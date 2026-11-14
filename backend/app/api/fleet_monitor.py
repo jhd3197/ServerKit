@@ -12,6 +12,7 @@ from flask_jwt_extended import jwt_required
 from app.services.fleet_monitor_service import fleet_monitor_service
 from app.middleware.rbac import admin_required, get_current_user
 from app.api._request import json_object
+from app.api.servers import _get_operable_server
 
 fleet_monitor_bp = Blueprint('fleet_monitor', __name__)
 
@@ -128,6 +129,7 @@ def get_anomalies():
 @jwt_required()
 def get_forecast(server_id):
     """Get capacity forecast for a server."""
+    _get_operable_server(server_id)
     metric = request.args.get('metric', 'disk')
     return jsonify(fleet_monitor_service.forecast_capacity(server_id, metric))
 

@@ -49,6 +49,7 @@
 .sk-viewbar {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: $space-4;
     margin-bottom: $space-4;
 
@@ -59,8 +60,15 @@
     &__actions {
         display: flex;
         align-items: center;
+        // No wrap: the search shrinks, so an icon button is never orphaned. When
+        // the bar itself wraps, this group takes its own row, icons together.
+        flex-wrap: nowrap;
+        flex: 0 1 auto;
+        min-width: 0;
         gap: $space-2;
-        margin-left: auto;
+        margin-inline-start: auto;
+
+        > * { flex-shrink: 0; }
     }
 
     // Amber, not red: unsaved tweaks are a state, not an error.
@@ -201,6 +209,7 @@
     }
 
     &__row:hover &__cog,
+    &__row:focus-within &__cog,
     &__row.is-on &__cog { opacity: 1; }
 }
 
@@ -412,6 +421,9 @@
         font-size: $text-sm;
         overflow: hidden;
 
+        // inset: the cell clips an outer ring
+        :is(a, button, [role='button'], [tabindex]):focus-visible { outline-offset: -2px; }
+
         &.is-num {
             text-align: right;
             font-size: $text-xs;
@@ -527,7 +539,8 @@
         }
     }
 
-    &__row:hover &__rowend button { opacity: 1; }
+    &__row:hover &__rowend button,
+    &__row:focus-within &__rowend button { opacity: 1; }
 
     // ---- group headers ----
     &__group {
@@ -733,7 +746,6 @@
             min-width: 0;
             background: none;
             border: none;
-            outline: none;
             color: var(--text);
             font-size: $text-sm;
         }
@@ -998,7 +1010,7 @@
         font-size: $text-sm;
         outline: none;
 
-        &:focus { border-color: var(--accent-dim); }
+        &:focus { border-color: var(--accent-dim); box-shadow: $focus-ring; }
     }
 
     &__del {

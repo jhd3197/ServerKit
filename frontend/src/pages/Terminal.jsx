@@ -16,10 +16,13 @@ import ProcessTable from '../components/ProcessTable';
 import { procUser } from '../components/processData';
 import SystemdServicesTab from '../components/serverdetail/ServicesTab';
 import { useTableSort } from '@/hooks/useTableSort';
+import InfoTip from '@/components/InfoTip';
 import PageLayout from '../layouts/PageLayout';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 
 // Log/journal tail cadence while auto-refresh is on.
 const LOG_TAIL_MS = 3000;
@@ -151,7 +154,7 @@ const TerminalShellTab = () => {
                         <p>
                             {anyOnline
                                 ? t('app.terminal.pickServerToOpenShell', 'Pick a server on the left to open a shell.')
-                                : t('app.terminal.shellsRunOverAgent', 'Interactive shells run over the ServerKit agent. Pair a server (Servers → Add server) with shell access and it shows up here.')}
+                                : <>{t('app.terminal.pairShort', 'Pair a server with shell access.')} <InfoTip>{t('app.terminal.shellsRunOverAgent', 'Interactive shells run over the ServerKit agent. Pair a server (Servers → Add server) with shell access and it shows up here.')}</InfoTip></>}
                         </p>
                     </div>
                 )}
@@ -433,6 +436,7 @@ const LogFilesTab = () => {
                         onClear={handleClearLog}
                         onScrollToBottom={scrollToBottom}
                         canAct={!!selectedLog && !loadingContent}
+                        actDisabledReason={!selectedLog ? t('app.terminal.selectALogFileFirst', 'Select a log file first') : undefined}
                     />
 
                     <LogContent
@@ -674,6 +678,7 @@ const JournalTab = () => {
                                 value={unitInput}
                                 onChange={(e) => setUnitInput(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && applyUnitInput()}
+                                aria-label={t('app.terminal.typeUnitName', 'Type unit name…')}
                                 placeholder={t('app.terminal.typeUnitName', 'Type unit name…')}
                             />
                         </div>
@@ -769,6 +774,7 @@ const JournalTab = () => {
                         onClear={() => toast.error(t('app.terminal.journalLogsCannotBeTruncatedFrom', 'Journal logs cannot be truncated from the panel.'))}
                         onScrollToBottom={scrollToBottom}
                         canAct={!loading && !isRemote}
+                        actDisabledReason={isRemote ? t('app.terminal.remoteJournalIsNotAvailableYet', 'Remote journal isn\'t available yet') : undefined}
                     />
 
                     <LogContent
@@ -820,6 +826,7 @@ const ProcessesTab = () => {
     const [selectedProcess, setSelectedProcess] = useState(null);
     const [autoRefresh, setAutoRefresh] = useState(false);
     const [lastUpdated, setLastUpdated] = useState(null);
+    const [loadError, setLoadError] = useState(null);
 
     // The table sorts client-side, but /processes answers with a TOP-N slice:
     // the top 100 by CPU re-sorted by memory is NOT the top 100 by memory. So
@@ -851,8 +858,10 @@ const ProcessesTab = () => {
             const data = await api.getProcesses(limit, fetchSort);
             setProcesses(data.processes || []);
             setLastUpdated(new Date());
+            setLoadError(null);
         } catch (err) {
             console.error('Failed to load processes:', err);
+            setLoadError(err);
             toast.error(t('app.terminal.failed', "Couldn't do that. {{message}}", { message: errorReason(err) }));
         } finally {
             setLoading(false);
@@ -948,7 +957,13 @@ const ProcessesTab = () => {
                 whole table — chrome, active view, column rules, sort and scroll
                 position with it — then remounted a second later. */}
             {loading && processes.length === 0 ? (
-                <div className="lv-content-loading">{t('app.terminal.loadingProcesses', 'Loading processes…')}</div>
+                <EmptyState loading loadingVariant="table" title={t('app.terminal.loadingProcesses', 'Loading processes…')} />
+            ) : loadError && processes.length === 0 ? (
+                <ErrorState
+                    title={t('app.terminal.failedToLoadProcesses', "Couldn't load processes.")}
+                    error={loadError}
+                    onRetry={() => loadProcesses()}
+                />
             ) : (
                 <ProcessTable
                     processes={processes}

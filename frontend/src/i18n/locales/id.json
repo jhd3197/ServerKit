@@ -227,10 +227,6 @@
             "viewRelease": "Lihat Rilis",
             "youReUpToDate": "Anda terkini!"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "Tambahkan kunci sandi atau 2FA",
-            "secureYourAccount": "Amankan akun Anda"
-        },
         "activityTab": {
             "actionType": "Jenis Tindakan",
             "actionsThisWeek": "tindakan minggu ini",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Peningkatan versi dipicu untuk semua agen online",
             "versionDistribution": "Distribusi Versi",
             "versions": "Versi",
-            "viewDetails": "Lihat Detail"
+            "viewDetails": "Lihat Detail",
+            "selectAVersionFirst": "Pilih versi terlebih dahulu"
         },
         "ai": {
             "assistant": "Asisten"
@@ -612,7 +609,8 @@
             "remote": "Terpencil",
             "restoreDrills": "Kembalikan latihan",
             "turnOnProtectionOrClickBack": "Aktifkan perlindungan atau klik Cadangkan sekarang.",
-            "verifyRemoteCopy": "Verifikasi salinan jarak jauh"
+            "verifyRemoteCopy": "Verifikasi salinan jarak jauh",
+            "onlySuccessfulBackupsCanBeRestored": "Hanya cadangan yang berhasil yang dapat dipulihkan"
         },
         "backupTabs": {
             "schedules": "Jadwal",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "Unggah cadangan baru secara otomatis ke penyimpanan jarak jauh",
             "b2GbMonth": "B2 ($/GB/bulan)",
             "backUpNow": "Cadangkan sekarang",
+            "backUpShort": "Cadangkan",
             "backblazeB2": "Blablaze B2",
             "backupDeleted": "Cadangan dihapus",
             "backupName": "Nama Cadangan",
@@ -667,6 +666,7 @@
             "database": "Basis data",
             "databaseBackupCreated": "Cadangan basis data dibuat",
             "databaseName": "Nama Basis Data",
+            "databaseNameRequired": "Masukkan nama basis data.",
             "databaseOnly": "Hanya Basis Data",
             "databaseType": "Tipe Basis Data",
             "delete": "Hapus {{name}}",
@@ -721,6 +721,7 @@
             "secretKey": "Kunci Rahasia",
             "selectApplication": "Pilih Layanan",
             "serverkitIsFreeTheseAreYour": "ServerKit gratis — ini adalah biaya penyimpanan Anda sendiri. Lokal adalah disk server Anda (biarkan 0 jika Anda tidak melacaknya). S3/B2 adalah $/GB/bulan penyedia cloud Anda.",
+            "serviceRequired": "Pilih layanan.",
             "settingsSaved": "Pengaturan disimpan",
             "siteService": "Situs/Layanan",
             "storageConfigurationSaved": "Konfigurasi penyimpanan disimpan",
@@ -883,7 +884,8 @@
             "selectSize": "Pilih ukuran",
             "serverDestroyed": "Server hancur",
             "serverName": "Nama Server",
-            "serverProvisioningInitiated": "Penyediaan server dimulai"
+            "serverProvisioningInitiated": "Penyediaan server dimulai",
+            "enterANameAndChooseAProvider": "Masukkan nama dan pilih penyedia terlebih dahulu"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME untuk nama host ini akan dibuat di Cloudflare DNS, menunjuk ke terowongan.",
@@ -969,7 +971,10 @@
             "sortAToZ": "Urutkan A ke Z",
             "sortHighToLow": "Urutkan tinggi ke rendah",
             "sortLowToHigh": "Urutkan rendah ke tinggi",
-            "sortZToA": "Urutkan Z ke A"
+            "sortZToA": "Urutkan Z ke A",
+            "alreadyTheFirstColumn": "Sudah kolom pertama",
+            "alreadyTheLastColumn": "Sudah kolom terakhir",
+            "noFilterOnThisColumn": "Tidak ada filter pada kolom ini"
         },
         "columnsMenu": {
             "columns": "Kolom",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "Kirim pesan ke asisten",
             "noResources": "Tidak ada sumber daya yang dapat diakses",
             "searchResources": "Cari sumber daya…",
-            "send": "Mengirim"
+            "send": "Mengirim",
+            "setUpTheAssistantFirst": "Siapkan asisten terlebih dahulu",
+            "typeAMessageFirst": "Ketik pesan terlebih dahulu"
         },
         "configDiffModal": {
             "applyRestorePoint": "Terapkan titik pemulihan",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "IP publik server ini",
             "useStarttlsRecommended": "Gunakan STARTTLS (disarankan)",
             "whereDoIGetThis": "Dimana saya bisa mendapatkan ini?",
-            "yourAccountEmailGlobalKeySimplest": "Email akun Anda + kunci global. Paling sederhana untuk disiapkan, tetapi memberikan akses akun penuh."
+            "yourAccountEmailGlobalKeySimplest": "Email akun Anda + kunci global. Paling sederhana untuk disiapkan, tetapi memberikan akses akun penuh.",
+            "setUpTheOauthAppFirst": "Siapkan aplikasi OAuth terlebih dahulu"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Tambahkan kredensial aplikasi OAuth GitHub di Pengaturan sebelum menghubungkan.",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "Cari repositori",
             "serviceName": "Nama layanan",
             "systemdUnitOptional": "Unit systemd (opsional)",
-            "uploadTheArchive": "Unggah arsip"
+            "uploadTheArchive": "Unggah arsip",
+            "setUpGithubInSettingsFirst": "Siapkan GitHub di Pengaturan terlebih dahulu"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Diotorisasi melalui OAuth",
@@ -1337,7 +1346,8 @@
             "toRun": "untuk menjalankan.",
             "writeSqlAboveAndPress": "Tulis SQL di atas dan tekan",
             "writesEnabledBeCareful": "Penulisan diaktifkan — hati-hati",
-            "writesOn": "Penulisan aktif"
+            "writesOn": "Penulisan aktif",
+            "runAQueryWithResultsFirst": "Jalankan kueri dengan hasil terlebih dahulu"
         },
         "consoleToolbar": {
             "allLevels": "Semua level",
@@ -1353,7 +1363,8 @@
             "searchLogs": "Log penelusuran…",
             "showTheDeploymentDetailsAgain": "Tampilkan kembali detail penerapan",
             "timestamps": "Stempel waktu",
-            "wrap": "Membungkus"
+            "wrap": "Membungkus",
+            "noMatchesToJumpTo": "Tidak ada kecocokan untuk dituju"
         },
         "containerOpsPanel": {
             "actionFailed": "Tindakan gagal",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "Tidak ada keluaran yang dihasilkan.",
             "noRunsRecordedYet": "Belum ada proses yang tercatat.",
             "noRunsYet": "Belum ada run",
-            "noScheduledJobsFoundCreateYour": "Tidak ada pekerjaan terjadwal yang ditemukan. Buat pekerjaan cron pertama Anda untuk mengotomatisasi tugas.",
             "paused": "Dijeda",
             "runHistory": "Riwayat proses",
             "runHistoryIsAnAdminOnly": "Riwayat proses adalah permukaan khusus admin.",
@@ -1607,7 +1617,8 @@
             "undo": "Membuka",
             "unnamedJob": "Pekerjaan tanpa nama",
             "untracked": "Tidak dilacak",
-            "whatDoesThisJobDo": "Apa fungsi pekerjaan ini?"
+            "whatDoesThisJobDo": "Apa fungsi pekerjaan ini?",
+            "enterANameCommandAndScheduleFirst": "Masukkan nama, perintah, dan jadwal terlebih dahulu"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 bidang: menit, jam, hari, bulan, hari kerja.",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "Hapus Pekerjaan Cron",
             "scheduleACommandOnTheHost": "Jadwalkan perintah pada host crontab. Berjalan sebagai pengguna agen.",
             "scheduleIsRequired": "Jadwal diperlukan",
-            "serverOffline": "Server Luar Talian"
-        },
-        "cutoverDrawer": {
-            "answer": "Menjawab",
-            "applyCutover": "Terapkan peralihan",
-            "applyDnsCutover": "Terapkan peralihan DNS?",
-            "applying": "Melamar…",
-            "atTheBoxWhereTheImported": "di kotak tempat situs yang diimpor sekarang berada. Catatan saat ini diambil terlebih dahulu, sehingga peralihan selalu dapat dikembalikan.",
-            "capturing": "Menangkap…",
-            "checkPropagation": "Periksa propagasi",
-            "cutoverApplied": "Peralihan diterapkan —",
-            "cutoverAppliedNowPointsAt": "Pemotongan diterapkan — {{domain}} sekarang menunjuk pada {{value}}",
-            "cutoverFinishedWithErrorsReviewBelow": "Cutover selesai dengan kesalahan. Tinjau di bawah dan kembalikan jika diperlukan.",
-            "cutoverFinishedWithErrorsReviewThe": "Cutover selesai dengan kesalahan — tinjau hasilnya dan pertimbangkan untuk mengembalikannya.",
-            "deletedCreatedRecords_one": "Menghapus 1 record yang dibuat oleh cutover.",
-            "deletedCreatedRecords_other": "Menghapus {{count}} record yang dibuat oleh cutover.",
-            "dnsCutover": "Peralihan DNS",
-            "matchesNewTarget": "Cocok dengan target baru",
-            "new": "Baru",
-            "newAddressTarget": "Alamat baru (target)",
-            "newTarget": "sasaran baru",
-            "noChangesToApplyForThe": "Tidak ada perubahan yang diterapkan pada jenis rekaman yang dipilih.",
-            "notFullyPropagated": "Belum sepenuhnya terpropagasi",
-            "nowPointsAt": "sekarang menunjuk ke",
-            "oneClickRestoresTheSnapshotCaptured": "Satu klik akan memulihkan snapshot yang diambil sebelum peralihan ini — termasuk menghapus rekaman apa pun yang dibuat oleh peralihan tersebut.",
-            "plannedChanges": "Perubahan yang direncanakan",
-            "propagated": "Terpropagasi",
-            "propagating": "Sedang dipropagasi",
-            "propagation": "Perambatan",
-            "providerZoneId": "Id zona penyedia",
-            "publicResolversCacheTheOldAddress": "Resolver publik menyimpan cache alamat lama hingga TTL-nya habis masa berlakunya. Periksa di mana alamat baru mulai berlaku.",
-            "recordTypes": "Jenis rekaman",
-            "recordTypes2": "jenis rekaman",
-            "recordsCaptured": "catatan yang diambil",
-            "repoint": "Penunjukan ulang",
-            "repointsRecords_one": "Ini mengarahkan ulang record {{types}} untuk {{domain}} ke {{target}}. Cuplikan memungkinkan Anda mengembalikannya.",
-            "repointsRecords_other": "Ini mengarahkan ulang record {{types}} untuk {{domain}} ke {{target}}. Cuplikan memungkinkan Anda mengembalikannya.",
-            "resolver": "Penyelesai",
-            "restoredRecords_one": "1 record dipulihkan.",
-            "restoredRecords_other": "{{count}} record dipulihkan.",
-            "revertCutover": "Kembalikan peralihan",
-            "revertFinishedWithErrorsCheckThe": "Pengembalian selesai dengan kesalahan — periksa hasilnya.",
-            "revertedRestoredSPreCutoverRecords": "Dikembalikan — memulihkan catatan pra-pemutusan {{domain}}",
-            "reverting": "Mengembalikan…",
-            "review": "Tinjauan",
-            "rollBack": "Putar kembali",
-            "snapshotPreview": "Cuplikan & pratinjau",
-            "theDnsProviderSZoneIdentifier": "pengidentifikasi zona penyedia DNS",
-            "theIpOrHostnameForCname": "IP (atau nama host untuk CNAME) yang harus ditunjuk oleh data.",
-            "thisDomainHasNoConnectedProvider": "Domain ini tidak memiliki zona penyedia yang terhubung — cutover memerlukan seseorang untuk membaca dan menulis catatan.",
-            "verify": "Memeriksa"
+            "serverOffline": "Server Luar Talian",
+            "failedToLoadCronJobs": "Tidak dapat memuat tugas cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Belum ada widget di dasbor ini."
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "Klik untuk mengurutkan · Shift+klik untuk menambahkan tingkat pengurutan",
             "loading": "Memuat",
             "noRowsMatchTheActiveColumn": "Tidak ada baris yang cocok dengan filter kolom aktif.",
+            "scrollableTable": "Tabel yang dapat digulir",
             "selectAllRows": "Pilih semua baris",
-            "selectRow": "Pilih baris"
+            "selectRow": "Pilih baris",
+            "sortAColumnFirst": "Urutkan kolom terlebih dahulu"
         },
         "dataTableFooter": {
             "nextPage": "Halaman berikutnya",
@@ -1776,7 +1740,8 @@
             "updateOverview": "Perbarui Ikhtisar",
             "updatingDatabaseSchema": "Memperbarui skema database...",
             "weRecommendBackingUpYourDatabase": "Kami menyarankan untuk mencadangkan database Anda sebelum menerapkan pembaruan.",
-            "whichDoesNotExistInThis": ", yang tidak ada di build ini — biasanya cabang yang menambahkan migrasi dan kemudian dikembalikan. Skema tidak dapat ditingkatkan hingga dikembalikan ke revisi yang diketahui:"
+            "whichDoesNotExistInThis": ", yang tidak ada di build ini — biasanya cabang yang menambahkan migrasi dan kemudian dikembalikan. Skema tidak dapat ditingkatkan hingga dikembalikan ke revisi yang diketahui:",
+            "createABackupFirst": "Buat cadangan terlebih dahulu"
         },
         "databases": {
             "backUpDatabase": "Cadangkan basis data",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "Pada Linux, pastikan daemon Docker dimulai",
             "retryConnection": "Coba Lagi Koneksi",
             "targets": "Target",
-            "toUseDockerManagement": "Untuk menggunakan manajemen Docker:",
             "verifyTheUserHasPermissionsTo": "Verifikasikan bahwa pengguna memiliki izin untuk mengakses Docker",
             "volumes": "Volume"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "Segarkan catatan",
             "regenerateToken": "Regenerasi token",
             "thisDomainIsnTSetUp": "Domain ini belum disiapkan untuk DNS di ServerKit.",
-            "tokenRegenerated": "Token dibuat ulang"
+            "tokenRegenerated": "Token dibuat ulang",
+            "enterTheRecordContentFirst": "Masukkan isi catatan terlebih dahulu"
         },
         "domainField": {
             "alreadyAttached": "{{name}} sudah terhubung ke sebuah layanan.",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "Nonaktifkan SSL untuk {{name}}?",
             "dismissError": "Singkirkan kesalahan",
             "dnsProvider": "Penyedia DNS",
+            "domainRequired": "Masukkan domain yang valid.",
             "domainVerificationFailed": "Verifikasi domain gagal: {{error}}",
             "domainVerifiedIp": "Domain terverifikasi! IP: {{ipaddress}}",
             "emailAddress": "Alamat Surel",
@@ -2292,6 +2258,7 @@
             "rowsFields": "Baris {{n}} · Bidang {{fields}} · {{value}}",
             "searchDomains": "Cari domain…",
             "selectAnApplication": "Pilih layanan",
+            "serviceRequired": "Pilih layanan.",
             "setAsPrimaryDomain": "Tetapkan sebagai domain utama",
             "sslCertificate": "Sertifikat SSL",
             "sslExpires": "Kedaluwarsa {{days}}d",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "Verifikasi unduhan Anda menggunakan checksum SHA256:",
             "windows": "jendela:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "dengan token pendaftaran server."
+            "withTheServerRegistrationToken": "dengan token pendaftaran server.",
+            "noBuildPublishedForThisPlatform": "Belum ada build yang dipublikasikan untuk platform ini"
         },
         "drawerHeader": {
             "aiSettings": "Pengaturan AI",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Coba istilah pencarian lain atau jelajahi folder lain.",
             "typeZA": "Tipe Z-A",
             "types": "Jenis",
+            "up": "Naik",
             "upDelDeleteF2RenameA": "⌫ Atas · Del Hapus · F2 Ganti Nama · ⌘A Semua",
             "updatedAt": "Diperbarui {{time}}",
             "upload": "Mengunggah",
@@ -2809,10 +2778,12 @@
             "videos": "Video",
             "volumes": "Volume",
             "webConfig": "Konfigurasi web",
-            "willBeCreatedIn": "Akan dibuat di:"
+            "willBeCreatedIn": "Akan dibuat di:",
+            "nothingToGoBackTo": "Tidak ada yang bisa dikembalikan",
+            "nothingToGoForwardTo": "Tidak ada yang bisa dimajukan",
+            "alreadyAtTheTopFolder": "Sudah di folder teratas"
         },
         "fileRow": {
-            "deselect": "Batalkan pilihan",
             "rename": "Ganti nama",
             "select": "Memilih"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "Hapus semuanya",
             "noFilters": "tidak ada filter",
             "showResults_one": "Tampilkan {{count}} {{noun}}",
-            "showResults_other": "Tampilkan {{count}} {{noun}}"
+            "showResults_other": "Tampilkan {{count}} {{noun}}",
+            "noFiltersApplied": "Tidak ada filter yang diterapkan"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 atau 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "Kecenderungan",
             "unusuallyHigh": "Tinggi tidak biasa",
             "unusuallyLow": "Rendah tidak biasa",
-            "zScore": "Skor-Z"
+            "zScore": "Skor-Z",
+            "selectAServerFirst": "Pilih server terlebih dahulu"
         },
         "fleetProxy": {
             "apps": "Layanan",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "Setel ulang perubahan tampilan",
             "rowDensity": "Kepadatan baris",
             "rowsInThisView": "Baris dalam tampilan ini",
-            "selectedRows": "Baris yang dipilih"
+            "selectedRows": "Baris yang dipilih",
+            "selectSomeRowsFirst": "Pilih beberapa baris terlebih dahulu"
         },
         "gridViewPicker": {
             "builtIn": "Dibangun di",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Mulai dari filter & kolom saat ini",
             "unsaved": "Belum disimpan",
             "unsetAsDefault": "Batalkan sebagai default",
-            "viewOptions": "Opsi {{name}}"
+            "viewOptions": "Opsi {{name}}",
+            "enterAViewNameFirst": "Masukkan nama tampilan terlebih dahulu"
         },
         "groupMenu": {
             "group": "Grup",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "Konfigurasi disimpan. Mulai ulang layanan untuk menerapkan perubahan.",
             "failedToSaveConfiguration": "Gagal menyimpan konfigurasi",
             "gunicornConfiguration": "Konfigurasi Gunicorn",
-            "loadingGunicornConfiguration": "Memuat konfigurasi Gunicorn..."
+            "loadingGunicornConfiguration": "Memuat konfigurasi Gunicorn...",
+            "failedToLoadConfiguration": "Tidak dapat memuat konfigurasi Gunicorn."
         },
         "hints": {
             "appBound": "Layanan itu sendiri adalah hambatannya. Cache seluruh halaman di depannya, atau berikan server yang lebih besar.",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Tidak ada yang perlu dikonversi — tidak ada arahan yang ditemukan.",
             "pasteTheContentsOfAnApache": "Rekatkan konten Apache",
             "reason": "Alasan",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine Aktif \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine Aktif \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "Tempel aturan .htaccess terlebih dahulu"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 atau 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "untuk mengkonfirmasi",
             "tryAgain": "Coba lagi",
             "whereTheDumpLives": "Dimana tempat pembuangan sampah itu tinggal",
-            "working": "Memproses…"
+            "working": "Memproses…",
+            "chooseADumpFileFirst": "Pilih berkas dump terlebih dahulu",
+            "chooseATargetDatabaseFirst": "Pilih database tujuan terlebih dahulu",
+            "importFinished": "Impor selesai",
+            "onlyAdminsCanImport": "Hanya admin yang dapat mengimpor",
+            "typeTheDatabaseNameToConfirm": "Ketik nama database untuk mengonfirmasi"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "Arsip cpmove / backup-*.tar.gz dari Cadangan Akun Lengkap cPanel.",
@@ -3344,7 +3326,9 @@
             "unknownAge": "usia tidak diketahui",
             "viewChanges": "Lihat perubahan",
             "watchingADocrootHashesEveryFile": "Menonton docroot meng-hash setiap file di luar direktori unggah/cache, sehingga diikutsertakan per layanan.",
-            "whatChanged": "Apa yang berubah"
+            "whatChanged": "Apa yang berubah",
+            "createABaselineFirst": "Buat baseline terlebih dahulu",
+            "notAvailableOnThisServer": "Tidak tersedia di server ini"
         },
         "invitationsTab": {
             "copyInviteLink": "Salin tautan undangan",
@@ -3394,7 +3378,8 @@
             "exitCode": "(exit {{code}})",
             "streamingProgress": "Kemajuan streaming…",
             "waitingForTheAgentToBegin": "Menunggu agen untuk memulai…",
-            "working": "Memproses…"
+            "working": "Memproses…",
+            "waitForTheJobToFinish": "Tunggu hingga tugas selesai"
         },
         "jobs": {
             "activity": "Aktivitas",
@@ -3501,7 +3486,9 @@
             "logFiles": "File Log",
             "noLogFilesFound": "Tidak ada file log yang ditemukan",
             "searchPattern": "Pola pencarian...",
-            "selectALogFile": "Pilih berkas log untuk melihat isinya."
+            "selectALogFile": "Pilih berkas log untuk melihat isinya.",
+            "selectALogFileFirst": "Pilih file log terlebih dahulu",
+            "nothingToDownloadYet": "Belum ada yang bisa diunduh"
         },
         "loginLinksSection": {
             "allowedIp": "IP yang diizinkan",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "Tidak ada izin host yang diumumkan.",
             "pasteAGithubRepoOwnerRepo": "Tempelkan repo GitHub (pemilik/repo atau pemilik/repo@tag), rilis URL, atau tautan zip langsung. Anda akan melihat pratinjau instalasi apa sebelum mendarat.",
             "preview": "Pratinjau",
-            "signatureInvalid": "Tanda tangan tidak valid",
             "signatureMismatch": "Tanda tangan tidak cocok dengan arsip ini.",
-            "signed": "Ditandatangani ·",
-            "signedUnknownPublisher": "Ditandatangani · penerbit tidak diketahui",
             "theDownloadMayHaveBeenTampered": "Unduhan mungkin telah dirusak — jangan menginstalnya.",
             "thisExtensionRequests": "Ekstensi ini meminta:",
             "thisReleaseCarriesNoPublisherSignature": "Rilis ini tidak memiliki tanda tangan penerbit. Ini akan berjalan dengan hak istimewa panel penuh — instal hanya jika Anda memercayai sumbernya.",
             "thisReleaseIsSignedButThe": "Rilis ini telah ditandatangani, namun kunci penerbit tidak disematkan oleh panel ini, sehingga tanda tangan tidak dapat diverifikasi. Perlakukan itu sebagai tidak ditandatangani.",
-            "unsigned": "Tidak ditandatangani",
             "uploadAnExtensionZipWith": "Unggah zip ekstensi dengan",
             "useAnAbsolutePathThatExists": "Gunakan jalur absolut yang ada di host backend atau di dalam kontainer backend.",
             "zip": "Ritsleting"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "Gagal memuat katalog ekstensi.",
             "couldntToggle": "Gagal mengaktifkan atau menonaktifkan ekstensi.",
             "couldntUninstall": "Gagal menghapus instalasi ekstensi.",
-            "declaredPermissionsWhatThePanelHas": "Izin yang dinyatakan, apa yang telah diamati panel, dan dependensi Python yang tertunda",
-            "disabling": "Menonaktifkan…",
-            "enabling": "Mengaktifkan…",
             "extensionConfigurationSaved": "Konfigurasi ekstensi disimpan",
             "extensionDisabled": "Ekstensi dinonaktifkan",
             "extensionEnabled": "Ekstensi diaktifkan",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "Instal dengan tanda tangan yang tidak dapat diverifikasi?",
             "installWithoutChecksumVerification": "Instal tanpa verifikasi checksum?",
             "installed": "Terinstal",
-            "installedExtensions": "Ekstensi terpasang",
             "installedHotReloadShouldPickIt": "Menginstal \"{{displayname}}\". Reload panas harus mengambilnya; restart backend jika rute cetak biru tidak muncul.",
             "installedRestartBackendIfBlueprintRoutes": "Menginstal \"{{displayname}}\". Mulai ulang backend jika rute cetak biru tidak muncul.",
             "installing": "Menginstal…",
@@ -3665,33 +3644,21 @@
             "purgeData": "Bersihkan data",
             "registry": "Registri",
             "registryInstallFailed": "Penginstalan registri gagal",
-            "releaseZipIsSignedThePanel": "Rilis zip ditandatangani; panel memverifikasi tanda tangan ed25519 saat instalasi",
             "removingThisExtensionStopsItsRoutes": "Menghapus ekstensi ini akan menghentikan rute dan kontribusi UI-nya.",
             "resetFilters": "Setel ulang filter",
             "reviewed": "Ditinjau",
             "screenshots": "Tangkapan layar",
             "searchExtensions": "Ekstensi penelusuran…",
-            "signed": "Ditandatangani",
-            "signedWithPublisherKeyWhichThis": "Ditandatangani dengan kunci penerbit '{{publisherKeyId}}', yang tidak disematkan pada panel ini",
             "sourceRepo": "Repo sumber",
             "thisExtensionDeclaresNoConfigurationFields": "Ekstensi ini menyatakan tidak ada bidang konfigurasi.",
             "thisExtensionRequests": "Ekstensi ini meminta:",
-            "thisReleaseCarriesNoPublisherSignature": "Rilis ini tidak memiliki tanda tangan penerbit",
             "uninstall": "Copot pemasangan {{displayname}}?",
-            "uninstalling": "Menghapus instalasi…",
-            "unknownSigner": "Penandatangan tidak dikenal",
             "unreviewed": "Belum ditinjau",
-            "unsigned": "Tidak ditandatangani",
             "update": "Memperbarui",
             "updateAnyway": "Tetap perbarui",
-            "updateAvailableV": "Pembaruan tersedia → v",
             "updating": "Memperbarui…",
-            "versionByAuthor": "v{{version}} · oleh {{author}}"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "Izinkan anggota menjalankan tindakan yang dikurasi",
-            "letWorkspaceMembersRunASmall": "Izinkan anggota ruang kerja menjalankan serangkaian tindakan kecil yang dikurasi dan diberi parameter (seperti menyesuaikan frekuensi pencadangan layanan) untuk layanan yang dapat mereka jangkau. Setiap tindakan divalidasi berdasarkan skema tetap dan dicatat dalam log audit — tidak ada teks bebas yang mencapai shell server. Matikan ini untuk menonaktifkan seluruh permukaan tindakan anggota.",
-            "memberActions": "Tindakan Anggota"
+            "versionByAuthor": "v{{version}} · oleh {{author}}",
+            "installShort": "Instal"
         },
         "message": {
             "somethingWentWrong": "Terjadi kesalahan."
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "Metrik dikumpulkan setiap menit",
             "noHistoricalDataYet": "Belum ada data historis",
             "realTimePerformance": "Performa Waktu Nyata",
-            "systemMetrics": "Metrik Sistem"
+            "systemMetrics": "Metrik Sistem",
+            "loadingMetricsHistory": "Memuat riwayat metrik…"
         },
         "metricsTab": {
             "activeRunning": "Aktif (berjalan)",
@@ -3732,7 +3700,8 @@
             "processes": "Proses",
             "serviceStatus": "Status Layanan",
             "startTheServiceToViewResource": "Mulai layanan untuk melihat metrik sumber daya.",
-            "workers": "Pekerja"
+            "workers": "Pekerja",
+            "failedToLoadMetrics": "Tidak dapat memuat metrik."
         },
         "microCachePanel": {
             "assetCachingSaved": "Cache aset disimpan",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "Buat pengguna dengan nama yang sama dan hak penuh",
             "creating": "Membuat…",
             "databaseCreated": "Basis data dibuat",
-            "databaseName": "Nama basis data *",
+            "databaseName": "Nama basis data",
             "encoding": "Pengkodean",
             "engine": "Mesin",
             "fromTheTemplateCatalog": "dari katalog templat",
@@ -3836,7 +3805,9 @@
             "running": "berjalan",
             "saveTheseCredentialsThePasswordWon": "Simpan kredensial ini — kata sandi tidak akan ditampilkan lagi.",
             "userCreated": "Pengguna dibuat",
-            "username": "Nama belakang *"
+            "username": "Nama belakang",
+            "databaseNameInvalid": "Gunakan hanya huruf, angka, dan garis bawah.",
+            "databaseNameRequired": "Masukkan nama basis data."
         },
         "modeToggle": {
             "assistant": "Asisten",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "Pemicu di atas",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "Tempat peringatan ketika terjadi kebakaran",
-            "wouldAlertNow": "Akan memicu peringatan sekarang"
+            "wouldAlertNow": "Akan memicu peringatan sekarang",
+            "couldntLoadMonitoringData": "Tidak dapat memuat data pemantauan."
         },
         "monitoringOverview": {
             "activeAlerts": "Peringatan aktif",
@@ -4018,7 +3990,8 @@
             "runTest": "Jalankan tes",
             "running": "Menjalankan…",
             "speedTest": "Tes kecepatan",
-            "tested": "Diuji"
+            "tested": "Diuji",
+            "loadingHosts": "Memuat host"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Respons 200 tanpa teks ini dihitung sebagai pemadaman.",
@@ -4048,7 +4021,6 @@
             "monitoring": "Pemantauan {{name}}",
             "nextCheck": "Periksa selanjutnya",
             "noMonitorsMatch": "Tidak ada monitor yang cocok",
-            "nothingIsBeingWatchedYet": "Belum ada yang diawasi",
             "offForSelfSignedCertificatesOn": "Nonaktif untuk sertifikat yang ditandatangani sendiri pada host internal.",
             "pause": "Berhenti sebentar",
             "paused": "{{name}} dijeda",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "Monitor mati",
             "mostRecentResults": "Hasil terkini",
             "noChecksRecordedYetTheScheduler": "Belum ada pemeriksaan yang dicatat — penjadwal melakukan jajak pendapat pada setiap interval monitor.",
-            "nothingIsBeingWatchedYet": "Belum ada yang diawasi"
+            "nothingIsBeingWatchedYet": "Belum ada yang diawasi",
+            "couldntLoadMonitors": "Tidak dapat memuat monitor."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Buat jaringan untuk menghubungkan kontainer.",
@@ -4111,7 +4084,10 @@
             "registering": "Mendaftarkan…",
             "review": "Tinjauan",
             "uploadAndDeploy": "Unggah & terapkan",
-            "uploading": "Mengunggah…"
+            "uploading": "Mengunggah…",
+            "completeTheSourceDetailsFirst": "Lengkapi detail sumber terlebih dahulu",
+            "fillInTheRequiredDetailsFirst": "Isi detail yang diperlukan terlebih dahulu",
+            "finishThePreviousStepFirst": "Selesaikan langkah sebelumnya terlebih dahulu"
         },
         "notFound": {
             "browseExtensions": "Telusuri Ekstensi",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "Tidak ada notifikasi yang belum dibaca.",
             "notifications": "Pemberitahuan",
             "success": "Kesuksesan",
-            "unread": "Belum dibaca"
+            "unread": "Belum dibaca",
+            "noFiltersToReset": "Tidak ada filter untuk direset"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, tim@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "Alihkan dock Operasi",
             "title": "Operasi",
             "unreadCount": "{{count}} belum dibaca",
-            "waitingForLogs": "Menunggu log proses…"
+            "waitingForLogs": "Menunggu log proses…",
+            "enterTheRequiredValueFirst": "Masukkan nilai yang diperlukan terlebih dahulu"
         },
         "organizationTabs": {
             "projects": "Proyek",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "Memuat paket...",
             "package": "Kemasan",
             "packageNameEGRequestsFlask": "Nama paket (misalnya, permintaan, flask==2.0.0)",
-            "requirementsTxtUpdated": "persyaratan.txt diperbarui"
+            "requirementsTxtUpdated": "persyaratan.txt diperbarui",
+            "failedToLoadPackages": "Tidak dapat memuat paket."
         },
         "pageContextMap": {
             "application": "Layanan",
@@ -4484,7 +4463,6 @@
             "emailAddress": "Alamat Surel",
             "memberSince": "Anggota Sejak",
             "profileSettings": "Pengaturan Profil",
-            "role": "Peran",
             "saveChanges": "Simpan perubahan"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "Nginx host menangani proksi terbalik. Beralih ke Traefik atau Caddy di atas untuk menjalankan tumpukan proksi Docker yang dikelola.",
             "thisServerSActiveProxyIs": "Proksi aktif server ini adalah",
             "traefik": "Traefik",
-            "whichExpects": ", yang diharapkan"
+            "whichExpects": ", yang diharapkan",
+            "noChangesToSave": "Tidak ada perubahan untuk disimpan",
+            "selectADifferentProxyFirst": "Pilih proxy lain terlebih dahulu"
         },
         "pruneButton": {
             "cleaning": "Membersihkan…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "Muatan harus valid JSON",
             "permanentlyDeleteThisMessage": "Hapus pesan ini secara permanen?",
             "priority": "Prioritas",
-            "queue": "Antre",
             "queueBus": "Bus Antrian",
             "readOnly": "Hanya baca",
             "requeue": "Antrean",
@@ -4702,7 +4681,6 @@
             "total": "Total"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Sesuaikan filter atau permintaan pencarian untuk melihat antrian Anda.",
             "allGroups": "Semua kelompok",
             "anyStatus": "Status apa pun",
             "areYouSureYouWantTo": "Apakah Anda yakin ingin menghapus \"{{value}}\" dan semua pesannya?",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}} langkah",
             "unavailable": "Katalog resep tidak tersedia",
             "unavailableHint": "Registri tidak dapat dijangkau dan tidak ada salinan bawaan.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Selesaikan hambatan di atas terlebih dahulu",
+            "selectATargetServerFirst": "Pilih server tujuan terlebih dahulu"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Gagal memuat tempat sampah.",
@@ -4840,16 +4820,21 @@
             "basicAuth": "Otentikasi dasar",
             "betweenServers": "antara {{privateServer}} dan {{edgeServer}}",
             "edgeServerPublicIpFrontsThe": "Server tepi (IP publik — di depan terowongan)",
+            "edgeServerRequired": "Pilih server edge.",
             "exposeALocalService": "Paparkan Layanan Lokal",
+            "exposeAPrivateServicePublicly": "Paparkan layanan privat ke publik.",
             "exposeAServiceRunningOnA": "Paparkan layanan yang berjalan pada mesin pribadi (di belakang NAT, tanpa penerusan porta) ke nama host publik melalui terowongan WireGuard antara dua agen Anda.",
             "exposeService": "Ekspos layanan",
+            "exposeServicesOn": "Paparkan layanan di",
             "exposeServicesRunningOn": "Paparkan layanan yang sedang berjalan",
+            "exposeShort": "Ekspos",
             "exposed": "{{hostname}} terbuka",
             "failedToExposeService": "Gagal mengekspos layanan",
             "failedToLoadTunnels": "Gagal memuat terowongan",
             "failedToRemoveService": "Gagal menghapus layanan",
             "failedToTearDownTunnel": "Gagal merobohkan terowongan",
-            "handshakeAt": "handshake {{time}}",
+            "handshakeAt": "handshake terakhir {{time}}",
+            "hostnameRequired": "Masukkan nama host publik yang valid.",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "Memuat terowongan",
             "noHandshakeYetIfThisPersists": "Belum ada jabat tangan — jika hal ini terus berlanjut, UDP keluar host pribadi ke edge mungkin diblokir (diperlukan relai).",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "Tidak ada terowongan untuk server ini",
             "noTunnelsYet": "Belum ada terowongan",
             "obtainACertificateOnTheEdge": "Dapatkan sertifikat di tepinya.",
+            "passwordRequired": "Masukkan kata sandi.",
             "pickAPublicIpEdgeServer": "Pilih server edge IP publik dan ServerKit akan memasangkannya dengan {{value}} melalui WireGuard.",
             "pickAPublicIpEdgeServer2": "Pilih server edge IP publik dan host pribadi, dan ServerKit akan memasangkannya melalui WireGuard dan mempublikasikan layanan Anda — tidak perlu perubahan router.",
+            "pickAPublicIpEdgeServerShort": "Pilih server edge dengan IP publik.",
+            "pickAnEdgeAndAPrivateHost": "Pilih server edge dan host privat.",
             "pickTwoDifferentServers": "Pilih dua server yang berbeda: edge berada di depan host privat.",
-            "pointAtEdge": "Arahkan {{name}} ke server edge; tunnel membawanya dari sana.",
+            "pointAtEdgeGeneric": "Arahkan hostname ke server edge; tunnel akan membawanya dari sana.",
+            "portRequired": "Masukkan port layanan.",
+            "privateHostRequired": "Pilih host privat.",
             "privateHostWhereTheServiceRuns": "Host pribadi (tempat layanan berjalan)",
             "publicHostname": "Nama host publik",
             "publishing": "Memublikasikan…",
@@ -4869,13 +4859,24 @@
             "removed": "Menghapus {{hostname}}",
             "requireLoginBasicAuth": "Memerlukan login (autentikasi dasar)",
             "servicePort": "Port layanan",
+            "status": {
+                "pending": "menunggu",
+                "up": "aktif",
+                "degraded": "menurun",
+                "down": "mati",
+                "error": "galat",
+                "published": "dipublikasikan",
+                "unknown": "tidak diketahui"
+            },
             "tearDown": "Meruntuhkan",
             "tearDownTunnel": "Meruntuhkan terowongan",
             "tearDownTunnel2": "Meruntuhkan terowongan?",
+            "thisHost": "host ini",
             "thisRemovesTheWireguardTunnel": "Ini menghilangkan terowongan WireGuard",
             "thisServer": "server ini",
             "toAPublicHostnameOverA": "ke nama host publik melalui terowongan WireGuard. ServerKit memasangkan host ini dengan server edge yang memiliki IP publik.",
-            "tunnelTornDown": "Terowongan dirobohkan"
+            "tunnelTornDown": "Terowongan dirobohkan",
+            "usernameRequired": "Masukkan nama pengguna."
         },
         "remoteTerminal": {
             "closeTerminal": "Tutup terminalnya",
@@ -4938,15 +4939,13 @@
             "title": "Lalu lintas"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "keriting -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker tidak tersedia",
             "forThisInstallSProfile": "untuk profil instalasi ini.",
             "installItOnTheServerThen": "Instal di server, lalu restart ServerKit:",
             "needsDockerToRunContainersAnd": "membutuhkan Docker untuk menjalankan container, dan server ini diinstal dengan",
             "profileWhichLeavesItOutNothing": "profil, yang mengabaikannya. Tidak ada yang terkunci — menambahkan Docker akan mengaktifkan halaman ini.",
             "serverkitReChecksForDockerAutomatically": "ServerKit memeriksa ulang Docker secara otomatis. Pemantauan, domain, sertifikat, cron dan DNS tetap berfungsi tanpanya — lihat",
-            "settingsSystem": "Pengaturan → Sistem",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "Pengaturan → Sistem"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB dan server ini punya",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "Gagal menambahkan kunci: {{message}}",
             "failedToRemoveKey": "Gagal menghapus kunci: {{message}}",
             "fingerprint": "Sidik jari",
-            "noSshKeysConfiguredForRoot": "Tidak ada kunci SSH yang dikonfigurasi untuk pengguna root.",
             "pasteYourSshPublicKeyTypically": "Tempelkan kunci publik SSH Anda (biasanya dari ~/.ssh/id_rsa.pub atau ~/.ssh/id_ed25519.pub)",
             "publicKey": "Kunci Publik",
             "removeSshKey": "Hapus Kunci SSH",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "melalui penyedia DNS Anda.",
             "webrootPath": "Jalur Webroot",
             "wildcardCertificateDns01Validation": "Sertifikat wildcard (validasi DNS-01)",
-            "wildcardCertificateIssued": "Sertifikat wildcard diterbitkan"
+            "wildcardCertificateIssued": "Sertifikat wildcard diterbitkan",
+            "domainsRequired": "Masukkan setidaknya satu domain."
         },
         "sSOCallback": {
             "authenticationFailed": "Otentikasi Gagal",
@@ -5352,14 +5351,12 @@
             "alerts": "Peringatan",
             "areYouSureYouWantTo": "Apakah Anda yakin ingin menghapus server ini? Tindakan ini tidak dapat dibatalkan.",
             "backToServers": "Kembali ke Server",
-            "copyServerId": "Salin ID server",
             "cron": "Kron",
             "errorLoadingServer": "Kesalahan Memuat Server",
             "failedToAcknowledgeAlert": "Gagal mengakui peringatan",
             "failedToPingServer": "Gagal melakukan ping ke server",
             "failedToRemoveServer": "Gagal menghapus server",
             "failedToResolveAlert": "Gagal menyelesaikan peringatan",
-            "lastSeen": "terakhir terlihat",
             "limitedMode": "Modus terbatas",
             "loadingServerDetails": "Memuat detail server",
             "metrics": "Metrik",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "Tingkatkan semuanya",
             "upgradeAllPackages": "Tingkatkan semua paket",
             "upgradeFailedToStart": "Peningkatan gagal dimulai",
-            "upgradingAllPackages": "Meningkatkan semua paket"
+            "upgradingAllPackages": "Meningkatkan semua paket",
+            "enterAPackageNameFirst": "Masukkan nama paket terlebih dahulu"
         },
         "serverPicker": {
             "deployToServer": "Terapkan ke server",
@@ -5602,6 +5600,7 @@
             "library": "Perpustakaan",
             "nPackages": "{{n}} paket",
             "nServices": "{{n}} layanan",
+            "nameRequired": "Masukkan nama templat.",
             "nginxPhpFpmCertbot": "nginx \n php-fpm \n certbot",
             "noReadyMadeTemplatesAreAvailable": "Tidak ada templat siap pakai. Anda tetap dapat membuatnya dari awal.",
             "noTemplatesYet": "Belum ada template",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "Token berakhir",
             "ungrouped": "Tidak dikelompokkan",
             "whatHappensNext": "Apa yang terjadi selanjutnya?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Sinkron"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Apa kamu yakin? Tindakan ini akan menghapus layanan dan semua datanya secara permanen.",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "Putuskan tautan {{name}} dari layanan tertautnya?",
             "unlinking": "Memutuskan tautan…",
             "unlinkingWillResetBothAppsTo": "Membatalkan tautan akan mengatur ulang kedua layanan ke mode mandiri.",
-            "usedForCertificateExpiryRemindersFrom": "Digunakan untuk pengingat kedaluwarsa sertifikat dari Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "Digunakan untuk pengingat kedaluwarsa sertifikat dari Let's Encrypt.",
+            "enterADomainNameFirst": "Masukkan nama domain terlebih dahulu"
         },
         "setupHealthWidget": {
             "allSet": "Semua siap —",
@@ -6322,7 +6323,10 @@
             "targetService": "Layanan sasaran",
             "variables": "Variabel",
             "variablesInThisGroupApplyTo": "Variabel dalam grup ini berlaku untuk setiap sumber daya yang Anda lampirkan.",
-            "whatThisGroupIsFor": "Untuk apa grup ini…"
+            "whatThisGroupIsFor": "Untuk apa grup ini…",
+            "enterAGroupNameFirst": "Masukkan nama grup terlebih dahulu",
+            "enterAResourceIdFirst": "Masukkan ID sumber daya terlebih dahulu",
+            "enterAVariableNameFirst": "Masukkan nama variabel terlebih dahulu"
         },
         "shellTab": {
             "containerShell": "Shell Kontainer",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "Tidak ada kontainer yang berjalan",
             "running": "Berlari...",
             "startTheServiceToAccessThe": "Mulai layanan untuk mengakses shell.",
-            "typeACommandBelowToExecute": "Ketik perintah di bawah ini untuk menjalankannya di wadah."
+            "typeACommandBelowToExecute": "Ketik perintah di bawah ini untuk menjalankannya di wadah.",
+            "failedToLoadContainers": "Tidak dapat memuat kontainer."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Pilih preset atau buat tampilan kustom. Hanya item yang terlihat yang muncul di sidebar Anda.",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "Dua panel yang menulis konfigurasi server web akan berebut kepemilikan. Alihkan server ini ke",
             "upstream": "Hulu",
             "whatWeCheck": "Apa yang kami periksa",
-            "whileObserving": "sambil mengamati"
+            "whileObserving": "sambil mengamati",
+            "failedToLoadSurvey": "Tidak dapat memuat survei."
         },
         "systemNotices": {
             "dismiss": "Singkirkan {{title}}",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "Gunakan domain ini",
             "used": "Digunakan",
             "utcOffset": "Perimbangan UTC",
-            "version": "Versi {{brand}}"
+            "version": "Versi {{brand}}",
+            "enterADomainFirst": "Masukkan domain terlebih dahulu",
+            "selectADifferentTimezoneFirst": "Pilih zona waktu lain terlebih dahulu"
         },
         "tableDataTab": {
             "column": "Kolom",
@@ -7148,7 +7156,8 @@
             "query": "Pertanyaan",
             "structure": "Struktur",
             "tableView": "Tampilan tabel",
-            "zeroRows": "0 baris"
+            "zeroRows": "0 baris",
+            "noMoreRows": "Tidak ada baris lagi"
         },
         "tabs": {
             "moreTabs": "Lebih banyak tab"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "Potong file log",
             "typeUnitName": "Ketik nama satuan…",
             "unit": "Satuan",
-            "useThe": "Gunakan"
+            "useThe": "Gunakan",
+            "failedToLoadProcesses": "Tidak dapat memuat proses.",
+            "selectALogFileFirst": "Pilih file log terlebih dahulu",
+            "remoteJournalIsNotAvailableYet": "Jurnal jarak jauh belum tersedia"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Proses sedang berlangsung.",
@@ -7551,7 +7563,8 @@
             "viewSaved": "Lihat \"{{trimmed}}\" disimpan",
             "viewUpdated": "Lihat \"{{name}}\" diperbarui",
             "views": "Tampilan",
-            "withChanges": "” dengan perubahan"
+            "withChanges": "” dengan perubahan",
+            "enterAViewNameFirst": "Masukkan nama tampilan terlebih dahulu"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Hapus juga data. Tindakan ini tidak dapat dibatalkan.",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "Muatan URL",
             "retryCount": "Coba Lagi Hitung",
             "timeoutSeconds": "Batas waktu (detik)",
-            "update": "Perbarui"
+            "update": "Perbarui",
+            "eventsRequired": "Pilih setidaknya satu peristiwa."
         },
         "webhooksTab": {
             "active": "Aktif",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "Ruang kerja diarsipkan",
             "workspaceDeleted": "Ruang kerja dihapus",
             "workspaceNotFound": "Ruang kerja tidak ditemukan",
-            "workspaceRestored": "Ruang kerja dipulihkan",
-            "workspaces": "Ruang kerja"
+            "workspaceRestored": "Ruang kerja dipulihkan"
         },
         "workspaceMembersTab": {
             "addAMember": "Tambahkan anggota",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "Pengguna Maks (0 = tidak terbatas)",
             "members": "Anggota",
             "myTeam": "Tim saya",
+            "nameRequired": "Masukkan nama ruang kerja.",
             "newWorkspace": "Ruang Kerja Baru",
             "recolorsThePanelForAnyoneViewing": "Warnai ulang panel untuk siapa pun yang melihat ruang kerja ini. Biarkan default jika tidak ada pencitraan merek khusus.",
             "searchWorkspaces": "Cari ruang kerja…",
@@ -7981,6 +7995,14 @@
             "users": "Pengguna",
             "workspaceBrandColor": "Warna merek ruang kerja",
             "workspaceCreated": "Ruang kerja dibuat"
+        },
+        "mobileSearch": {
+            "label": "Cari",
+            "title": "Cari semuanya (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Tidak ada yang bisa diulang",
+            "nothingToUndo": "Tidak ada yang bisa dibatalkan"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "Memvalidasi undangan…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Menambahkan",
             "back": "Kembali",
@@ -8063,7 +8086,8 @@
             "stop": "Berhenti",
             "test": "Tes",
             "tryAgain": "Coba lagi",
-            "uninstall": "Hapus instalasi"
+            "uninstall": "Hapus instalasi",
+            "new": "Baru"
         },
         "checking": "Memeriksa...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "Memuat…",
         "more": "Lagi",
+        "moreActions": "Tindakan lainnya",
+        "moreInfoAbout": "Info lebih lanjut tentang {{subject}}",
         "moreSections": "Lebih banyak bagian",
         "page": "Halaman",
         "retry": "Coba lagi",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}h",
             "justNow": "baru saja",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Masukkan domain.",
+            "domainInvalid": "Masukkan domain yang valid.",
+            "emailInvalid": "Masukkan alamat email yang valid.",
+            "required": "Kolom ini wajib diisi.",
+            "urlInvalid": "Masukkan URL yang valid, mis. https://example.com/webhook."
         }
     },
     "errors": {

@@ -227,10 +227,6 @@
             "viewRelease": "Xem bản phát hành",
             "youReUpToDate": "Bạn đã cập nhật!"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "Thêm mật mã hoặc 2FA",
-            "secureYourAccount": "Bảo mật tài khoản của bạn"
-        },
         "activityTab": {
             "actionType": "Loại hành động",
             "actionsThisWeek": "hành động trong tuần này",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Đã kích hoạt nâng cấp cho tất cả các đại lý trực tuyến",
             "versionDistribution": "Phân phối phiên bản",
             "versions": "Phiên bản",
-            "viewDetails": "Xem chi tiết"
+            "viewDetails": "Xem chi tiết",
+            "selectAVersionFirst": "Hãy chọn một phiên bản trước"
         },
         "ai": {
             "assistant": "Trợ lý"
@@ -612,7 +609,8 @@
             "remote": "Xa",
             "restoreDrills": "Khôi phục cuộc tập trận",
             "turnOnProtectionOrClickBack": "Bật bảo vệ hoặc nhấp vào Sao lưu ngay.",
-            "verifyRemoteCopy": "Xác minh bản sao từ xa"
+            "verifyRemoteCopy": "Xác minh bản sao từ xa",
+            "onlySuccessfulBackupsCanBeRestored": "Chỉ có thể khôi phục các bản sao lưu thành công"
         },
         "backupTabs": {
             "schedules": "Lịch trình",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "Tự động tải bản sao lưu mới lên bộ nhớ từ xa",
             "b2GbMonth": "B2 ($/GB/tháng)",
             "backUpNow": "Sao lưu ngay bây giờ",
+            "backUpShort": "Sao lưu",
             "backblazeB2": "Ngược sáng B2",
             "backupDeleted": "Đã xóa bản sao lưu",
             "backupName": "Tên dự phòng",
@@ -667,6 +666,7 @@
             "database": "Cơ sở dữ liệu",
             "databaseBackupCreated": "Đã tạo bản sao lưu cơ sở dữ liệu",
             "databaseName": "Tên cơ sở dữ liệu",
+            "databaseNameRequired": "Nhập tên cơ sở dữ liệu.",
             "databaseOnly": "Chỉ cơ sở dữ liệu",
             "databaseType": "Loại cơ sở dữ liệu",
             "delete": "Xóa {{name}}",
@@ -721,6 +721,7 @@
             "secretKey": "Khóa bí mật",
             "selectApplication": "Chọn dịch vụ",
             "serverkitIsFreeTheseAreYour": "ServerKit miễn phí — đây là chi phí lưu trữ của riêng bạn. Cục bộ là đĩa máy chủ của bạn (để lại 0 nếu bạn không theo dõi nó). S3/B2 là $/GB/tháng của nhà cung cấp đám mây của bạn.",
+            "serviceRequired": "Chọn một dịch vụ.",
             "settingsSaved": "Đã lưu cài đặt",
             "siteService": "Trang web/Dịch vụ",
             "storageConfigurationSaved": "Đã lưu cấu hình bộ nhớ",
@@ -883,7 +884,8 @@
             "selectSize": "Chọn kích thước",
             "serverDestroyed": "Máy chủ bị phá hủy",
             "serverName": "Tên máy chủ",
-            "serverProvisioningInitiated": "Đã bắt đầu cung cấp máy chủ"
+            "serverProvisioningInitiated": "Đã bắt đầu cung cấp máy chủ",
+            "enterANameAndChooseAProvider": "Hãy nhập tên và chọn nhà cung cấp trước"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME cho tên máy chủ này sẽ được tạo trong Cloudflare DNS, trỏ vào đường hầm.",
@@ -969,7 +971,10 @@
             "sortAToZ": "Sắp xếp A đến Z",
             "sortHighToLow": "Sắp xếp cao đến thấp",
             "sortLowToHigh": "Sắp xếp thấp đến cao",
-            "sortZToA": "Sắp xếp Z đến A"
+            "sortZToA": "Sắp xếp Z đến A",
+            "alreadyTheFirstColumn": "Đã là cột đầu tiên",
+            "alreadyTheLastColumn": "Đã là cột cuối cùng",
+            "noFilterOnThisColumn": "Cột này không có bộ lọc"
         },
         "columnsMenu": {
             "columns": "Cột",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "Nhắn tin cho trợ lý",
             "noResources": "Không tìm thấy tài nguyên nào có thể truy cập",
             "searchResources": "Tìm kiếm tài nguyên…",
-            "send": "Gửi"
+            "send": "Gửi",
+            "setUpTheAssistantFirst": "Hãy thiết lập trợ lý trước",
+            "typeAMessageFirst": "Hãy nhập tin nhắn trước"
         },
         "configDiffModal": {
             "applyRestorePoint": "Áp dụng điểm khôi phục",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "IP công cộng của máy chủ này",
             "useStarttlsRecommended": "Sử dụng STARTTLS (được khuyến nghị)",
             "whereDoIGetThis": "Tôi lấy cái này ở đâu?",
-            "yourAccountEmailGlobalKeySimplest": "Email tài khoản của bạn + khóa chung. Thiết lập đơn giản nhất nhưng cấp toàn quyền truy cập vào tài khoản."
+            "yourAccountEmailGlobalKeySimplest": "Email tài khoản của bạn + khóa chung. Thiết lập đơn giản nhất nhưng cấp toàn quyền truy cập vào tài khoản.",
+            "setUpTheOauthAppFirst": "Hãy thiết lập ứng dụng OAuth trước"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Thêm thông tin xác thực ứng dụng GitHub OAuth trong Cài đặt trước khi kết nối.",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "Tìm kiếm kho lưu trữ",
             "serviceName": "Tên dịch vụ",
             "systemdUnitOptional": "Đơn vị systemd (tùy chọn)",
-            "uploadTheArchive": "Tải lên tệp nén"
+            "uploadTheArchive": "Tải lên tệp nén",
+            "setUpGithubInSettingsFirst": "Hãy thiết lập GitHub trong Cài đặt trước"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Đã ủy quyền qua OAuth",
@@ -1337,7 +1346,8 @@
             "toRun": "để chạy.",
             "writeSqlAboveAndPress": "Viết SQL ở trên và nhấn",
             "writesEnabledBeCareful": "Đã bật tính năng ghi - hãy cẩn thận",
-            "writesOn": "Cho phép ghi"
+            "writesOn": "Cho phép ghi",
+            "runAQueryWithResultsFirst": "Hãy chạy truy vấn có kết quả trước"
         },
         "consoleToolbar": {
             "allLevels": "Tất cả cấp độ",
@@ -1353,7 +1363,8 @@
             "searchLogs": "Nhật ký tìm kiếm…",
             "showTheDeploymentDetailsAgain": "Hiển thị lại chi tiết triển khai",
             "timestamps": "Dấu thời gian",
-            "wrap": "Bọc"
+            "wrap": "Bọc",
+            "noMatchesToJumpTo": "Không có kết quả khớp để chuyển tới"
         },
         "containerOpsPanel": {
             "actionFailed": "Hành động không thành công",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "Không có đầu ra được sản xuất.",
             "noRunsRecordedYet": "Chưa có lần chạy nào được ghi lại.",
             "noRunsYet": "Chưa có lượt chạy nào",
-            "noScheduledJobsFoundCreateYour": "Không tìm thấy công việc theo lịch trình. Tạo công việc cron đầu tiên của bạn để tự động hóa các tác vụ.",
             "paused": "Đã tạm dừng",
             "runHistory": "Lịch sử chạy",
             "runHistoryIsAnAdminOnly": "Lịch sử chạy là một bề mặt chỉ dành cho quản trị viên.",
@@ -1607,7 +1617,8 @@
             "undo": "Hoàn tác",
             "unnamedJob": "Công việc không tên",
             "untracked": "Không theo dõi",
-            "whatDoesThisJobDo": "Công việc này làm gì?"
+            "whatDoesThisJobDo": "Công việc này làm gì?",
+            "enterANameCommandAndScheduleFirst": "Hãy nhập tên, lệnh và lịch trước"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 trường: phút, giờ, ngày, tháng, ngày trong tuần.",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "Xóa công việc định kỳ",
             "scheduleACommandOnTheHost": "Lên lịch lệnh trên máy chủ crontab. Chạy với tư cách là người dùng đại lý.",
             "scheduleIsRequired": "Lịch trình là bắt buộc",
-            "serverOffline": "Máy chủ ngoại tuyến"
-        },
-        "cutoverDrawer": {
-            "answer": "Trả lời",
-            "applyCutover": "Áp dụng chuyển đổi",
-            "applyDnsCutover": "Áp dụng chuyển đổi DNS?",
-            "applying": "Đang áp dụng…",
-            "atTheBoxWhereTheImported": "tại hộp nơi trang web đã nhập hiện đang tồn tại. Các bản ghi hiện tại của nó được chụp nhanh trước tiên, do đó, công tắc luôn có thể được hoàn nguyên.",
-            "capturing": "Đang chụp…",
-            "checkPropagation": "Kiểm tra sự lan truyền",
-            "cutoverApplied": "Áp dụng chuyển đổi —",
-            "cutoverAppliedNowPointsAt": "Đã áp dụng chuyển đổi - {{domain}} hiện trỏ tới {{value}}",
-            "cutoverFinishedWithErrorsReviewBelow": "Quá trình cắt hoàn tất có lỗi. Xem lại bên dưới và hoàn nguyên nếu cần.",
-            "cutoverFinishedWithErrorsReviewThe": "Quá trình cắt hoàn tất có lỗi - xem lại kết quả và xem xét hoàn nguyên.",
-            "deletedCreatedRecords_one": "Đã xóa 1 bản ghi do quá trình chuyển đổi tạo ra.",
-            "deletedCreatedRecords_other": "Đã xóa {{count}} bản ghi do quá trình chuyển đổi tạo ra.",
-            "dnsCutover": "Chuyển đổi DNS",
-            "matchesNewTarget": "Khớp đích mới",
-            "new": "Mới",
-            "newAddressTarget": "Địa chỉ mới (đích)",
-            "newTarget": "mục tiêu mới",
-            "noChangesToApplyForThe": "Không có thay đổi nào để áp dụng cho các loại bản ghi đã chọn.",
-            "notFullyPropagated": "Chưa lan truyền hoàn toàn",
-            "nowPointsAt": "bây giờ chỉ vào",
-            "oneClickRestoresTheSnapshotCaptured": "Một cú nhấp chuột sẽ khôi phục ảnh chụp nhanh được chụp trước quá trình cắt này — bao gồm cả việc xóa mọi bản ghi mà quá trình cắt đã tạo.",
-            "plannedChanges": "Những thay đổi theo kế hoạch",
-            "propagated": "Đã lan truyền",
-            "propagating": "Đang lan truyền",
-            "propagation": "Tuyên truyền",
-            "providerZoneId": "Id vùng nhà cung cấp",
-            "publicResolversCacheTheOldAddress": "Trình phân giải công khai lưu trữ địa chỉ cũ cho đến khi TTL của họ hết hạn. Kiểm tra xem địa chỉ mới đã có hiệu lực ở đâu.",
-            "recordTypes": "Các loại bản ghi",
-            "recordTypes2": "các loại bản ghi",
-            "recordsCaptured": "bản ghi đã được lưu lại",
-            "repoint": "Bổ nhiệm lại",
-            "repointsRecords_one": "Thao tác này trỏ lại bản ghi {{types}} của {{domain}} tới {{target}}. Ảnh chụp nhanh cho phép bạn hoàn nguyên.",
-            "repointsRecords_other": "Thao tác này trỏ lại các bản ghi {{types}} của {{domain}} tới {{target}}. Ảnh chụp nhanh cho phép bạn hoàn nguyên.",
-            "resolver": "Trình giải quyết",
-            "restoredRecords_one": "Đã khôi phục 1 bản ghi.",
-            "restoredRecords_other": "Đã khôi phục {{count}} bản ghi.",
-            "revertCutover": "Hoàn nguyên chuyển đổi",
-            "revertFinishedWithErrorsCheckThe": "Hoàn nguyên khi có lỗi - kiểm tra kết quả.",
-            "revertedRestoredSPreCutoverRecords": "Đã hoàn nguyên - đã khôi phục các bản ghi cắt trước của {{domain}}",
-            "reverting": "Đang hoàn nguyên…",
-            "review": "Ôn tập",
-            "rollBack": "Quay lại",
-            "snapshotPreview": "Ảnh chụp nhanh & xem trước",
-            "theDnsProviderSZoneIdentifier": "mã định danh vùng của nhà cung cấp DNS",
-            "theIpOrHostnameForCname": "IP (hoặc tên máy chủ cho CNAME) mà bản ghi sẽ trỏ tới.",
-            "thisDomainHasNoConnectedProvider": "Miền này không có vùng nhà cung cấp được kết nối — cutover cần một vùng để đọc và ghi bản ghi.",
-            "verify": "Xác minh"
+            "serverOffline": "Máy chủ ngoại tuyến",
+            "failedToLoadCronJobs": "Không thể tải các tác vụ cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Chưa có tiện ích nào trên trang tổng quan này."
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "Nhấp để sắp xếp · Shift+nhấp để thêm cấp độ sắp xếp",
             "loading": "Đang tải",
             "noRowsMatchTheActiveColumn": "Không có hàng nào khớp với bộ lọc cột đang hoạt động.",
+            "scrollableTable": "Bảng có thể cuộn",
             "selectAllRows": "Chọn tất cả các hàng",
-            "selectRow": "Chọn hàng"
+            "selectRow": "Chọn hàng",
+            "sortAColumnFirst": "Hãy sắp xếp theo một cột trước"
         },
         "dataTableFooter": {
             "nextPage": "Trang tiếp theo",
@@ -1776,7 +1740,8 @@
             "updateOverview": "Cập nhật tổng quan",
             "updatingDatabaseSchema": "Đang cập nhật lược đồ cơ sở dữ liệu...",
             "weRecommendBackingUpYourDatabase": "Chúng tôi khuyên bạn nên sao lưu cơ sở dữ liệu của mình trước khi áp dụng các bản cập nhật.",
-            "whichDoesNotExistInThis": ", không tồn tại trong bản dựng này - thường là một nhánh đã thêm quá trình di chuyển và sau đó được hoàn nguyên. Lược đồ không thể được nâng cấp cho đến khi nó được đóng dấu trở lại bản sửa đổi đã biết:"
+            "whichDoesNotExistInThis": ", không tồn tại trong bản dựng này - thường là một nhánh đã thêm quá trình di chuyển và sau đó được hoàn nguyên. Lược đồ không thể được nâng cấp cho đến khi nó được đóng dấu trở lại bản sửa đổi đã biết:",
+            "createABackupFirst": "Hãy tạo bản sao lưu trước"
         },
         "databases": {
             "backUpDatabase": "Sao lưu cơ sở dữ liệu",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "Trên Linux, hãy đảm bảo daemon Docker được khởi động",
             "retryConnection": "Thử lại kết nối",
             "targets": "Mục tiêu",
-            "toUseDockerManagement": "Để sử dụng quản lý Docker:",
             "verifyTheUserHasPermissionsTo": "Xác minh người dùng có quyền truy cập Docker",
             "volumes": "Volume"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "Làm mới bản ghi",
             "regenerateToken": "Tạo lại mã thông báo",
             "thisDomainIsnTSetUp": "Miền này chưa được thiết lập cho DNS trong ServerKit.",
-            "tokenRegenerated": "Mã thông báo đã được tạo lại"
+            "tokenRegenerated": "Mã thông báo đã được tạo lại",
+            "enterTheRecordContentFirst": "Hãy nhập nội dung bản ghi trước"
         },
         "domainField": {
             "alreadyAttached": "{{name}} đã được gắn với một dịch vụ.",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "Tắt SSL cho {{name}}?",
             "dismissError": "Lỗi loại bỏ",
             "dnsProvider": "Nhà cung cấp DNS",
+            "domainRequired": "Nhập tên miền hợp lệ.",
             "domainVerificationFailed": "Xác minh tên miền không thành công: {{error}}",
             "domainVerifiedIp": "Tên miền đã được xác minh! IP: {{ipaddress}}",
             "emailAddress": "Địa chỉ email",
@@ -2292,6 +2258,7 @@
             "rowsFields": "Hàng {{n}} · Trường {{fields}} · {{value}}",
             "searchDomains": "Tìm kiếm tên miền…",
             "selectAnApplication": "Chọn một dịch vụ",
+            "serviceRequired": "Chọn một dịch vụ.",
             "setAsPrimaryDomain": "Đặt làm tên miền chính",
             "sslCertificate": "Chứng chỉ SSL",
             "sslExpires": "Hết hạn {{days}}d",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "Xác minh tải xuống của bạn bằng cách sử dụng tổng kiểm tra SHA256:",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "với mã thông báo đăng ký máy chủ."
+            "withTheServerRegistrationToken": "với mã thông báo đăng ký máy chủ.",
+            "noBuildPublishedForThisPlatform": "Chưa có bản dựng nào được phát hành cho nền tảng này"
         },
         "drawerHeader": {
             "aiSettings": "cài đặt AI",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Hãy thử một cụm từ tìm kiếm khác hoặc duyệt qua một thư mục khác.",
             "typeZA": "Loại Z-A",
             "types": "Các loại",
+            "up": "Lên",
             "upDelDeleteF2RenameA": "⌫ Lên · Xóa · F2 Đổi tên · ⌘A Tất cả",
             "updatedAt": "Cập nhật {{time}}",
             "upload": "Tải lên",
@@ -2809,10 +2778,12 @@
             "videos": "Video",
             "volumes": "Volumes",
             "webConfig": "Cấu hình web",
-            "willBeCreatedIn": "Sẽ được tạo trong:"
+            "willBeCreatedIn": "Sẽ được tạo trong:",
+            "nothingToGoBackTo": "Không có gì để quay lại",
+            "nothingToGoForwardTo": "Không có gì để đi tiếp",
+            "alreadyAtTheTopFolder": "Đã ở thư mục trên cùng"
         },
         "fileRow": {
-            "deselect": "Bỏ chọn",
             "rename": "Đổi tên",
             "select": "Lựa chọn"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "Xóa tất cả",
             "noFilters": "không có bộ lọc",
             "showResults_one": "Hiện {{count}} {{noun}}",
-            "showResults_other": "Hiện {{count}} {{noun}}"
+            "showResults_other": "Hiện {{count}} {{noun}}",
+            "noFiltersApplied": "Chưa áp dụng bộ lọc nào"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 hoặc 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "Xu hướng",
             "unusuallyHigh": "Cao bất thường",
             "unusuallyLow": "Thấp bất thường",
-            "zScore": "điểm Z"
+            "zScore": "điểm Z",
+            "selectAServerFirst": "Hãy chọn một máy chủ trước"
         },
         "fleetProxy": {
             "apps": "Dịch vụ",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "Đặt lại các thay đổi về chế độ xem",
             "rowDensity": "Mật độ hàng",
             "rowsInThisView": "Các hàng trong chế độ xem này",
-            "selectedRows": "Hàng đã chọn"
+            "selectedRows": "Hàng đã chọn",
+            "selectSomeRowsFirst": "Hãy chọn một số hàng trước"
         },
         "gridViewPicker": {
             "builtIn": "Được xây dựng trong",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Bắt đầu từ các bộ lọc và cột hiện tại",
             "unsaved": "Chưa lưu",
             "unsetAsDefault": "Bỏ đặt mặc định",
-            "viewOptions": "Tùy chọn {{name}}"
+            "viewOptions": "Tùy chọn {{name}}",
+            "enterAViewNameFirst": "Hãy nhập tên chế độ xem trước"
         },
         "groupMenu": {
             "group": "Nhóm",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "Đã lưu cấu hình. Khởi động lại dịch vụ để áp dụng các thay đổi.",
             "failedToSaveConfiguration": "Không lưu được cấu hình",
             "gunicornConfiguration": "Cấu hình Gunicorn",
-            "loadingGunicornConfiguration": "Đang tải cấu hình Gunicorn..."
+            "loadingGunicornConfiguration": "Đang tải cấu hình Gunicorn...",
+            "failedToLoadConfiguration": "Không thể tải cấu hình Gunicorn."
         },
         "hints": {
             "appBound": "Bản thân dịch vụ là điểm nghẽn. Hãy lưu đệm toàn bộ trang phía trước nó, hoặc cấp cho nó máy chủ lớn hơn.",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Không có gì để chuyển đổi - không tìm thấy chỉ thị nào.",
             "pasteTheContentsOfAnApache": "Dán nội dung của Apache",
             "reason": "Lý do",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine trên \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine trên \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "Hãy dán các quy tắc .htaccess trước"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 hoặc 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "để xác nhận",
             "tryAgain": "Thử lại",
             "whereTheDumpLives": "Nơi bãi rác sống",
-            "working": "Đang xử lý…"
+            "working": "Đang xử lý…",
+            "chooseADumpFileFirst": "Hãy chọn tệp dump trước",
+            "chooseATargetDatabaseFirst": "Hãy chọn cơ sở dữ liệu đích trước",
+            "importFinished": "Đã nhập xong",
+            "onlyAdminsCanImport": "Chỉ quản trị viên mới có thể nhập",
+            "typeTheDatabaseNameToConfirm": "Nhập tên cơ sở dữ liệu để xác nhận"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "Kho lưu trữ cpmove / backup-*.tar.gz từ Sao lưu toàn bộ tài khoản của cPanel.",
@@ -3344,7 +3326,9 @@
             "unknownAge": "không rõ thời gian",
             "viewChanges": "Xem thay đổi",
             "watchingADocrootHashesEveryFile": "Việc xem docroot băm mọi tệp bên ngoài thư mục tải lên/bộ đệm, do đó, nó được chọn tham gia cho mỗi dịch vụ.",
-            "whatChanged": "Điều gì đã thay đổi"
+            "whatChanged": "Điều gì đã thay đổi",
+            "createABaselineFirst": "Hãy tạo đường cơ sở trước",
+            "notAvailableOnThisServer": "Không khả dụng trên máy chủ này"
         },
         "invitationsTab": {
             "copyInviteLink": "Sao chép liên kết mời",
@@ -3394,7 +3378,8 @@
             "exitCode": "(mã thoát {{code}})",
             "streamingProgress": "Đang phát trực tuyến…",
             "waitingForTheAgentToBegin": "Đang chờ đại lý bắt đầu…",
-            "working": "Đang xử lý…"
+            "working": "Đang xử lý…",
+            "waitForTheJobToFinish": "Hãy đợi tác vụ hoàn tất"
         },
         "jobs": {
             "activity": "Hoạt động",
@@ -3501,7 +3486,9 @@
             "logFiles": "Tệp nhật ký",
             "noLogFilesFound": "Không tìm thấy tệp nhật ký nào",
             "searchPattern": "Mẫu tìm kiếm...",
-            "selectALogFile": "Chọn một tệp nhật ký để xem nội dung."
+            "selectALogFile": "Chọn một tệp nhật ký để xem nội dung.",
+            "selectALogFileFirst": "Hãy chọn một tệp nhật ký trước",
+            "nothingToDownloadYet": "Chưa có gì để tải xuống"
         },
         "loginLinksSection": {
             "allowedIp": "IP được phép",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "Không có quyền của máy chủ được khai báo.",
             "pasteAGithubRepoOwnerRepo": "Dán kho lưu trữ GitHub (chủ sở hữu/repo hoặc chủ sở hữu/repo@tag), bản phát hành URL hoặc liên kết zip trực tiếp. Bạn sẽ xem trước những gì cài đặt trước khi nó hạ cánh.",
             "preview": "Xem trước",
-            "signatureInvalid": "Chữ ký không hợp lệ",
             "signatureMismatch": "Chữ ký không khớp với tệp lưu trữ này.",
-            "signed": "Đã ký ·",
-            "signedUnknownPublisher": "Đã ký · nhà xuất bản không xác định",
             "theDownloadMayHaveBeenTampered": "Quá trình tải xuống có thể đã bị giả mạo — đừng cài đặt nó.",
             "thisExtensionRequests": "Tiện ích mở rộng này yêu cầu:",
             "thisReleaseCarriesNoPublisherSignature": "Bản phát hành này không có chữ ký của nhà xuất bản. Nó sẽ chạy với đặc quyền đầy đủ của bảng điều khiển - chỉ cài đặt nếu bạn tin cậy vào nguồn.",
             "thisReleaseIsSignedButThe": "Bản phát hành này đã được ký nhưng khóa nhà xuất bản không được bảng này ghim nên không thể xác minh chữ ký. Hãy coi nó như chưa được ký.",
-            "unsigned": "Chưa ký",
             "uploadAnExtensionZipWith": "Tải lên một zip tiện ích mở rộng với",
             "useAnAbsolutePathThatExists": "Sử dụng đường dẫn tuyệt đối tồn tại trên máy chủ phụ trợ hoặc bên trong vùng chứa phụ trợ.",
             "zip": "Mã zip"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "Không thể tải danh mục tiện ích mở rộng.",
             "couldntToggle": "Không thể bật hoặc tắt tiện ích mở rộng.",
             "couldntUninstall": "Không thể gỡ cài đặt tiện ích mở rộng.",
-            "declaredPermissionsWhatThePanelHas": "Các quyền đã được khai báo, những gì bảng điều khiển đã quan sát và các phần phụ thuộc Python đang chờ xử lý",
-            "disabling": "Đang tắt…",
-            "enabling": "Đang bật…",
             "extensionConfigurationSaved": "Đã lưu cấu hình tiện ích",
             "extensionDisabled": "Đã tắt tiện ích mở rộng",
             "extensionEnabled": "Đã bật tiện ích mở rộng",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "Cài đặt bằng chữ ký không thể xác minh?",
             "installWithoutChecksumVerification": "Cài đặt mà không cần xác minh tổng kiểm tra?",
             "installed": "Đã cài đặt",
-            "installedExtensions": "Tiện ích mở rộng đã cài đặt",
             "installedHotReloadShouldPickIt": "Đã cài đặt \"{{displayname}}\". Tải lại nóng nên nhặt nó lên; khởi động lại chương trình phụ trợ nếu các tuyến đường kế hoạch chi tiết không xuất hiện.",
             "installedRestartBackendIfBlueprintRoutes": "Đã cài đặt \"{{displayname}}\". Khởi động lại phần phụ trợ nếu các tuyến đường kế hoạch chi tiết không xuất hiện.",
             "installing": "Đang cài đặt…",
@@ -3665,33 +3644,21 @@
             "purgeData": "Xóa dữ liệu",
             "registry": "Đăng ký",
             "registryInstallFailed": "Cài đặt sổ đăng ký không thành công",
-            "releaseZipIsSignedThePanel": "Mã zip phát hành đã được ký; bảng điều khiển xác minh chữ ký ed25519 khi cài đặt",
             "removingThisExtensionStopsItsRoutes": "Việc xóa tiện ích mở rộng này sẽ dừng các tuyến đường và đóng góp giao diện người dùng của tiện ích này.",
             "resetFilters": "Đặt lại bộ lọc",
             "reviewed": "Đã đánh giá",
             "screenshots": "Ảnh chụp màn hình",
             "searchExtensions": "Tiện ích mở rộng tìm kiếm…",
-            "signed": "Đã ký",
-            "signedWithPublisherKeyWhichThis": "Được ký bằng khóa nhà xuất bản '{{publisherKeyId}}', bảng này không ghim",
             "sourceRepo": "Kho lưu trữ nguồn",
             "thisExtensionDeclaresNoConfigurationFields": "Tiện ích mở rộng này tuyên bố không có trường cấu hình.",
             "thisExtensionRequests": "Tiện ích mở rộng này yêu cầu:",
-            "thisReleaseCarriesNoPublisherSignature": "Bản phát hành này không có chữ ký của nhà xuất bản",
             "uninstall": "Gỡ cài đặt {{displayname}}?",
-            "uninstalling": "Đang gỡ cài đặt…",
-            "unknownSigner": "Người ký không xác định",
             "unreviewed": "Chưa được xem xét",
-            "unsigned": "Chưa ký",
             "update": "Cập nhật",
             "updateAnyway": "Vẫn cập nhật",
-            "updateAvailableV": "Đã có bản cập nhật → v",
             "updating": "Đang cập nhật…",
-            "versionByAuthor": "v{{version}} · bởi {{author}}"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "Cho phép thành viên thực hiện các hành động được tuyển chọn",
-            "letWorkspaceMembersRunASmall": "Cho phép các thành viên trong không gian làm việc chạy một tập hợp nhỏ các hành động được tham số hóa, tuyển chọn (chẳng hạn như điều chỉnh tần suất sao lưu của dịch vụ) cho các dịch vụ mà họ có thể tiếp cận. Mọi hành động đều được xác thực dựa trên một lược đồ cố định và được ghi lại kiểm tra - không có văn bản tự do nào đến được trình bao máy chủ. Tắt tính năng này để vô hiệu hóa toàn bộ bề mặt hành động của thành viên.",
-            "memberActions": "Hành động của thành viên"
+            "versionByAuthor": "v{{version}} · bởi {{author}}",
+            "installShort": "Cài đặt"
         },
         "message": {
             "somethingWentWrong": "Đã xảy ra lỗi."
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "Số liệu được thu thập mỗi phút",
             "noHistoricalDataYet": "Chưa có dữ liệu lịch sử",
             "realTimePerformance": "Hiệu suất thời gian thực",
-            "systemMetrics": "Số liệu hệ thống"
+            "systemMetrics": "Số liệu hệ thống",
+            "loadingMetricsHistory": "Đang tải lịch sử số liệu…"
         },
         "metricsTab": {
             "activeRunning": "Hoạt động (đang chạy)",
@@ -3732,7 +3700,8 @@
             "processes": "Quy trình",
             "serviceStatus": "Trạng thái dịch vụ",
             "startTheServiceToViewResource": "Khởi động dịch vụ để xem số liệu tài nguyên.",
-            "workers": "Worker"
+            "workers": "Worker",
+            "failedToLoadMetrics": "Không thể tải số liệu."
         },
         "microCachePanel": {
             "assetCachingSaved": "Đã lưu cài đặt bộ nhớ đệm tài nguyên",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "Tạo người dùng có cùng tên và đầy đủ đặc quyền",
             "creating": "Đang tạo…",
             "databaseCreated": "Đã tạo cơ sở dữ liệu",
-            "databaseName": "Tên cơ sở dữ liệu *",
+            "databaseName": "Tên cơ sở dữ liệu",
             "encoding": "Mã hóa",
             "engine": "Động cơ",
             "fromTheTemplateCatalog": "từ danh mục mẫu",
@@ -3836,7 +3805,9 @@
             "running": "đang chạy",
             "saveTheseCredentialsThePasswordWon": "Lưu các thông tin xác thực này — mật khẩu sẽ không được hiển thị lại.",
             "userCreated": "Người dùng đã tạo",
-            "username": "Tên người dùng *"
+            "username": "Tên người dùng",
+            "databaseNameInvalid": "Chỉ dùng chữ cái, chữ số và dấu gạch dưới.",
+            "databaseNameRequired": "Nhập tên cơ sở dữ liệu."
         },
         "modeToggle": {
             "assistant": "Trợ lý",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "Kích hoạt ở trên",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "Cảnh báo sẽ đi đến đâu khi nó kích hoạt",
-            "wouldAlertNow": "Sẽ cảnh báo ngay"
+            "wouldAlertNow": "Sẽ cảnh báo ngay",
+            "couldntLoadMonitoringData": "Không thể tải dữ liệu giám sát."
         },
         "monitoringOverview": {
             "activeAlerts": "Cảnh báo hoạt động",
@@ -4018,7 +3990,8 @@
             "runTest": "Chạy kiểm tra",
             "running": "Đang chạy…",
             "speedTest": "Kiểm tra tốc độ",
-            "tested": "Đã thử nghiệm"
+            "tested": "Đã thử nghiệm",
+            "loadingHosts": "Đang tải máy chủ"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Một phản hồi 200 không có văn bản này được tính là ngừng hoạt động.",
@@ -4048,7 +4021,6 @@
             "monitoring": "Giám sát {{name}}",
             "nextCheck": "Kiểm tra tiếp theo",
             "noMonitorsMatch": "Không có trình giám sát nào phù hợp",
-            "nothingIsBeingWatchedYet": "Chưa có gì được theo dõi",
             "offForSelfSignedCertificatesOn": "Tắt đối với chứng chỉ tự ký trên máy chủ nội bộ.",
             "pause": "Tạm dừng",
             "paused": "Đã tạm dừng {{name}}",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "Trình giám sát báo lỗi",
             "mostRecentResults": "Kết quả gần đây nhất",
             "noChecksRecordedYetTheScheduler": "Chưa có cuộc kiểm tra nào được ghi lại - bộ lập lịch thăm dò theo khoảng thời gian của mỗi màn hình.",
-            "nothingIsBeingWatchedYet": "Chưa có gì được theo dõi"
+            "nothingIsBeingWatchedYet": "Chưa có gì được theo dõi",
+            "couldntLoadMonitors": "Không thể tải các trình giám sát."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Tạo một mạng để kết nối các container.",
@@ -4111,7 +4084,10 @@
             "registering": "Đang đăng ký…",
             "review": "Ôn tập",
             "uploadAndDeploy": "Tải lên & triển khai",
-            "uploading": "Đang tải lên…"
+            "uploading": "Đang tải lên…",
+            "completeTheSourceDetailsFirst": "Hãy hoàn tất chi tiết nguồn trước",
+            "fillInTheRequiredDetailsFirst": "Hãy điền các thông tin bắt buộc trước",
+            "finishThePreviousStepFirst": "Hãy hoàn tất bước trước đó"
         },
         "notFound": {
             "browseExtensions": "Duyệt qua tiện ích mở rộng",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "Không có thông báo chưa đọc.",
             "notifications": "Thông báo",
             "success": "Thành công",
-            "unread": "Chưa đọc"
+            "unread": "Chưa đọc",
+            "noFiltersToReset": "Không có bộ lọc để đặt lại"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "quản trị viên@example.com, team@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "Bật/tắt dock Tác vụ",
             "title": "Tác vụ",
             "unreadCount": "{{count}} chưa đọc",
-            "waitingForLogs": "Đang chờ nhật ký chạy…"
+            "waitingForLogs": "Đang chờ nhật ký chạy…",
+            "enterTheRequiredValueFirst": "Hãy nhập giá trị bắt buộc trước"
         },
         "organizationTabs": {
             "projects": "Dự án",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "Đang tải gói...",
             "package": "Bưu kiện",
             "packageNameEGRequestsFlask": "Tên gói (ví dụ: yêu cầu, bình==2.0.0)",
-            "requirementsTxtUpdated": "đã cập nhật yêu cầu.txt"
+            "requirementsTxtUpdated": "đã cập nhật yêu cầu.txt",
+            "failedToLoadPackages": "Không thể tải các gói."
         },
         "pageContextMap": {
             "application": "Dịch vụ",
@@ -4484,7 +4463,6 @@
             "emailAddress": "Địa chỉ email",
             "memberSince": "Thành viên kể từ",
             "profileSettings": "Cài đặt hồ sơ",
-            "role": "Vai trò",
             "saveChanges": "Lưu thay đổi"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "Nginx của máy chủ đang xử lý ủy quyền ngược. Thay vào đó hãy chuyển sang Traefik hoặc Caddy ở trên để chạy ngăn xếp proxy Docker được quản lý.",
             "thisServerSActiveProxyIs": "Proxy hoạt động của máy chủ này là",
             "traefik": "traefik",
-            "whichExpects": ", mong đợi"
+            "whichExpects": ", mong đợi",
+            "noChangesToSave": "Không có thay đổi để lưu",
+            "selectADifferentProxyFirst": "Hãy chọn một proxy khác trước"
         },
         "pruneButton": {
             "cleaning": "Đang dọn dẹp…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "Tải trọng phải hợp lệ JSON",
             "permanentlyDeleteThisMessage": "Xóa vĩnh viễn tin nhắn này?",
             "priority": "Sự ưu tiên",
-            "queue": "Hàng đợi",
             "queueBus": "Xe buýt xếp hàng",
             "readOnly": "Chỉ đọc",
             "requeue": "hàng đợi",
@@ -4702,7 +4681,6 @@
             "total": "Tổng cộng"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Điều chỉnh bộ lọc hoặc truy vấn tìm kiếm để xem hàng đợi của bạn.",
             "allGroups": "Tất cả các nhóm",
             "anyStatus": "Bất kỳ trạng thái nào",
             "areYouSureYouWantTo": "Bạn có chắc chắn muốn xóa \"{{value}}\" và tất cả tin nhắn của nó không?",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}} bước",
             "unavailable": "Danh mục công thức không khả dụng",
             "unavailableHint": "Không thể truy cập registry và không có bản sao đi kèm.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Hãy giải quyết các điểm chặn ở trên trước",
+            "selectATargetServerFirst": "Hãy chọn máy chủ đích trước"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Không thể tải thùng rác.",
@@ -4840,16 +4820,21 @@
             "basicAuth": "Xác thực cơ bản",
             "betweenServers": "giữa {{privateServer}} và {{edgeServer}}",
             "edgeServerPublicIpFrontsThe": "Máy chủ biên (IP công cộng - phía trước đường hầm)",
+            "edgeServerRequired": "Chọn máy chủ biên.",
             "exposeALocalService": "Công khai một dịch vụ cục bộ",
+            "exposeAPrivateServicePublicly": "Công khai một dịch vụ riêng tư.",
             "exposeAServiceRunningOnA": "Hiển thị dịch vụ chạy trên máy riêng (phía sau NAT, không chuyển tiếp cổng) tới tên máy chủ công cộng qua đường hầm WireGuard giữa hai đại lý của bạn.",
             "exposeService": "Công khai dịch vụ",
+            "exposeServicesOn": "Công khai các dịch vụ trên",
             "exposeServicesRunningOn": "Công khai các dịch vụ đang chạy trên",
+            "exposeShort": "Mở",
             "exposed": "Tiếp xúc {{hostname}}",
             "failedToExposeService": "Không thể công khai dịch vụ",
             "failedToLoadTunnels": "Không thể tải đường hầm",
             "failedToRemoveService": "Không thể xóa dịch vụ",
             "failedToTearDownTunnel": "Không thể phá bỏ đường hầm",
             "handshakeAt": "bắt tay {{time}}",
+            "hostnameRequired": "Nhập tên máy chủ công khai hợp lệ.",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "Đang tải đường hầm",
             "noHandshakeYetIfThisPersists": "Chưa bắt tay - nếu điều này vẫn tiếp diễn, UDP đi ra ngoài của máy chủ riêng có thể bị chặn (cần có rơle).",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "Không có đường hầm cho máy chủ này",
             "noTunnelsYet": "Chưa có đường hầm",
             "obtainACertificateOnTheEdge": "Nhận được chứng chỉ ở rìa.",
+            "passwordRequired": "Nhập mật khẩu.",
             "pickAPublicIpEdgeServer": "Chọn một máy chủ biên IP công cộng và ServerKit sẽ ghép nối nó với {{value}} qua WireGuard.",
             "pickAPublicIpEdgeServer2": "Chọn một máy chủ biên IP công cộng và một máy chủ riêng, sau đó ServerKit sẽ ghép nối chúng qua WireGuard và xuất bản dịch vụ của bạn — không cần thay đổi bộ định tuyến.",
+            "pickAPublicIpEdgeServerShort": "Chọn một máy chủ biên có IP công cộng.",
+            "pickAnEdgeAndAPrivateHost": "Chọn một máy chủ biên và một máy chủ riêng.",
             "pickTwoDifferentServers": "Chọn hai máy chủ khác nhau: máy chủ biên đứng trước máy chủ riêng.",
-            "pointAtEdge": "Trỏ {{name}} đến máy chủ biên; đường hầm sẽ chuyển tiếp từ đó.",
+            "pointAtEdgeGeneric": "Trỏ tên máy chủ tới máy chủ biên; đường hầm sẽ đưa lưu lượng đi tiếp từ đó.",
+            "portRequired": "Nhập cổng dịch vụ.",
+            "privateHostRequired": "Chọn máy chủ riêng.",
             "privateHostWhereTheServiceRuns": "Máy chủ riêng (nơi dịch vụ chạy)",
             "publicHostname": "Tên máy chủ công cộng",
             "publishing": "Đang xuất bản…",
@@ -4869,13 +4859,24 @@
             "removed": "Đã xóa {{hostname}}",
             "requireLoginBasicAuth": "Yêu cầu đăng nhập (xác thực cơ bản)",
             "servicePort": "Cổng dịch vụ",
+            "status": {
+                "pending": "đang chờ",
+                "up": "hoạt động",
+                "degraded": "suy giảm",
+                "down": "ngừng",
+                "error": "lỗi",
+                "published": "đã xuất bản",
+                "unknown": "không xác định"
+            },
             "tearDown": "Xé xuống",
             "tearDownTunnel": "Phá bỏ đường hầm",
             "tearDownTunnel2": "Phá bỏ đường hầm?",
+            "thisHost": "máy chủ này",
             "thisRemovesTheWireguardTunnel": "Thao tác này sẽ xóa đường hầm WireGuard",
             "thisServer": "máy chủ này",
             "toAPublicHostnameOverA": "tới tên máy chủ công cộng qua đường hầm WireGuard. ServerKit ghép nối máy chủ này với máy chủ biên có IP công cộng.",
-            "tunnelTornDown": "Đường hầm bị phá bỏ"
+            "tunnelTornDown": "Đường hầm bị phá bỏ",
+            "usernameRequired": "Nhập tên người dùng."
         },
         "remoteTerminal": {
             "closeTerminal": "Đóng thiết bị đầu cuối",
@@ -4938,15 +4939,13 @@
             "title": "Lưu lượng"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "cuộn tròn -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker không có sẵn",
             "forThisInstallSProfile": "cho hồ sơ của cài đặt này.",
             "installItOnTheServerThen": "Cài đặt nó trên máy chủ, sau đó khởi động lại ServerKit:",
             "needsDockerToRunContainersAnd": "cần Docker để chạy các container và máy chủ này đã được cài đặt với",
             "profileWhichLeavesItOutNothing": "profile, loại bỏ nó. Không có gì bị khóa — thêm Docker sẽ bật trang này.",
             "serverkitReChecksForDockerAutomatically": "ServerKit tự động kiểm tra lại Docker. Giám sát, miền, chứng chỉ, cron và DNS vẫn hoạt động mà không cần có nó — xem",
-            "settingsSystem": "Cài đặt → Hệ thống",
-            "sudoSystemctlRestartServerkit": "sudo systemctl khởi động lại bộ máy chủ"
+            "settingsSystem": "Cài đặt → Hệ thống"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB và máy chủ này có",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "Không thêm được khóa: {{message}}",
             "failedToRemoveKey": "Không xóa được khóa: {{message}}",
             "fingerprint": "Dấu vân tay",
-            "noSshKeysConfiguredForRoot": "Không có khóa SSH nào được định cấu hình cho người dùng root.",
             "pasteYourSshPublicKeyTypically": "Dán khóa công khai SSH của bạn (thường là từ ~/.ssh/id_rsa.pub hoặc ~/.ssh/id_ed25519.pub)",
             "publicKey": "Khóa công khai",
             "removeSshKey": "Xóa khóa SSH",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "thông qua nhà cung cấp DNS của bạn.",
             "webrootPath": "Đường dẫn Webroot",
             "wildcardCertificateDns01Validation": "Chứng chỉ ký tự đại diện (xác thực DNS-01)",
-            "wildcardCertificateIssued": "Chứng chỉ ký tự đại diện đã được cấp"
+            "wildcardCertificateIssued": "Chứng chỉ ký tự đại diện đã được cấp",
+            "domainsRequired": "Nhập ít nhất một tên miền."
         },
         "sSOCallback": {
             "authenticationFailed": "Xác thực không thành công",
@@ -5352,14 +5351,12 @@
             "alerts": "Cảnh báo",
             "areYouSureYouWantTo": "Bạn có chắc chắn muốn xóa máy chủ này không? Không thể hoàn tác hành động này.",
             "backToServers": "Quay lại máy chủ",
-            "copyServerId": "Sao chép ID máy chủ",
             "cron": "Cron",
             "errorLoadingServer": "Lỗi tải máy chủ",
             "failedToAcknowledgeAlert": "Không thể xác nhận cảnh báo",
             "failedToPingServer": "Không ping được máy chủ",
             "failedToRemoveServer": "Không thể xóa máy chủ",
             "failedToResolveAlert": "Không giải quyết được cảnh báo",
-            "lastSeen": "nhìn thấy lần cuối",
             "limitedMode": "Chế độ giới hạn",
             "loadingServerDetails": "Đang tải chi tiết máy chủ",
             "metrics": "Số liệu",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "Nâng cấp tất cả",
             "upgradeAllPackages": "Nâng cấp tất cả các gói",
             "upgradeFailedToStart": "Nâng cấp không bắt đầu được",
-            "upgradingAllPackages": "Nâng cấp tất cả các gói"
+            "upgradingAllPackages": "Nâng cấp tất cả các gói",
+            "enterAPackageNameFirst": "Hãy nhập tên gói trước"
         },
         "serverPicker": {
             "deployToServer": "Triển khai đến máy chủ",
@@ -5602,6 +5600,7 @@
             "library": "Thư viện",
             "nPackages": "{{n}} gói",
             "nServices": "{{n}} dịch vụ",
+            "nameRequired": "Nhập tên mẫu.",
             "nginxPhpFpmCertbot": "nginx \n php-fpm \n certbot",
             "noReadyMadeTemplatesAreAvailable": "Không có mẫu dựng sẵn nào. Bạn vẫn có thể tạo mẫu từ đầu.",
             "noTemplatesYet": "Chưa có mẫu nào",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "Mã thông báo hết hạn",
             "ungrouped": "Đã tách nhóm",
             "whatHappensNext": "Điều gì xảy ra tiếp theo?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Đồng bộ"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Bạn có chắc không? Thao tác này sẽ xóa vĩnh viễn dịch vụ và tất cả dữ liệu của dịch vụ đó.",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "Hủy liên kết {{name}} khỏi dịch vụ được liên kết của nó?",
             "unlinking": "Đang hủy liên kết…",
             "unlinkingWillResetBothAppsTo": "Việc hủy liên kết sẽ đặt lại cả hai dịch vụ về chế độ độc lập.",
-            "usedForCertificateExpiryRemindersFrom": "Được sử dụng để nhắc nhở hết hạn chứng chỉ từ Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "Được sử dụng để nhắc nhở hết hạn chứng chỉ từ Let's Encrypt.",
+            "enterADomainNameFirst": "Hãy nhập tên miền trước"
         },
         "setupHealthWidget": {
             "allSet": "Mọi thứ đã sẵn sàng —",
@@ -6322,7 +6323,10 @@
             "targetService": "Dịch vụ mục tiêu",
             "variables": "Biến",
             "variablesInThisGroupApplyTo": "Các biến trong nhóm này áp dụng cho mọi tài nguyên mà bạn đính kèm.",
-            "whatThisGroupIsFor": "Nhóm này dùng để làm gì…"
+            "whatThisGroupIsFor": "Nhóm này dùng để làm gì…",
+            "enterAGroupNameFirst": "Hãy nhập tên nhóm trước",
+            "enterAResourceIdFirst": "Hãy nhập ID tài nguyên trước",
+            "enterAVariableNameFirst": "Hãy nhập tên biến trước"
         },
         "shellTab": {
             "containerShell": "Shell container",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "Không có container đang chạy",
             "running": "Đang chạy...",
             "startTheServiceToAccessThe": "Bắt đầu dịch vụ để truy cập shell.",
-            "typeACommandBelowToExecute": "Nhập lệnh bên dưới để thực thi lệnh đó trong vùng chứa."
+            "typeACommandBelowToExecute": "Nhập lệnh bên dưới để thực thi lệnh đó trong vùng chứa.",
+            "failedToLoadContainers": "Không thể tải các container."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Chọn một cài đặt trước hoặc xây dựng chế độ xem tùy chỉnh. Chỉ các mục hiển thị mới xuất hiện trong thanh bên của bạn.",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "Hai bảng viết cấu hình máy chủ web sẽ tranh giành quyền sở hữu. Chuyển máy chủ này sang",
             "upstream": "Thượng nguồn",
             "whatWeCheck": "Những gì chúng tôi kiểm tra",
-            "whileObserving": "trong khi quan sát"
+            "whileObserving": "trong khi quan sát",
+            "failedToLoadSurvey": "Không thể tải khảo sát."
         },
         "systemNotices": {
             "dismiss": "Loại bỏ {{title}}",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "Sử dụng tên miền này",
             "used": "Đã sử dụng",
             "utcOffset": "Bù UTC",
-            "version": "Phiên bản {{brand}}"
+            "version": "Phiên bản {{brand}}",
+            "enterADomainFirst": "Hãy nhập tên miền trước",
+            "selectADifferentTimezoneFirst": "Hãy chọn một múi giờ khác trước"
         },
         "tableDataTab": {
             "column": "Cột",
@@ -7148,7 +7156,8 @@
             "query": "Truy vấn",
             "structure": "Kết cấu",
             "tableView": "Xem bảng",
-            "zeroRows": "0 hàng"
+            "zeroRows": "0 hàng",
+            "noMoreRows": "Không còn hàng nào"
         },
         "tabs": {
             "moreTabs": "Thêm tab"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "Cắt bớt tệp nhật ký",
             "typeUnitName": "Nhập tên đơn vị…",
             "unit": "Đơn vị",
-            "useThe": "Sử dụng"
+            "useThe": "Sử dụng",
+            "failedToLoadProcesses": "Không thể tải các tiến trình.",
+            "selectALogFileFirst": "Hãy chọn một tệp nhật ký trước",
+            "remoteJournalIsNotAvailableYet": "Nhật ký từ xa chưa khả dụng"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Một cuộc chạy đang được tiến hành.",
@@ -7551,7 +7563,8 @@
             "viewSaved": "Xem \"{{trimmed}}\" đã lưu",
             "viewUpdated": "Xem \"{{name}}\" đã cập nhật",
             "views": "Chế độ xem",
-            "withChanges": "” với những thay đổi"
+            "withChanges": "” với những thay đổi",
+            "enterAViewNameFirst": "Hãy nhập tên chế độ xem trước"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Đồng thời xóa dữ liệu. Không thể hoàn tác.",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "Tải trọng URL",
             "retryCount": "Đếm lại",
             "timeoutSeconds": "Thời gian chờ (giây)",
-            "update": "Cập nhật"
+            "update": "Cập nhật",
+            "eventsRequired": "Chọn ít nhất một sự kiện."
         },
         "webhooksTab": {
             "active": "Hoạt động",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "Đã lưu trữ không gian làm việc",
             "workspaceDeleted": "Đã xóa không gian làm việc",
             "workspaceNotFound": "Không tìm thấy không gian làm việc",
-            "workspaceRestored": "Đã khôi phục không gian làm việc",
-            "workspaces": "Không gian làm việc"
+            "workspaceRestored": "Đã khôi phục không gian làm việc"
         },
         "workspaceMembersTab": {
             "addAMember": "Thêm thành viên",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "Người dùng tối đa (0 = không giới hạn)",
             "members": "Thành viên",
             "myTeam": "Đội của tôi",
+            "nameRequired": "Nhập tên không gian làm việc.",
             "newWorkspace": "Không gian làm việc mới",
             "recolorsThePanelForAnyoneViewing": "Đổi màu bảng điều khiển cho bất kỳ ai xem không gian làm việc này. Để mặc định cho không có nhãn hiệu tùy chỉnh.",
             "searchWorkspaces": "Tìm kiếm không gian làm việc…",
@@ -7981,6 +7995,14 @@
             "users": "Người dùng",
             "workspaceBrandColor": "Màu sắc thương hiệu không gian làm việc",
             "workspaceCreated": "Đã tạo không gian làm việc"
+        },
+        "mobileSearch": {
+            "label": "Tìm kiếm",
+            "title": "Tìm mọi thứ (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Không có gì để làm lại",
+            "nothingToUndo": "Không có gì để hoàn tác"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "Đang xác thực lời mời…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Thêm vào",
             "back": "Mặt sau",
@@ -8063,7 +8086,8 @@
             "stop": "Dừng lại",
             "test": "Bài kiểm tra",
             "tryAgain": "Thử lại",
-            "uninstall": "Gỡ cài đặt"
+            "uninstall": "Gỡ cài đặt",
+            "new": "Mới"
         },
         "checking": "Đang kiểm tra...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "Đang tải…",
         "more": "Hơn",
+        "moreActions": "Thêm thao tác",
+        "moreInfoAbout": "Thông tin thêm về {{subject}}",
         "moreSections": "Các phần khác",
         "page": "Trang",
         "retry": "Thử lại",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}h",
             "justNow": "ngay bây giờ",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Nhập tên miền.",
+            "domainInvalid": "Nhập tên miền hợp lệ.",
+            "emailInvalid": "Nhập địa chỉ email hợp lệ.",
+            "required": "Trường này là bắt buộc.",
+            "urlInvalid": "Nhập URL hợp lệ, ví dụ https://example.com/webhook."
         }
     },
     "errors": {

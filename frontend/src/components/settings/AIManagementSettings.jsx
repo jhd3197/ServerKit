@@ -8,6 +8,7 @@ import { Switch } from '../ui/switch';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
 import ModelBinding from '../ai/ModelBinding';
 import EmptyState from '../EmptyState';
+import InfoTip from '../InfoTip';
 
 // Radix Select cannot hold an empty value; this stands in for "no override".
 const PROVIDER_DEFAULT = '__default';
@@ -39,13 +40,13 @@ export default function AIManagementSettings({ connections, defaultId }) {
         catch (e) { setError(e.message); }
         finally { setBusy(false); }
     };
-    if (!config) return <div className="settings-card">{error ? <><p role="alert">{error}</p><Button onClick={load}>{t('common.retry', 'Retry')}</Button></> : <EmptyState loading title={t('common.loading', 'Loading…')} />}</div>;
+    if (!config) return <div className="settings-card">{error ? <><p role="alert">{error}</p><Button onClick={load}>{t('common.retry', 'Retry')}</Button></> : <EmptyState loading loadingVariant="form" loadingRows={5} title={t('common.loading', 'Loading…')} />}</div>;
     const profiles = [
         ['utility', t('ai.management.utility', 'Utility'), t('ai.management.utilityHint', 'Economical model for summaries and structured extraction.')],
         ['standard', t('ai.management.standard', 'Standard'), t('ai.management.standardHint', 'Everyday questions and tool-assisted troubleshooting.')],
         ['advanced', t('ai.management.advanced', 'Advanced'), t('ai.management.advancedHint', 'Complex analysis and read-only diagnostic tasks.')],
     ];
-    const numberField = (key, label, min, max, hint, step = '1') => <FormField key={key} htmlFor={`ai-${key}`} label={label} hint={hint}>
+    const numberField = (key, label, min, max, hint, step = '1') => <FormField key={key} htmlFor={`ai-${key}`} label={label} info={hint}>
         <Input id={`ai-${key}`} type="number" min={min} max={max} step={step} value={config[key]} disabled={busy} onChange={(e) => change(key, e.target.value)} />
     </FormField>;
     const toggle = (key, label) => <div className="settings-row"><label htmlFor={`ai-${key}`}>{label}</label>
@@ -74,10 +75,9 @@ export default function AIManagementSettings({ connections, defaultId }) {
     </div>;
     return <div className="sk-ai-management">
         <section className="settings-card">
-            <h3>{t('ai.management.taskModels', 'Task models')}</h3>
-            <p>{t('ai.management.taskModelsHint', 'Choose models by task. New chats resolve these roles; existing chats keep their selected connection.')}</p>
+            <h3>{t('ai.management.taskModels', 'Task models')} <InfoTip>{t('ai.management.taskModelsHint', 'Choose models by task. New chats resolve these roles; existing chats keep their selected connection.')}</InfoTip></h3>
             {profiles.map(([key, label, hint]) => <div className="sk-ai-profile" key={key}>
-                <h4>{label}</h4><p className="settings-hint">{hint}</p>
+                <h4>{label} <InfoTip>{hint}</InfoTip></h4>
                 <ModelBinding id={`ai-profile-${key}`} value={config.profiles[key]} connections={connections} allowInherit discover disabled={busy}
                     inheritLabel={key === 'standard' ? t('ai.management.panelDefault', 'Use panel default') : undefined}
                     onChange={(value) => change('profiles', { ...config.profiles, [key]: value })} />
@@ -87,8 +87,7 @@ export default function AIManagementSettings({ connections, defaultId }) {
             </div>)}
         </section>
         <section className="settings-card">
-            <h3>{t('ai.management.routing', 'Routing and fallback')}</h3>
-            <p>{t('ai.management.routingHint', 'Automatic routing uses only the approved pool below. An explicit model choice takes priority. Capability tiers guide selection; speed is not a measured guarantee.')}</p>
+            <h3>{t('ai.management.routing', 'Routing and fallback')} <InfoTip>{t('ai.management.routingHint', 'Automatic routing uses only the approved pool below. An explicit model choice takes priority. Capability tiers guide selection; speed is not a measured guarantee.')}</InfoTip></h3>
             {toggle('routing_enabled', t('ai.management.enableRouting', 'Enable automatic routing'))}
             <FormField htmlFor="ai-routing-strategy" label={t('ai.management.strategy', 'Strategy')}>
                 <Select value={config.strategy} disabled={busy} onValueChange={(value) => change('strategy', value)}>
@@ -102,13 +101,13 @@ export default function AIManagementSettings({ connections, defaultId }) {
                 </Select>
             </FormField>
             {candidates('pool')}
-            <FormField htmlFor="ai-routing-sample" label={t('ai.management.previewTask', 'Preview a task')} hint={t('ai.management.previewHint', 'Uses the current draft. Preview does not send your task to a provider or spend tokens.')}>
+            <FormField htmlFor="ai-routing-sample" label={t('ai.management.previewTask', 'Preview a task')} info={t('ai.management.previewHint', 'Uses the current draft. Preview does not send your task to a provider or spend tokens.')}>
                 <Input id="ai-routing-sample" value={sample} onChange={(e) => setSample(e.target.value)} maxLength={16000} />
             </FormField>
             <Button type="button" variant="outline" onClick={previewRoute} disabled={busy || !sample.trim()}>{t('ai.management.preview', 'Preview routing')}</Button>
             {preview && <div className="sk-ai-routing-result" role="status"><strong>{connections.find((item) => item.id === preview.connection_id)?.name} · {preview.model}</strong><p>{preview.reason}</p></div>}
             {toggle('fallback_enabled', t('ai.management.enableFallback', 'Enable fallback before output starts'))}
-            <p className="settings-hint">{t('ai.management.fallbackHint', 'Candidates are tried in order using their own saved credentials. Delivered output and tool actions are never replayed. Degradation chooses a lower-priced candidate before a turn at 80% of the conversation allowance; unknown prices cannot be compared.')}</p>
+            <InfoTip subject={t('ai.management.enableFallback', 'Enable fallback before output starts')}>{t('ai.management.fallbackHint', 'Candidates are tried in order using their own saved credentials. Delivered output and tool actions are never replayed. Degradation chooses a lower-priced candidate before a turn at 80% of the conversation allowance; unknown prices cannot be compared.')}</InfoTip>
             {candidates('fallbacks')}
         </section>
         <section className="settings-card">
@@ -132,10 +131,10 @@ export default function AIManagementSettings({ connections, defaultId }) {
                     {numberField('max_tool_rounds', t('ai.management.toolRounds', 'Maximum tool rounds'), 1, 20)}
                     {numberField('max_tool_result_length', t('ai.management.toolLength', 'Maximum tool result characters'), 256, 32000)}
                     {numberField('max_history_messages', t('ai.management.history', 'Messages kept in model context'), 4, 200)}
-                    <FormField htmlFor="ai-temperature" label={t('ai.management.temperature', 'Temperature')} hint={t('ai.management.supportedOnly', 'Applied only when the model catalog confirms support. Blank uses the provider default.')}>
+                    <FormField htmlFor="ai-temperature" label={t('ai.management.temperature', 'Temperature')} info={t('ai.management.supportedOnly', 'Applied only when the model catalog confirms support. Blank uses the provider default.')}>
                         <Input id="ai-temperature" type="number" min="0" max="2" step="0.1" disabled={busy} value={config.temperature ?? ''} onChange={(e) => change('temperature', e.target.value === '' ? null : e.target.value)} />
                     </FormField>
-                    <FormField htmlFor="ai-reasoning" label={t('ai.management.reasoning', 'Reasoning effort')} hint={t('ai.management.reasoningHint', 'Applied to supported OpenAI reasoning models. Other models retain provider defaults.')}>
+                    <FormField htmlFor="ai-reasoning" label={t('ai.management.reasoning', 'Reasoning effort')} info={t('ai.management.reasoningHint', 'Applied to supported OpenAI reasoning models. Other models retain provider defaults.')}>
                         <Select disabled={busy} value={config.reasoning_effort || PROVIDER_DEFAULT} onValueChange={(value) => change('reasoning_effort', value === PROVIDER_DEFAULT ? null : value)}>
                             <SelectTrigger id="ai-reasoning"><SelectValue /></SelectTrigger>
                             <SelectContent>
@@ -149,7 +148,7 @@ export default function AIManagementSettings({ connections, defaultId }) {
                 </div>
             </details>
             <details className="sk-ai-advanced"><summary>{t('ai.management.monthly', 'Monthly spending allowances')}</summary>
-                <p>{t('ai.management.allowanceHint', 'Allowances include active run reservations. Unknown-cost attempts consume the reservation conservatively. Limits use reported or estimated costs; a final call can overshoot. Use provider limits for authoritative billing caps.')}</p>
+                <p>{t('ai.management.allowanceHintShort', 'Includes active run reservations; limits are estimates.')} <InfoTip>{t('ai.management.allowanceHint', 'Allowances include active run reservations. Unknown-cost attempts consume the reservation conservatively. Limits use reported or estimated costs; a final call can overshoot. Use provider limits for authoritative billing caps.')}</InfoTip></p>
                 <div className="ai-connections__fields">
                     {numberField('monthly_limit_usd', t('ai.management.panelLimit', 'Panel allowance (USD / month)'), 0, 1000000, null, '0.01')}
                     {numberField('user_monthly_limit_usd', t('ai.management.userLimit', 'Allowance per user (USD / month)'), 0, 1000000, null, '0.01')}

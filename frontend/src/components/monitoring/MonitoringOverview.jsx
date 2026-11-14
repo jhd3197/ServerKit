@@ -7,7 +7,7 @@ import api from '../../services/api';
 import { formatBytes } from '@/utils/formatBytes';
 import { AreaChart, KpiBand, MetricCard, Pill, Sparkline } from '@/components/ds';
 import { Button } from '@/components/ui/button';
-import EmptyState from '../EmptyState';
+import { Skeleton } from '../Skeleton';
 import MonitorsSummary from './MonitorsSummary';
 import DiskReclaimModal from './DiskReclaimModal';
 import { HOST_SCOPE, useScopeMetrics, trendOf } from './useMonitorScope';
@@ -15,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 import { formatDateTime } from '@/utils/intl';
 
 const PERIODS = ['1h', '6h', '24h', '7d'];
+const CHART_HEIGHT = 180;
+const FLEET_CARD_HEIGHT = 148;
 
 // Tint per metric, matching the Servers list convention (CPU accent / RAM cyan
 // / disk green) so the same metric is the same color everywhere in the panel.
@@ -46,7 +48,7 @@ function last(series) {
 export default function MonitoringOverview({
     scope, isHost, scopeLabel, status, activeAlerts = [],
     speedTest, speedTestRunning, onRunSpeedTest,
-    thresholds = {}, onScopeChange, refreshKey = 0,
+    thresholds = {}, onScopeChange, refreshKey = 0, monitorsSummary,
 }) {
     const { t } = useTranslation();
     const [period, setPeriod] = useState('24h');
@@ -56,6 +58,7 @@ export default function MonitoringOverview({
     // The fleet strip: current values per server in one call, CPU history for
     // all of them in a second — rather than one history request per card.
     const [fleet, setFleet] = useState([]);
+    const [fleetLoaded, setFleetLoaded] = useState(false);
     const [fleetSpark, setFleetSpark] = useState({});
     // The panel host isn't in the fleet comparison (it has no agent row), so its
     // card would be the only one in the strip without a line. One extra call
@@ -93,7 +96,8 @@ export default function MonitoringOverview({
                     })
                     .catch(() => { if (!cancelled) setFleetSpark({}); });
             })
-            .catch(() => { if (!cancelled) setFleet([]); });
+            .catch(() => { if (!cancelled) setFleet([]); })
+            .finally(() => { if (!cancelled) setFleetLoaded(true); });
         return () => { cancelled = true; };
     }, [period, refreshKey]);
 
@@ -194,7 +198,7 @@ export default function MonitoringOverview({
             {/* Monitors first: "is the site up" is the question this page is
                 for, and everything below describes the machines ServerKit runs
                 on rather than the things it is watching. */}
-            <MonitorsSummary refreshKey={refreshKey} />
+            <MonitorsSummary summary={monitorsSummary} />
 
             <div className="mon-section-head">
                 <h3>{t('app.monitoringOverview.hostHealth', 'Host health')}</h3>
@@ -235,6 +239,9 @@ export default function MonitoringOverview({
                                     height={34}
                                     grid={false}
                                 />
+                            ) : loading && tile.spark !== null ? (
+                                // Holds the sparkline's height until the series lands.
+                                <Skeleton variant="block" height={34} />
                             ) : undefined}
                         >
                             {tile.sub && <div className="sk-kpi__sub"><span>{tile.sub}</span></div>}
@@ -273,7 +280,7 @@ export default function MonitoringOverview({
                         </div>
                     </div>
                     <ChartBody loading={loading} values={series?.cpu}>
-                        <AreaChart series={[series?.cpu || []]} colors={[TONE.cpu]} height={180} />
+                        <AreaChart series={[series?.cpu || []]} colors={[TONE.cpu]} height={CHART_HEIGHT} />
                     </ChartBody>
                 </section>
 
@@ -292,7 +299,7 @@ export default function MonitoringOverview({
                         <AreaChart
                             series={[series?.memory || [], series?.disk || []]}
                             colors={[TONE.memory, TONE.disk]}
-                            height={180}
+                            height={CHART_HEIGHT}
                         />
                     </ChartBody>
                 </section>
@@ -300,6 +307,17 @@ export default function MonitoringOverview({
 
             {/* The fleet, inline. Clicking a card re-scopes everything above it,
                 which is the whole reason this replaced a separate page. */}
+            {!fleetLoaded && (
+                <div role="status" aria-busy="true" aria-label={t('app.monitoringOverview.loadingHosts', 'Loading hosts')}>
+                    <div className="mon-section-head">
+                        <h3>{t('app.monitoringOverview.allHosts', 'All hosts')}</h3>
+                        <Skeleton variant="line" width={160} height={18} />
+                    </div>
+                    <div className="mon-fleet-grid">
+                        <Skeleton variant="block" height={FLEET_CARD_HEIGHT} />
+                    </div>
+                </div>
+            )}
             {fleet.length > 0 && (
                 <>
                     <div className="mon-section-head">
@@ -422,7 +440,14 @@ export default function MonitoringOverview({
 // on a fresh install the collector simply hasn't run yet.
 function ChartBody({ loading, values, children }) {
     const { t } = useTranslation();
-    if (loading) return <EmptyState loading loadingVariant="chart" title={t('app.monitoringOverview.loadingMetrics', 'Loading metrics')} />;
+    // A plot-height block, not the full chart archetype: the chart resolves in place.
+    if (loading) {
+        return (
+            <div role="status" aria-busy="true" aria-label={t('app.monitoringOverview.loadingMetrics', 'Loading metrics')}>
+                <Skeleton variant="block" height={CHART_HEIGHT} />
+            </div>
+        );
+    }
     if (!values || values.length < 2) {
         return (
             <p className="mon-panel-hint">

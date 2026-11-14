@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import useLabel from '../i18n/labels';
 import { MANAGED_CAPABILITY_MAP } from './sidebarItems';
 import { formatDate } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // The managed card: what a held capability's page shows instead of
 // its content. It names the capability, who holds it and since when, and links
@@ -36,9 +37,12 @@ export default function ManagedCard({ capability, profile, compact = false }) {
                 {t('managed.card.title', '{{label}} is managed by {{heldBy}}', { label, heldBy })}
             </h3>
             <p className="managed-card__body">
+                {t('managed.card.bodyShort', 'Hidden, not removed. Returns when Managed ends.')}{' '}
+                <InfoTip>
                 {since
                     ? t('managed.card.bodySince', 'ServerKit Cloud took this over on {{date}} as part of your Managed service. The page is hidden, not removed. Its API still answers and everything returns the moment the Managed scope ends.', { date: since })
                     : t('managed.card.body', 'ServerKit Cloud takes care of this as part of your Managed service. The page is hidden, not removed. Its API still answers and everything returns the moment the Managed scope ends.')}
+                </InfoTip>
                 {capability === 'updates' && (
                     <> {t('managed.card.updatesNote', 'The panel still updates itself; only the update screens are hidden.')}</>
                 )}

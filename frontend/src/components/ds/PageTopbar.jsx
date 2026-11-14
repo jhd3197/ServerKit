@@ -50,7 +50,22 @@ export function PageTopbar({ icon, title, meta, tabs, actions, className, navLab
     );
 }
 
+// Tab label plus the optional update-count pill. `iconOnlyNarrow` tabs keep
+// their label for assistive tech and, on phones, show it only while active.
+function TabContent({ tab }) {
+    return (
+        <>
+            {tab.icon}
+            {tab.iconOnlyNarrow ? <span className="sk-topbar__tab-label">{tab.label}</span> : tab.label}
+            {tab.badgeCount > 0 && <span className="sk-topbar__badge">{tab.badgeCount}</span>}
+        </>
+    );
+}
+
 function matchTab(tab, path) {
+    // Button tabs (`id` + `onSelect`) carry their own `active` flag — the page
+    // owns the selection (e.g. a /page/:tab URL param) rather than the route.
+    if (!tab.to) return !!tab.active;
     if (tab.end) return path === tab.to;
     // Segment-aware so "/fleet" doesn't swallow "/fleet-monitor".
     return path === tab.to || path.startsWith(tab.to + '/');
@@ -63,7 +78,8 @@ function TopbarTabs({ tabs, label }) {
     const [popoverOpen, setPopoverOpen] = useState(false);
     const safeTabs = useMemo(
         () => (Array.isArray(tabs) ? tabs : []).filter(
-            (tab) => tab && typeof tab.to === 'string' && tab.to.length > 0
+            (tab) => tab && ((typeof tab.to === 'string' && tab.to.length > 0)
+                || (tab.id && typeof tab.onSelect === 'function'))
         ),
         [tabs]
     );
@@ -77,20 +93,56 @@ function TopbarTabs({ tabs, label }) {
 
     const { containerRef, itemRefs, moreBtnRef, hiddenIndices, hiddenSet } = useOverflowItems({
         count: safeTabs.length,
-        gap: 2,
-        moreWidth: 56,
+        gap: 4,
+        moreWidth: 80,
         getActiveIndex,
         deps: [activeIndex],
     });
+
+    // Arrow/Home/End roving for button tabs (WAI-ARIA tablist): move focus and
+    // select, like the sibling <Tabs> primitive does.
+    const onKeyDown = (e) => {
+        const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+        if (!keys.includes(e.key) || !e.target.closest('[role="tab"]')) return;
+        const visible = safeTabs.map((tab, i) => ({ tab, i })).filter(({ tab, i }) => !tab.to && !hiddenSet.has(i));
+        const cur = visible.findIndex(({ i }) => itemRefs.current[i] === e.target);
+        if (cur < 0) return;
+        const rtl = getComputedStyle(e.currentTarget).direction === 'rtl';
+        const step = e.key === 'ArrowRight' ? (rtl ? -1 : 1) : e.key === 'ArrowLeft' ? (rtl ? 1 : -1) : 0;
+        const next = e.key === 'Home' ? 0 : e.key === 'End' ? visible.length - 1 : (cur + step + visible.length) % visible.length;
+        e.preventDefault();
+        itemRefs.current[visible[next].i]?.focus();
+        visible[next].tab.onSelect();
+    };
+
+    const buttonTabs = safeTabs.some((tab) => !tab.to);
 
     return (
         // The nav is the flex-fill measurement region (kept right-aligned so a
         // changing page title never shoves the tabs sideways); the inner bar is
         // the visible segmented control that actually holds the tabs.
-        <nav ref={containerRef} className="sk-topbar__tabs" aria-label={t('app.pageTopbar.sections', '{{label}} sections', { label })}>
-            <div className="sk-topbar__tabs-inner">
+        <nav ref={containerRef} className="sk-topbar__tabs" onKeyDown={buttonTabs ? onKeyDown : undefined} aria-label={t('app.pageTopbar.sections', '{{label}} sections', { label })}>
+            <div className="sk-topbar__tabs-inner" role={buttonTabs ? 'tablist' : undefined}>
                 {safeTabs.map((tab, i) => {
                     const isHidden = hiddenSet.has(i);
+                    if (!tab.to) {
+                        return (
+                            <SharedButton
+                                key={tab.id}
+                                variant="unstyled"
+                                type="button"
+                                role="tab"
+                                ref={(el) => { itemRefs.current[i] = el; }}
+                                aria-selected={!!tab.active}
+                                tabIndex={tab.active ? 0 : -1}
+                                className={cn('sk-topbar__tab', tab.active && 'is-active', isHidden && 'is-hidden')}
+                                data-overflow={isHidden ? 'hidden' : undefined}
+                                onClick={tab.onSelect}
+                            >
+                                <TabContent tab={tab} />
+                            </SharedButton>
+                        );
+                    }
                     return (
                         <NavLink
                             key={tab.to}
@@ -99,9 +151,10 @@ function TopbarTabs({ tabs, label }) {
                             ref={(el) => { itemRefs.current[i] = el; }}
                             className={({ isActive }) => cn('sk-topbar__tab', isActive && 'is-active', isHidden && 'is-hidden')}
                             data-overflow={isHidden ? 'hidden' : undefined}
+                            aria-label={tab.iconOnlyNarrow ? tab.label : undefined}
+                            title={tab.iconOnlyNarrow ? tab.label : undefined}
                         >
-                            {tab.icon}
-                            {tab.label}
+                            <TabContent tab={tab} />
                         </NavLink>
                     );
                 })}
@@ -123,6 +176,20 @@ function TopbarTabs({ tabs, label }) {
                                 {hiddenIndices.map((idx) => {
                                     const tab = safeTabs[idx];
                                     if (!tab) return null;
+                                    if (!tab.to) {
+                                        return (
+                                            <SharedButton
+                                                key={tab.id}
+                                                variant="unstyled"
+                                                type="button"
+                                                className="tabs-overflow-item"
+                                                data-state={idx === activeIndex ? 'active' : 'inactive'}
+                                                onClick={() => { setPopoverOpen(false); tab.onSelect(); }}
+                                            >
+                                                <TabContent tab={tab} />
+                                            </SharedButton>
+                                        );
+                                    }
                                     return (
                                         <NavLink
                                             key={tab.to}
@@ -132,8 +199,7 @@ function TopbarTabs({ tabs, label }) {
                                             data-state={idx === activeIndex ? 'active' : 'inactive'}
                                             onClick={() => setPopoverOpen(false)}
                                         >
-                                            {tab.icon}
-                                            {tab.label}
+                                            <TabContent tab={tab} />
                                         </NavLink>
                                     );
                                 })}

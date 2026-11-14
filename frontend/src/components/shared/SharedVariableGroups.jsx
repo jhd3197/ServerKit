@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { ArrowLeft, Boxes, Plus, Trash2 } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -199,9 +201,12 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
         </>
     ) : (
         <>
-            <Button size="sm" onClick={() => setCreating(true)}>
-                <Plus size={15} /> {t('app.sharedVariableGroups.newGroup', 'New group')}
-            </Button>
+            <PagePrimaryButton
+                id="shared-variable-groups-new"
+                label={t('app.sharedVariableGroups.newGroup', 'New group')}
+                shortLabel={t('common.actions.new', 'New')}
+                onClick={() => setCreating(true)}
+            />
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.sharedVariableGroups.searchGroups', 'Search groups…')} />
         </>
     )), [detail, search]);
@@ -373,7 +378,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                     onRowClick={(g) => setSelectedId(g.id)}
                     emptyIcon={Boxes}
                     emptyTitle="No variable groups yet"
-                    emptyDescription="A group is a set of variables you attach to services, databases or servers at once, instead of copying the same values into each."
+                    emptyDescription={<>{t('app.sharedVariableGroups.emptyShort', 'Reusable variables for many resources.')} <InfoTip>{t('app.sharedVariableGroups.emptyFull', 'A group is a set of variables you attach to services, databases or servers at once, instead of copying the same values into each.')}</InfoTip></>}
                     emptyAction={<Button onClick={() => setCreating(true)}><Plus size={16} /> {t('app.sharedVariableGroups.createYourFirstGroup', 'Create your first group')}</Button>}
                     filteredEmptyIcon={Boxes}
                     filteredEmptyTitle="No groups found"
@@ -409,7 +414,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                         </div>
                         <div className="modal-actions">
                             <Button type="button" variant="outline" onClick={() => setCreating(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={!newName.trim()}>{t('app.sharedVariableGroups.createGroup', 'Create group')}</Button>
+                            <Button type="submit" disabled={!newName.trim()} disabledReason={t('app.sharedVariableGroups.enterAGroupNameFirst', 'Enter a group name first')}>{t('app.sharedVariableGroups.createGroup', 'Create group')}</Button>
                         </div>
                     </form>
                 </Modal>
@@ -479,7 +484,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                                     <Checkbox checked={varSecret} onCheckedChange={setVarSecret} />
                                     <span>{t('app.sharedVariableGroups.secret', 'Secret')}</span>
                                 </label>
-                                <Button type="submit" size="sm" disabled={!varKey.trim()}>
+                                <Button type="submit" size="sm" disabled={!varKey.trim()} disabledReason={t('app.sharedVariableGroups.enterAVariableNameFirst', 'Enter a variable name first')}>
                                     {t('common.actions.add', 'Add')}
                                 </Button>
                             </form>
@@ -530,7 +535,7 @@ const SharedVariableGroups = ({ scopeType = 'workspace', scopeId = 'default' }) 
                                     placeholder={t('app.sharedVariableGroups.resourceId', 'resource ID')}
                                     className="shared-groups__attach-id"
                                 />
-                                <Button type="submit" size="sm" disabled={!attachId.trim()}>
+                                <Button type="submit" size="sm" disabled={!attachId.trim()} disabledReason={t('app.sharedVariableGroups.enterAResourceIdFirst', 'Enter a resource ID first')}>
                                     {t('app.sharedVariableGroups.attach', 'Attach')}
                                 </Button>
                             </form>

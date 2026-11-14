@@ -228,3 +228,42 @@ def test_operator_cannot_join_other_workspace_server(db_session, clients):
     sock = clients(user)
     sock.emit('join_room', {'room': sk.rooms.server_channel_room(server.id, 'job:job-1')})
     assert sock.get_received()[0]['name'] == 'error'
+
+
+def test_container_log_lines_reach_each_viewer_once(db_session, clients, monkeypatch):
+    """Each subscriber runs its own `docker logs` process; its lines used to be
+    sent to the shared app room, so two open viewers each saw every line twice
+    and got the other's 200-line tail replayed into theirs."""
+    import io
+    user = make_user(db_session, role='viewer')
+    application = make_application(db_session, user_id=user.id)
+    procs = []
+
+    class FakeProcess:
+        def __init__(self, tag):
+            self.stdout = io.StringIO(f'{tag}-1\n{tag}-2\n')
+            procs.append(self)
+
+        def terminate(self):
+            pass
+
+        def wait(self, timeout=None):
+            return 0
+
+    monkeypatch.setattr(sk.DockerService, 'get_all_app_containers', lambda app: [{'name': 'c1'}])
+    monkeypatch.setattr(sk.DockerService, 'get_app_container_id', lambda app: 'c1')
+    monkeypatch.setattr(sk.DockerService, 'get_container_state', lambda cid: 'running')
+    monkeypatch.setattr(sk.DockerService, 'parse_log_line', lambda line: {'message': line})
+    first, second = clients(user), clients(user)
+    for sock, tag in ((first, 'A'), (second, 'B')):
+        monkeypatch.setattr(sk.DockerService, 'stream_container_logs',
+                            lambda *a, _tag=tag, **k: FakeProcess(_tag))
+        sock.emit('subscribe_container_logs', {'app_id': application.id})
+    for info in list(sk.container_log_streams.values()):
+        info['thread'].join(timeout=5)
+
+    def lines(sock):
+        return [e['args'][0]['line'] for e in sock.get_received() if e['name'] == 'container_log']
+
+    assert lines(first) == ['A-1', 'A-2']
+    assert lines(second) == ['B-1', 'B-2']

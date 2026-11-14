@@ -5,6 +5,8 @@ import ApiKeyScopesModal from '../api/ApiKeyScopesModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { FormField } from '../FormField';
+import useFieldErrors from '../../hooks/useFieldErrors';
 import CopyField from '../CopyField';
 import { useTranslation } from 'react-i18next';
 
@@ -23,9 +25,13 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
     const [expiresAt, setExpiresAt] = useState('');
     const [saving, setSaving] = useState(false);
 
+    const fe = useFieldErrors({
+        name: name.trim() ? null : t('common.validation.required', 'This field is required.'),
+    }, fieldId);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!name.trim()) return;
+        if (!fe.attempt()) return;
         setSaving(true);
         try {
             await onSubmit({
@@ -57,19 +63,18 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
 
     return (
         <Modal open={true} onClose={onClose} title={t('app.apiKeyModal.createApiKey', 'Create API key')} className="api-key-modal">
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} noValidate>
                     <div className="modal-body">
-                        <div className="form-group">
-                            <Label htmlFor={`${fieldId}-name`}>{t('common.labels.name', 'Name')}</Label>
+                        <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-name`} required error={fe.error('name')}>
                             <Input
                                 id={`${fieldId}-name`}
                                 type="text"
                                 value={name}
-                                onChange={e => setName(e.target.value)}
+                                onChange={e => { fe.clear('name'); setName(e.target.value); }}
+                                onBlur={() => fe.touch('name')}
                                 placeholder={t('app.apiKeyModal.eGCiCdPipelineMonitoring', 'e.g. CI/CD Pipeline, Monitoring Script')}
-                                required
                             />
-                        </div>
+                        </FormField>
 
                         <div className="form-group">
                             <Label>{t('app.apiKeyModal.tier', 'Tier')}</Label>
@@ -93,20 +98,22 @@ const ApiKeyModal = ({ onClose, onSubmit, createdKey }) => {
                             <ApiKeyScopesModal value={scopes} onChange={setScopes} />
                         </div>
 
-                        <div className="form-group">
-                            <Label htmlFor={`${fieldId}-expires`}>{t('app.apiKeyModal.expirationOptional', 'Expiration (optional)')}</Label>
+                        <FormField
+                            label={t('app.apiKeyModal.expirationOptional', 'Expiration (optional)')}
+                            htmlFor={`${fieldId}-expires`}
+                            hint={t('app.apiKeyModal.leaveEmptyForNoExpiration', 'Leave empty for no expiration')}
+                        >
                             <Input
                                 id={`${fieldId}-expires`}
                                 type="datetime-local"
                                 value={expiresAt}
                                 onChange={e => setExpiresAt(e.target.value)}
                             />
-                            <span className="form-help">{t('app.apiKeyModal.leaveEmptyForNoExpiration', 'Leave empty for no expiration')}</span>
-                        </div>
+                        </FormField>
                     </div>
                     <div className="modal-footer">
                         <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button type="submit" variant="default" disabled={saving || !name.trim()}>
+                        <Button type="submit" variant="default" disabled={saving}>
                             {saving ? t('app.apiKeyModal.creating', 'Creating…') : t('app.apiKeyModal.createKey', 'Create key')}
                         </Button>
                     </div>

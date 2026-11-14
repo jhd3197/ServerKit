@@ -1,10 +1,11 @@
 import { useState, useEffect, useId, useMemo } from 'react';
 import {
     ShieldCheck, RefreshCw, Plus, Lock, MoreVertical,
-    Settings, Download, Upload,
+    Settings, Download, Upload, MoreHorizontal,
 } from 'lucide-react';
 import api from '../services/api';
 import Modal from '@/components/Modal';
+import InfoTip from '@/components/InfoTip';
 import { Pill, SearchField } from '@/components/ds';
 import ResourceListPage from '../components/layouts/ResourceListPage';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
@@ -12,7 +13,8 @@ import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
@@ -23,6 +25,7 @@ import {
 import DomainField from '../components/DomainField';
 import { formatExpiry } from '../utils/expiry';
 import { useTranslation } from 'react-i18next';
+import useMediaQuery from '@/hooks/useMediaQuery';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
 
@@ -97,6 +100,7 @@ const SSL_BUILTIN_VIEWS = [
 
 const SSLCertificates = () => {
     const { t } = useTranslation();
+    const phone = useMediaQuery('(max-width: 639px)');
     const fieldId = useId();
     const toast = useToast();
     const { confirm } = useConfirm();
@@ -127,6 +131,40 @@ const SSLCertificates = () => {
     const [uploadCert, setUploadCert] = useState('');
     const [uploadKey, setUploadKey] = useState('');
     const [uploadChain, setUploadChain] = useState('');
+    const [domainInfo, setDomainInfo] = useState(null);
+    const [uploadDomainInfo, setUploadDomainInfo] = useState(null);
+
+    const required = t('common.validation.required', 'This field is required.');
+    const domainProblem = (value, info) => {
+        if (value) return null;
+        return info && !info.empty
+            ? t('common.validation.domainInvalid', 'Enter a valid domain.')
+            : t('common.validation.domainEmpty', 'Enter a domain.');
+    };
+    const hasDomains = domains.split(',').some((d) => d.trim());
+    // Only the fields that apply to the chosen method are validated, in DOM order.
+    const obtainErrors = useFieldErrors({
+        domains: wildcard
+            ? domainProblem(domains, domainInfo)
+            : (hasDomains ? null : t('app.sSLCertificates.domainsRequired', 'Enter at least one domain.')),
+        ...(wildcard ? {} : {
+            email: !email.trim() ? required
+                : (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) ? null : t('common.validation.emailInvalid', 'Enter a valid email address.')),
+            webroot: !useNginx && !webrootPath.trim() ? required : null,
+        }),
+        ...(wildcard && dnsProvider === 'cloudflare' ? { cftoken: dnsToken ? null : required } : {}),
+        ...(wildcard && dnsProvider !== 'cloudflare' ? {
+            awskey: awsAccessKey ? null : required,
+            awssecret: awsSecretKey ? null : required,
+        } : {}),
+    }, fieldId);
+    const uploadErrors = useFieldErrors({
+        domain: domainProblem(uploadDomain, uploadDomainInfo),
+        cert: uploadCert.trim() ? null : required,
+        key: uploadKey.trim() ? null : required,
+    }, `${fieldId}-up`);
+    const closeObtain = () => { setShowObtainModal(false); obtainErrors.reset(); };
+    const closeUpload = () => { setShowUploadModal(false); uploadErrors.reset(); };
 
     useEffect(() => {
         loadData();
@@ -147,8 +185,8 @@ const SSLCertificates = () => {
 
     async function handleObtainCertificate(e) {
         e.preventDefault();
+        if (!obtainErrors.attempt()) return;
         const domainList = domains.split(',').map(d => d.trim()).filter(Boolean);
-        if (domainList.length === 0) return;
 
         try {
             setActionLoading(true);
@@ -160,14 +198,13 @@ const SSLCertificates = () => {
                     : { aws_access_key_id: awsAccessKey, aws_secret_access_key: awsSecretKey };
                 result = await api.issueWildcardCert(domainList[0], dnsProvider, credentials);
             } else {
-                if (!email) return;
                 const data = { domains: domainList, email, use_nginx: useNginx };
                 if (!useNginx && webrootPath) data.webroot_path = webrootPath;
                 result = await api.obtainCertificate(data);
             }
             if (result.success) {
                 toast.success(wildcard ? t('app.sSLCertificates.wildcardCertificateIssued', 'Wildcard certificate issued') : t('app.sSLCertificates.certificateObtainedSuccessfully', 'Certificate obtained'));
-                setShowObtainModal(false);
+                closeObtain();
                 setDomains('');
                 setEmail('');
                 setDnsToken('');
@@ -187,14 +224,14 @@ const SSLCertificates = () => {
 
     async function handleUploadCertificate(e) {
         e.preventDefault();
-        if (!uploadDomain || !uploadCert || !uploadKey) return;
+        if (!uploadErrors.attempt()) return;
         try {
             setActionLoading(true);
             const result = await api.uploadCustomCert(uploadDomain.trim(), uploadCert, uploadKey, uploadChain || null);
             // upload returns the saved cert paths (no `success` envelope).
             if (result && (result.cert_path || result.success)) {
                 toast.success(t('app.sSLCertificates.certificateUploadedFor', 'Certificate uploaded for {{uploadDomain}}', { uploadDomain: uploadDomain }));
-                setShowUploadModal(false);
+                closeUpload();
                 setUploadDomain('');
                 setUploadCert('');
                 setUploadKey('');
@@ -436,7 +473,7 @@ const SSLCertificates = () => {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                            <Button variant="ghost" size="icon" disabled={renewing || actionLoading}>
+                            <Button variant="ghost" size="icon" disabled={renewing || actionLoading} aria-label={t('common.moreActions', 'More actions')}>
                                 {renewing ? <RefreshCw size={14} className="spin" /> : <MoreVertical size={14} />}
                             </Button>
                         </DropdownMenuTrigger>
@@ -470,37 +507,72 @@ const SSLCertificates = () => {
                     {t('app.sSLCertificates.installCertbot', 'Install Certbot')}
                 </Button>
             )}
-            <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSetupAutoRenewal}
-                disabled={actionLoading || !certbotInstalled}
-                title={t('app.sSLCertificates.configureAutomaticRenewalViaSystemdOr', 'Configure automatic renewal via systemd or cron')}
-            >
-                <Settings size={15} />
-                {t('app.sSLCertificates.autoRenew2', 'Auto-renew')}
-            </Button>
-            {certificates.length > 0 && (
-                <Button variant="outline" size="sm" onClick={handleRenewAll} disabled={actionLoading}>
-                    <RefreshCw size={15} />
-                    {t('app.sSLCertificates.renewAll', 'Renew all')}
-                </Button>
+            {phone ? (
+                // Phones: the secondary actions share one overflow menu so the
+                // bar stays a single row; Install Certbot / New certificate stay out.
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="icon" aria-label={t('common.moreActions', 'More actions')}>
+                            <MoreHorizontal size={15} />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={handleSetupAutoRenewal} disabled={actionLoading || !certbotInstalled} disabledReason={!certbotInstalled ? t('app.sSLCertificates.installCertbotFirst', 'Install Certbot first') : undefined}>
+                            <Settings size={15} />
+                            {t('app.sSLCertificates.autoRenew2', 'Auto-renew')}
+                        </DropdownMenuItem>
+                        {certificates.length > 0 && (
+                            <DropdownMenuItem onClick={handleRenewAll} disabled={actionLoading}>
+                                <RefreshCw size={15} />
+                                {t('app.sSLCertificates.renewAll', 'Renew all')}
+                            </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem onClick={loadData}>
+                            <RefreshCw size={15} />
+                            {t('common.actions.refresh', 'Refresh')}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setShowUploadModal(true)}>
+                            <Upload size={15} />
+                            {t('app.sSLCertificates.upload', 'Upload')}
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            ) : (
+                <>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleSetupAutoRenewal}
+                        disabled={actionLoading || !certbotInstalled}
+                        disabledReason={!certbotInstalled ? t('app.sSLCertificates.installCertbotFirst', 'Install Certbot first') : undefined}
+                        title={t('app.sSLCertificates.configureAutomaticRenewalViaSystemdOr', 'Configure automatic renewal via systemd or cron')}
+                    >
+                        <Settings size={15} />
+                        {t('app.sSLCertificates.autoRenew2', 'Auto-renew')}
+                    </Button>
+                    {certificates.length > 0 && (
+                        <Button variant="outline" size="sm" onClick={handleRenewAll} disabled={actionLoading}>
+                            <RefreshCw size={15} />
+                            {t('app.sSLCertificates.renewAll', 'Renew all')}
+                        </Button>
+                    )}
+                    <Button variant="outline" size="sm" onClick={loadData}>
+                        <RefreshCw size={15} />
+                        {t('common.actions.refresh', 'Refresh')}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => setShowUploadModal(true)}>
+                        <Upload size={15} />
+                        {t('app.sSLCertificates.upload', 'Upload')}
+                    </Button>
+                </>
             )}
-            <Button variant="outline" size="sm" onClick={loadData}>
-                <RefreshCw size={15} />
-                {t('common.actions.refresh', 'Refresh')}
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => setShowUploadModal(true)}>
-                <Upload size={15} />
-                {t('app.sSLCertificates.upload', 'Upload')}
-            </Button>
-            <Button size="sm" onClick={() => setShowObtainModal(true)} disabled={!certbotInstalled}>
+            <Button size="sm" onClick={() => setShowObtainModal(true)} disabled={!certbotInstalled} disabledReason={!certbotInstalled ? t('app.sSLCertificates.installCertbotFirst', 'Install Certbot first') : undefined}>
                 <Plus size={15} />
                 {t('app.sSLCertificates.newCertificate', 'New certificate')}
             </Button>
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.sSLCertificates.searchCertificates', 'Search certificates…')} />
         </>
-    ), [actionLoading, certbotInstalled, certbotMissing, certificates.length, search]);
+    ), [actionLoading, certbotInstalled, certbotMissing, certificates.length, search, phone]);
 
     return (
         <>
@@ -523,8 +595,17 @@ const SSLCertificates = () => {
                 onSearchChange={setSearch}
                 searchInTopbar
                 emptyIcon={Lock}
-                emptyTitle="No SSL certificates"
-                emptyDescription="Obtain your first Let's Encrypt certificate to secure your domains."
+                emptySize="default"
+                emptyTitle={t('app.sSLCertificates.noSslCertificates', 'No SSL certificates')}
+                emptyDescription={(
+                    <>
+                        {t('app.sSLCertificates.secureYourDomainsWithLetS', "Secure your domains with Let's Encrypt.")}
+                        <InfoTip>
+                            {t('app.sSLCertificates.freeAutoRenewingCertificates', 'Get free, auto-renewing certificates for your domains.')}
+                            {!certbotInstalled && ` ${t('app.sSLCertificates.certbotMustBeInstalledFirst', 'Certbot must be installed first.')}`}
+                        </InfoTip>
+                    </>
+                )}
                 emptyAction={certbotInstalled ? (
                     <Button onClick={() => setShowObtainModal(true)}>
                         <Plus size={16} />
@@ -542,8 +623,8 @@ const SSLCertificates = () => {
             />
 
             {/* Obtain Certificate Modal */}
-            <Modal open={showObtainModal} onClose={() => setShowObtainModal(false)} title={t('app.sSLCertificates.obtainSslCertificate', 'Obtain SSL certificate')}>
-                        <form onSubmit={handleObtainCertificate}>
+            <Modal open={showObtainModal} onClose={closeObtain} title={t('app.sSLCertificates.obtainSslCertificate', 'Obtain SSL certificate')}>
+                        <form onSubmit={handleObtainCertificate} noValidate>
                             <div className="ssl-info-box">
                                 <ShieldCheck size={32} />
                                 <div>
@@ -561,42 +642,52 @@ const SSLCertificates = () => {
                                 </label>
                                 <p className="hint">{t('app.sSLCertificates.issues', 'Issues')} <code>domain</code> + <code>*.domain</code> {t('app.sSLCertificates.viaYourDnsProvider', 'via your DNS provider.')}</p>
                             </div>
-                            <div className="form-group">
-                                <Label htmlFor="ssl-domains">{wildcard ? t('app.sSLCertificates.baseDomain', 'Base domain') : t('app.sSLCertificates.domainsLabel', 'Domains')}</Label>
+                            <FormField
+                                label={wildcard ? t('app.sSLCertificates.baseDomain', 'Base domain') : t('app.sSLCertificates.domainsLabel', 'Domains')}
+                                htmlFor={`${fieldId}-domains`}
+                                required
+                                hint={wildcard ? t('app.sSLCertificates.singleBaseDomainHint', 'A single base domain for the wildcard certificate') : t('app.sSLCertificates.commaSeparatedDomainsHint', 'Comma-separated list of domains')}
+                                error={obtainErrors.error('domains')}
+                            >
                                 {/* A wildcard cert covers one base domain; HTTP-01
                                     takes a comma-separated list, so it keeps a plain input. */}
                                 {wildcard ? (
-                                    <DomainField
-                                        id="ssl-domains"
-                                        modes={['custom']}
-                                        value={domains}
-                                        onChange={(fqdn) => setDomains(fqdn)}
-                                    />
+                                    <div onBlur={() => obtainErrors.touch('domains')}>
+                                        <DomainField
+                                            id={`${fieldId}-domains`}
+                                            modes={['custom']}
+                                            value={domains}
+                                            onChange={(fqdn, info) => { setDomains(fqdn); setDomainInfo(info); }}
+                                        />
+                                    </div>
                                 ) : (
                                     <Input
-                                        id="ssl-domains"
+                                        id={`${fieldId}-domains`}
                                         type="text"
                                         placeholder={t('app.sSLCertificates.exampleComWwwExampleCom', 'example.com, www.example.com')}
                                         value={domains}
                                         onChange={e => setDomains(e.target.value)}
-                                        required
+                                        onBlur={() => obtainErrors.touch('domains')}
                                     />
                                 )}
-                                <p className="hint">{wildcard ? t('app.sSLCertificates.singleBaseDomainHint', 'A single base domain for the wildcard certificate') : t('app.sSLCertificates.commaSeparatedDomainsHint', 'Comma-separated list of domains')}</p>
-                            </div>
+                            </FormField>
                             {!wildcard && (
                                 <>
-                                    <div className="form-group">
-                                        <Label htmlFor={`${fieldId}-email`}>{t('app.sSLCertificates.emailAddress', 'Email address')}</Label>
+                                    <FormField
+                                        label={t('app.sSLCertificates.emailAddress', 'Email address')}
+                                        htmlFor={`${fieldId}-email`}
+                                        required
+                                        hint={t('app.sSLCertificates.forCertificateExpirationNotifications', 'For certificate expiration notifications')}
+                                        error={obtainErrors.error('email')}
+                                    >
                                         <Input id={`${fieldId}-email`}
                                             type="email"
                                             placeholder="admin@example.com"
                                             value={email}
                                             onChange={e => setEmail(e.target.value)}
-                                            required={!wildcard}
+                                            onBlur={() => obtainErrors.touch('email')}
                                         />
-                                        <p className="hint">{t('app.sSLCertificates.forCertificateExpirationNotifications', 'For certificate expiration notifications')}</p>
-                                    </div>
+                                    </FormField>
                                     <div className="form-group">
                                         <label className="checkbox-label">
                                             <Checkbox
@@ -607,63 +698,63 @@ const SSLCertificates = () => {
                                         </label>
                                     </div>
                                     {!useNginx && (
-                                        <div className="form-group">
-                                            <Label htmlFor={`${fieldId}-webroot`}>{t('app.sSLCertificates.webrootPath', 'Webroot path')}</Label>
+                                        <FormField
+                                            label={t('app.sSLCertificates.webrootPath', 'Webroot path')}
+                                            htmlFor={`${fieldId}-webroot`}
+                                            required
+                                            hint={t('app.sSLCertificates.documentRootForHttpValidation', 'Document root for HTTP validation')}
+                                            error={obtainErrors.error('webroot')}
+                                        >
                                             <Input id={`${fieldId}-webroot`}
                                                 type="text"
                                                 placeholder="/var/www/html"
                                                 value={webrootPath}
                                                 onChange={e => setWebrootPath(e.target.value)}
-                                                required={!useNginx}
+                                                onBlur={() => obtainErrors.touch('webroot')}
                                             />
-                                            <p className="hint">{t('app.sSLCertificates.documentRootForHttpValidation', 'Document root for HTTP validation')}</p>
-                                        </div>
+                                        </FormField>
                                     )}
                                 </>
                             )}
                             {wildcard && (
                                 <>
-                                    <div className="form-group">
-                                        <Label htmlFor="ssl-dns-provider">{t('app.sSLCertificates.dnsProvider', 'DNS provider')}</Label>
+                                    <FormField label={t('app.sSLCertificates.dnsProvider', 'DNS provider')} htmlFor={`${fieldId}-dns-provider`}>
                                         <Select value={dnsProvider} onValueChange={setDnsProvider}>
-                                            <SelectTrigger id="ssl-dns-provider"><SelectValue /></SelectTrigger>
+                                            <SelectTrigger id={`${fieldId}-dns-provider`}><SelectValue /></SelectTrigger>
                                             <SelectContent>
                                                 <SelectItem value="cloudflare">{t('app.sSLCertificates.cloudflare', 'Cloudflare')}</SelectItem>
                                                 <SelectItem value="route53">{t('app.sSLCertificates.awsRoute53', 'AWS Route 53')}</SelectItem>
                                             </SelectContent>
                                         </Select>
-                                    </div>
+                                    </FormField>
                                     {dnsProvider === 'cloudflare' ? (
-                                        <div className="form-group">
-                                            <Label htmlFor={`${fieldId}-cf-token`}>{t('app.sSLCertificates.cloudflareApiToken', 'Cloudflare API token')}</Label>
-                                            <Input id={`${fieldId}-cf-token`}
+                                        <FormField label={t('app.sSLCertificates.cloudflareApiToken', 'Cloudflare API token')} htmlFor={`${fieldId}-cftoken`} required error={obtainErrors.error('cftoken')}>
+                                            <Input id={`${fieldId}-cftoken`}
                                                 type="password"
                                                 placeholder={t('app.sSLCertificates.apiTokenWithDnsEditRights', 'API token with DNS edit rights')}
                                                 value={dnsToken}
                                                 onChange={e => setDnsToken(e.target.value)}
-                                                required={wildcard}
+                                                onBlur={() => obtainErrors.touch('cftoken')}
                                             />
-                                        </div>
+                                        </FormField>
                                     ) : (
                                         <>
-                                            <div className="form-group">
-                                                <Label htmlFor={`${fieldId}-aws-access-key`}>{t('app.sSLCertificates.awsAccessKeyId', 'AWS access key ID')}</Label>
-                                                <Input id={`${fieldId}-aws-access-key`}
+                                            <FormField label={t('app.sSLCertificates.awsAccessKeyId', 'AWS access key ID')} htmlFor={`${fieldId}-awskey`} required error={obtainErrors.error('awskey')}>
+                                                <Input id={`${fieldId}-awskey`}
                                                     type="text"
                                                     value={awsAccessKey}
                                                     onChange={e => setAwsAccessKey(e.target.value)}
-                                                    required={wildcard}
+                                                    onBlur={() => obtainErrors.touch('awskey')}
                                                 />
-                                            </div>
-                                            <div className="form-group">
-                                                <Label htmlFor={`${fieldId}-aws-secret-key`}>{t('app.sSLCertificates.awsSecretAccessKey', 'AWS secret access key')}</Label>
-                                                <Input id={`${fieldId}-aws-secret-key`}
+                                            </FormField>
+                                            <FormField label={t('app.sSLCertificates.awsSecretAccessKey', 'AWS secret access key')} htmlFor={`${fieldId}-awssecret`} required error={obtainErrors.error('awssecret')}>
+                                                <Input id={`${fieldId}-awssecret`}
                                                     type="password"
                                                     value={awsSecretKey}
                                                     onChange={e => setAwsSecretKey(e.target.value)}
-                                                    required={wildcard}
+                                                    onBlur={() => obtainErrors.touch('awssecret')}
                                                 />
-                                            </div>
+                                            </FormField>
                                         </>
                                     )}
                                 </>
@@ -672,13 +763,13 @@ const SSLCertificates = () => {
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    onClick={() => setShowObtainModal(false)}
+                                    onClick={closeObtain}
                                 >
                                     {t('common.actions.cancel', 'Cancel')}
                                 </Button>
                                 <Button
                                     type="submit"
-                                    disabled={actionLoading || (wildcard && !domains)}
+                                    disabled={actionLoading}
                                 >
                                     {actionLoading ? t('app.sSLCertificates.obtaining', 'Obtaining…') : t('app.sSLCertificates.obtainCertificateAction', 'Obtain certificate')}
                                 </Button>
@@ -687,8 +778,8 @@ const SSLCertificates = () => {
             </Modal>
 
             {/* Upload Custom Certificate Modal */}
-            <Modal open={showUploadModal} onClose={() => setShowUploadModal(false)} title={t('app.sSLCertificates.uploadCustomCertificate', 'Upload custom certificate')}>
-                <form onSubmit={handleUploadCertificate}>
+            <Modal open={showUploadModal} onClose={closeUpload} title={t('app.sSLCertificates.uploadCustomCertificate', 'Upload custom certificate')}>
+                <form onSubmit={handleUploadCertificate} noValidate>
                     <div className="ssl-info-box">
                         <Upload size={32} />
                         <div>
@@ -696,39 +787,37 @@ const SSLCertificates = () => {
                             <p>{t('app.sSLCertificates.pasteAPemCertificatePrivateKey', 'Paste a PEM certificate, private key, and (optional) chain issued elsewhere.')}</p>
                         </div>
                     </div>
-                    <div className="form-group">
-                        <Label htmlFor="ssl-upload-domain">{t('common.labels.domain', 'Domain')}</Label>
-                        <DomainField
-                            id="ssl-upload-domain"
-                            modes={['custom']}
-                            value={uploadDomain}
-                            onChange={(fqdn) => setUploadDomain(fqdn)}
-                        />
-                    </div>
-                    <div className="form-group">
-                        <Label htmlFor={`${fieldId}-cert-pem`}>{t('app.sSLCertificates.certificatePem', 'Certificate (PEM)')}</Label>
-                        <textarea id={`${fieldId}-cert-pem`}
+                    <FormField label={t('common.labels.domain', 'Domain')} htmlFor={`${fieldId}-up-domain`} required error={uploadErrors.error('domain')}>
+                        <div onBlur={() => uploadErrors.touch('domain')}>
+                            <DomainField
+                                id={`${fieldId}-up-domain`}
+                                modes={['custom']}
+                                value={uploadDomain}
+                                onChange={(fqdn, info) => { setUploadDomain(fqdn); setUploadDomainInfo(info); }}
+                            />
+                        </div>
+                    </FormField>
+                    <FormField label={t('app.sSLCertificates.certificatePem', 'Certificate (PEM)')} htmlFor={`${fieldId}-up-cert`} required error={uploadErrors.error('cert')}>
+                        <textarea id={`${fieldId}-up-cert`}
                             className="ui-textarea ssl-pem-input"
                             rows={5}
                             placeholder={t('app.sSLCertificates.beginCertificate', '-----BEGIN CERTIFICATE-----')}
                             value={uploadCert}
                             onChange={e => setUploadCert(e.target.value)}
-                            required
+                            onBlur={() => uploadErrors.touch('cert')}
                         />
-                    </div>
-                    <div className="form-group">
-                        <Label htmlFor={`${fieldId}-key-pem`}>{t('app.sSLCertificates.privateKeyPem', 'Private key (PEM)')}</Label>
-                        <textarea id={`${fieldId}-key-pem`}
+                    </FormField>
+                    <FormField label={t('app.sSLCertificates.privateKeyPem', 'Private key (PEM)')} htmlFor={`${fieldId}-up-key`} required error={uploadErrors.error('key')}>
+                        <textarea id={`${fieldId}-up-key`}
                             className="ui-textarea ssl-pem-input"
                             rows={5}
                             placeholder={t('app.sSLCertificates.beginPrivateKey', '-----BEGIN PRIVATE KEY-----')}
                             value={uploadKey}
                             onChange={e => setUploadKey(e.target.value)}
-                            required
+                            onBlur={() => uploadErrors.touch('key')}
                         />
-                    </div>
-                    <div className="form-group">
-                        <Label htmlFor={`${fieldId}-chain-pem`}>{t('app.sSLCertificates.chainPemOptional', 'Chain (PEM, optional)')}</Label>
+                    </FormField>
+                    <FormField label={t('app.sSLCertificates.chainPemOptional', 'Chain (PEM, optional)')} htmlFor={`${fieldId}-chain-pem`}>
                         <textarea id={`${fieldId}-chain-pem`}
                             className="ui-textarea ssl-pem-input"
                             rows={4}
@@ -736,12 +825,12 @@ const SSLCertificates = () => {
                             value={uploadChain}
                             onChange={e => setUploadChain(e.target.value)}
                         />
-                    </div>
+                    </FormField>
                     <div className="modal-actions">
-                        <Button type="button" variant="outline" onClick={() => setShowUploadModal(false)}>
+                        <Button type="button" variant="outline" onClick={closeUpload}>
                             {t('common.actions.cancel', 'Cancel')}
                         </Button>
-                        <Button type="submit" disabled={actionLoading || !uploadDomain}>
+                        <Button type="submit" disabled={actionLoading}>
                             {actionLoading ? t('app.sSLCertificates.uploading', 'Uploading…') : t('app.sSLCertificates.uploadCertificateAction', 'Upload certificate')}
                         </Button>
                     </div>

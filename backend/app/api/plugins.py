@@ -643,10 +643,21 @@ def list_updates():
     """List installed plugins that have a newer version in the registry.
 
     Each entry: {slug, plugin_id, installed_version, available_version,
-    update_available, compatible, source}.
+    update_available, compatible, source, display_name, update_source,
+    incompatible_reason, requires_ack, risk}. ``?refresh=1`` refetches the
+    registry index first.
     """
+    from datetime import datetime, timezone
+    from app.services import registry_service
     from app.services.plugin_service import check_for_updates
-    return jsonify({'updates': check_for_updates()})
+    refresh = request.args.get('refresh', '').lower() in ('1', 'true', 'yes')
+    updates = check_for_updates(refresh=refresh)
+    return jsonify({
+        'updates': updates,
+        'count': sum(1 for u in updates if u['update_available'] and u['compatible']),
+        'checked_at': datetime.now(timezone.utc).isoformat(),
+        'registry_source': registry_service.registry_source_label(),
+    })
 
 
 @plugins_bp.route('/<int:plugin_id>/update', methods=['POST'])
@@ -670,21 +681,23 @@ def update_plugin_route(plugin_id):
     if not plugin:
         return jsonify({'error': 'Plugin not found'}), 404
 
-    entry = registry_service.get_entry(plugin.slug)
-    if not entry:
+    builtin = plugin.source_type == 'builtin'  # local bundled code: no consent
+    entry = None if builtin else registry_service.get_entry(plugin.slug)
+    if not builtin and not entry:
         return jsonify({
             'error': f"No registry entry for '{plugin.slug}' — cannot update "
                      f"from the registry."
         }), 400
     # Hidden means not updatable either: unreviewed entries only exist in
     # development contexts (see registry_service._show_unreviewed).
-    if entry.get('trust') == 'unreviewed' \
+    if entry and entry.get('trust') == 'unreviewed' \
             and not registry_service._show_unreviewed():
         return jsonify({'error': 'Extension not found in the registry'}), 404
 
     body = json_object(optional=True)
     acknowledged = body.get('acknowledge_risk') is True
-    reason, message = registry_service.consent_gate(entry, acknowledged)
+    reason, message = (None, None) if builtin else \
+        registry_service.consent_gate(entry, acknowledged)
     if reason:
         return jsonify({
             'error': f'{message} Resend with acknowledge_risk: true to proceed.',
@@ -703,7 +716,7 @@ def update_plugin_route(plugin_id):
             target_id=plugin.id,
             details={
                 'name': plugin.name, 'version': plugin.version,
-                'source': 'registry-update',
+                'source': 'builtin-update' if builtin else 'registry-update',
                 # Forensics (audit I7): the signature verdict of the bytes
                 # that just landed.
                 'signature': sig.get('status') or 'unsigned',

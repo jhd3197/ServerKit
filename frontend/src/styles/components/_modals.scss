@@ -19,6 +19,7 @@
     width: 100%;
     max-width: 560px;
     max-height: 90vh;
+    max-height: 90dvh;
     overflow-y: auto;
     @include custom-scrollbar();
 }

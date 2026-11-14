@@ -9,7 +9,7 @@
 // rows this client never loaded), while the grid chrome's column rules narrow
 // the rows already on screen. A saved view carries both — the server pair under
 // `page.serverFilters`, the rules under `columnFilters`.
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     ChevronRight, Globe, Pause, Play, Plus, Radar, RefreshCw,
@@ -17,6 +17,7 @@ import {
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '@/components/InfoTip';
 import ErrorState from '../components/ErrorState';
 import {
     DataTable, DataTableFooter, Drawer, FilterButton, FilterDrawer,
@@ -26,8 +27,10 @@ import {
     useTableChrome, GridViewPicker, GridChips, GridToolsMenu,
 } from '@/components/ds/grid';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { Switch } from '@/components/ui/switch';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
@@ -252,7 +255,16 @@ export default function Monitors() {
         if (saved.serverFilters !== undefined) setFilters((f) => ({ ...f, ...saved.serverFilters }));
     }, []);
 
-    const openCreate = () => { setForm(emptyForm); setFormOpen(true); };
+    const fieldId = useId();
+    const required = t('common.validation.required', 'This field is required.');
+    // The keyword only applies (and is only validated) for keyword checks.
+    const fe = useFieldErrors({
+        name: form.name.trim() ? null : required,
+        target: form.check_target.trim() ? null : required,
+        ...(form.check_type === 'keyword' ? { keyword: form.keyword.trim() ? null : required } : {}),
+    }, fieldId);
+
+    const openCreate = () => { fe.reset(); setForm(emptyForm); setFormOpen(true); };
     // Quick-create deep link: /monitoring/monitors?focus=create:monitor opens the form.
     useFocusParam('create', openCreate);
 
@@ -263,14 +275,18 @@ export default function Monitors() {
             <Button variant="outline" size="sm" onClick={load}>
                 <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}
             </Button>
-            <Button size="sm" onClick={openCreate}>
-                <Plus size={14} /> {t('app.monitors.addMonitor', 'New monitor')}
-            </Button>
+            <PagePrimaryButton
+                id="monitors-new"
+                label={t('app.monitors.addMonitor', 'New monitor')}
+                shortLabel={t('common.actions.new', 'New')}
+                onClick={openCreate}
+            />
         </>
     ), [q, activeFilterCount, load]);
 
     const onSave = async (e) => {
         e.preventDefault();
+        if (!fe.attempt()) return;
         setSaving(true);
         try {
             const payload = { ...form };
@@ -288,6 +304,7 @@ export default function Monitors() {
             setFormOpen(false);
             load();
         } catch (err) {
+            if (fe.fromServer(err)) return;
             toastError(toast, t('app.monitors.couldNotCreateTheMonitor', "Couldn't create the monitor."), err);
         } finally {
             setSaving(false);
@@ -519,10 +536,10 @@ export default function Monitors() {
             ) : monitors.length === 0 ? (
                 <EmptyState
                     icon={Radar}
-                    title={hasFilters ? t('app.monitors.noMonitorsMatch', 'No monitors match') : t('app.monitors.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}
+                    title={hasFilters ? t('app.monitors.noMonitorsMatch', 'No monitors match') : t('app.monitors.noMonitorsYet', 'No monitors yet')}
                     description={hasFilters
                         ? t('app.monitors.tryADifferentSearchOrClear', 'Try a different search or clear the filters.')
-                        : t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site, and get an incident when it stops answering.')}
+                        : <>{t('app.monitors.emptyShort', 'Watch a site, API, or port.')} <InfoTip>{t('app.monitors.addAMonitorToWatchA', 'Add a monitor to watch a website, an API endpoint, a database port or a WordPress site, and get an incident when it stops answering.')}</InfoTip></>}
                     action={hasFilters
                         ? <Button variant="outline" onClick={() => { setQ(''); setFilters({ status: '', type: '' }); }}>{t('common.actions.clearFilters', 'Clear filters')}</Button>
                         : <Button onClick={openCreate}><Plus size={16} /> {t('app.monitors.addMonitor', 'New monitor')}</Button>}
@@ -563,17 +580,16 @@ export default function Monitors() {
                 icon={<Radar size={18} />}
             >
                 <form className="mon-form" onSubmit={onSave} data-walkthrough="monitor-form">
-                    <div className="form-group">
-                        <Label htmlFor="mon-name">{t('common.labels.name', 'Name')}</Label>
+                    <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-name`} required error={fe.error('name')}>
                         <Input
-                            id="mon-name" required value={form.name}
-                            onChange={(e) => setForm({ ...form, name: e.target.value })}
+                            id={`${fieldId}-name`} value={form.name}
+                            onChange={(e) => { fe.clear('name'); setForm({ ...form, name: e.target.value }); }}
+                            onBlur={() => fe.touch('name')}
                             placeholder={t('app.monitors.marketingSite', 'Marketing site')}
                         />
-                    </div>
+                    </FormField>
 
-                    <div className="form-group">
-                        <Label htmlFor="mon-type">{t('app.monitors.checkType', 'Check type')}</Label>
+                    <FormField label={t('app.monitors.checkType', 'Check type')} htmlFor="mon-type">
                         <Select
                             value={form.check_type}
                             onValueChange={(v) => setForm({ ...form, check_type: v })}
@@ -585,61 +601,57 @@ export default function Monitors() {
                                 ))}
                             </SelectContent>
                         </Select>
-                    </div>
+                    </FormField>
 
-                    <div className="form-group">
-                        <Label htmlFor="mon-target">{t('common.labels.target', 'Target')}</Label>
+                    <FormField label={t('common.labels.target', 'Target')} htmlFor={`${fieldId}-target`} required error={fe.error('target')}>
                         <Input
-                            id="mon-target" required value={form.check_target}
-                            onChange={(e) => setForm({ ...form, check_target: e.target.value })}
+                            id={`${fieldId}-target`} value={form.check_target}
+                            onChange={(e) => { fe.clear('target'); setForm({ ...form, check_target: e.target.value }); }}
+                            onBlur={() => fe.touch('target')}
                             placeholder={TARGET_PLACEHOLDER[form.check_type]}
                         />
-                    </div>
+                    </FormField>
 
                     {form.check_type === 'keyword' && (
-                        <div className="form-group">
-                            <Label htmlFor="mon-keyword">{t('app.monitors.keyword', 'Keyword')}</Label>
+                        <FormField
+                            label={t('app.monitors.keyword', 'Keyword')} htmlFor={`${fieldId}-keyword`} required
+                            hint={t('app.monitors.a200ResponseWithoutThisText', 'A 200 response without this text counts as an outage.')}
+                            error={fe.error('keyword')}
+                        >
                             <Input
-                                id="mon-keyword" required value={form.keyword}
-                                onChange={(e) => setForm({ ...form, keyword: e.target.value })}
+                                id={`${fieldId}-keyword`} value={form.keyword}
+                                onChange={(e) => { fe.clear('keyword'); setForm({ ...form, keyword: e.target.value }); }}
+                                onBlur={() => fe.touch('keyword')}
                                 placeholder={t('app.monitors.proceedToCheckout', 'Proceed to checkout')}
                             />
-                            <span className="form-help">
-                                {t('app.monitors.a200ResponseWithoutThisText', 'A 200 response without this text counts as an outage.')}
-                            </span>
-                        </div>
+                        </FormField>
                     )}
 
                     <div className="mon-form__row">
-                        <div className="form-group">
-                            <Label htmlFor="mon-interval">{t('app.monitors.intervalS', 'Interval (s)')}</Label>
+                        <FormField label={t('app.monitors.intervalS', 'Interval (s)')} htmlFor="mon-interval">
                             <Input
                                 id="mon-interval" type="number" min="30" max="86400" value={form.check_interval}
                                 onChange={(e) => setForm({ ...form, check_interval: Number(e.target.value) })}
                             />
-                        </div>
-                        <div className="form-group">
-                            <Label htmlFor="mon-timeout">{t('app.monitors.timeoutS', 'Timeout (s)')}</Label>
+                        </FormField>
+                        <FormField label={t('app.monitors.timeoutS', 'Timeout (s)')} htmlFor="mon-timeout">
                             <Input
                                 id="mon-timeout" type="number" min="1" max="120" value={form.check_timeout}
                                 onChange={(e) => setForm({ ...form, check_timeout: Number(e.target.value) })}
                             />
-                        </div>
-                        <div className="form-group">
-                            <Label htmlFor="mon-retries">{t('app.monitors.retries', 'Retries')}</Label>
+                        </FormField>
+                        <FormField label={t('app.monitors.retries', 'Retries')} htmlFor="mon-retries" hint={t('app.monitors.failedChecksToleratedBeforeAnIncident', 'Failed checks tolerated before an incident opens.')}>
                             <Input
                                 id="mon-retries" type="number" min="0" max="10" value={form.retries}
                                 onChange={(e) => setForm({ ...form, retries: Number(e.target.value) })}
                             />
-                            <span className="form-help">{t('app.monitors.failedChecksToleratedBeforeAnIncident', 'Failed checks tolerated before an incident opens.')}</span>
-                        </div>
+                        </FormField>
                     </div>
 
                     {isHttpish && (
                         <>
                             <div className="mon-form__row">
-                                <div className="form-group">
-                                    <Label htmlFor="mon-method">{t('app.monitors.method', 'Method')}</Label>
+                                <FormField label={t('app.monitors.method', 'Method')} htmlFor="mon-method">
                                     <Select
                                         value={form.check_method}
                                         onValueChange={(v) => setForm({ ...form, check_method: v })}
@@ -651,15 +663,14 @@ export default function Monitors() {
                                             ))}
                                         </SelectContent>
                                     </Select>
-                                </div>
-                                <div className="form-group">
-                                    <Label htmlFor="mon-expected">{t('app.monitors.expectedStatus', 'Expected status')}</Label>
+                                </FormField>
+                                <FormField label={t('app.monitors.expectedStatus', 'Expected status')} htmlFor="mon-expected">
                                     <Input
                                         id="mon-expected" value={form.expected_status}
                                         onChange={(e) => setForm({ ...form, expected_status: e.target.value })}
                                         placeholder="200-299"
                                     />
-                                </div>
+                                </FormField>
                             </div>
 
                             <div className="mon-switch-row">

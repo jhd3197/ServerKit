@@ -9,10 +9,12 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { SegControl } from '@/components/ds';
 import { Cloud, Server } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
@@ -26,6 +28,7 @@ const CloudProvision = () => {
     const [servers, setServers] = useState([]);
     const [costs, setCosts] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [view, setView] = useState('servers');
     const [showCreateProvider, setShowCreateProvider] = useState(false);
     const [showCreateServer, setShowCreateServer] = useState(false);
     const [providerOptions, setProviderOptions] = useState(null);
@@ -54,15 +57,21 @@ const CloudProvision = () => {
     useEffect(() => { loadData(); }, [loadData]);
 
     // Publish the admin actions to the shared tab-group top bar.
-    useTopbarActions(() =>
-        user?.is_admin ? (
-            <>
-                <Button size="sm" variant="outline" onClick={() => setShowCreateProvider(true)}>{t('app.cloudProvision.addProvider', 'Add provider')}</Button>
-                <Button size="sm" onClick={() => setShowCreateServer(true)}>{t('app.cloudProvision.newServer', 'New server')}</Button>
-            </>
-        ) : null,
-        [user?.is_admin]
-    );
+    useTopbarActions(() => (
+        <>
+            {user?.is_admin && (
+                <>
+                    <Button size="sm" variant="outline" onClick={() => setShowCreateProvider(true)}>{t('app.cloudProvision.addProvider', 'Add provider')}</Button>
+                    <PagePrimaryButton
+                        id="cloud-provision-new-server"
+                        label={t('app.cloudProvision.newServer', 'New server')}
+                        shortLabel={t('common.actions.new', 'New')}
+                        onClick={() => setShowCreateServer(true)}
+                    />
+                </>
+            )}
+        </>
+    ), [user?.is_admin, view]);
 
     const handleCreateProvider = async () => {
         try {
@@ -112,13 +121,19 @@ const CloudProvision = () => {
 
     return (
         <div className="sk-tabgroup__inner cloud-provision-page">
-            <Tabs defaultValue="servers">
-                <TabsList>
-                    <TabsTrigger value="servers">{t('common.labels.servers', 'Servers')}</TabsTrigger>
-                    <TabsTrigger value="providers">{t('app.cloudProvision.providers', 'Providers')}</TabsTrigger>
-                    <TabsTrigger value="costs">{t('app.cloudProvision.costs', 'Costs')}</TabsTrigger>
-                </TabsList>
-
+            <div className="sk-viewswitch">
+                <SegControl
+                    aria-label={t('app.cloudProvision.views', 'Cloud views')}
+                    value={view}
+                    onChange={setView}
+                    options={[
+                        { value: 'servers', label: t('common.labels.servers', 'Servers') },
+                        { value: 'providers', label: t('app.cloudProvision.providers', 'Providers') },
+                        { value: 'costs', label: t('app.cloudProvision.costs', 'Costs') },
+                    ]}
+                />
+            </div>
+            <Tabs value={view} onValueChange={setView}>
                 <TabsContent value="servers">
                     <div className="cloud-servers-grid">
                         {servers.map(srv => (
@@ -227,7 +242,7 @@ const CloudProvision = () => {
                 footer={(
                     <>
                         <Button variant="outline" onClick={() => setShowCreateServer(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button onClick={handleCreateServer} disabled={!serverForm.name || !serverForm.provider_id}>{t('common.actions.create', 'Create')}</Button>
+                        <Button onClick={handleCreateServer} disabled={!serverForm.name || !serverForm.provider_id} disabledReason={t('app.cloudProvision.enterANameAndChooseAProvider', 'Enter a name and choose a provider first')}>{t('common.actions.create', 'Create')}</Button>
                     </>
                 )}
             >

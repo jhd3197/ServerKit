@@ -125,7 +125,6 @@ class DomainAttachService:
         if want_ssl:
             try:
                 from app.services.ssl_service import SSLService, get_acme_contact
-                from app.services.nginx_service import NginxService
                 # The stored panel contact before the admin@<host> guess —
                 # that guess is where Let's Encrypt expiry notices went to
                 # die, since the address usually does not exist.
@@ -135,13 +134,16 @@ class DomainAttachService:
                     domain.ssl_enabled = True
                     domain.ssl_certificate_path = cert.get('certificate_path')
                     domain.ssl_key_path = cert.get('private_key_path')
-                    ssl_result['enabled'] = True
-                    try:
-                        NginxService.add_ssl_to_site(
-                            app.name, cert.get('certificate_path'),
-                            cert.get('private_key_path'))
-                    except Exception as e:
-                        warnings.append(f'certificate issued but nginx SSL wiring failed: {e}')
+                    db.session.flush()
+                    wired = SiteDomainService.write_app_vhost(app)
+                    if wired.get('warning'):
+                        # Keep the cert paths for a retry, but don't claim
+                        # HTTPS that nginx is not serving.
+                        domain.ssl_enabled = False
+                        warnings.append('certificate issued but nginx SSL wiring '
+                                        f"failed: {wired['warning']}")
+                    else:
+                        ssl_result['enabled'] = True
                 else:
                     err = (cert or {}).get('error') or 'certificate request failed'
                     ssl_result['error'] = err

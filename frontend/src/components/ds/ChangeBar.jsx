@@ -33,6 +33,7 @@ export default function ChangeBar({
                     size="sm"
                     onClick={session.undo}
                     disabled={!session.canUndo || isSaving}
+                    disabledReason={!isSaving ? t('app.changeBar.nothingToUndo', 'Nothing to undo') : undefined}
                 >
                     <Undo2 aria-hidden="true" />
                     {t('common.editing.undo', 'Undo')}
@@ -43,6 +44,7 @@ export default function ChangeBar({
                     size="sm"
                     onClick={session.redo}
                     disabled={!session.canRedo || isSaving}
+                    disabledReason={!isSaving ? t('app.changeBar.nothingToRedo', 'Nothing to redo') : undefined}
                 >
                     <Redo2 aria-hidden="true" />
                     {t('common.editing.redo', 'Redo')}
@@ -52,7 +54,7 @@ export default function ChangeBar({
                     <RotateCcw aria-hidden="true" />
                     {t('common.editing.discard', 'Discard')}
                 </Button>
-                <Button type="button" size="sm" onClick={onSave} disabled={!session.isDirty || isSaving}>
+                <Button type="button" size="sm" onClick={onSave} disabled={!session.isDirty || isSaving} disabledReason={!isSaving ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}>
                     <Save aria-hidden="true" />
                     {isSaving
                         ? t('common.editing.saving', 'Saving…')

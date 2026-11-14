@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import InfoTip from '@/components/InfoTip';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
@@ -435,8 +436,9 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                     ) : (
                         <div className="cloudflared-login-prompt">
                             <p>
-                                {t('app.cloudflaredTab.cloudflareNeedsYouToAuthoriseThis', 'Cloudflare needs you to authorise this agent once. Click')}{' '}
-                                <strong>{t('app.cloudflaredTab.login', 'Login')}</strong> {t('app.cloudflaredTab.belowWeLlStartTheOauth', "below. We'll start the OAuth flow on the server and surface the URL for you to open in your browser. Once you authorise, the agent picks up the cert.pem automatically and the rest of this tab unlocks.")}
+                                {t('app.cloudflaredTab.authoriseOnce', 'Authorise this agent with Cloudflare once.')}{' '}
+                                <InfoTip>{t('app.cloudflaredTab.cloudflareNeedsYouToAuthoriseThis', 'Cloudflare needs you to authorise this agent once. Click')}{' '}
+                                <strong>{t('app.cloudflaredTab.login', 'Login')}</strong> {t('app.cloudflaredTab.belowWeLlStartTheOauth', "below. We'll start the OAuth flow on the server and surface the URL for you to open in your browser. Once you authorise, the agent picks up the cert.pem automatically and the rest of this tab unlocks.")}</InfoTip>
                             </p>
                             <Button onClick={handleStartLogin}>{t('app.cloudflaredTab.loginToCloudflare', 'Login to Cloudflare')}</Button>
                         </div>

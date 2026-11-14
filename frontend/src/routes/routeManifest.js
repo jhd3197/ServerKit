@@ -95,6 +95,7 @@ export const CORE_ROUTES = Object.freeze([
 
     { id: 'extensions', path: '/extensions', placement: 'dashboard', group: 'marketplace', component: 'Marketplace', titleKey: 'common.labels.extensions', title: 'Extensions' },
     { id: 'installed-extensions', path: '/extensions/installed', placement: 'dashboard', group: 'marketplace', component: 'Marketplace', titleKey: 'app.routeManifest.installedExtensions', title: 'Installed extensions' },
+    { id: 'extension-updates', path: '/extensions/updates', placement: 'dashboard', group: 'marketplace', component: 'Marketplace', titleKey: 'app.routeManifest.extensionUpdates', title: 'Extension updates' },
     { id: 'marketplace-recipes', path: '/extensions/recipes', placement: 'dashboard', group: 'marketplace', component: 'Recipes', titleKey: 'app.routeManifest.recipes', title: 'Recipes' },
     { id: 'downloads', path: '/downloads', placement: 'dashboard', group: 'marketplace', component: 'Downloads', titleKey: 'app.routeManifest.downloads', title: 'Downloads' },
     { id: 'legacy-marketplace', path: '/marketplace', placement: 'dashboard', redirect: '/extensions' },

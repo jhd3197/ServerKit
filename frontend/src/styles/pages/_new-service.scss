@@ -85,6 +85,12 @@
         font-weight: $font-weight-medium;
     }
 
+    // Phones: only the current step keeps its label so all dots fit.
+    @media (max-width: $breakpoint-sm) {
+        &__stepper-item { padding-inline: $space-2; }
+        &__stepper-item:not(&__stepper-item--current) &__stepper-label { display: none; }
+    }
+
     // ── Single centered column ──────────────────────────────
     &__wizard-col {
         display: grid;

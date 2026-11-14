@@ -111,6 +111,9 @@ const ComposeTab = ({ onStatsChange }) => {
     const loadSeq = useRef(0);
     const [loadError, setLoadError] = useState(null);
 
+    // A different server's rows must not linger as the "already loaded" list.
+    useEffect(() => { setProjects([]); }, [serverId]);
+
     useEffect(() => {
         loadProjects();
     }, [serverId]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -370,10 +373,10 @@ const ComposeTab = ({ onStatsChange }) => {
         applyPage: applyViewPageState,
     });
 
-    if (loading) {
+    if (loading && projects.length === 0) {
         return (
             <div className="dx-tab-pane">
-                <div className="docker-loading">{t('app.composeTab.loadingComposeProjects', 'Loading compose projects…')}</div>
+                <EmptyState loading loadingVariant="table" loadingRows={4} title={t('app.composeTab.loadingComposeProjects', 'Loading compose projects…')} />
             </div>
         );
     }

@@ -2,6 +2,7 @@ import { serverStatusKind } from './serverDetailData';
 import { Pill, KpiBand } from '../ds';
 import OnboardingWizard from '../server/OnboardingWizard';
 import SystemStatusCard from './SystemStatusCard';
+import ServerHealthCard from './ServerHealthCard';
 import { formatBytes } from '@/utils/formatBytes';
 import { InfoList, InfoItem } from '../InfoList';
 import { useTranslation } from 'react-i18next';
@@ -162,6 +163,8 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                         <InfoItem label={<><ClockIcon /> {t('common.labels.uptime', 'Uptime')}</>} value={formatUptime(metrics?.uptime)} />
                     </InfoList>
                 </div>
+
+                <ServerHealthCard server={server} />
 
                 <div className="overview-grid__full">
                     <SystemStatusCard server={server} onRefresh={onRefreshServer} />

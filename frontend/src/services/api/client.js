@@ -174,6 +174,8 @@ class ApiClient {
             const isJwtIssue = probe && probe.msg && !probe.error;
 
             if (isJwtIssue) {
+                // Throws on a transient refresh failure (offline, 5xx, 429):
+                // the refresh token is still good, so the session must survive.
                 const refreshed = await this.refreshToken();
                 if (refreshed) {
                     config.headers.Authorization = `Bearer ${this.getToken()}`;
@@ -223,28 +225,37 @@ class ApiClient {
         return data;
     }
 
-    async refreshToken() {
+    // True once a new access token is stored; false only when the server
+    // rejected the refresh token (401/422), which is the one case that ends the
+    // session. Anything else throws and leaves the tokens alone. Concurrent
+    // callers share one in-flight refresh, so a burst of expired requests costs
+    // one POST /auth/refresh instead of one each (and can't trip its limit).
+    refreshToken() {
+        this._refreshing ??= this._refreshOnce().finally(() => { this._refreshing = null; });
+        return this._refreshing;
+    }
+
+    async _refreshOnce() {
         const refreshToken = localStorage.getItem(storageKey('refresh_token'));
         if (!refreshToken) return false;
 
-        try {
-            const response = await fetch(`${this.baseUrl}/auth/refresh`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${refreshToken}`,
-                },
-            });
+        const response = await fetch(`${this.baseUrl}/auth/refresh`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        });
 
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem(storageKey('access_token'), data.access_token);
-                return true;
-            }
-            return false;
-        } catch {
-            return false;
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem(storageKey('access_token'), data.access_token);
+            return true;
         }
+        if (response.status === 401 || response.status === 422) return false;
+        const err = new Error(`Could not refresh the session (${response.status})`);
+        err.status = response.status;
+        throw err;
     }
 }
 

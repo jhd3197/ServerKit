@@ -4,6 +4,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
 
@@ -12,14 +13,17 @@ const GunicornTab = ({ appId }) => {
     const toast = useToast();
     const [config, setConfig] = useState('');
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [saving, setSaving] = useState(false);
 
     const loadConfig = useCallback(async () => {
         try {
             const data = await api.getGunicornConfig(appId);
             setConfig(data.content || '');
+            setLoadError(null);
         } catch (err) {
             console.error('Failed to load config:', err);
+            setLoadError(err);
         } finally {
             setLoading(false);
         }
@@ -42,7 +46,12 @@ const GunicornTab = ({ appId }) => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.gunicornTab.loadingGunicornConfiguration', 'Loading Gunicorn configuration…')} />;
+        return <EmptyState loading loadingVariant="console" loadingRows={10} title={t('app.gunicornTab.loadingGunicornConfiguration', 'Loading Gunicorn configuration…')} />;
+    }
+
+    // Never offer the editor after a failed load: saving its empty text would overwrite the real config.
+    if (loadError) {
+        return <ErrorState title={t('app.gunicornTab.failedToLoadConfiguration', "Couldn't load the Gunicorn configuration.")} error={loadError} onRetry={() => { setLoading(true); loadConfig(); }} />;
     }
 
     return (

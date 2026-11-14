@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+import InfoTip from '@/components/InfoTip';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { Button } from '@/components/ui/button';
 import { DataTable, DataTableFooter, ListToolbar, Pill } from '../ds';
 import EmptyState from '../EmptyState';
+import ErrorState from '../ErrorState';
 import { useTranslation } from 'react-i18next';
 import { t } from '../../i18n/t';
 import {
@@ -33,6 +35,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
     const toast = useToast();
 
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [snapshots, setSnapshots] = useState([]);
     const [map, setMap] = useState(null);
     const [takenAt, setTakenAt] = useState(null);
@@ -53,6 +56,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
 
     const load = useCallback(async () => {
         try {
+            setLoadError(null);
             const [surveysRes, obs] = await Promise.all([
                 api.getServerSurveys(serverId),
                 api.getServerObservedStatus(serverId).catch(() => null),
@@ -80,6 +84,7 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             }
         } catch (err) {
             console.error('Failed to load survey:', err);
+            setLoadError(err);
         }
     }, [serverId]);
 
@@ -92,6 +97,12 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
         })();
         return () => { cancelled = true; };
     }, [load]);
+
+    const retryLoad = async () => {
+        setLoading(true);
+        await load();
+        setLoading(false);
+    };
 
     async function refly() {
         setFlying(true);
@@ -153,13 +164,17 @@ const SurveyTab = ({ serverId, serverStatus, server }) => {
             <EmptyState
                 icon={FileSearch}
                 title={t('app.surveyTab.surveyNotAvailable', 'Survey not available')}
-                description={t('app.surveyTab.thisAgentDoesnTSupportThe', "This agent doesn't support the read-only survey yet. Upgrade the agent to enable Observe mode. It maps what's running on the server without changing anything.")}
+                description={<>{t('app.surveyTab.upgradeAgentForSurvey', 'Upgrade the agent to enable Observe mode.')} <InfoTip>{t('app.surveyTab.thisAgentDoesnTSupportThe', "This agent doesn't support the read-only survey yet. Upgrade the agent to enable Observe mode. It maps what's running on the server without changing anything.")}</InfoTip></>}
             />
         );
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.surveyTab.loadingSurvey', 'Loading survey')} />;
+        return <EmptyState loading loadingVariant="detail" title={t('app.surveyTab.loadingSurvey', 'Loading survey')} />;
+    }
+
+    if (loadError && snapshots.length === 0) {
+        return <ErrorState title={t('app.surveyTab.failedToLoadSurvey', "Couldn't load the survey.")} error={loadError} onRetry={retryLoad} />;
     }
 
     return (

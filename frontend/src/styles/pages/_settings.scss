@@ -8,8 +8,11 @@
     gap: $space-6;
     min-height: calc(100vh - 200px);
 
+    // minmax(0, …): the nowrap tab strip must scroll, not stretch the column.
     @media (max-width: $breakpoint-lg) {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+        grid-auto-rows: min-content;
+        min-height: 0;
     }
 }
 
@@ -38,14 +41,34 @@
     }
 
     @media (max-width: $breakpoint-lg) {
-        flex-direction: row;
-        flex-wrap: wrap;
         position: static;
         max-height: none;
         overflow-y: visible;
         background: $bg-card;
         padding: $space-2;
         border-radius: $radius-card;
+    }
+}
+
+// The tab list: a rail on desktop, a single scrolling strip (edge fades,
+// active tab kept in view — see hooks/useScrollTabs) once the rail collapses.
+.settings-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+
+    @media (max-width: $breakpoint-lg) {
+        @include tab-scroll;
+        flex-direction: row;
+        align-items: center;
+
+        // Section labels become inline captions between groups of tabs.
+        .settings-nav-divider {
+            flex-shrink: 0;
+            margin: 0;
+            padding: 0 $space-2;
+            white-space: nowrap;
+        }
     }
 }
 
@@ -61,8 +84,8 @@
     border-radius: $radius-control;
 
     @media (max-width: $breakpoint-lg) {
-        flex-basis: 100%;
         width: 100%;
+        margin-bottom: $space-2;
     }
 }
 
@@ -125,7 +148,7 @@
 
     &:focus-visible {
         outline: none;
-        box-shadow: $focus-ring;
+        box-shadow: inset 0 0 0 2px var(--accent-primary); // geometry: inset, the nav scroller clips an outer ring
     }
 
     &.active {
@@ -138,6 +161,7 @@
 
     @media (max-width: $breakpoint-lg) {
         width: auto;
+        white-space: nowrap;
     }
 }
 
@@ -371,10 +395,10 @@
 }
 
 .settings-card__loading {
-    padding: $space-6;
-    text-align: center;
-    color: $text-tertiary;
-    font-size: $text-xs;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    padding: $space-4 0;
 }
 
 .settings-card__footer {
@@ -1146,6 +1170,7 @@
     background: $bg-hover;
     border-radius: $radius-control;
     gap: $space-4;
+    flex-wrap: wrap; // on phones the control drops below the label instead of squeezing it
 
     &:not(:last-child) {
         margin-bottom: $space-3;
@@ -1158,7 +1183,14 @@
 }
 
 .settings-label {
-    flex: 1;
+    flex: 1 1 12rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: $space-1;
+
+    // `.form-group label` adds a bottom margin; mirror it so align-items: center centres the (i) on the text, not text + margin.
+    .form-group & > .ui-label + .info-tip { margin-block-end: $space-2; }
 
     > span:first-child {
         display: block;
@@ -1169,6 +1201,7 @@
 
     .settings-hint {
         display: block;
+        flex-basis: 100%;
         font-size: $text-xs;
         color: $text-tertiary;
     }
@@ -1199,6 +1232,7 @@
     &:focus {
         outline: none;
         border-color: $accent-primary;
+        box-shadow: $focus-ring;
     }
 
     &:disabled {
@@ -1387,6 +1421,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: $space-3;
     margin-bottom: $space-3;
 
@@ -1396,7 +1431,7 @@
 
 .theme-gallery-actions {
     display: flex;
-    flex-shrink: 0;
+    flex-wrap: wrap;
     gap: $space-2;
 }
 
@@ -1426,6 +1461,8 @@
     &:hover {
         border-color: var(--border-strong);
     }
+
+    &:focus-visible { outline-offset: -2px; } // inset: the gallery clips an outer ring
 
     &--active {
         border-color: var(--accent-primary);
@@ -1950,6 +1987,7 @@
             &:focus {
                 outline: none;
                 border-color: $accent-primary;
+                box-shadow: $focus-ring;
             }
         }
     }
@@ -2118,6 +2156,7 @@
             &:focus {
                 outline: none;
                 border-color: $accent-primary;
+                box-shadow: $focus-ring;
             }
         }
     }
@@ -2194,6 +2233,7 @@
                 &:focus {
                     outline: none;
                     border-color: $accent-primary;
+                    box-shadow: $focus-ring;
                 }
             }
 
@@ -2608,4 +2648,56 @@
 }
 .sk-ai-message__usage { font-size: $text-xs; color: $text-secondary; border-top: 1px solid $border-subtle; margin-top: $space-3; padding-top: $space-2; overflow-wrap: anywhere;
     summary { cursor: pointer; }
+}
+
+.profile-identity {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: $space-2 $space-3;
+    padding: $space-3 $space-4;
+    margin-block-end: $space-4;
+    background: $bg-card;
+    border: 1px solid $border-default;
+    border-radius: $radius-card;
+
+    &__avatar {
+        display: grid;
+        place-items: center;
+        inline-size: 40px; // geometry: avatar tile
+        block-size: 40px; // geometry: avatar tile
+        border-radius: $radius-full;
+        background: $accent-bg;
+        font-size: $text-md;
+        font-weight: $font-weight-semibold;
+        color: $accent-bright;
+    }
+    &__text { min-inline-size: 0; }
+    &__name {
+        font-size: $text-md;
+        font-weight: $font-weight-semibold;
+        color: $text-primary;
+    }
+    &__email {
+        font-size: $text-sm;
+        color: $text-secondary;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    &__name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    &__role { text-transform: capitalize; }
+    &__meta {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-2;
+        .sk-pill { block-size: auto; svg { inline-size: 14px; block-size: 14px; } } // geometry: chip glyph
+    }
+
+    @media (min-width: $breakpoint-md) {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        &__avatar { inline-size: 48px; block-size: 48px; } // geometry: avatar tile
+        &__meta { grid-column: auto; justify-content: flex-end; }
+    }
 }

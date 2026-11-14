@@ -174,7 +174,7 @@ const SystemTab = () => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.systemTab.loadingSystemInformation', 'Loading system information…')} />;
+        return <EmptyState loading loadingVariant="detail" title={t('app.systemTab.loadingSystemInformation', 'Loading system information…')} />;
     }
 
     return (
@@ -283,6 +283,7 @@ const SystemTab = () => {
                             variant="default"
                             onClick={handleTimezoneChange}
                             disabled={savingTimezone || !selectedTimezone || selectedTimezone === metrics?.time?.timezone_id}
+                            disabledReason={!savingTimezone ? t('app.systemTab.selectADifferentTimezoneFirst', 'Select a different timezone first') : undefined}
                         >
                             {savingTimezone ? t('common.saving', 'Saving…') : t('app.systemTab.apply', 'Apply')}
                         </Button>
@@ -307,7 +308,7 @@ const SystemTab = () => {
                     </div>
                 )}
                 {domainLoading ? (
-                    <EmptyState loading title={t('app.systemTab.loadingDomainSettings', 'Loading domain settings…')} />
+                    <EmptyState loading loadingVariant="form" loadingRows={2} title={t('app.systemTab.loadingDomainSettings', 'Loading domain settings…')} />
                 ) : domainError ? (
                     <ErrorState
                         title={t('app.systemTab.couldntLoadDomainSettings', "Couldn't load domain settings.")}
@@ -374,6 +375,7 @@ const SystemTab = () => {
                             variant="default"
                             onClick={handleSaveCanonicalDomain}
                             disabled={savingDomain || !canonicalDomain}
+                            disabledReason={!savingDomain ? t('app.systemTab.enterADomainFirst', 'Enter a domain first') : undefined}
                         >
                             {savingDomain ? t('common.saving', 'Saving…') : t('app.systemTab.saveCanonicalDomain', 'Save canonical domain')}
                         </Button>

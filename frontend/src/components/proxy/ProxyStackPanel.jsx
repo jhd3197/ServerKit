@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Pill, SegControl, serviceStatusKind } from '../ds';
 import EmptyState from '../EmptyState';
+import InfoTip from '../InfoTip';
+import ProxyLogoTiles from './ProxyLogoTiles';
 import { AlertTriangle, CheckCircle2, Network } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
@@ -199,9 +201,10 @@ const ProxyStackPanel = ({ serverId }) => {
                 </div>
             </header>
 
-            <p className="proxy-panel__hint">
-                {t('app.proxyStackPanel.hostNginxIsTheDefaultAnd', 'Host Nginx is the default and is recommended for PHP/WordPress. You can opt into a Dockerized Traefik or Caddy proxy deployed as a Compose stack.')}
-            </p>
+            <div className="proxy-panel__hint tip-chip-row">
+                <ProxyLogoTiles />
+                <InfoTip subject={t('app.proxyStackPanel.reverseProxy', 'Reverse proxy')}>{t('app.proxyStackPanel.hostNginxIsTheDefaultAnd', 'Host Nginx is the default and is recommended for PHP/WordPress. You can opt into a Dockerized Traefik or Caddy proxy deployed as a Compose stack.')}</InfoTip>
+            </div>
 
             {audit && audit.mismatch_count > 0 && (
                 <div className="proxy-panel__ingress-warning" role="alert">
@@ -243,7 +246,7 @@ const ProxyStackPanel = ({ serverId }) => {
                     onChange={setSelectedType}
                 />
                 <div className="proxy-panel__actions">
-                    <Button onClick={handleSwitch} disabled={!isDirtyType || busy}>
+                    <Button onClick={handleSwitch} disabled={!isDirtyType || busy} disabledReason={!busy ? t('app.proxyStackPanel.selectADifferentProxyFirst', 'Select a different proxy first') : undefined}>
                         {isDirtyType
                             ? t('app.proxyStackPanel.switchTo', 'Switch to {{type}}', { type: selectedType })
                             : t('app.proxyStackPanel.noChange', 'No change')}
@@ -290,6 +293,7 @@ const ProxyStackPanel = ({ serverId }) => {
                             variant="outline"
                             onClick={handleSaveSnippet}
                             disabled={!isDirtySnippet || busy}
+                            disabledReason={!busy ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}
                         >
                             {t('app.proxyStackPanel.saveSnippet', 'Save snippet')}
                         </Button>
@@ -301,7 +305,7 @@ const ProxyStackPanel = ({ serverId }) => {
                 <EmptyState
                     icon={Network}
                     title={t('app.proxyStackPanel.hostNginxIsActive', 'Host Nginx is active')}
-                    description={t('app.proxyStackPanel.theHostSNginxIsHandling', 'The host\'s Nginx is handling reverse proxying. Switch to Traefik or Caddy above to run a managed Docker proxy stack instead.')}
+                    description={<InfoTip>{t('app.proxyStackPanel.theHostSNginxIsHandling', 'The host\'s Nginx is handling reverse proxying. Switch to Traefik or Caddy above to run a managed Docker proxy stack instead.')}</InfoTip>}
                 />
             )}
         </div>

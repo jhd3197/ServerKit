@@ -82,6 +82,7 @@ export default function FileManagerToolbar({
                             className="nav-btn"
                             onClick={goBack}
                             disabled={historyIdx === 0}
+                            disabledReason={t('app.fileManager.nothingToGoBackTo', 'Nothing to go back to')}
                             title={t('common.actions.back', 'Back')}
                         >
                             <ArrowLeft size={14} />
@@ -92,6 +93,7 @@ export default function FileManagerToolbar({
                             className="nav-btn"
                             onClick={goForward}
                             disabled={historyIdx >= history.length - 1}
+                            disabledReason={t('app.fileManager.nothingToGoForwardTo', 'Nothing to go forward to')}
                             title={t('app.fileManager.forward', 'Forward')}
                         >
                             <ArrowRight size={14} />
@@ -102,7 +104,8 @@ export default function FileManagerToolbar({
                             className="nav-btn"
                             onClick={goUp}
                             disabled={!parentPath}
-                            title="Up"
+                            disabledReason={t('app.fileManager.alreadyAtTheTopFolder', 'Already at the top folder')}
+                            title={t('app.fileManager.up', 'Up')}
                         >
                             <ArrowUp size={14} />
                         </Button>
@@ -224,6 +227,7 @@ export default function FileManagerToolbar({
                             type="button"
                             className={`view-toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
                             onClick={() => setViewMode('grid')}
+                            aria-pressed={viewMode === 'grid'}
                             title={t('app.fileManager.gridView', 'Grid view')}
                         >
                             <LayoutGrid size={14} />
@@ -233,6 +237,7 @@ export default function FileManagerToolbar({
                             type="button"
                             className={`view-toggle-btn ${viewMode === 'list' ? 'active' : ''}`}
                             onClick={() => setViewMode('list')}
+                            aria-pressed={viewMode === 'list'}
                             title={t('app.fileManager.listView', 'List view')}
                         >
                             <List size={14} />
@@ -243,6 +248,7 @@ export default function FileManagerToolbar({
                         type="button"
                         className={`toolbar-icon-btn ${showHidden ? 'active' : ''}`}
                         onClick={() => setShowHidden(!showHidden)}
+                        aria-pressed={showHidden}
                         title={t('app.fileManager.toggleHiddenFiles', 'Toggle hidden files')}
                     >
                         {showHidden ? <Eye size={14} /> : <EyeOff size={14} />}

@@ -14,6 +14,22 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ------------------------------------------------------------
 // Pill — status badge (dot + label)
 // ------------------------------------------------------------
+// StatusDot: the Pill's dot on its own, for headers that want colour without a label.
+.sk-statusdot {
+    display: inline-block;
+    flex: none;
+    width: 8px; // geometry: status dot
+    height: 8px; // geometry: status dot
+    border-radius: 50%;
+
+    &--green { background: var(--green); }
+    &--amber { background: var(--amber); }
+    &--red { background: var(--red); }
+    &--cyan { background: var(--cyan); }
+    &--violet { background: var(--violet); }
+    &--gray { background: var(--text-faint); }
+}
+
 .sk-pill {
     // Badge spec: 20px tall, 4px radius, 12px/500, tinted fill, flat dot.
     display: inline-flex;
@@ -96,6 +112,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 // ------------------------------------------------------------
 .sk-seg {
     display: inline-flex;
+    max-width: 100%; // wider than its row -> scrolls (see .sk-tabscroll)
     gap: $space-hair;
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -119,6 +136,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         transition: 0.14s;
 
         &:hover { color: var(--text-dim); }
+        &:focus-visible { outline-offset: -2px; } // inset: the pill row clips an outer ring
         &.is-on { background: var(--surface-3); color: var(--text); box-shadow: none; }
 
         .sk-seg__count { font-size: $text-xs; opacity: 0.7; }
@@ -149,6 +167,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     grid-template-areas: "icon body trend" "spark spark spark";
 
     &:hover { border-color: var(--border-strong); }
+    // Spark-less tile stretched to its siblings' height: pack rows at the top and
+    // leave the slack empty. Spark tiles keep the default so the spark fills down.
+    &:not(:has(> .sk-kpi__spark)) { align-content: start; }
 
     // A bare glyph. Tinted icon squares in a rainbow of tones read as
     // decoration; only "act on this" tones keep a colour, on the glyph alone.
@@ -216,6 +237,33 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     // A tile whose metric is over its configured limit. Amber, not red: it is
     // an "act soon", and the value itself already carries the number.
     &.is-alerting { border-color: rgba(245, 185, 69, 0.35); }
+
+    // Phone (matches the 2-up KpiBand): the icon sits inline with the value and
+    // the body dissolves into the grid, so the label gets the full tile width
+    // (two-line clamp, no ellipsis) and the sub line collapses to one line.
+    @media (max-width: 560px) {
+        grid-template-areas: none;
+        row-gap: $space-hair;
+
+        // Row 1 is pinned (icon, value, trend); every other body child and the
+        // spark span the full width and auto-flow into their own rows below.
+        &__body { display: contents; }
+        &__icon, &__val, &__trend { grid-area: auto; grid-row: 1; }
+        &__icon { grid-column: 1; }
+        // Value sizes to its content (never ellipsized); the trend takes what is left.
+        grid-template-columns: auto auto minmax(0, 1fr);
+        &__val { grid-column: 2; overflow: visible; text-overflow: clip; }
+        &__trend { grid-column: 3; justify-self: end; }
+        &__body > :not(.sk-kpi__val), &__spark { grid-area: auto; grid-column: 1 / -1; min-width: 0; }
+        &__label {
+            white-space: normal;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+        }
+        &__sub { > * { min-width: 0; overflow-wrap: anywhere; } }
+    }
 }
 
 // ------------------------------------------------------------
@@ -228,6 +276,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     flex-direction: column;
     gap: $space-3;
  margin-bottom: $space-5;
+    container-type: inline-size;
 }
 
 .sk-kpiband {
@@ -242,6 +291,11 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     }
     @media (max-width: 560px) {
         grid-template-columns: 1fr 1fr;
+    }
+    // Four tiles: 4 across or 2x2, never the 3+1 auto-fit gives at tablet width.
+    // Measured on the band's own container, so a sidebar-narrowed page agrees.
+    @container (max-width: 820px) {
+        &[data-cols='4'] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     // Skeleton tile — same geometry as .sk-kpi so content doesn't jump on load.
@@ -496,6 +550,153 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         border-radius: $radius-full;
         padding: 1px $space-2;
     }
+
+    // Cell content is wrapped so card mode can lay a label beside it; on
+    // desktop the wrapper must not exist as far as layout is concerned.
+    &__value { display: contents; }
+}
+
+// Desktop has the header row for sorting.
+.sk-dtable__sortbar { display: none; }
+.sk-dtable__checklabel { display: none; }
+
+// ---- card mode: rows become stacked cards under 640px --------------------
+// The markup is unchanged (DataTable `responsive`, on by default), so sorting,
+// selection, grouping and the keyboard cursor all keep working. Opt out with
+// `responsive={false}` for editor grids.
+@media (max-width: $breakpoint-sm - 1) {
+    .sk-dtable-wrap:has(.sk-dtable--stack) {
+        overflow: visible;
+        background: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .sk-dtable__sortbar {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        margin-bottom: $space-3;
+
+        > [role='combobox'] { flex: 1 1 auto; min-width: 0; height: $control-lg; }
+        > button { flex: 0 0 auto; width: $control-lg; height: $control-lg; }
+    }
+
+    .sk-dtable--stack {
+        &, thead, tbody { display: block; }
+
+        // Sorting lives in the .sk-dtable__sortbar above; only the select-all
+        // checkbox stays up here, as a chip.
+        thead:not(:has(.sk-dtable__check)) { display: none; }
+
+        thead tr {
+            display: flex;
+            gap: $space-2;
+            margin-bottom: $space-3;
+            border: 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+
+            &::-webkit-scrollbar { display: none; }
+        }
+
+        thead th {
+            display: none;
+            flex: 0 0 auto;
+            align-items: center;
+            height: $control-lg;
+            padding: 0 $space-3 !important;
+            border: 1px solid var(--border-soft);
+            border-radius: $radius-full;
+            background: var(--surface);
+
+            &.sk-dtable__check { display: inline-flex; gap: $space-2; width: auto; }
+            .sk-dtable__checklabel { display: inline; font-size: $text-sm; color: var(--text-dim); white-space: nowrap; }
+
+            // Header menus are hover affordances; there is no hover on a phone.
+            .sk-colmenu-btn { display: none; }
+        }
+
+        tbody tr {
+            position: relative;
+            display: block;
+            margin-bottom: $space-3;
+            padding-block: $space-1;
+            background: var(--surface);
+            border: 1px solid var(--border-soft);
+            border-radius: $radius-card;
+            overflow: hidden;
+        }
+
+        tbody td {
+            display: block;
+            height: auto;
+            padding: $space-1 $space-4;
+            border-bottom: 0;
+            overflow-wrap: anywhere; // emails, ids and paths wrap instead of overflowing
+        }
+
+        // label · value rows
+        tbody td[data-label] {
+            display: grid;
+            grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+            align-items: baseline;
+            justify-items: start; // pills/badges hug their content, not the column
+            column-gap: $space-3;
+
+            &::before {
+                content: attr(data-label);
+                font-size: $text-xs;
+                color: var(--text-faint);
+            }
+        }
+
+        // The title is its own heading, never a label · value pair.
+        tbody td.sk-dtable__cell--title {
+            display: block;
+            padding-block: $space-2;
+            font-weight: $font-weight-semibold;
+
+            &::before { content: none; }
+        }
+
+        // Actions: a footer row of full-size touch targets.
+        tbody td.sk-dtable__cell--actions {
+            display: block;
+            margin-top: $space-1;
+            padding-block: $space-1;
+            border-top: 1px solid var(--border-soft);
+
+            .sk-dtable__value {
+                display: flex;
+                flex-wrap: wrap;
+                gap: $space-2;
+            }
+
+            :is(button, a, [role='button']) {
+                min-height: $control-lg;
+                min-width: $control-lg;
+            }
+        }
+
+        tbody td.sk-dtable__check {
+            position: absolute;
+            inset-block-start: $space-1;
+            inset-inline-end: $space-1;
+            width: auto;
+            padding: $space-2 !important;
+        }
+
+        // A lone chevron ("row opens a detail") has no job on a card.
+        tbody td.sk-dtable__cell--actions:has(> .sk-dtable__value > svg:only-child),
+        tbody td.sk-dtable__cell--actions:has(> .sk-dtable__value:empty),
+        tbody td.sk-dtable__cell--actions:has(> .sk-dtable__value > :only-child:empty) { display: none; }
+
+        tbody tr:has(.sk-dtable__check) .sk-dtable__cell--title { padding-inline-end: $space-10; }
+
+        tbody tr.sk-dtable__group,
+        tbody tr.sk-dtable__nomatch { padding-block: 0; }
+    }
 }
 
 // THE table frame. Every list table in the panel (Databases studio aside)
@@ -508,6 +709,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     background: var(--surface);
     border: 1px solid var(--border-soft);
     border-radius: $radius-card;
+
+    // inset: the wrap (and stacked phone cards) clips an outer ring
+    :is(a, button, [role='button'], [tabindex]):focus-visible { outline-offset: -2px; }
 }
 
 // A table that is one section of a titled card/panel runs flush inside it:
@@ -831,7 +1035,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         opacity: 0;
         transition: 0.12s;
 
-        .sk-viewmenu__row:hover & { opacity: 1; }
+        .sk-viewmenu__row:hover &,
+        .sk-viewmenu__row:focus-within & { opacity: 1; }
         &:hover { background: var(--surface); color: var(--text); }
     }
 
@@ -873,7 +1078,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             transition: border-color 0.14s;
 
             &::placeholder { color: var(--text-faint); }
-            &:focus { border-color: var(--accent-dim); }
+            &:focus { border-color: var(--accent-dim); box-shadow: $focus-ring; }
         }
     }
 }
@@ -1073,7 +1278,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             font-size: $text-sm;
 
             &::placeholder { color: var(--text-faint); }
-            &:focus { outline: none; }
+            &:focus-visible { outline-offset: -2px; }
         }
     }
 
@@ -1166,6 +1371,14 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__title { margin: 0; font-size: $text-md; font-weight: $font-weight-semibold; letter-spacing: -0.01em; color: var(--text); }
     &__meta { font-size: $text-xs; color: var(--text-faint); }
     &__spacer { flex: 1; }
+    // A page's compact create button. Never grows with a long label; below the
+    // width where the mobile header shows, that header "+" runs the same action.
+    &__primary {
+        max-inline-size: 14rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
     &__actions {
         display: inline-flex;
         align-items: center;
@@ -1194,6 +1407,14 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         > .sk-topbar__chrome > .sk-searchfield { order: 1; }
         > .sk-gridicon,
         > .sk-topbar__chrome > .sk-gridicon { order: 2; }
+    }
+
+    // Primary is hidden here, so a strip holding only it (and an empty chrome
+    // slot) is a 0-height flex item that still costs the topbar a row-gap.
+    @media (max-width: $breakpoint-md) {
+        // Only the topbar copy hides; the same button in a page body stays.
+        &__actions > &__primary { display: none; }
+        &__actions:has(> .sk-topbar__primary):not(:has(> :not(.sk-topbar__primary, .sk-topbar__chrome), > .sk-topbar__chrome > *)) { display: none; }
     }
 
     // The portal target a table's chrome renders into. It must not become a box
@@ -1268,6 +1489,10 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         color: var(--text-dim);
         text-decoration: none;
         white-space: nowrap;
+        // Button tabs (<button role="tab">) share the link tabs' flat look.
+        border: 0;
+        background: transparent;
+        cursor: pointer;
         transition: background 0.14s, color 0.14s;
 
         svg { width: 15px; height: 15px; }
@@ -1275,6 +1500,23 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &.is-active { @include status-variant(var(--accent-bright), var(--accent-bg)); }
         // Overflowed tab — moved into the "More" popover, not rendered inline.
         &.is-hidden { display: none; }
+        // __tabs clips overflow, so the default 2px-offset ring would be cut off.
+        &:focus-visible { outline-offset: -2px; }
+    }
+    // Count pill on a tab (e.g. pending updates).
+    &__badge {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: $space-4; height: $space-4; padding: 0 $space-1;
+        border-radius: $radius-full;
+        background: var(--accent); color: $on-accent;
+        font-size: $text-xs; font-weight: $font-weight-semibold; line-height: 1;
+    }
+    // Phones: inactive iconOnlyNarrow tabs are icon-only (aria-label keeps the name).
+    @media (max-width: $breakpoint-sm) {
+        &__tab:not(.is-active) &__tab-label {
+            position: absolute; inline-size: 1px; block-size: 1px;
+            overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+        }
     }
     // Overflow ("More") trigger — a tab-styled button that never collapses.
     &__more {
@@ -1286,6 +1528,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         font: inherit;
         cursor: pointer;
         &[data-state="open"] { background: var(--surface-hover); color: var(--text); }
+        &:focus-visible { outline-offset: -2px; }
     }
 
     @media (max-width: 768px) {
@@ -1293,20 +1536,82 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
         &__actions {
             order: 2;
             width: 100%;
+            flex-wrap: wrap;
             min-width: 0;
             justify-content: flex-start;
             overflow-x: auto;
             overflow-y: hidden;
             scrollbar-width: none;
-            -webkit-mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
-            mask-image: linear-gradient(to right, black 0, black calc(100% - 28px), transparent 100%);
+            // No edge fade: the search box shrinks first, so the strip only
+            // scrolls in extremis, and a permanent fade dimmed the last icon.
 
             > *,
             > .sk-topbar__chrome > * { flex-shrink: 0; }
 
+            // The search takes what is left on its row and wraps to a row of its
+            // own (full width) when even its minimum doesn't fit — never offscreen.
+            > .sk-searchfield,
+            > .sk-topbar__chrome > .sk-searchfield { flex: 1 1 180px; max-width: none; min-width: 0; }
+
             &::-webkit-scrollbar { display: none; }
         }
         &__tabs { order: 3; width: 100%; margin-left: 0; justify-content: flex-start; }
+
+        // Only compact icon actions (e.g. a lone Refresh): share the tabs' row,
+        // pinned right, instead of costing a full row of their own.
+        &__actions:has(> .sk-topbar__action--compact):not(:has(> :not(.sk-topbar__action--compact, .sk-topbar__chrome))) {
+            order: 2;
+            width: auto;
+            margin-left: auto;
+        }
+        &:has(.sk-topbar__actions > .sk-topbar__action--compact):not(:has(.sk-topbar__actions > :not(.sk-topbar__action--compact, .sk-topbar__chrome))) &__tabs {
+            order: 1;
+            width: auto;
+            flex: 1 1 0;
+        }
+    }
+
+    // Phones: the one page-header rule. The title takes the row beside its icon
+    // and wraps (meta drops under it instead of squeezing the heading into a
+    // sliver); the actions drop below as a WRAPPING group of full-size targets
+    // rather than a clipped, side-scrolling strip.
+    @media (max-width: $breakpoint-sm - 1) {
+        &__titles {
+            flex: 1 1 0;
+            flex-wrap: wrap;
+            gap: 0 $space-3;
+        }
+        &__title { overflow-wrap: anywhere; }
+        &__spacer { flex: 0; }
+
+        &__actions {
+            flex-wrap: wrap;
+            overflow: visible;
+            -webkit-mask-image: none;
+            mask-image: none;
+
+            > *,
+            > .sk-topbar__chrome > * { flex-shrink: 1; }
+
+            // The search box leads its own row and the two icon buttons
+            // (filter, "⋮") sit inline after it: its basis leaves exactly their
+            // room, so they never wrap onto a row of their own.
+            > .sk-searchfield,
+            > .sk-topbar__chrome > .sk-searchfield { flex: 1 1 calc(100% - #{2 * ($control-lg + $space-2)}); min-width: 0; }
+
+            :is(button, a, [role='button']) { min-height: $control-lg; }
+
+            // A view switcher (SegControl) is a row of its own that scrolls
+            // sideways rather than clipping or wrapping its segments.
+            > .sk-seg {
+                flex: 1 1 100%;
+                max-width: 100%;
+                overflow-x: auto;
+                scrollbar-width: none;
+                &::-webkit-scrollbar { display: none; }
+                .sk-seg__btn { flex-shrink: 0; }
+            }
+        }
     }
 }
 
@@ -1388,6 +1693,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     flex: 1 1 240px;
     min-width: 180px;
     max-width: 420px;
+
+    // Inside a view bar it shrinks before its icon buttons would wrap.
+    .sk-viewbar__actions > & { flex: 1 1 auto; min-width: 96px; }
 
     &__icon {
         position: absolute;
@@ -1522,6 +1830,9 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     border-radius: $radius-card;
     background: var(--surface);
     overflow: hidden;
+
+    // inset: the list clips an outer ring
+    :is(a, button, [role='button'], [tabindex]):focus-visible { outline-offset: -2px; }
 }
 
 .sk-resource-card {
@@ -1579,6 +1890,7 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &.is-clickable:focus-within { border-color: var(--border); }
 
     &__head { display: flex; align-items: flex-start; gap: 10px; min-width: 0; }
+    &__head > .info-tip { margin-inline-start: -6px; } // 10px gap - 6 = the 4px InfoTip rule
     &__icon {
         display: inline-flex; align-items: center; justify-content: center;
         flex-shrink: 0;
@@ -1594,7 +1906,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
     &__title {
         display: inline-flex; align-items: center; gap: 6px;
         font-weight: $font-weight-semibold; font-size: $text-sm; color: var(--text);
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        overflow: hidden; overflow-wrap: anywhere;
+        display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical;
     }
     &__open {
         max-width: 100%;
@@ -1607,10 +1920,8 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
 
         &:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     }
-    &__featured { flex-shrink: 0; color: var(--text-faint); fill: currentColor; }
-    &__sub {
-        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
+    &__featured { flex-shrink: 0; color: var(--text-faint); fill: currentColor; margin-inline-start: 6px; vertical-align: -1px; }
+    &__sub { overflow-wrap: anywhere; }
     &__tag { flex-shrink: 0; font-size: $text-xs; color: var(--text-faint); white-space: nowrap; }
     &__desc {
         margin: 0;
@@ -1847,4 +2158,15 @@ $sk-tones: ('accent', 'green', 'cyan', 'amber', 'red', 'violet');
             line-height: 1.6;
         }
     }
+}
+
+// In-page view switch for a tab-group child ("Dashboard / Versions / …" on one
+// page): the group's bar owns the tab row, so the page's own sub-views are a
+// SegControl at the top of the body — the same pattern Jobs uses. Scrolls
+// sideways rather than wrapping when the views don't fit a phone.
+.sk-viewswitch {
+    display: flex;
+    margin-bottom: $space-4;
+    max-width: 100%;
+    min-width: 0;
 }

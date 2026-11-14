@@ -25,8 +25,8 @@
         padding-right: $space-4;
         min-width: 140px;
 
-        &:focus {
-            outline: none;
+        &:focus-visible {
+            outline-offset: 2px;
         }
 
         option {

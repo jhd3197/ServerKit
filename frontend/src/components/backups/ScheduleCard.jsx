@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Calendar, Save, Loader2 } from 'lucide-react';
 import SchedulePicker from '../SchedulePicker';
 import { useTranslation } from 'react-i18next';
+import InfoTip from '@/components/InfoTip';
 
 // Card 2 of the backup "Protection" panel: the editable schedule form.
 // The saved policy carries a raw cron string; this card now mounts the shared
@@ -187,7 +188,7 @@ const ScheduleCard = ({ policy, remoteConfigured, onSave, saving }) => {
                         onChange={setDrillCadence}
                     />
                     <p className="app-panel-hint">
-                        {t('app.scheduleCard.periodicallyTestRestoreTheLatestBackup', 'Periodically test-restore the latest backup to prove it can actually be recovered. Drills run into a throwaway location and never touch this site. Replaying an incremental backup chain during a drill needs GNU tar, so those drills run on Linux hosts only.')}
+                        {t('app.scheduleCard.periodicallyTestRestoreTheLatestBackupShort', 'Test-restore the latest backup periodically.')} <InfoTip>{t('app.scheduleCard.periodicallyTestRestoreTheLatestBackup', 'Periodically test-restore the latest backup to prove it can actually be recovered. Drills run into a throwaway location and never touch this site. Replaying an incremental backup chain during a drill needs GNU tar, so those drills run on Linux hosts only.')}</InfoTip>
                     </p>
                 </div>
 
@@ -213,6 +214,7 @@ const ScheduleCard = ({ policy, remoteConfigured, onSave, saving }) => {
                         variant="primary"
                         size="sm"
                         disabled={!dirty || saving}
+                        disabledReason={!saving ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}
                         onClick={handleSave}
                     >
                         {saving ? <Loader2 size={14} className="spin" /> : <Save size={14} />}

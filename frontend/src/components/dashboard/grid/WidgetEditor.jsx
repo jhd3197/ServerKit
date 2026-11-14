@@ -15,7 +15,8 @@ import {
 // Single source of truth for shortcut targets: what a user can pick here is
 // exactly what the renderer can draw. WidgetBody is what the board itself
 // draws with, so the preview cannot drift from the real thing.
-import { QUICK_ACTION_OPTIONS, WidgetBody } from '../widgets/renderers';
+import { WidgetBody } from '../widgets/renderers';
+import { QUICK_ACTION_OPTIONS } from '../widgets/quickActions';
 import { deriveWidgetTitle } from '../widgets/registry';
 import { GRID_COLS, GRID_GAP, GRID_ROW } from './layout';
 import { useTranslation } from 'react-i18next';

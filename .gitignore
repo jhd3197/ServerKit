@@ -132,6 +132,10 @@ SECURITY_AND_CODE_AUDIT.md
 !/docs/screenshots/
 !/docs/screenshots/*.png
 
+# Layout screenshot baselines compared by `npm run test:layout`.
+!/frontend/tests/layout-baselines/
+!/frontend/tests/layout-baselines/*.png
+
 # Video walkthrough thumbnails linked from the README.
 !/docs/videos/*.png
 

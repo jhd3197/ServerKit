@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useId } from 'react';
 import api from '../../services/api';
 import PermissionEditor from './PermissionEditor';
 import Modal from '../Modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { FormField, FormRow } from '../FormField';
+import useFieldErrors from '../../hooks/useFieldErrors';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import CopyField from '../CopyField';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +21,13 @@ const InviteModal = ({ onClose, onCreated }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [result, setResult] = useState(null);
+    const fieldId = useId();
+    // Email is optional; only a value that is present must look like an address.
+    const fe = useFieldErrors({
+        email: !email.trim() || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+            ? null
+            : t('common.validation.emailInvalid', 'Enter a valid email address.'),
+    }, fieldId);
 
     useEffect(() => {
         api.getPermissionTemplates().then(data => {
@@ -39,6 +47,7 @@ const InviteModal = ({ onClose, onCreated }) => {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         setError('');
         setLoading(true);
 
@@ -59,6 +68,7 @@ const InviteModal = ({ onClose, onCreated }) => {
             }));
             if (onCreated) onCreated();
         } catch (err) {
+            if (fe.fromServer(err)) return;
             setError(err.message || 'Failed to create invitation');
         } finally {
             setLoading(false);
@@ -98,27 +108,28 @@ const InviteModal = ({ onClose, onCreated }) => {
 
     return (
         <Modal open={true} onClose={onClose} title={t('app.inviteModal.inviteUser', 'Invite user')} size="md">
-                <form onSubmit={handleSubmit} data-walkthrough="invite-form">
+                <form onSubmit={handleSubmit} noValidate data-walkthrough="invite-form">
                     <div className="modal-body">
                         {error && <div className="error-message">{error}</div>}
 
-                        <div className="form-group">
-                            <Label htmlFor="invite-email">{t('app.inviteModal.emailOptional', 'Email (optional)')}</Label>
+                        <FormField
+                            label={t('app.inviteModal.emailOptional', 'Email (optional)')}
+                            htmlFor={`${fieldId}-email`}
+                            hint={t('app.inviteModal.ifProvidedAnInvitationEmailWill', 'If provided, an invitation email will be sent. Otherwise, share the link manually.')}
+                            error={fe.error('email')}
+                        >
                             <Input
                                 type="email"
-                                id="invite-email"
+                                id={`${fieldId}-email`}
                                 value={email}
-                                onChange={e => setEmail(e.target.value)}
+                                onChange={e => { fe.clear('email'); setEmail(e.target.value); }}
+                                onBlur={() => fe.touch('email')}
                                 placeholder={t('app.inviteModal.userExampleComLeaveBlankFor', 'user@example.com (leave blank for link-only)')}
                             />
-                            <span className="form-help">
-                                {t('app.inviteModal.ifProvidedAnInvitationEmailWill', 'If provided, an invitation email will be sent. Otherwise, share the link manually.')}
-                            </span>
-                        </div>
+                        </FormField>
 
-                        <div className="form-row">
-                            <div className="form-group">
-                                <Label htmlFor="invite-role">{t('app.inviteModal.role', 'Role')}</Label>
+                        <FormRow>
+                            <FormField label={t('app.inviteModal.role', 'Role')} htmlFor="invite-role">
                                 <Select value={role} onValueChange={handleRoleChange}>
                                     <SelectTrigger id="invite-role">
                                         <SelectValue />
@@ -129,10 +140,9 @@ const InviteModal = ({ onClose, onCreated }) => {
                                         <SelectItem value="viewer">{t('app.inviteModal.viewer', 'Viewer')}</SelectItem>
                                     </SelectContent>
                                 </Select>
-                            </div>
+                            </FormField>
 
-                            <div className="form-group">
-                                <Label htmlFor="invite-expiry">{t('app.inviteModal.expires', 'Expires')}</Label>
+                            <FormField label={t('app.inviteModal.expires', 'Expires')} htmlFor="invite-expiry">
                                 <Select
                                     value={String(expiryDays)}
                                     onValueChange={(val) => setExpiryDays(Number(val))}
@@ -148,8 +158,8 @@ const InviteModal = ({ onClose, onCreated }) => {
                                         <SelectItem value="0">{t('app.inviteModal.never', 'Never')}</SelectItem>
                                     </SelectContent>
                                 </Select>
-                            </div>
-                        </div>
+                            </FormField>
+                        </FormRow>
 
                         {role !== 'admin' && (
                             <div className="customize-permissions-section">

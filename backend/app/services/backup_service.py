@@ -10,14 +10,13 @@ from pathlib import Path
 import threading
 import time
 import uuid
-import schedule
 
 from app import paths
 from app.utils import backup_crypto
 from app.utils.config_store import load_json_config, save_json_config
 from app.utils.formatting import format_bytes
 from app.utils.system import (
-    is_command_available, run_checked, run_from_gzip, run_to_gzip,
+    is_command_available, run_checked, run_from_gzip, run_to_gzip, secret_env,
 )
 from app.services.telemetry_service import TelemetryService, generate_correlation_id
 from app.services import backup_schedule_service
@@ -197,13 +196,12 @@ class BackupService:
                 cmd = ['mysqldump']
                 if config.get('user'):
                     cmd.extend(['-u', config['user']])
-                if config.get('password'):
-                    cmd.append(f"-p{config['password']}")
                 if config.get('host'):
                     cmd.extend(['-h', config['host']])
                 cmd.append(db_name)
 
-                result = run_to_gzip(cmd, backup_file)
+                result = run_to_gzip(cmd, backup_file,
+                                     env=secret_env(MYSQL_PWD=config.get('password')))
 
                 if not result['success']:
                     return {'success': False, 'error': result['error']}
@@ -470,13 +468,11 @@ class BackupService:
                 cmd = ['mysql']
                 if user:
                     cmd.extend(['-u', user])
-                if password:
-                    cmd.append(f"-p{password}")
                 if host:
                     cmd.extend(['-h', host])
                 cmd.append(db_name)
 
-                result = run_from_gzip(cmd, backup_path)
+                result = run_from_gzip(cmd, backup_path, env=secret_env(MYSQL_PWD=password))
 
             elif db_type == 'postgresql':
                 if not is_command_available('psql'):

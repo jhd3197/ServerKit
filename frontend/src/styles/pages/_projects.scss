@@ -130,6 +130,9 @@
         flex-direction: column;
         gap: $space-2;
     }
+
+    // The container's gap already spaces fields.
+    > .form-field { margin-bottom: 0; }
 }
 
 // ============================================

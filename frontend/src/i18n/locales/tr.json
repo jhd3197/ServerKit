@@ -227,10 +227,6 @@
             "viewRelease": "Sürümü Görüntüle",
             "youReUpToDate": "Güncelsiniz!"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "Bir şifre anahtarı veya 2FA ekleyin",
-            "secureYourAccount": "Hesabınızı güvence altına alın"
-        },
         "activityTab": {
             "actionType": "Eylem Türü",
             "actionsThisWeek": "bu haftaki eylemler",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Yükseltme tüm çevrimiçi temsilciler için tetiklendi",
             "versionDistribution": "Sürüm Dağıtımı",
             "versions": "Sürümler",
-            "viewDetails": "Ayrıntıları Görüntüle"
+            "viewDetails": "Ayrıntıları Görüntüle",
+            "selectAVersionFirst": "Önce bir sürüm seçin"
         },
         "ai": {
             "assistant": "Asistan"
@@ -612,7 +609,8 @@
             "remote": "Uzak",
             "restoreDrills": "Tatbikatları geri yükle",
             "turnOnProtectionOrClickBack": "Korumayı açın veya Şimdi yedekle'ye tıklayın.",
-            "verifyRemoteCopy": "Uzaktan kopyayı doğrulayın"
+            "verifyRemoteCopy": "Uzaktan kopyayı doğrulayın",
+            "onlySuccessfulBackupsCanBeRestored": "Yalnızca başarılı yedekler geri yüklenebilir"
         },
         "backupTabs": {
             "schedules": "Programlar",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "Yeni yedeklemeleri uzak depolama birimine otomatik olarak yükle",
             "b2GbMonth": "B2 ($/GB/ay)",
             "backUpNow": "Şimdi yedekle",
+            "backUpShort": "Yedekle",
             "backblazeB2": "Backblaze B2",
             "backupDeleted": "Yedekleme silindi",
             "backupName": "Yedekleme Adı",
@@ -667,6 +666,7 @@
             "database": "Veritabanı",
             "databaseBackupCreated": "Veritabanı yedeklemesi oluşturuldu",
             "databaseName": "Veritabanı Adı",
+            "databaseNameRequired": "Veritabanı adını girin.",
             "databaseOnly": "Yalnızca Veritabanı",
             "databaseType": "Veritabanı Türü",
             "delete": "{{name}}'yi sil",
@@ -721,6 +721,7 @@
             "secretKey": "Gizli Anahtar",
             "selectApplication": "Hizmeti Seçin",
             "serverkitIsFreeTheseAreYour": "ServerKit ücretsizdir; bunlar sizin kendi depolama maliyetlerinizdir. Yerel, sunucu diskinizdir (takip etmiyorsanız 0'da bırakın). S3/B2, bulut sağlayıcınızın $/GB/ay'ıdır.",
+            "serviceRequired": "Bir hizmet seçin.",
             "settingsSaved": "Ayarlar kaydedildi",
             "siteService": "Site/Hizmet",
             "storageConfigurationSaved": "Depolama yapılandırması kaydedildi",
@@ -883,7 +884,8 @@
             "selectSize": "Boyutu seçin",
             "serverDestroyed": "Sunucu yok edildi",
             "serverName": "Sunucu Adı",
-            "serverProvisioningInitiated": "Sunucu temel hazırlığı başlatıldı"
+            "serverProvisioningInitiated": "Sunucu temel hazırlığı başlatıldı",
+            "enterANameAndChooseAProvider": "Önce bir ad girin ve sağlayıcı seçin"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "Bu ana bilgisayar adı için Cloudflare DNS'de tüneli işaret edecek şekilde bir CNAME oluşturulacaktır.",
@@ -969,7 +971,10 @@
             "sortAToZ": "A'dan Z'ye sırala",
             "sortHighToLow": "Yüksekten düşüğe sırala",
             "sortLowToHigh": "Düşükten yükseğe sırala",
-            "sortZToA": "Z'den A'ya sırala"
+            "sortZToA": "Z'den A'ya sırala",
+            "alreadyTheFirstColumn": "Zaten ilk sütun",
+            "alreadyTheLastColumn": "Zaten son sütun",
+            "noFilterOnThisColumn": "Bu sütunda filtre yok"
         },
         "columnsMenu": {
             "columns": "Sütunlar",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "Asistana mesaj gönder",
             "noResources": "Erişilebilir kaynak bulunamadı",
             "searchResources": "Kaynaklarda ara…",
-            "send": "Göndermek"
+            "send": "Göndermek",
+            "setUpTheAssistantFirst": "Önce asistanı ayarlayın",
+            "typeAMessageFirst": "Önce bir mesaj yazın"
         },
         "configDiffModal": {
             "applyRestorePoint": "Geri yükleme noktasını uygula",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "Bu sunucunun genel IP'si",
             "useStarttlsRecommended": "STARTTLS kullanın (önerilir)",
             "whereDoIGetThis": "Bunu nereden alacağım?",
-            "yourAccountEmailGlobalKeySimplest": "Hesabınızın e-postası + genel anahtarınız. Kurulumu en basit olanıdır ancak tam hesap erişimi sağlar."
+            "yourAccountEmailGlobalKeySimplest": "Hesabınızın e-postası + genel anahtarınız. Kurulumu en basit olanıdır ancak tam hesap erişimi sağlar.",
+            "setUpTheOauthAppFirst": "Önce OAuth uygulamasını ayarlayın"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Bağlanmadan önce Ayarlar'da GitHub OAuth uygulaması kimlik bilgilerini ekleyin.",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "Depolarda ara",
             "serviceName": "Hizmet adı",
             "systemdUnitOptional": "systemd ünitesi (isteğe bağlı)",
-            "uploadTheArchive": "Arşivi yükleyin"
+            "uploadTheArchive": "Arşivi yükleyin",
+            "setUpGithubInSettingsFirst": "Önce Ayarlar'da GitHub'ı kurun"
         },
         "connectionsHub": {
             "authorizedViaOauth": "OAuth ile yetkilendirildi",
@@ -1337,7 +1346,8 @@
             "toRun": "çalıştırmak için.",
             "writeSqlAboveAndPress": "Yukarıya SQL yazın ve tuşuna basın",
             "writesEnabledBeCareful": "Yazma etkin — dikkatli olun",
-            "writesOn": "Yazma açık"
+            "writesOn": "Yazma açık",
+            "runAQueryWithResultsFirst": "Önce sonuç döndüren bir sorgu çalıştırın"
         },
         "consoleToolbar": {
             "allLevels": "Tüm düzeyler",
@@ -1353,7 +1363,8 @@
             "searchLogs": "Günlükleri ara…",
             "showTheDeploymentDetailsAgain": "Dağıtım ayrıntılarını tekrar göster",
             "timestamps": "Zaman damgaları",
-            "wrap": "Dürüm"
+            "wrap": "Dürüm",
+            "noMatchesToJumpTo": "Gidilecek eşleşme yok"
         },
         "containerOpsPanel": {
             "actionFailed": "İşlem başarısız oldu",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "Çıktı üretilmedi.",
             "noRunsRecordedYet": "Henüz kayıtlı bir çalıştırma yok.",
             "noRunsYet": "Henüz çalıştırma yok",
-            "noScheduledJobsFoundCreateYour": "Planlanmış iş bulunamadı. Görevleri otomatikleştirmek için ilk cron işinizi oluşturun.",
             "paused": "Duraklatıldı",
             "runHistory": "Çalıştırma geçmişi",
             "runHistoryIsAnAdminOnly": "Çalıştırma geçmişi yalnızca yöneticilerin erişebildiği bir yüzeydir.",
@@ -1607,7 +1617,8 @@
             "undo": "Geri al",
             "unnamedJob": "Adsız iş",
             "untracked": "Takip edilmiyor",
-            "whatDoesThisJobDo": "Bu iş ne işe yarıyor?"
+            "whatDoesThisJobDo": "Bu iş ne işe yarıyor?",
+            "enterANameCommandAndScheduleFirst": "Önce ad, komut ve zamanlama girin"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 alan: dakika, saat, gün, ay, haftanın günü.",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "Cron Job'u Kaldır",
             "scheduleACommandOnTheHost": "crontab ana bilgisayarında bir komut planlayın. Aracı kullanıcı olarak çalışır.",
             "scheduleIsRequired": "Program gerekli",
-            "serverOffline": "Sunucu Çevrimdışı"
-        },
-        "cutoverDrawer": {
-            "answer": "Cevap",
-            "applyCutover": "Geçiş uygula",
-            "applyDnsCutover": "DNS geçişi uygulansın mı?",
-            "applying": "Başvuruluyor…",
-            "atTheBoxWhereTheImported": "içe aktarılan sitenin şu anda yaşadığı kutuda. Önce mevcut kayıtların anlık görüntüsü alınır, böylece anahtar her zaman geri döndürülebilir.",
-            "capturing": "Yakalanıyor…",
-            "checkPropagation": "Yayılımı kontrol edin",
-            "cutoverApplied": "Geçiş uygulandı —",
-            "cutoverAppliedNowPointsAt": "Kesme uygulandı — {{domain}} artık {{value}}'yi işaret ediyor",
-            "cutoverFinishedWithErrorsReviewBelow": "Kesme işlemi hatalarla tamamlandı. Aşağıyı inceleyin ve gerekirse geri dönün.",
-            "cutoverFinishedWithErrorsReviewThe": "Kesme işlemi hatalarla tamamlandı; sonuçları inceleyin ve geri dönmeyi düşünün.",
-            "deletedCreatedRecords_one": "Geçişin oluşturduğu 1 kayıt silindi.",
-            "deletedCreatedRecords_other": "Geçişin oluşturduğu {{count}} kayıt silindi.",
-            "dnsCutover": "DNS geçişi",
-            "matchesNewTarget": "Yeni hedefle eşleşiyor",
-            "new": "Yeni",
-            "newAddressTarget": "Yeni adres (hedef)",
-            "newTarget": "yeni hedef",
-            "noChangesToApplyForThe": "Seçilen kayıt türleri için uygulanacak değişiklik yok.",
-            "notFullyPropagated": "Tam olarak yayılmadı",
-            "nowPointsAt": "şimdi işaret ediyor",
-            "oneClickRestoresTheSnapshotCaptured": "Tek bir tıklama, bu geçişten önce çekilen anlık görüntüyü geri yükler; geçişin oluşturduğu tüm kayıtların silinmesi de dahil.",
-            "plannedChanges": "Planlanan değişiklikler",
-            "propagated": "Yayıldı",
-            "propagating": "Yayılıyor",
-            "propagation": "Yayılma",
-            "providerZoneId": "Sağlayıcı bölge kimliği",
-            "publicResolversCacheTheOldAddress": "Genel çözümleyiciler eski adresi TTL'lerinin süresi dolana kadar önbelleğe alır. Yeni adresin nerede geçerli olduğunu kontrol edin.",
-            "recordTypes": "Kayıt türleri",
-            "recordTypes2": "kayıt türleri",
-            "recordsCaptured": "Yakalanan kayıtlar",
-            "repoint": "Yeniden işaretle",
-            "repointsRecords_one": "Bu, {{domain}} için {{types}} kaydını {{target}} hedefine yönlendirir. Anlık görüntü geri dönmenizi sağlar.",
-            "repointsRecords_other": "Bu, {{domain}} için {{types}} kayıtlarını {{target}} hedefine yönlendirir. Anlık görüntü geri dönmenizi sağlar.",
-            "resolver": "Çözümleyici",
-            "restoredRecords_one": "1 kayıt geri yüklendi.",
-            "restoredRecords_other": "{{count}} kayıt geri yüklendi.",
-            "revertCutover": "Geçişi geri al",
-            "revertFinishedWithErrorsCheckThe": "Hatalarla tamamlanan geri alma işlemi — sonuçları kontrol edin.",
-            "revertedRestoredSPreCutoverRecords": "Geri döndürüldü — {{domain}}'nin kesme öncesi kayıtları geri yüklendi",
-            "reverting": "Geri alınıyor…",
-            "review": "Gözden geçirmek",
-            "rollBack": "Geri al",
-            "snapshotPreview": "Anlık görüntü ve önizleme",
-            "theDnsProviderSZoneIdentifier": "DNS sağlayıcının bölge tanımlayıcısı",
-            "theIpOrHostnameForCname": "Kayıtların işaret etmesi gereken IP (veya CNAME için ana bilgisayar adı).",
-            "thisDomainHasNoConnectedProvider": "Bu etki alanının bağlı bir sağlayıcı bölgesi yok; geçişin kayıtları okumak ve yazmak için birine ihtiyacı var.",
-            "verify": "Doğrulamak"
+            "serverOffline": "Sunucu Çevrimdışı",
+            "failedToLoadCronJobs": "Cron görevleri yüklenemedi."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Bu kontrol panelinde henüz widget yok."
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "Sıralamak için tıklayın · Sıralama düzeyi eklemek için Shift+tıklayın",
             "loading": "Yükleniyor",
             "noRowsMatchTheActiveColumn": "Etkin sütun filtreleriyle eşleşen satır yok.",
+            "scrollableTable": "Kaydırılabilir tablo",
             "selectAllRows": "Tüm satırları seç",
-            "selectRow": "Satır seç"
+            "selectRow": "Satır seç",
+            "sortAColumnFirst": "Önce bir sütuna göre sıralayın"
         },
         "dataTableFooter": {
             "nextPage": "Sonraki sayfa",
@@ -1776,7 +1740,8 @@
             "updateOverview": "Güncellemeye Genel Bakış",
             "updatingDatabaseSchema": "Veritabanı şeması güncelleniyor...",
             "weRecommendBackingUpYourDatabase": "Güncelleştirmeleri uygulamadan önce veritabanınızı yedeklemenizi öneririz.",
-            "whichDoesNotExistInThis": ", bu yapıda mevcut değil - genellikle geçiş ekleyen ve daha sonra geri döndürülen bir dal. Şema, bilinen bir revizyona geri damgalanana kadar yükseltilemez:"
+            "whichDoesNotExistInThis": ", bu yapıda mevcut değil - genellikle geçiş ekleyen ve daha sonra geri döndürülen bir dal. Şema, bilinen bir revizyona geri damgalanana kadar yükseltilemez:",
+            "createABackupFirst": "Önce bir yedek oluşturun"
         },
         "databases": {
             "backUpDatabase": "Veritabanını yedekle",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "Linux'de Docker arka plan programının başlatıldığından emin olun",
             "retryConnection": "Bağlantıyı Yeniden Dene",
             "targets": "Hedefler",
-            "toUseDockerManagement": "Docker yönetimini kullanmak için:",
             "verifyTheUserHasPermissionsTo": "Kullanıcının Docker'ye erişim izinleri olduğunu doğrulayın",
             "volumes": "Birimler"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "Kayıtları yenile",
             "regenerateToken": "Jetonu yeniden oluştur",
             "thisDomainIsnTSetUp": "Bu alan adı henüz ServerKit'de DNS için ayarlanmadı.",
-            "tokenRegenerated": "Jeton yeniden oluşturuldu"
+            "tokenRegenerated": "Jeton yeniden oluşturuldu",
+            "enterTheRecordContentFirst": "Önce kayıt içeriğini girin"
         },
         "domainField": {
             "alreadyAttached": "{{name}} zaten bir hizmete bağlı.",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "{{name}} için SSL devre dışı bırakılsın mı?",
             "dismissError": "Hatayı reddet",
             "dnsProvider": "DNS sağlayıcı",
+            "domainRequired": "Geçerli bir alan adı girin.",
             "domainVerificationFailed": "Etki alanı doğrulaması başarısız oldu: {{error}}",
             "domainVerifiedIp": "Alan adı doğrulandı! IP: {{ipaddress}}",
             "emailAddress": "E-posta Adresi",
@@ -2292,6 +2258,7 @@
             "rowsFields": "{{n}} satırlar · {{fields}} alanları · {{value}}",
             "searchDomains": "Alan adlarını ara…",
             "selectAnApplication": "Bir hizmet seçin",
+            "serviceRequired": "Bir hizmet seçin.",
             "setAsPrimaryDomain": "Birincil alan adı olarak ayarla",
             "sslCertificate": "SSL sertifikası",
             "sslExpires": "Süresi doluyor {{days}}d",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "İndirme işleminizi SHA256 sağlama toplamlarını kullanarak doğrulayın:",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "sunucu kayıt belirteci ile."
+            "withTheServerRegistrationToken": "sunucu kayıt belirteci ile.",
+            "noBuildPublishedForThisPlatform": "Bu platform için henüz yayınlanmış bir derleme yok"
         },
         "drawerHeader": {
             "aiSettings": "Yapay zeka ayarları",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Farklı bir arama terimi deneyin veya başka bir klasöre göz atın.",
             "typeZA": "Tip Z-A",
             "types": "Türler",
+            "up": "Yukarı",
             "upDelDeleteF2RenameA": "⌫ Yukarı · Sil Sil · F2 Yeniden Adlandır · ⌘A Tümü",
             "updatedAt": "{{time}} güncellendi",
             "upload": "Yüklemek",
@@ -2809,10 +2778,12 @@
             "videos": "Videolar",
             "volumes": "Birimler",
             "webConfig": "Web yapılandırması",
-            "willBeCreatedIn": "Şurada oluşturulacak:"
+            "willBeCreatedIn": "Şurada oluşturulacak:",
+            "nothingToGoBackTo": "Geri gidilecek bir şey yok",
+            "nothingToGoForwardTo": "İleri gidilecek bir şey yok",
+            "alreadyAtTheTopFolder": "Zaten en üst klasördesiniz"
         },
         "fileRow": {
-            "deselect": "Seçimi kaldır",
             "rename": "Yeniden isimlendirmek",
             "select": "Seçme"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "Tümünü temizle",
             "noFilters": "filtre yok",
             "showResults_one": "{{count}} {{noun}} göster",
-            "showResults_other": "{{count}} {{noun}} göster"
+            "showResults_other": "{{count}} {{noun}} göster",
+            "noFiltersApplied": "Uygulanmış filtre yok"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 veya 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "Eğilim",
             "unusuallyHigh": "Olağandışı yüksek",
             "unusuallyLow": "Olağandışı düşük",
-            "zScore": "Z puanı"
+            "zScore": "Z puanı",
+            "selectAServerFirst": "Önce bir sunucu seçin"
         },
         "fleetProxy": {
             "apps": "Hizmetler",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "Görünüm değişikliklerini sıfırla",
             "rowDensity": "Satır yoğunluğu",
             "rowsInThisView": "Bu görünümdeki satırlar",
-            "selectedRows": "Seçilen satırlar"
+            "selectedRows": "Seçilen satırlar",
+            "selectSomeRowsFirst": "Önce birkaç satır seçin"
         },
         "gridViewPicker": {
             "builtIn": "Dahili",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Mevcut filtrelerden ve sütunlardan başlayın",
             "unsaved": "Kaydedilmemiş",
             "unsetAsDefault": "Varsayılanı kaldır",
-            "viewOptions": "{{name}} seçenekleri"
+            "viewOptions": "{{name}} seçenekleri",
+            "enterAViewNameFirst": "Önce bir görünüm adı girin"
         },
         "groupMenu": {
             "group": "Grupla",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "Yapılandırma kaydedildi. Değişiklikleri uygulamak için hizmeti yeniden başlatın.",
             "failedToSaveConfiguration": "Yapılandırma kaydedilemedi",
             "gunicornConfiguration": "Gunicorn Yapılandırması",
-            "loadingGunicornConfiguration": "Gunicorn yapılandırması yükleniyor..."
+            "loadingGunicornConfiguration": "Gunicorn yapılandırması yükleniyor...",
+            "failedToLoadConfiguration": "Gunicorn yapılandırması yüklenemedi."
         },
         "hints": {
             "appBound": "Darboğaz hizmetin kendisi. Önüne tam sayfa önbelleği koyun veya ona daha büyük bir sunucu verin.",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Dönüştürülecek bir şey yok — yönerge bulunamadı.",
             "pasteTheContentsOfAnApache": "Bir Apache'nin içeriğini yapıştırın",
             "reason": "Sebep",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "Önce .htaccess kurallarını yapıştırın"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 veya 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "onaylamak",
             "tryAgain": "Tekrar deneyin",
             "whereTheDumpLives": "Çöplüğün yaşadığı yer",
-            "working": "Çalışıyor…"
+            "working": "Çalışıyor…",
+            "chooseADumpFileFirst": "Önce bir döküm dosyası seçin",
+            "chooseATargetDatabaseFirst": "Önce hedef veritabanını seçin",
+            "importFinished": "İçe aktarma tamamlandı",
+            "onlyAdminsCanImport": "Yalnızca yöneticiler içe aktarabilir",
+            "typeTheDatabaseNameToConfirm": "Onaylamak için veritabanı adını yazın"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "cPanel'in Tam Hesap Yedeklemesinden bir cpmove / backup-*.tar.gz arşivi.",
@@ -3344,7 +3326,9 @@
             "unknownAge": "bilinmeyen yaş",
             "viewChanges": "Değişiklikleri görüntüle",
             "watchingADocrootHashesEveryFile": "Bir docroot izlemek, yükleme/önbellek dizinleri dışındaki her dosyaya hash uygular, dolayısıyla hizmet başına katılım sağlanır.",
-            "whatChanged": "Ne değişti"
+            "whatChanged": "Ne değişti",
+            "createABaselineFirst": "Önce bir temel çizgi oluşturun",
+            "notAvailableOnThisServer": "Bu sunucuda kullanılamıyor"
         },
         "invitationsTab": {
             "copyInviteLink": "Davet bağlantısını kopyala",
@@ -3394,7 +3378,8 @@
             "exitCode": "(çıkış {{code}})",
             "streamingProgress": "Akış ilerlemesi…",
             "waitingForTheAgentToBegin": "Temsilcinin başlaması bekleniyor…",
-            "working": "Çalışıyor…"
+            "working": "Çalışıyor…",
+            "waitForTheJobToFinish": "İşin bitmesini bekleyin"
         },
         "jobs": {
             "activity": "Etkinlik",
@@ -3501,7 +3486,9 @@
             "logFiles": "Günlük Dosyaları",
             "noLogFilesFound": "Günlük dosyası bulunamadı",
             "searchPattern": "Arama modeli...",
-            "selectALogFile": "İçeriğini görüntülemek için bir günlük dosyası seçin."
+            "selectALogFile": "İçeriğini görüntülemek için bir günlük dosyası seçin.",
+            "selectALogFileFirst": "Önce bir günlük dosyası seçin",
+            "nothingToDownloadYet": "Henüz indirilecek bir şey yok"
         },
         "loginLinksSection": {
             "allowedIp": "İzin verilen IP",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "Hiçbir ana makine izni bildirilmedi.",
             "pasteAGithubRepoOwnerRepo": "Bir GitHub deposunu (sahip/repo veya sahip/repo@etiketi), bir URL sürümünü veya doğrudan zip bağlantısını yapıştırın. Kurulmadan önce nelerin yüklendiğini önizleyeceksiniz.",
             "preview": "Önizleme",
-            "signatureInvalid": "İmza geçersiz",
             "signatureMismatch": "İmza bu arşivle eşleşmiyor.",
-            "signed": "İmzalandı ·",
-            "signedUnknownPublisher": "İmzalı · bilinmeyen yayıncı",
             "theDownloadMayHaveBeenTampered": "İndirme işleminde değişiklik yapılmış olabilir; yüklemeyin.",
             "thisExtensionRequests": "Bu uzantı şunları ister:",
             "thisReleaseCarriesNoPublisherSignature": "Bu sürüm yayıncı imzası taşımamaktadır. Tam panel ayrıcalıklarıyla çalışır; yalnızca kaynağa güveniyorsanız yükleyin.",
             "thisReleaseIsSignedButThe": "Bu sürüm imzalandı ancak yayıncı anahtarı bu panel tarafından sabitlenmediğinden imza doğrulanamıyor. İmzasız olarak kabul edin.",
-            "unsigned": "İmzasız",
             "uploadAnExtensionZipWith": "Şununla bir uzantı zip'i yükleyin:",
             "useAnAbsolutePathThatExists": "Arka uç ana bilgisayarında veya arka uç kapsayıcısının içinde bulunan mutlak bir yol kullanın.",
             "zip": "Posta Kodu"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "Uzantı kataloğu yüklenemedi.",
             "couldntToggle": "Uzantı açılamadı veya kapatılamadı.",
             "couldntUninstall": "Uzantı kaldırılamadı.",
-            "declaredPermissionsWhatThePanelHas": "Bildirilen izinler, panelin gözlemlediği bilgiler ve bekleyen Python bağımlılıkları",
-            "disabling": "Devre dışı bırakılıyor…",
-            "enabling": "Etkinleştiriliyor…",
             "extensionConfigurationSaved": "Uzantı yapılandırması kaydedildi",
             "extensionDisabled": "Uzantı devre dışı bırakıldı",
             "extensionEnabled": "Uzantı etkinleştirildi",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "Doğrulanamayan bir imzayla mı yüklensin?",
             "installWithoutChecksumVerification": "Sağlama toplamı doğrulaması olmadan yüklensin mi?",
             "installed": "Yüklü",
-            "installedExtensions": "Yüklü uzantılar",
             "installedHotReloadShouldPickIt": "\"{{displayname}}\" yüklendi. Çalışırken yeniden yüklemenin onu alması gerekir; plan rotaları görünmüyorsa arka ucu yeniden başlatın.",
             "installedRestartBackendIfBlueprintRoutes": "\"{{displayname}}\" yüklendi. Plan rotaları görünmüyorsa arka ucu yeniden başlatın.",
             "installing": "Yükleniyor…",
@@ -3665,33 +3644,21 @@
             "purgeData": "Verileri temizle",
             "registry": "Kayıt defteri",
             "registryInstallFailed": "Kayıt defteri yüklemesi başarısız oldu",
-            "releaseZipIsSignedThePanel": "Sürüm zip'i imzalandı; panel kurulum sırasında ed25519 imzasını doğrular",
             "removingThisExtensionStopsItsRoutes": "Bu uzantının kaldırılması, rotalarını ve kullanıcı arayüzü katkılarını durdurur.",
             "resetFilters": "Filtreleri sıfırla",
             "reviewed": "İncelendi",
             "screenshots": "Ekran görüntüleri",
             "searchExtensions": "Uzantıları ara…",
-            "signed": "İmzalandı",
-            "signedWithPublisherKeyWhichThis": "Bu panelin sabitlemediği '{{publisherKeyId}}' yayıncı anahtarıyla imzalanmıştır",
             "sourceRepo": "Kaynak deposu",
             "thisExtensionDeclaresNoConfigurationFields": "Bu uzantı hiçbir yapılandırma alanı bildirmiyor.",
             "thisExtensionRequests": "Bu uzantı şunları ister:",
-            "thisReleaseCarriesNoPublisherSignature": "Bu sürüm yayıncı imzası taşımamaktadır",
             "uninstall": "{{displayname}} kaldırılsın mı?",
-            "uninstalling": "Kaldırılıyor…",
-            "unknownSigner": "Bilinmeyen imzalayan",
             "unreviewed": "İncelenmedi",
-            "unsigned": "İmzasız",
             "update": "Güncelleme",
             "updateAnyway": "Yine de güncelle",
-            "updateAvailableV": "Güncelleme mevcut → v",
             "updating": "Güncelleniyor…",
-            "versionByAuthor": "v{{version}} · {{author}} tarafından"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "Üyelerin seçilmiş eylemleri yürütmesine izin ver",
-            "letWorkspaceMembersRunASmall": "Çalışma alanı üyelerinin, ulaşabilecekleri hizmetler için seçilmiş, parametrelendirilmiş küçük bir dizi eylemi (bir hizmetin yedekleme sıklığını ayarlamak gibi) çalıştırmasına izin verin. Her eylem sabit bir şemaya göre doğrulanır ve denetim günlüğüne kaydedilir; hiçbir serbest metin sunucu kabuğuna ulaşmaz. Üye eylem yüzeyinin tamamını devre dışı bırakmak için bunu kapatın.",
-            "memberActions": "Üye Eylemleri"
+            "versionByAuthor": "v{{version}} · {{author}} tarafından",
+            "installShort": "Yükle"
         },
         "message": {
             "somethingWentWrong": "Bir şeyler ters gitti."
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "Metrikler her dakika toplanır",
             "noHistoricalDataYet": "Henüz geçmiş veri yok",
             "realTimePerformance": "Gerçek Zamanlı Performans",
-            "systemMetrics": "Sistem Metrikleri"
+            "systemMetrics": "Sistem Metrikleri",
+            "loadingMetricsHistory": "Metrik geçmişi yükleniyor…"
         },
         "metricsTab": {
             "activeRunning": "Etkin (çalışıyor)",
@@ -3732,7 +3700,8 @@
             "processes": "Süreçler",
             "serviceStatus": "Hizmet Durumu",
             "startTheServiceToViewResource": "Kaynak ölçümlerini görüntülemek için hizmeti başlatın.",
-            "workers": "İşçiler"
+            "workers": "İşçiler",
+            "failedToLoadMetrics": "Metrikler yüklenemedi."
         },
         "microCachePanel": {
             "assetCachingSaved": "Varlık önbelleğe alma kaydedildi",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "Aynı ada ve tüm ayrıcalıklara sahip bir kullanıcı oluşturun",
             "creating": "Oluşturuluyor…",
             "databaseCreated": "Veritabanı oluşturuldu",
-            "databaseName": "Veritabanı adı *",
+            "databaseName": "Veritabanı adı",
             "encoding": "Kodlama",
             "engine": "Motor",
             "fromTheTemplateCatalog": "şablon kataloğundan",
@@ -3836,7 +3805,9 @@
             "running": "çalışıyor",
             "saveTheseCredentialsThePasswordWon": "Bu kimlik bilgilerini kaydedin; şifre bir daha gösterilmeyecektir.",
             "userCreated": "Kullanıcı oluşturuldu",
-            "username": "Kullanıcı adı *"
+            "username": "Kullanıcı adı",
+            "databaseNameInvalid": "Yalnızca harf, rakam ve alt çizgi kullanın.",
+            "databaseNameRequired": "Veritabanı adını girin."
         },
         "modeToggle": {
             "assistant": "Asistan",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "Yukarıda tetikle",
             "webhook": "Web kancası",
             "whereAnAlertGoesWhenIt": "Bir uyarı tetiklendiğinde nereye gider?",
-            "wouldAlertNow": "Şu anda uyarı verirdi"
+            "wouldAlertNow": "Şu anda uyarı verirdi",
+            "couldntLoadMonitoringData": "İzleme verileri yüklenemedi."
         },
         "monitoringOverview": {
             "activeAlerts": "Aktif uyarılar",
@@ -4018,7 +3990,8 @@
             "runTest": "Testi çalıştır",
             "running": "Çalışıyor…",
             "speedTest": "Hız testi",
-            "tested": "Test edildi"
+            "tested": "Test edildi",
+            "loadingHosts": "Sunucular yükleniyor"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Bu metnin bulunmadığı 200 yanıt, kesinti olarak sayılır.",
@@ -4048,7 +4021,6 @@
             "monitoring": "{{name}}'nin izlenmesi",
             "nextCheck": "Sonraki kontrol",
             "noMonitorsMatch": "Hiçbir monitör eşleşmiyor",
-            "nothingIsBeingWatchedYet": "Henüz hiçbir şey izlenmiyor",
             "offForSelfSignedCertificatesOn": "Dahili ana makinelerdeki kendinden imzalı sertifikalar için kapalı.",
             "pause": "Duraklat",
             "paused": "Duraklatıldı {{name}}",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "Monitörler kapalı",
             "mostRecentResults": "En yeni sonuçlar",
             "noChecksRecordedYetTheScheduler": "Henüz hiçbir kontrol kaydedilmedi; zamanlayıcı her monitörün aralığını yoklar.",
-            "nothingIsBeingWatchedYet": "Henüz hiçbir şey izlenmiyor"
+            "nothingIsBeingWatchedYet": "Henüz hiçbir şey izlenmiyor",
+            "couldntLoadMonitors": "Monitörler yüklenemedi."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Kapları bağlamak için bir ağ oluşturun.",
@@ -4111,7 +4084,10 @@
             "registering": "Kaydediliyor…",
             "review": "Gözden geçirmek",
             "uploadAndDeploy": "Yükle ve dağıt",
-            "uploading": "Yükleniyor…"
+            "uploading": "Yükleniyor…",
+            "completeTheSourceDetailsFirst": "Önce kaynak ayrıntılarını tamamlayın",
+            "fillInTheRequiredDetailsFirst": "Önce gerekli bilgileri doldurun",
+            "finishThePreviousStepFirst": "Önce önceki adımı tamamlayın"
         },
         "notFound": {
             "browseExtensions": "Uzantılara Göz Atın",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "Okunmamış bildirim yok.",
             "notifications": "Bildirimler",
             "success": "Başarı",
-            "unread": "Okunmamış"
+            "unread": "Okunmamış",
+            "noFiltersToReset": "Sıfırlanacak filtre yok"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, ekip@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "İşlemler panelini aç/kapat",
             "title": "İşlemler",
             "unreadCount": "{{count}} okunmamış",
-            "waitingForLogs": "Çalıştırma günlükleri bekleniyor…"
+            "waitingForLogs": "Çalıştırma günlükleri bekleniyor…",
+            "enterTheRequiredValueFirst": "Önce gerekli değeri girin"
         },
         "organizationTabs": {
             "projects": "Projeler",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "Paketler yükleniyor...",
             "package": "Paket",
             "packageNameEGRequestsFlask": "Paket adı (ör. istekler, şişe==2.0.0)",
-            "requirementsTxtUpdated": "gereksinimleri.txt güncellendi"
+            "requirementsTxtUpdated": "gereksinimleri.txt güncellendi",
+            "failedToLoadPackages": "Paketler yüklenemedi."
         },
         "pageContextMap": {
             "application": "Hizmet",
@@ -4484,7 +4463,6 @@
             "emailAddress": "E-posta Adresi",
             "memberSince": "Üyelik Tarihi",
             "profileSettings": "Profil Ayarları",
-            "role": "Rol",
             "saveChanges": "Değişiklikleri kaydet"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "Ana bilgisayarın Nginx'si ters proxy'yi yönetiyor. Bunun yerine yönetilen bir Docker proxy yığınını çalıştırmak için yukarıdaki Traefik veya Caddy'ye geçin.",
             "thisServerSActiveProxyIs": "Bu sunucunun aktif proxy'si:",
             "traefik": "Traefik",
-            "whichExpects": ", beklenen"
+            "whichExpects": ", beklenen",
+            "noChangesToSave": "Kaydedilecek değişiklik yok",
+            "selectADifferentProxyFirst": "Önce farklı bir proxy seçin"
         },
         "pruneButton": {
             "cleaning": "Temizleniyor…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "Yük geçerli JSON olmalıdır",
             "permanentlyDeleteThisMessage": "Bu mesaj kalıcı olarak silinsin mi?",
             "priority": "Öncelik",
-            "queue": "Sıra",
             "queueBus": "Kuyruk Otobüsü",
             "readOnly": "Salt okunur",
             "requeue": "Yeniden sıraya al",
@@ -4702,7 +4681,6 @@
             "total": "Toplam"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Sıralarınızı görmek için filtreleri veya arama sorgusunu ayarlayın.",
             "allGroups": "Tüm gruplar",
             "anyStatus": "Herhangi bir durum",
             "areYouSureYouWantTo": "\"{{value}}\" ve tüm mesajlarını silmek istediğinizden emin misiniz?",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}} adım",
             "unavailable": "Tarif kataloğu kullanılamıyor",
             "unavailableHint": "Registry'ye ulaşılamadı ve paketlenmiş bir kopya mevcut değil.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Önce yukarıdaki engelleri giderin",
+            "selectATargetServerFirst": "Önce bir hedef sunucu seçin"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Geri dönüşüm kutusu yüklenemedi.",
@@ -4840,16 +4820,21 @@
             "basicAuth": "Temel kimlik doğrulama",
             "betweenServers": "{{privateServer}} ile {{edgeServer}} arasında",
             "edgeServerPublicIpFrontsThe": "Edge sunucusu (genel IP — tünelin önünde)",
+            "edgeServerRequired": "Uç sunucuyu seçin.",
             "exposeALocalService": "Yerel Bir Hizmeti Dışa Açın",
+            "exposeAPrivateServicePublicly": "Özel bir hizmeti herkese açık yayınlayın.",
             "exposeAServiceRunningOnA": "Özel bir makinede çalışan bir hizmeti (NAT'ın arkasında, bağlantı noktası yönlendirme yok), iki aracınız arasındaki WireGuard tüneli üzerinden genel bir ana bilgisayar adına gösterin.",
             "exposeService": "Hizmeti dışa aç",
+            "exposeServicesOn": "Hizmetleri şurada yayınlayın:",
             "exposeServicesRunningOn": "Üzerinde çalışan hizmetleri dışa açın",
+            "exposeShort": "Aç",
             "exposed": "Açıkta kalan {{hostname}}",
             "failedToExposeService": "Hizmet dışa açılamadı",
             "failedToLoadTunnels": "Tüneller yüklenemedi",
             "failedToRemoveService": "Hizmet kaldırılamadı",
             "failedToTearDownTunnel": "Tünel yıkılamadı",
             "handshakeAt": "el sıkışma {{time}}",
+            "hostnameRequired": "Geçerli bir genel ana makine adı girin.",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "Tüneller yükleniyor",
             "noHandshakeYetIfThisPersists": "Henüz el sıkışma yok — bu durum devam ederse, özel ana bilgisayarın uca giden UDP bağlantısı engellenmiş olabilir (bir röle gereklidir).",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "Bu sunucu için tünel yok",
             "noTunnelsYet": "Henüz tünel yok",
             "obtainACertificateOnTheEdge": "Kenarda bir sertifika edinin.",
+            "passwordRequired": "Bir parola girin.",
             "pickAPublicIpEdgeServer": "Bir genel IP uç sunucusu seçin; ServerKit, onu WireGuard üzerinden {{value}} ile eşleştirecektir.",
             "pickAPublicIpEdgeServer2": "Bir genel IP uç sunucusu ve özel bir ana bilgisayar seçin; ServerKit bunları WireGuard üzerinden eşleştirecek ve hizmetinizi yayınlayacaktır; yönlendirici değişikliğine gerek yoktur.",
+            "pickAPublicIpEdgeServerShort": "Genel IP'li bir uç sunucu seçin.",
+            "pickAnEdgeAndAPrivateHost": "Bir uç sunucu ve bir özel ana bilgisayar seçin.",
             "pickTwoDifferentServers": "İki farklı sunucu seçin: uç sunucu, özel ana makinenin önünde durur.",
-            "pointAtEdge": "{{name}} adresini uç sunucuya yönlendirin; tünel onu oradan taşır.",
+            "pointAtEdgeGeneric": "Ana bilgisayar adını uç sunucuya yönlendirin; gerisini tünel taşır.",
+            "portRequired": "Hizmet bağlantı noktasını girin.",
+            "privateHostRequired": "Özel ana makineyi seçin.",
             "privateHostWhereTheServiceRuns": "Özel ana bilgisayar (hizmetin çalıştığı yer)",
             "publicHostname": "Genel ana makine adı",
             "publishing": "Yayınlanıyor…",
@@ -4869,13 +4859,24 @@
             "removed": "{{hostname}} kaldırıldı",
             "requireLoginBasicAuth": "Oturum açmayı gerektir (temel kimlik doğrulama)",
             "servicePort": "Servis portu",
+            "status": {
+                "pending": "beklemede",
+                "up": "çalışıyor",
+                "degraded": "bozulmuş",
+                "down": "kapalı",
+                "error": "hata",
+                "published": "yayında",
+                "unknown": "bilinmiyor"
+            },
             "tearDown": "Sökmek",
             "tearDownTunnel": "Tüneli yıkın",
             "tearDownTunnel2": "Tüneli yıkmak mı?",
+            "thisHost": "bu ana bilgisayar",
             "thisRemovesTheWireguardTunnel": "Bu, WireGuard tünelini kaldırır",
             "thisServer": "bu sunucu",
             "toAPublicHostnameOverA": "WireGuard tüneli üzerinden genel bir ana bilgisayar adına. ServerKit, bu ana bilgisayarı genel IP'ye sahip bir uç sunucuyla eşleştirir.",
-            "tunnelTornDown": "Tünel yıkıldı"
+            "tunnelTornDown": "Tünel yıkıldı",
+            "usernameRequired": "Bir kullanıcı adı girin."
         },
         "remoteTerminal": {
             "closeTerminal": "Terminali kapat",
@@ -4938,15 +4939,13 @@
             "title": "Trafik"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "kıvrılma -fsSL https://get.docker.com | ş",
             "dockerIsnTAvailable": "Docker mevcut değil",
             "forThisInstallSProfile": "bu kurulumun profili için.",
             "installItOnTheServerThen": "Sunucuya yükleyin ve ardından ServerKit'yi yeniden başlatın:",
             "needsDockerToRunContainersAnd": "Konteynerleri çalıştırmak için Docker gerekiyor ve bu sunucu,",
             "profileWhichLeavesItOutNothing": "profil, bu da onu dışarıda bırakıyor. Hiçbir şey kilitli değil — Docker eklendiğinde bu sayfa açılır.",
             "serverkitReChecksForDockerAutomatically": "ServerKit, Docker'yi otomatik olarak yeniden kontrol eder. İzleme, etki alanları, sertifikalar, cron ve DNS onsuz çalışmaya devam eder; bkz.",
-            "settingsSystem": "Ayarlar → Sistem",
-            "sudoSystemctlRestartServerkit": "sudo systemctl sunucu kitini yeniden başlat"
+            "settingsSystem": "Ayarlar → Sistem"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB ve bu sunucunun",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "Anahtar eklenemedi: {{message}}",
             "failedToRemoveKey": "Anahtar kaldırılamadı: {{message}}",
             "fingerprint": "Parmak izi",
-            "noSshKeysConfiguredForRoot": "Kök kullanıcı için yapılandırılmış SSH anahtarı yok.",
             "pasteYourSshPublicKeyTypically": "SSH ortak anahtarınızı yapıştırın (genellikle ~/.ssh/id_rsa.pub veya ~/.ssh/id_ed25519.pub adresinden)",
             "publicKey": "Genel Anahtar",
             "removeSshKey": "SSH Anahtarını Kaldır",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "DNS sağlayıcınız aracılığıyla.",
             "webrootPath": "Web kökü Yolu",
             "wildcardCertificateDns01Validation": "Joker karakter sertifikası (DNS-01 doğrulaması)",
-            "wildcardCertificateIssued": "Joker karakter sertifikası verildi"
+            "wildcardCertificateIssued": "Joker karakter sertifikası verildi",
+            "domainsRequired": "En az bir alan adı girin."
         },
         "sSOCallback": {
             "authenticationFailed": "Kimlik Doğrulama Başarısız",
@@ -5352,14 +5351,12 @@
             "alerts": "Uyarılar",
             "areYouSureYouWantTo": "Bu sunucuyu kaldırmak istediğinizden emin misiniz? Bu eylem geri alınamaz.",
             "backToServers": "Sunuculara Geri Dön",
-            "copyServerId": "Sunucu kimliğini kopyala",
             "cron": "Cron",
             "errorLoadingServer": "Sunucu Yükleme Hatası",
             "failedToAcknowledgeAlert": "Uyarı onaylanamadı",
             "failedToPingServer": "Sunucuya ping işlemi yapılamadı",
             "failedToRemoveServer": "Sunucu kaldırılamadı",
             "failedToResolveAlert": "Uyarı çözülemedi",
-            "lastSeen": "son görülme",
             "limitedMode": "Sınırlı mod",
             "loadingServerDetails": "Sunucu ayrıntıları yükleniyor",
             "metrics": "Metrikler",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "Tümünü yükselt",
             "upgradeAllPackages": "Tüm paketleri yükselt",
             "upgradeFailedToStart": "Yükseltme başlatılamadı",
-            "upgradingAllPackages": "Tüm paketleri yükseltme"
+            "upgradingAllPackages": "Tüm paketleri yükseltme",
+            "enterAPackageNameFirst": "Önce paket adını girin"
         },
         "serverPicker": {
             "deployToServer": "Sunucuya dağıt",
@@ -5602,6 +5600,7 @@
             "library": "Kütüphane",
             "nPackages": "{{n}} paket",
             "nServices": "{{n}} hizmet",
+            "nameRequired": "Bir şablon adı girin.",
             "nginxPhpFpmCertbot": "nginx \n php-fpm \n sertifika robotu",
             "noReadyMadeTemplatesAreAvailable": "Kullanılabilir hazır şablon yok. Yine de sıfırdan bir tane oluşturabilirsiniz.",
             "noTemplatesYet": "Henüz şablon yok",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "Belirtecin süresi doluyor",
             "ungrouped": "Gruplandırılmamış",
             "whatHappensNext": "Sonra ne olacak?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Eşitle"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Emin misin? Bu, hizmeti ve içindeki tüm verileri kalıcı olarak kaldıracaktır.",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "{{name}}'nin bağlı hizmetinden bağlantısı kaldırılsın mı?",
             "unlinking": "Bağlantı kaldırılıyor…",
             "unlinkingWillResetBothAppsTo": "Bağlantının kaldırılması her iki hizmeti da bağımsız moda sıfırlayacaktır.",
-            "usedForCertificateExpiryRemindersFrom": "Let's Encrypt'den sertifika süre sonu hatırlatmaları için kullanılır."
+            "usedForCertificateExpiryRemindersFrom": "Let's Encrypt'den sertifika süre sonu hatırlatmaları için kullanılır.",
+            "enterADomainNameFirst": "Önce bir alan adı girin"
         },
         "setupHealthWidget": {
             "allSet": "Her şey hazır —",
@@ -6322,7 +6323,10 @@
             "targetService": "Hedef hizmet",
             "variables": "Değişkenler",
             "variablesInThisGroupApplyTo": "Bu gruptaki değişkenler, onu eklediğiniz her kaynak için geçerlidir.",
-            "whatThisGroupIsFor": "Bu grup ne işe yarar?..."
+            "whatThisGroupIsFor": "Bu grup ne işe yarar?...",
+            "enterAGroupNameFirst": "Önce bir grup adı girin",
+            "enterAResourceIdFirst": "Önce bir kaynak kimliği girin",
+            "enterAVariableNameFirst": "Önce bir değişken adı girin"
         },
         "shellTab": {
             "containerShell": "Konteyner Kabuğu",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "Çalışan kapsayıcı yok",
             "running": "Koşma...",
             "startTheServiceToAccessThe": "Kabuğa erişmek için hizmeti başlatın.",
-            "typeACommandBelowToExecute": "Kapsayıcıda yürütmek için aşağıya bir komut yazın."
+            "typeACommandBelowToExecute": "Kapsayıcıda yürütmek için aşağıya bir komut yazın.",
+            "failedToLoadContainers": "Konteynerler yüklenemedi."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Bir ön ayar seçin veya özel bir görünüm oluşturun. Kenar çubuğunuzda yalnızca görünür öğeler görünür.",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "Web sunucusu yapılandırmasını yazan iki panel, sahiplik konusunda kavga edecek. Bu sunucuyu şuraya değiştir:",
             "upstream": "Yukarı akış",
             "whatWeCheck": "Neleri kontrol ediyoruz",
-            "whileObserving": "gözlemlerken"
+            "whileObserving": "gözlemlerken",
+            "failedToLoadSurvey": "Tarama yüklenemedi."
         },
         "systemNotices": {
             "dismiss": "{{title}}'yi reddet",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "Bu alanı kullan",
             "used": "Kullanılmış",
             "utcOffset": "UTC Farkı",
-            "version": "{{brand}} Sürümü"
+            "version": "{{brand}} Sürümü",
+            "enterADomainFirst": "Önce bir alan adı girin",
+            "selectADifferentTimezoneFirst": "Önce farklı bir saat dilimi seçin"
         },
         "tableDataTab": {
             "column": "Kolon",
@@ -7148,7 +7156,8 @@
             "query": "Sorgu",
             "structure": "Yapı",
             "tableView": "Tablo görünümü",
-            "zeroRows": "0 satır"
+            "zeroRows": "0 satır",
+            "noMoreRows": "Başka satır yok"
         },
         "tabs": {
             "moreTabs": "Daha fazla sekme"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "Günlük dosyasını kısalt",
             "typeUnitName": "Birim adını yazın…",
             "unit": "Birim",
-            "useThe": "Şunu kullanın:"
+            "useThe": "Şunu kullanın:",
+            "failedToLoadProcesses": "Süreçler yüklenemedi.",
+            "selectALogFileFirst": "Önce bir günlük dosyası seçin",
+            "remoteJournalIsNotAvailableYet": "Uzak günlük henüz kullanılamıyor"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Bir çalıştırma zaten devam ediyor.",
@@ -7551,7 +7563,8 @@
             "viewSaved": "Kaydedilen \"{{trimmed}}\" görünümünü görüntüleyin",
             "viewUpdated": "\"{{name}}\" görünümünün güncellenmesi",
             "views": "Görünümler",
-            "withChanges": "” değişikliklerle"
+            "withChanges": "” değişikliklerle",
+            "enterAViewNameFirst": "Önce bir görünüm adı girin"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Verileri de sil. Bu işlem geri alınamaz.",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "Yük URL",
             "retryCount": "Yeniden Deneme Sayısı",
             "timeoutSeconds": "Zaman aşımı (saniye)",
-            "update": "Güncelle"
+            "update": "Güncelle",
+            "eventsRequired": "En az bir olay seçin."
         },
         "webhooksTab": {
             "active": "Etkin",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "Çalışma alanı arşivlendi",
             "workspaceDeleted": "Çalışma alanı silindi",
             "workspaceNotFound": "Çalışma alanı bulunamadı",
-            "workspaceRestored": "Çalışma alanı geri yüklendi",
-            "workspaces": "Çalışma alanları"
+            "workspaceRestored": "Çalışma alanı geri yüklendi"
         },
         "workspaceMembersTab": {
             "addAMember": "Üye ekle",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "Maksimum Kullanıcı (0 = sınırsız)",
             "members": "Üyeler",
             "myTeam": "Ekibim",
+            "nameRequired": "Bir çalışma alanı adı girin.",
             "newWorkspace": "Yeni Çalışma Alanı",
             "recolorsThePanelForAnyoneViewing": "Bu çalışma alanını görüntüleyen herkes için paneli yeniden renklendirir. Özel markalama yapmamak için varsayılanı bırakın.",
             "searchWorkspaces": "Çalışma alanlarını arayın…",
@@ -7981,6 +7995,14 @@
             "users": "Kullanıcılar",
             "workspaceBrandColor": "Çalışma alanı marka rengi",
             "workspaceCreated": "Çalışma alanı oluşturuldu"
+        },
+        "mobileSearch": {
+            "label": "Ara",
+            "title": "Her yerde ara (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Yinelenecek bir şey yok",
+            "nothingToUndo": "Geri alınacak bir şey yok"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "Davetiye doğrulanıyor…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Eklemek",
             "back": "Geri",
@@ -8063,7 +8086,8 @@
             "stop": "Durmak",
             "test": "Test",
             "tryAgain": "Tekrar deneyin",
-            "uninstall": "Kaldır"
+            "uninstall": "Kaldır",
+            "new": "Yeni"
         },
         "checking": "Kontrol ediliyor...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "Yükleniyor…",
         "more": "Daha",
+        "moreActions": "Diğer eylemler",
+        "moreInfoAbout": "{{subject}} hakkında daha fazla bilgi",
         "moreSections": "Daha fazla bölüm",
         "page": "Sayfa",
         "retry": "Yeniden dene",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}h",
             "justNow": "Şu anda",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Bir alan adı girin.",
+            "domainInvalid": "Geçerli bir alan adı girin.",
+            "emailInvalid": "Geçerli bir e-posta adresi girin.",
+            "required": "Bu alan zorunludur.",
+            "urlInvalid": "Geçerli bir URL girin, ör. https://example.com/webhook."
         }
     },
     "errors": {

@@ -14,6 +14,7 @@ import { ENGINE_META } from './dbAdapter';
 import { useTranslation } from 'react-i18next';
 import { translateLabel } from '@/i18n/labels';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // Import a SQL dump into an existing database.
 //
@@ -108,6 +109,12 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
     const confirmed = Boolean(target) && confirmText.trim() === target.name;
     const ready = Boolean(target && backupPath && confirmed && isAdmin && !result?.ok);
 
+    const importReason = result?.ok ? t('app.importDumpModal.importFinished', 'Import finished')
+        : !isAdmin ? t('app.importDumpModal.onlyAdminsCanImport', 'Only admins can import')
+        : !target ? t('app.importDumpModal.chooseATargetDatabaseFirst', 'Choose a target database first')
+        : !backupPath ? t('app.importDumpModal.chooseADumpFileFirst', 'Choose a dump file first')
+        : t('app.importDumpModal.typeTheDatabaseNameToConfirm', 'Type the database name to confirm');
+
     async function run() {
         if (!ready || busy) return;
         setBusy(true);
@@ -154,7 +161,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
     const footer = (
         <>
             <Button type="button" variant="outline" onClick={onClose}>{result?.ok ? t('common.actions.done', 'Done') : t('common.actions.cancel', 'Cancel')}</Button>
-            <Button type="button" variant="danger" onClick={run} disabled={!ready || busy}>
+            <Button type="button" variant="danger" onClick={run} disabled={!ready || busy} disabledReason={busy ? undefined : importReason}>
                 {busy
                     ? <Loader2 size={14} className="dbx-spin" aria-hidden="true" />
                     : <FileCode2 size={14} aria-hidden="true" />}
@@ -276,7 +283,7 @@ export default function ImportDumpModal({ preset, isAdmin = false, onClose, onIm
                                     />
                                 </div>
                                 <p className="dbx-field-hint">
-                                    {t('app.importDumpModal.anAbsolutePathOnTheServer', 'An absolute path on the panel server. There is no upload endpoint, so a file on your own machine has to be copied across first (scp, the file manager, or a backup taken here).')} <code>.gz</code> {t('app.importDumpModal.isDecompressedAutomatically', 'is decompressed automatically.')}
+                                    {t('app.importDumpModal.anAbsolutePathShort', 'Absolute path on the panel server.')} <InfoTip>{t('app.importDumpModal.anAbsolutePathOnTheServer', 'An absolute path on the panel server. There is no upload endpoint, so a file on your own machine has to be copied across first (scp, the file manager, or a backup taken here).')} <code>.gz</code> {t('app.importDumpModal.isDecompressedAutomatically', 'is decompressed automatically.')}</InfoTip>
                                 </p>
                             </>
                         )}

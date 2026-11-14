@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useTabParam from '../hooks/useTabParam';
+import { useScrollTabs } from '../hooks/useScrollTabs';
 import { refreshDevMode } from '../hooks/useDevMode';
 import { useAuth } from '../contexts/useAuth.js';
 import api from '../services/api';
@@ -57,6 +58,9 @@ const Settings = () => {
         if (requestedTab === 'modules') navigate('/marketplace', { replace: true });
     }, [requestedTab, navigate]);
 
+    const navListRef = useRef(null);
+    useScrollTabs(navListRef);
+
     const activeGroup = isAdmin && ADMIN_TABS.includes(activeTab) ? 'admin' : 'account';
 
     useEffect(() => {
@@ -96,6 +100,7 @@ const Settings = () => {
                             onChange={(group) => setActiveTab(group === 'admin' ? 'users' : 'profile')}
                         />
                     )}
+                    <div className="settings-nav-list" ref={navListRef}>
                     {activeGroup === 'account' && (
                         <>
                     <Button variant="unstyled"
@@ -343,6 +348,7 @@ const Settings = () => {
                             )}
                         </>
                     )}
+                    </div>
                 </nav>
 
                 <div className="settings-content">

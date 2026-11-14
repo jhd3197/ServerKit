@@ -44,7 +44,7 @@ function loadBases() {
  * record at this server (a tunnel route, an edge proxy).
  *
  * `onChange` receives the normalized hostname ('' while incomplete) and
- * `{ mode, valid, base, label, dnsMode, https }` so the caller can pick the
+ * `{ mode, valid, empty, base, label, dnsMode, https }` so the caller can pick the
  * right API (give-subdomain vs create-domain) without re-deriving anything.
  */
 export default function DomainField({
@@ -132,6 +132,7 @@ export default function DomainField({
         const info = {
             mode: activeMode,
             valid: usable,
+            empty: !fqdn,
             base: activeMode === 'subdomain' ? base : null,
             label: activeMode === 'subdomain' ? label : null,
             dnsMode: activeMode === 'subdomain' ? baseRow?.dns_mode || null : null,
@@ -197,7 +198,7 @@ export default function DomainField({
                     />
                     {bases.length > 1 ? (
                         <Select value={base} onValueChange={setBase} disabled={disabled}>
-                            <SelectTrigger className="sk-domain-field__base" aria-label={t('app.domainField.baseDomain', 'Base domain')}>
+                            <SelectTrigger id={`${inputId}-base`} className="sk-domain-field__base" aria-label={t('app.domainField.baseDomain', 'Base domain')}>
                                 <span className="sk-domain-field__dot">.</span><SelectValue />
                             </SelectTrigger>
                             <SelectContent>

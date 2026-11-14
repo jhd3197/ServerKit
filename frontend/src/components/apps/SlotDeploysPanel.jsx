@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import InfoTip from '@/components/InfoTip';
 import Modal from '@/components/Modal';
 import { Layers } from 'lucide-react';
 import api from '../../services/api';
@@ -129,7 +130,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
             </div>
             <div className="app-panel-body">
                 <p className="app-panel-hint">
-                    {t('app.slotDeploysPanel.intro', 'Each deploy boots the new release in a second slot on its own port while the live one keeps serving. It switches traffic only after the new release passes its health check, watches it for a while, and switches back on its own if it falls over. The previous release stays warm for an instant manual switch back.')}
+                    {t('app.slotDeploysPanel.introShort', 'Zero-downtime deploys with automatic rollback.')} <InfoTip>{t('app.slotDeploysPanel.intro', 'Each deploy boots the new release in a second slot on its own port while the live one keeps serving. It switches traffic only after the new release passes its health check, watches it for a while, and switches back on its own if it falls over. The previous release stays warm for an instant manual switch back.')}</InfoTip>
                 </p>
 
                 <div className="settings-row">
@@ -156,7 +157,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                         <div className="settings-label">
                             <span>{t('app.slotDeploysPanel.split', 'Move the stateful services first')}</span>
                             <span className="settings-hint">
-                                {t('app.slotDeploysPanel.splitHint', 'A database or cache cannot run twice. It moves once into a shared data compose project that both slots reach by the same name, on the same volumes. Preview exactly what changes before anything happens.')}
+                                {t('app.slotDeploysPanel.splitHintShort', 'Databases and caches move once.')} <InfoTip>{t('app.slotDeploysPanel.splitHint', 'A database or cache cannot run twice. It moves once into a shared data compose project that both slots reach by the same name, on the same volumes. Preview exactly what changes before anything happens.')}</InfoTip>
                             </span>
                         </div>
                         <div className="settings-control">
@@ -202,7 +203,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                         <div className="settings-label">
                             <span>{t('app.slotDeploysPanel.volumes', 'Two copies may share the volumes')}</span>
                             <span className="settings-hint">
-                                {t('app.slotDeploysPanel.volumesHint', 'For a few seconds around each switch both releases mount the same volumes. Leave this off if the service keeps something like SQLite there, which breaks when two processes write to it.')}
+                                {t('app.slotDeploysPanel.volumesHintShort', 'Both releases mount the volumes briefly.')} <InfoTip>{t('app.slotDeploysPanel.volumesHint', 'For a few seconds around each switch both releases mount the same volumes. Leave this off if the service keeps something like SQLite there, which breaks when two processes write to it.')}</InfoTip>
                             </span>
                         </div>
                         <div className="settings-control">
@@ -218,7 +219,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                             {t('app.slotDeploysPanel.release', 'Release command')}
                         </label>
                         <span className="settings-hint">
-                            {t('app.slotDeploysPanel.releaseHint', 'Runs once in a throwaway container of the new release, before traffic switches, for example database migrations. If it fails the deploy stops and the live release is untouched. Empty uses the release: line of the Procfile or serverkit.yaml, if there is one.')}
+                            {t('app.slotDeploysPanel.releaseHintShort', 'Runs before traffic switches.')} <InfoTip>{t('app.slotDeploysPanel.releaseHint', 'Runs once in a throwaway container of the new release, before traffic switches, for example database migrations. If it fails the deploy stops and the live release is untouched. Empty uses the release: line of the Procfile or serverkit.yaml, if there is one.')}</InfoTip>
                         </span>
                     </div>
                     <div className="settings-control">
@@ -244,7 +245,7 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                     <div className="settings-label">
                         <span>{t('app.slotDeploysPanel.stopOld', 'Stop the live release before the release command')}</span>
                         <span className="settings-hint">
-                            {t('app.slotDeploysPanel.stopOldHint', 'For schema changes the running release cannot survive. The service is down from the release command until the new release passes its health check; a failure starts the old release again.')}
+                            {t('app.slotDeploysPanel.stopOldHintShort', 'Needed for incompatible schema changes.')} <InfoTip>{t('app.slotDeploysPanel.stopOldHint', 'For schema changes the running release cannot survive. The service is down from the release command until the new release passes its health check; a failure starts the old release again.')}</InfoTip>
                         </span>
                     </div>
                     <div className="settings-control">
@@ -257,7 +258,8 @@ const SlotDeploysPanel = ({ app, onChanged }) => {
                     <div className="settings-label" />
                     <div className="settings-control">
                         <Button size="sm" onClick={handleSave}
-                            disabled={saving || !dirty || watchValue === null || standbyValue === null}>
+                            disabled={saving || !dirty || watchValue === null || standbyValue === null}
+                            disabledReason={!saving && !dirty ? t('app.proxyStackPanel.noChangesToSave', 'No changes to save') : undefined}>
                             {saving ? t('common.editing.saving', 'Saving…') : t('common.actions.save', 'Save')}
                         </Button>
                     </div>

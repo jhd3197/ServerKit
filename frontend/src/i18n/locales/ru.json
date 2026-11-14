@@ -227,10 +227,6 @@
             "viewRelease": "Посмотреть выпуск",
             "youReUpToDate": "Вы в курсе!"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "Добавьте ключ доступа или 2FA",
-            "secureYourAccount": "Защитите свой аккаунт"
-        },
         "activityTab": {
             "actionType": "Тип действия",
             "actionsThisWeek": "действия на этой неделе",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Обновление запущено для всех онлайн-агентов",
             "versionDistribution": "Распространение версий",
             "versions": "Версии",
-            "viewDetails": "Посмотреть детали"
+            "viewDetails": "Посмотреть детали",
+            "selectAVersionFirst": "Сначала выберите версию"
         },
         "ai": {
             "assistant": "Ассистент"
@@ -612,7 +609,8 @@
             "remote": "Удаленный",
             "restoreDrills": "Восстановление сверл",
             "turnOnProtectionOrClickBack": "Включите защиту или нажмите «Создать резервную копию сейчас».",
-            "verifyRemoteCopy": "Проверка удаленной копии"
+            "verifyRemoteCopy": "Проверка удаленной копии",
+            "onlySuccessfulBackupsCanBeRestored": "Восстановить можно только успешные резервные копии"
         },
         "backupTabs": {
             "schedules": "Расписания",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "Автоматическая загрузка новых резервных копий в удаленное хранилище",
             "b2GbMonth": "B2 ($/ГБ/месяц)",
             "backUpNow": "Резервное копирование сейчас",
+            "backUpShort": "Бэкап",
             "backblazeB2": "Бэкблэйз Б2",
             "backupDeleted": "Резервная копия удалена.",
             "backupName": "Резервное имя",
@@ -667,6 +666,7 @@
             "database": "База данных",
             "databaseBackupCreated": "Резервная копия базы данных создана.",
             "databaseName": "Имя базы данных",
+            "databaseNameRequired": "Введите имя базы данных.",
             "databaseOnly": "Только база данных",
             "databaseType": "Тип базы данных",
             "delete": "Удалить {{name}}",
@@ -721,6 +721,7 @@
             "secretKey": "Секретный ключ",
             "selectApplication": "Выберите сервис",
             "serverkitIsFreeTheseAreYour": "ServerKit бесплатен — это ваши собственные затраты на хранение. Локальный — это диск вашего сервера (оставьте 0, если вы его не отслеживаете). S3/B2 — это цена вашего облачного провайдера за ГБ/месяц.",
+            "serviceRequired": "Выберите сервис.",
             "settingsSaved": "Настройки сохранены.",
             "siteService": "Сайт/Сервис",
             "storageConfigurationSaved": "Конфигурация хранилища сохранена.",
@@ -883,7 +884,8 @@
             "selectSize": "Выберите размер",
             "serverDestroyed": "Сервер уничтожен",
             "serverName": "Имя сервера",
-            "serverProvisioningInitiated": "Инициация подготовки сервера началась"
+            "serverProvisioningInitiated": "Инициация подготовки сервера началась",
+            "enterANameAndChooseAProvider": "Сначала введите имя и выберите провайдера"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME для этого имени хоста будет создан в DNS Cloudflare и будет указывать на туннель.",
@@ -969,7 +971,10 @@
             "sortAToZ": "Сортировать от А до Я",
             "sortHighToLow": "Сортировать по убыванию",
             "sortLowToHigh": "Сортировать по возрастанию",
-            "sortZToA": "Сортировать от Я до А"
+            "sortZToA": "Сортировать от Я до А",
+            "alreadyTheFirstColumn": "Это уже первый столбец",
+            "alreadyTheLastColumn": "Это уже последний столбец",
+            "noFilterOnThisColumn": "Для этого столбца нет фильтра"
         },
         "columnsMenu": {
             "columns": "Столбцы",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "Напишите помощнику",
             "noResources": "Доступные ресурсы не найдены",
             "searchResources": "Поиск ресурсов…",
-            "send": "Отправлять"
+            "send": "Отправлять",
+            "setUpTheAssistantFirst": "Сначала настройте ассистента",
+            "typeAMessageFirst": "Сначала введите сообщение"
         },
         "configDiffModal": {
             "applyRestorePoint": "Применить точку восстановления",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "Публичный IP-адрес этого сервера",
             "useStarttlsRecommended": "Используйте STARTTLS (рекомендуется)",
             "whereDoIGetThis": "Где я могу это получить?",
-            "yourAccountEmailGlobalKeySimplest": "Адрес электронной почты вашей учетной записи + глобальный ключ. Самый простой в настройке, но предоставляет полный доступ к учетной записи."
+            "yourAccountEmailGlobalKeySimplest": "Адрес электронной почты вашей учетной записи + глобальный ключ. Самый простой в настройке, но предоставляет полный доступ к учетной записи.",
+            "setUpTheOauthAppFirst": "Сначала настройте приложение OAuth"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Перед подключением добавьте учётные данные OAuth-приложения GitHub в настройках.",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "Поиск репозиториев",
             "serviceName": "Название службы",
             "systemdUnitOptional": "Юнит systemd (необязательно)",
-            "uploadTheArchive": "Загрузите архив"
+            "uploadTheArchive": "Загрузите архив",
+            "setUpGithubInSettingsFirst": "Сначала настройте GitHub в настройках"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Авторизовано через OAuth",
@@ -1337,7 +1346,8 @@
             "toRun": "для запуска.",
             "writeSqlAboveAndPress": "Напишите SQL выше и нажмите",
             "writesEnabledBeCareful": "Запись включена — будьте осторожны",
-            "writesOn": "Запись включена"
+            "writesOn": "Запись включена",
+            "runAQueryWithResultsFirst": "Сначала выполните запрос с результатами"
         },
         "consoleToolbar": {
             "allLevels": "Все уровни",
@@ -1353,7 +1363,8 @@
             "searchLogs": "Поиск в журналах…",
             "showTheDeploymentDetailsAgain": "Показать сведения о развертывании еще раз",
             "timestamps": "Временные метки",
-            "wrap": "Сворачивать"
+            "wrap": "Сворачивать",
+            "noMatchesToJumpTo": "Нет совпадений для перехода"
         },
         "containerOpsPanel": {
             "actionFailed": "Действие не выполнено",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "Выходных данных не получено.",
             "noRunsRecordedYet": "Запусков пока не зафиксировано.",
             "noRunsYet": "Запусков пока нет",
-            "noScheduledJobsFoundCreateYour": "Запланированных вакансий не найдено. Создайте свое первое задание cron для автоматизации задач.",
             "paused": "Приостановлено",
             "runHistory": "История запуска",
             "runHistoryIsAnAdminOnly": "История запусков доступна только администратору.",
@@ -1607,7 +1617,8 @@
             "undo": "Отменить",
             "unnamedJob": "Безымянное задание",
             "untracked": "Не отслеживается",
-            "whatDoesThisJobDo": "Что делает эта работа?"
+            "whatDoesThisJobDo": "Что делает эта работа?",
+            "enterANameCommandAndScheduleFirst": "Сначала укажите имя, команду и расписание"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 полей: минуты, часы, день, месяц, день недели.",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "Удалить задание Cron",
             "scheduleACommandOnTheHost": "Запланируйте команду в crontab хоста. Запускается от имени пользователя агента.",
             "scheduleIsRequired": "Требуется расписание",
-            "serverOffline": "Сервер оффлайн"
-        },
-        "cutoverDrawer": {
-            "answer": "Отвечать",
-            "applyCutover": "Применить переключение",
-            "applyDnsCutover": "Применить переключение DNS?",
-            "applying": "Применение…",
-            "atTheBoxWhereTheImported": "в ящике, где сейчас живет импортированный сайт. Сначала создаются моментальные снимки его текущих записей, поэтому переключение всегда можно отменить.",
-            "capturing": "Захват…",
-            "checkPropagation": "Проверить распространение",
-            "cutoverApplied": "Применено переключение —",
-            "cutoverAppliedNowPointsAt": "Применено переключение — {{domain}} теперь указывает на {{value}}",
-            "cutoverFinishedWithErrorsReviewBelow": "Переключение завершилось с ошибками. Просмотрите ниже и вернитесь при необходимости.",
-            "cutoverFinishedWithErrorsReviewThe": "Переключение завершено с ошибками. Просмотрите результаты и рассмотрите возможность возврата.",
-            "deletedCreatedRecords_one": "Удалена 1 запись, созданная при переключении.",
-            "deletedCreatedRecords_other": "Удалено записей, созданных при переключении: {{count}}.",
-            "dnsCutover": "переключение DNS",
-            "matchesNewTarget": "Соответствует новой цели",
-            "new": "Новый",
-            "newAddressTarget": "Новый адрес (цель)",
-            "newTarget": "новая цель",
-            "noChangesToApplyForThe": "Для выбранных типов записей нет изменений.",
-            "notFullyPropagated": "Распространено не полностью",
-            "nowPointsAt": "теперь указывает на",
-            "oneClickRestoresTheSnapshotCaptured": "Один щелчок восстанавливает снимок, сделанный до этого переключения, включая удаление всех записей, созданных в результате переключения.",
-            "plannedChanges": "Планируемые изменения",
-            "propagated": "Распространено",
-            "propagating": "Распространяется",
-            "propagation": "Распространение",
-            "providerZoneId": "Идентификатор зоны провайдера",
-            "publicResolversCacheTheOldAddress": "Публичные преобразователи кэшируют старый адрес до тех пор, пока не истечет срок их жизни. Проверьте, где новый адрес вступил в силу.",
-            "recordTypes": "Типы записей",
-            "recordTypes2": "типы записей",
-            "recordsCaptured": "записи захвачены",
-            "repoint": "Переназначить",
-            "repointsRecords_one": "Запись {{types}} для {{domain}} будет перенаправлена на {{target}}. Снимок позволяет откатить изменение.",
-            "repointsRecords_other": "Записи {{types}} для {{domain}} будут перенаправлены на {{target}}. Снимок позволяет откатить изменение.",
-            "resolver": "резольвер",
-            "restoredRecords_one": "Восстановлена 1 запись.",
-            "restoredRecords_other": "Восстановлено записей: {{count}}.",
-            "revertCutover": "Отменить переключение",
-            "revertFinishedWithErrorsCheckThe": "Возврат завершен с ошибками — проверьте результаты.",
-            "revertedRestoredSPreCutoverRecords": "Отменено — восстановлены записи до переключения {{domain}}.",
-            "reverting": "Возврат…",
-            "review": "Обзор",
-            "rollBack": "Откат назад",
-            "snapshotPreview": "Снимок и предварительный просмотр",
-            "theDnsProviderSZoneIdentifier": "идентификатор зоны DNS-провайдера",
-            "theIpOrHostnameForCname": "IP-адрес (или имя хоста для CNAME), на который должны указывать записи.",
-            "thisDomainHasNoConnectedProvider": "У этого домена нет подключенной зоны провайдера — для переключения требуется чтение и запись записей.",
-            "verify": "Проверять"
+            "serverOffline": "Сервер оффлайн",
+            "failedToLoadCronJobs": "Не удалось загрузить задания cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "На этой панели пока нет виджетов."
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "Нажмите, чтобы отсортировать · Shift+щелкните, чтобы добавить уровень сортировки",
             "loading": "Загрузка",
             "noRowsMatchTheActiveColumn": "Ни одна строка не соответствует активным фильтрам столбцов.",
+            "scrollableTable": "Прокручиваемая таблица",
             "selectAllRows": "Выбрать все строки",
-            "selectRow": "Выберите строку"
+            "selectRow": "Выберите строку",
+            "sortAColumnFirst": "Сначала отсортируйте по столбцу"
         },
         "dataTableFooter": {
             "nextPage": "Следующая страница",
@@ -1776,7 +1740,8 @@
             "updateOverview": "Обзор обновлений",
             "updatingDatabaseSchema": "Обновление схемы базы данных...",
             "weRecommendBackingUpYourDatabase": "Мы рекомендуем создать резервную копию базы данных перед применением обновлений.",
-            "whichDoesNotExistInThis": ", которого нет в этой сборке — обычно это ветка, в которую была добавлена миграция, а затем отменена. Схему невозможно обновить, пока она не будет возвращена к известной версии:"
+            "whichDoesNotExistInThis": ", которого нет в этой сборке — обычно это ветка, в которую была добавлена миграция, а затем отменена. Схему невозможно обновить, пока она не будет возвращена к известной версии:",
+            "createABackupFirst": "Сначала создайте резервную копию"
         },
         "databases": {
             "backUpDatabase": "Резервное копирование базы данных",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "В Linux убедитесь, что демон Docker запущен.",
             "retryConnection": "Повторить попытку подключения",
             "targets": "Цели",
-            "toUseDockerManagement": "Чтобы использовать управление Docker:",
             "verifyTheUserHasPermissionsTo": "Убедитесь, что у пользователя есть разрешения на доступ к Docker.",
             "volumes": "Тома"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "Обновить записи",
             "regenerateToken": "Перегенерировать токен",
             "thisDomainIsnTSetUp": "Этот домен еще не настроен для DNS в ServerKit.",
-            "tokenRegenerated": "Токен перегенерирован"
+            "tokenRegenerated": "Токен перегенерирован",
+            "enterTheRecordContentFirst": "Сначала введите содержимое записи"
         },
         "domainField": {
             "alreadyAttached": "{{name}} уже привязан к сервису.",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "Отключить SSL для {{name}}?",
             "dismissError": "Ошибка закрытия",
             "dnsProvider": "DNS-провайдер",
+            "domainRequired": "Введите корректный домен.",
             "domainVerificationFailed": "Проверка домена не удалась: {{error}}",
             "domainVerifiedIp": "Домен подтвержден! IP: {{ipaddress}}",
             "emailAddress": "Адрес электронной почты",
@@ -2292,6 +2258,7 @@
             "rowsFields": "{{n}} строк · {{fields}} полей · {{value}}",
             "searchDomains": "Поиск доменов…",
             "selectAnApplication": "Выберите сервис",
+            "serviceRequired": "Выберите сервис.",
             "setAsPrimaryDomain": "Установить как основной домен",
             "sslCertificate": "SSL-сертификат",
             "sslExpires": "Срок действия истекает {{days}} д.",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "Проверьте загрузку, используя контрольные суммы SHA256:",
             "windows": "Окна:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "с токеном регистрации сервера."
+            "withTheServerRegistrationToken": "с токеном регистрации сервера.",
+            "noBuildPublishedForThisPlatform": "Для этой платформы сборка ещё не опубликована"
         },
         "drawerHeader": {
             "aiSettings": "Настройки ИИ",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Попробуйте другой поисковый запрос или просмотрите другую папку.",
             "typeZA": "Тип Z-A",
             "types": "Типы",
+            "up": "Вверх",
             "upDelDeleteF2RenameA": "⌫ Вверх · Удалить · Переименовать F2 · ⌘A Все",
             "updatedAt": "Обновлено {{time}}",
             "upload": "Загрузить",
@@ -2809,10 +2778,12 @@
             "videos": "Видео",
             "volumes": "Тома",
             "webConfig": "Веб-конфигурация",
-            "willBeCreatedIn": "Будет создано в:"
+            "willBeCreatedIn": "Будет создано в:",
+            "nothingToGoBackTo": "Некуда возвращаться",
+            "nothingToGoForwardTo": "Некуда переходить вперёд",
+            "alreadyAtTheTopFolder": "Это уже верхняя папка"
         },
         "fileRow": {
-            "deselect": "Отменить выбор",
             "rename": "Переименовать",
             "select": "Выбрать"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "Очистить все",
             "noFilters": "без фильтров",
             "showResults_one": "Показать {{count}} {{noun}}",
-            "showResults_other": "Показать {{count}} {{noun}}"
+            "showResults_other": "Показать {{count}} {{noun}}",
+            "noFiltersApplied": "Фильтры не применены"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 или 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "Тренд",
             "unusuallyHigh": "Необычно высокое",
             "unusuallyLow": "Необычно низкое",
-            "zScore": "Z-оценка"
+            "zScore": "Z-оценка",
+            "selectAServerFirst": "Сначала выберите сервер"
         },
         "fleetProxy": {
             "apps": "Сервисы",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "Сбросить изменения вида",
             "rowDensity": "Плотность строк",
             "rowsInThisView": "Строки в этом представлении",
-            "selectedRows": "Выбранные строки"
+            "selectedRows": "Выбранные строки",
+            "selectSomeRowsFirst": "Сначала выберите строки"
         },
         "gridViewPicker": {
             "builtIn": "Встроенный",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Начать с текущих фильтров и столбцов",
             "unsaved": "несохраненный",
             "unsetAsDefault": "Убрать из умолчаний",
-            "viewOptions": "Параметры: {{name}}"
+            "viewOptions": "Параметры: {{name}}",
+            "enterAViewNameFirst": "Сначала введите название представления"
         },
         "groupMenu": {
             "group": "Группа",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "Конфигурация сохранена. Перезапустите сервис, чтобы применить изменения.",
             "failedToSaveConfiguration": "Не удалось сохранить конфигурацию.",
             "gunicornConfiguration": "Конфигурация Gunicorn",
-            "loadingGunicornConfiguration": "Загрузка конфигурации Gunicorn..."
+            "loadingGunicornConfiguration": "Загрузка конфигурации Gunicorn...",
+            "failedToLoadConfiguration": "Не удалось загрузить конфигурацию Gunicorn."
         },
         "hints": {
             "appBound": "Узкое место — сам сервис. Кэшируйте целые страницы перед ним или выделите ему более мощный сервер.",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Нечего конвертировать — директивы не найдены.",
             "pasteTheContentsOfAnApache": "Вставьте содержимое Apache",
             "reason": "Причина",
-            "rewriteengineOnRewritecondRequestFilenameF": "Перезаписать двигатель включен\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nПереписатьПравило. /index.php [Л]"
+            "rewriteengineOnRewritecondRequestFilenameF": "Перезаписать двигатель включен\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nПереписатьПравило. /index.php [Л]",
+            "pasteSomeHtaccessRulesFirst": "Сначала вставьте правила .htaccess"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 или 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "подтвердить",
             "tryAgain": "Попробуйте еще раз",
             "whereTheDumpLives": "Где живет свалка",
-            "working": "Выполняется…"
+            "working": "Выполняется…",
+            "chooseADumpFileFirst": "Сначала выберите файл дампа",
+            "chooseATargetDatabaseFirst": "Сначала выберите целевую базу данных",
+            "importFinished": "Импорт завершён",
+            "onlyAdminsCanImport": "Импортировать могут только администраторы",
+            "typeTheDatabaseNameToConfirm": "Введите имя базы данных для подтверждения"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "Архив cpmove/backup-*.tar.gz из полной резервной копии учетной записи cPanel.",
@@ -3344,7 +3326,9 @@
             "unknownAge": "возраст неизвестен",
             "viewChanges": "Просмотреть изменения",
             "watchingADocrootHashesEveryFile": "Наблюдение за docroot хеширует каждый файл за пределами каталогов загрузки/кэша, поэтому его использование разрешено для каждого сервиса.",
-            "whatChanged": "Что изменилось"
+            "whatChanged": "Что изменилось",
+            "createABaselineFirst": "Сначала создайте базовый снимок",
+            "notAvailableOnThisServer": "Недоступно на этом сервере"
         },
         "invitationsTab": {
             "copyInviteLink": "Скопировать ссылку-приглашение",
@@ -3394,7 +3378,8 @@
             "exitCode": "(код выхода {{code}})",
             "streamingProgress": "Трансляция прогресса…",
             "waitingForTheAgentToBegin": "Ожидание начала агента…",
-            "working": "Выполняется…"
+            "working": "Выполняется…",
+            "waitForTheJobToFinish": "Дождитесь завершения задачи"
         },
         "jobs": {
             "activity": "Активность",
@@ -3501,7 +3486,9 @@
             "logFiles": "Файлы журналов",
             "noLogFilesFound": "Файлы журналов не найдены",
             "searchPattern": "Шаблон поиска...",
-            "selectALogFile": "Выберите файл журнала, чтобы просмотреть его содержимое."
+            "selectALogFile": "Выберите файл журнала, чтобы просмотреть его содержимое.",
+            "selectALogFileFirst": "Сначала выберите файл журнала",
+            "nothingToDownloadYet": "Пока нечего скачивать"
         },
         "loginLinksSection": {
             "allowedIp": "Разрешенный IP-адрес",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "Разрешения хоста не заявлены.",
             "pasteAGithubRepoOwnerRepo": "Вставьте репозиторий GitHub (владелец/репо или владелец/репо@тег), URL-адрес выпуска или прямую ссылку на почтовый индекс. Вы увидите, что будет установлено, прежде чем оно появится.",
             "preview": "Предпросмотр",
-            "signatureInvalid": "Подпись недействительна",
             "signatureMismatch": "Подпись не соответствует этому архиву.",
-            "signed": "Подписано ·",
-            "signedUnknownPublisher": "Подпись · неизвестный издатель",
             "theDownloadMayHaveBeenTampered": "Возможно, загрузка была подделана — не устанавливайте ее.",
             "thisExtensionRequests": "Это расширение запрашивает:",
             "thisReleaseCarriesNoPublisherSignature": "Этот выпуск не имеет подписи издателя. Он будет работать с полными правами панели — устанавливайте, только если вы доверяете источнику.",
             "thisReleaseIsSignedButThe": "Этот выпуск подписан, но ключ издателя не закреплен на этой панели, поэтому подпись невозможно проверить. Считайте его неподписанным.",
-            "unsigned": "Без подписи",
             "uploadAnExtensionZipWith": "Загрузите zip-архив расширения с",
             "useAnAbsolutePathThatExists": "Используйте абсолютный путь, существующий на внутреннем узле или внутри внутреннего контейнера.",
             "zip": "Почтовый индекс"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "Не удалось загрузить каталог расширений.",
             "couldntToggle": "Не удалось включить или выключить расширение.",
             "couldntUninstall": "Не удалось удалить расширение.",
-            "declaredPermissionsWhatThePanelHas": "Объявленные разрешения, наблюдения панели и ожидающие зависимости Python.",
-            "disabling": "Отключение…",
-            "enabling": "Включение…",
             "extensionConfigurationSaved": "Конфигурация расширения сохранена.",
             "extensionDisabled": "Расширение отключено",
             "extensionEnabled": "Расширение включено",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "Установить с непроверяемой подписью?",
             "installWithoutChecksumVerification": "Установить без проверки контрольной суммы?",
             "installed": "Установлено",
-            "installedExtensions": "Установленные расширения",
             "installedHotReloadShouldPickIt": "Установлен \"{{displayname}}\". Горячая перезагрузка должна поднять его; перезапустите серверную часть, если маршруты чертежей не отображаются.",
             "installedRestartBackendIfBlueprintRoutes": "Установлен \"{{displayname}}\". Перезапустите серверную часть, если маршруты чертежей не отображаются.",
             "installing": "Установка…",
@@ -3665,33 +3644,21 @@
             "purgeData": "Очистить данные",
             "registry": "Реестр",
             "registryInstallFailed": "Установка реестра не удалась",
-            "releaseZipIsSignedThePanel": "Релизный почтовый индекс подписан; панель проверяет подпись ed25519 при установке",
             "removingThisExtensionStopsItsRoutes": "Удаление этого расширения останавливает его маршруты и вклад в пользовательский интерфейс.",
             "resetFilters": "Сбросить фильтры",
             "reviewed": "Рассмотрено",
             "screenshots": "Скриншоты",
             "searchExtensions": "Поиск расширений…",
-            "signed": "Подписано",
-            "signedWithPublisherKeyWhichThis": "Подписано ключом издателя «{{publisherKeyId}}», который не закрепляется на этой панели.",
             "sourceRepo": "Исходный репозиторий",
             "thisExtensionDeclaresNoConfigurationFields": "Это расширение не декларирует никаких полей конфигурации.",
             "thisExtensionRequests": "Это расширение запрашивает:",
-            "thisReleaseCarriesNoPublisherSignature": "Этот выпуск не содержит подписи издателя.",
             "uninstall": "Удалить {{displayname}}?",
-            "uninstalling": "Удаление…",
-            "unknownSigner": "Неизвестный подписавший",
             "unreviewed": "Непроверенный",
-            "unsigned": "Без подписи",
             "update": "Обновлять",
             "updateAnyway": "Всё равно обновить",
-            "updateAvailableV": "Доступно обновление → v",
             "updating": "Обновление…",
-            "versionByAuthor": "v{{version}} · автор: {{author}}"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "Разрешить участникам выполнять рекомендованные действия",
-            "letWorkspaceMembersRunASmall": "Разрешите участникам рабочей области выполнять небольшой набор тщательно подобранных параметризованных действий (например, настройку частоты резервного копирования сервиса) для сервисов, к которым они могут получить доступ. Каждое действие проверяется на соответствие фиксированной схеме и протоколируется — никакой свободный текст никогда не достигает оболочки сервера. Отключите эту опцию, чтобы отключить всю поверхность действий участников.",
-            "memberActions": "Действия участника"
+            "versionByAuthor": "v{{version}} · автор: {{author}}",
+            "installShort": "Установить"
         },
         "message": {
             "somethingWentWrong": "Что-то пошло не так."
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "Метрики собираются каждую минуту",
             "noHistoricalDataYet": "Исторических данных пока нет",
             "realTimePerformance": "Производительность в реальном времени",
-            "systemMetrics": "Системные метрики"
+            "systemMetrics": "Системные метрики",
+            "loadingMetricsHistory": "Загрузка истории метрик…"
         },
         "metricsTab": {
             "activeRunning": "Активен (работает)",
@@ -3732,7 +3700,8 @@
             "processes": "Процессы",
             "serviceStatus": "Статус сервиса",
             "startTheServiceToViewResource": "Запустите службу, чтобы просмотреть метрики ресурсов.",
-            "workers": "Рабочие процессы"
+            "workers": "Рабочие процессы",
+            "failedToLoadMetrics": "Не удалось загрузить метрики."
         },
         "microCachePanel": {
             "assetCachingSaved": "Кеширование ресурсов сохранено",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "Создайте пользователя с тем же именем и полными привилегиями.",
             "creating": "Создание…",
             "databaseCreated": "База данных создана",
-            "databaseName": "Имя базы данных *",
+            "databaseName": "Имя базы данных",
             "encoding": "Кодирование",
             "engine": "Двигатель",
             "fromTheTemplateCatalog": "из каталога шаблонов",
@@ -3836,7 +3805,9 @@
             "running": "запущен",
             "saveTheseCredentialsThePasswordWon": "Сохраните эти учетные данные — пароль больше не будет отображаться.",
             "userCreated": "Пользователь создан",
-            "username": "Имя пользователя *"
+            "username": "Имя пользователя",
+            "databaseNameInvalid": "Используйте только буквы, цифры и подчёркивания.",
+            "databaseNameRequired": "Введите имя базы данных."
         },
         "modeToggle": {
             "assistant": "Ассистент",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "Триггер выше",
             "webhook": "Вебхук",
             "whereAnAlertGoesWhenIt": "Куда направляется оповещение при срабатывании",
-            "wouldAlertNow": "Сработало бы сейчас"
+            "wouldAlertNow": "Сработало бы сейчас",
+            "couldntLoadMonitoringData": "Не удалось загрузить данные мониторинга."
         },
         "monitoringOverview": {
             "activeAlerts": "Активные оповещения",
@@ -4018,7 +3990,8 @@
             "runTest": "Запустить тест",
             "running": "Выполнение…",
             "speedTest": "Тест скорости",
-            "tested": "Протестировано"
+            "tested": "Протестировано",
+            "loadingHosts": "Загрузка хостов"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Ответ 200 без этого текста считается сбоем в работе.",
@@ -4048,7 +4021,6 @@
             "monitoring": "Мониторинг {{name}}",
             "nextCheck": "Следующая проверка",
             "noMonitorsMatch": "Ни один монитор не подходит",
-            "nothingIsBeingWatchedYet": "Пока ничего не смотрят",
             "offForSelfSignedCertificatesOn": "Выключено для самозаверяющих сертификатов на внутренних хостах.",
             "pause": "Приостановить",
             "paused": "Приостановлено {{name}}",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "Мониторы со сбоем",
             "mostRecentResults": "Последние результаты",
             "noChecksRecordedYetTheScheduler": "Проверок пока не зарегистрировано — планировщик опрашивает интервал каждого монитора.",
-            "nothingIsBeingWatchedYet": "Пока ничего не смотрят"
+            "nothingIsBeingWatchedYet": "Пока ничего не смотрят",
+            "couldntLoadMonitors": "Не удалось загрузить мониторы."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Создайте сеть для подключения контейнеров.",
@@ -4111,7 +4084,10 @@
             "registering": "Регистрация…",
             "review": "Обзор",
             "uploadAndDeploy": "Загрузить и развернуть",
-            "uploading": "Загрузка…"
+            "uploading": "Загрузка…",
+            "completeTheSourceDetailsFirst": "Сначала заполните данные источника",
+            "fillInTheRequiredDetailsFirst": "Сначала заполните обязательные поля",
+            "finishThePreviousStepFirst": "Сначала завершите предыдущий шаг"
         },
         "notFound": {
             "browseExtensions": "Просмотр расширений",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "Нет непрочитанных уведомлений.",
             "notifications": "Уведомления",
             "success": "Успешно",
-            "unread": "Непрочитано"
+            "unread": "Непрочитано",
+            "noFiltersToReset": "Нет фильтров для сброса"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "Переключить панель операций",
             "title": "Операции",
             "unreadCount": "{{count}} непрочитанных",
-            "waitingForLogs": "Ожидание журналов выполнения…"
+            "waitingForLogs": "Ожидание журналов выполнения…",
+            "enterTheRequiredValueFirst": "Сначала введите требуемое значение"
         },
         "organizationTabs": {
             "projects": "Проекты",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "Загрузка пакетов...",
             "package": "Упаковка",
             "packageNameEGRequestsFlask": "Имя пакета (например, запросы, колба==2.0.0)",
-            "requirementsTxtUpdated": "Требования.txt обновлен"
+            "requirementsTxtUpdated": "Требования.txt обновлен",
+            "failedToLoadPackages": "Не удалось загрузить пакеты."
         },
         "pageContextMap": {
             "application": "Сервис",
@@ -4484,7 +4463,6 @@
             "emailAddress": "Адрес электронной почты",
             "memberSince": "Участник с",
             "profileSettings": "Настройки профиля",
-            "role": "Роль",
             "saveChanges": "Сохранить изменения"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "Nginx хоста обрабатывает обратное проксирование. Переключитесь на Traefik или Caddy, указанный выше, чтобы вместо этого запустить управляемый стек прокси-сервера Docker.",
             "thisServerSActiveProxyIs": "Активный прокси-сервер этого сервера",
             "traefik": "Traefik",
-            "whichExpects": ", который ожидает"
+            "whichExpects": ", который ожидает",
+            "noChangesToSave": "Нет изменений для сохранения",
+            "selectADifferentProxyFirst": "Сначала выберите другой прокси"
         },
         "pruneButton": {
             "cleaning": "Очистка…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "Полезная нагрузка должна быть действительным JSON.",
             "permanentlyDeleteThisMessage": "Удалить это сообщение навсегда?",
             "priority": "Приоритет",
-            "queue": "Очередь",
             "queueBus": "Шина очередей",
             "readOnly": "Только чтение",
             "requeue": "Запросить",
@@ -4702,7 +4681,6 @@
             "total": "Всего"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Настройте фильтры или поисковый запрос, чтобы увидеть свои очереди.",
             "allGroups": "Все группы",
             "anyStatus": "Любой статус",
             "areYouSureYouWantTo": "Вы уверены, что хотите удалить «{{value}}» и все его сообщения?",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "Шагов: {{count}}",
             "unavailable": "Каталог рецептов недоступен",
             "unavailableHint": "Не удалось связаться с реестром, а встроенной копии нет.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Сначала устраните блокировки выше",
+            "selectATargetServerFirst": "Сначала выберите целевой сервер"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Не удалось загрузить корзину.",
@@ -4840,16 +4820,21 @@
             "basicAuth": "Базовая аутентификация",
             "betweenServers": "между {{privateServer}} и {{edgeServer}}",
             "edgeServerPublicIpFrontsThe": "Пограничный сервер (публичный IP-адрес — перед туннелем)",
+            "edgeServerRequired": "Выберите граничный сервер.",
             "exposeALocalService": "Открыть доступ к локальной службе",
+            "exposeAPrivateServicePublicly": "Опубликуйте приватный сервис для внешнего доступа.",
             "exposeAServiceRunningOnA": "Предоставьте службе, работающей на частном компьютере (за NAT, без переадресации портов), общедоступное имя хоста через туннель WireGuard между двумя вашими агентами.",
             "exposeService": "Открыть доступ к службе",
+            "exposeServicesOn": "Предоставить доступ к службам на",
             "exposeServicesRunningOn": "Предоставлять службы, работающие на",
+            "exposeShort": "Открыть",
             "exposed": "Открытый {{hostname}}",
             "failedToExposeService": "Не удалось предоставить сервис",
             "failedToLoadTunnels": "Не удалось загрузить туннели.",
             "failedToRemoveService": "Не удалось удалить службу",
             "failedToTearDownTunnel": "Не удалось снести туннель",
             "handshakeAt": "рукопожатие {{time}}",
+            "hostnameRequired": "Введите корректное публичное имя хоста.",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "Погрузочные туннели",
             "noHandshakeYetIfThisPersists": "Пока нет рукопожатия — если оно сохраняется, исходящий UDP частного хоста к краю может быть заблокирован (необходим ретранслятор).",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "Нет туннелей для этого сервера",
             "noTunnelsYet": "Туннелей пока нет",
             "obtainACertificateOnTheEdge": "Получите сертификат на грани.",
+            "passwordRequired": "Введите пароль.",
             "pickAPublicIpEdgeServer": "Выберите пограничный сервер с общедоступным IP-адресом, и ServerKit соединит его с {{value}} через WireGuard.",
             "pickAPublicIpEdgeServer2": "Выберите пограничный сервер с общедоступным IP-адресом и частный хост, и ServerKit соединит их через WireGuard и опубликует ваш сервис — никаких изменений в маршрутизаторе не требуется.",
+            "pickAPublicIpEdgeServerShort": "Выберите пограничный сервер с общедоступным IP-адресом.",
+            "pickAnEdgeAndAPrivateHost": "Выберите пограничный сервер и приватный хост.",
             "pickTwoDifferentServers": "Выберите два разных сервера: пограничный сервер стоит перед приватным хостом.",
-            "pointAtEdge": "Направьте {{name}} на пограничный сервер; дальше трафик передаёт туннель.",
+            "pointAtEdgeGeneric": "Направьте имя хоста на пограничный сервер — дальше трафик доставит туннель.",
+            "portRequired": "Введите порт сервиса.",
+            "privateHostRequired": "Выберите приватный хост.",
             "privateHostWhereTheServiceRuns": "Частный хост (где работает служба)",
             "publicHostname": "Публичное имя хоста",
             "publishing": "Публикация…",
@@ -4869,13 +4859,24 @@
             "removed": "Удален {{hostname}}",
             "requireLoginBasicAuth": "Требовать вход в систему (базовая аутентификация)",
             "servicePort": "Сервисный порт",
+            "status": {
+                "pending": "ожидание",
+                "up": "работает",
+                "degraded": "ухудшено",
+                "down": "не работает",
+                "error": "ошибка",
+                "published": "опубликовано",
+                "unknown": "неизвестно"
+            },
             "tearDown": "Срывать",
             "tearDownTunnel": "Снести туннель",
             "tearDownTunnel2": "Снести туннель?",
+            "thisHost": "этот хост",
             "thisRemovesTheWireguardTunnel": "Это удалит туннель WireGuard.",
             "thisServer": "этот сервер",
             "toAPublicHostnameOverA": "к общедоступному имени хоста через туннель WireGuard. ServerKit соединяет этот хост с пограничным сервером, имеющим общедоступный IP-адрес.",
-            "tunnelTornDown": "Туннель снесен"
+            "tunnelTornDown": "Туннель снесен",
+            "usernameRequired": "Введите имя пользователя."
         },
         "remoteTerminal": {
             "closeTerminal": "Закрыть терминал",
@@ -4938,15 +4939,13 @@
             "title": "Трафик"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker недоступен",
             "forThisInstallSProfile": "для профиля этой установки.",
             "installItOnTheServerThen": "Установите его на сервер, затем перезапустите ServerKit:",
             "needsDockerToRunContainersAnd": "для запуска контейнеров требуется Docker, и этот сервер был установлен с",
             "profileWhichLeavesItOutNothing": "профиль, который исключает его. Ничего не заблокировано — добавление Docker включает эту страницу.",
             "serverkitReChecksForDockerAutomatically": "ServerKit автоматически проверяет наличие Docker. Мониторинг, домены, сертификаты, cron и DNS продолжают работать и без него — см.",
-            "settingsSystem": "Настройки → Система",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "Настройки → Система"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "МБ и на этом сервере есть",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "Не удалось добавить ключ: {{message}}.",
             "failedToRemoveKey": "Не удалось удалить ключ: {{message}}.",
             "fingerprint": "Отпечаток пальца",
-            "noSshKeysConfiguredForRoot": "Для пользователя root не настроены ключи SSH.",
             "pasteYourSshPublicKeyTypically": "Вставьте свой открытый ключ SSH (обычно из ~/.ssh/id_rsa.pub или ~/.ssh/id_ed25519.pub).",
             "publicKey": "Открытый ключ",
             "removeSshKey": "Удалить SSH-ключ",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "через вашего DNS-провайдера.",
             "webrootPath": "Корневой веб-путь",
             "wildcardCertificateDns01Validation": "Подстановочный сертификат (проверка DNS-01)",
-            "wildcardCertificateIssued": "Выдан сертификат Wildcard"
+            "wildcardCertificateIssued": "Выдан сертификат Wildcard",
+            "domainsRequired": "Укажите хотя бы один домен."
         },
         "sSOCallback": {
             "authenticationFailed": "Аутентификация не удалась",
@@ -5352,14 +5351,12 @@
             "alerts": "Оповещения",
             "areYouSureYouWantTo": "Вы уверены, что хотите удалить этот сервер? Это действие невозможно отменить.",
             "backToServers": "Вернуться к Серверам",
-            "copyServerId": "Копировать идентификатор сервера",
             "cron": "Крон",
             "errorLoadingServer": "Ошибка загрузки сервера",
             "failedToAcknowledgeAlert": "Не удалось подтвердить оповещение",
             "failedToPingServer": "Не удалось выполнить пинг сервера",
             "failedToRemoveServer": "Не удалось удалить сервер",
             "failedToResolveAlert": "Не удалось разрешить оповещение",
-            "lastSeen": "последний раз видели",
             "limitedMode": "Ограниченный режим",
             "loadingServerDetails": "Загрузка сведений о сервере",
             "metrics": "Метрики",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "Обновить все",
             "upgradeAllPackages": "Обновить все пакеты",
             "upgradeFailedToStart": "Обновление не началось",
-            "upgradingAllPackages": "Обновление всех пакетов"
+            "upgradingAllPackages": "Обновление всех пакетов",
+            "enterAPackageNameFirst": "Сначала введите имя пакета"
         },
         "serverPicker": {
             "deployToServer": "Развертывание на сервере",
@@ -5602,6 +5600,7 @@
             "library": "Библиотека",
             "nPackages": "Пакетов: {{n}}",
             "nServices": "Сервисов: {{n}}",
+            "nameRequired": "Введите название шаблона.",
             "nginxPhpFpmCertbot": "nginx\nphp-fpm\nсертификатбот",
             "noReadyMadeTemplatesAreAvailable": "Готовых шаблонов нет. Вы можете создать шаблон с нуля.",
             "noTemplatesYet": "Шаблонов пока нет",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "Срок действия токена истекает",
             "ungrouped": "Разгруппировано",
             "whatHappensNext": "Что произойдет дальше?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Синхр."
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Вы уверены? Это приведет к безвозвратному удалению службы и всех ее данных.",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "Отсоединить {{name}} от связанного с ним сервиса?",
             "unlinking": "Отвязка…",
             "unlinkingWillResetBothAppsTo": "Отмена связи приведет к сбросу обоих сервисов в автономный режим.",
-            "usedForCertificateExpiryRemindersFrom": "Используется для напоминаний об истечении срока действия сертификата от Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "Используется для напоминаний об истечении срока действия сертификата от Let's Encrypt.",
+            "enterADomainNameFirst": "Сначала введите имя домена"
         },
         "setupHealthWidget": {
             "allSet": "Все готово —",
@@ -6322,7 +6323,10 @@
             "targetService": "Целевой сервис",
             "variables": "Переменные",
             "variablesInThisGroupApplyTo": "Переменные в этой группе применяются к каждому ресурсу, к которому вы их прикрепляете.",
-            "whatThisGroupIsFor": "Для чего эта группа..."
+            "whatThisGroupIsFor": "Для чего эта группа...",
+            "enterAGroupNameFirst": "Сначала введите имя группы",
+            "enterAResourceIdFirst": "Сначала введите ID ресурса",
+            "enterAVariableNameFirst": "Сначала введите имя переменной"
         },
         "shellTab": {
             "containerShell": "Контейнерная оболочка",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "Нет работающих контейнеров",
             "running": "Бег...",
             "startTheServiceToAccessThe": "Запустите службу для доступа к оболочке.",
-            "typeACommandBelowToExecute": "Введите команду ниже, чтобы выполнить ее в контейнере."
+            "typeACommandBelowToExecute": "Введите команду ниже, чтобы выполнить ее в контейнере.",
+            "failedToLoadContainers": "Не удалось загрузить контейнеры."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Выберите предустановку или создайте собственное представление. На боковой панели отображаются только видимые элементы.",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "Две панели, пишущие конфигурацию веб-сервера, будут бороться за право собственности. Переключите этот сервер на",
             "upstream": "вверх по течению",
             "whatWeCheck": "Что мы проверяем",
-            "whileObserving": "наблюдая за"
+            "whileObserving": "наблюдая за",
+            "failedToLoadSurvey": "Не удалось загрузить обследование."
         },
         "systemNotices": {
             "dismiss": "Удалить {{title}}",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "Используйте этот домен",
             "used": "Использовано",
             "utcOffset": "Смещение UTC",
-            "version": "{{brand}} Версия"
+            "version": "{{brand}} Версия",
+            "enterADomainFirst": "Сначала введите домен",
+            "selectADifferentTimezoneFirst": "Сначала выберите другой часовой пояс"
         },
         "tableDataTab": {
             "column": "Столбец",
@@ -7148,7 +7156,8 @@
             "query": "Запрос",
             "structure": "Структура",
             "tableView": "Вид таблицы",
-            "zeroRows": "0 строк"
+            "zeroRows": "0 строк",
+            "noMoreRows": "Больше нет строк"
         },
         "tabs": {
             "moreTabs": "Дополнительные вкладки"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "Усечь файл журнала",
             "typeUnitName": "Введите название устройства…",
             "unit": "Единица",
-            "useThe": "Используйте"
+            "useThe": "Используйте",
+            "failedToLoadProcesses": "Не удалось загрузить процессы.",
+            "selectALogFileFirst": "Сначала выберите файл журнала",
+            "remoteJournalIsNotAvailableYet": "Удалённый журнал пока недоступен"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Забег уже идет.",
@@ -7551,7 +7563,8 @@
             "viewSaved": "Просмотреть \"{{trimmed}}\" сохранено.",
             "viewUpdated": "Просмотр \"{{name}}\" обновлен",
             "views": "Представления",
-            "withChanges": "» с изменениями"
+            "withChanges": "» с изменениями",
+            "enterAViewNameFirst": "Сначала введите название представления"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Также удалить данные. Это нельзя отменить.",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "URL-адрес полезной нагрузки",
             "retryCount": "Количество повторов",
             "timeoutSeconds": "Тайм-аут (секунды)",
-            "update": "Обновить"
+            "update": "Обновить",
+            "eventsRequired": "Выберите хотя бы одно событие."
         },
         "webhooksTab": {
             "active": "Активен",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "Рабочая область заархивирована",
             "workspaceDeleted": "Рабочая область удалена.",
             "workspaceNotFound": "Рабочее пространство не найдено",
-            "workspaceRestored": "Рабочая область восстановлена",
-            "workspaces": "Рабочие области"
+            "workspaceRestored": "Рабочая область восстановлена"
         },
         "workspaceMembersTab": {
             "addAMember": "Добавить участника",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "Максимальное количество пользователей (0 = неограниченно)",
             "members": "Члены",
             "myTeam": "Моя команда",
+            "nameRequired": "Введите название рабочего пространства.",
             "newWorkspace": "Новая рабочая область",
             "recolorsThePanelForAnyoneViewing": "Меняет цвет панели для всех, кто просматривает это рабочее пространство. Оставьте значение по умолчанию, чтобы не использовать собственный брендинг.",
             "searchWorkspaces": "Поиск рабочих пространств…",
@@ -7981,6 +7995,14 @@
             "users": "Пользователи",
             "workspaceBrandColor": "Фирменный цвет рабочего пространства",
             "workspaceCreated": "Рабочая область создана"
+        },
+        "mobileSearch": {
+            "label": "Поиск",
+            "title": "Поиск везде (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Нечего повторять",
+            "nothingToUndo": "Нечего отменять"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "Проверка приглашения…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "Добавить",
             "back": "Назад",
@@ -8063,7 +8086,8 @@
             "stop": "Остановить",
             "test": "Проверить",
             "tryAgain": "Попробуйте еще раз",
-            "uninstall": "Удалить"
+            "uninstall": "Удалить",
+            "new": "Создать"
         },
         "checking": "Проверка...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "Загрузка…",
         "more": "Более",
+        "moreActions": "Другие действия",
+        "moreInfoAbout": "Подробнее: {{subject}}",
         "moreSections": "Еще разделы",
         "page": "Страница",
         "retry": "Повторить",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}} ч.",
             "justNow": "прямо сейчас",
             "minutesShort": "{{count}} м"
+        },
+        "validation": {
+            "domainEmpty": "Укажите домен.",
+            "domainInvalid": "Укажите корректный домен.",
+            "emailInvalid": "Укажите корректный адрес электронной почты.",
+            "required": "Это поле обязательно.",
+            "urlInvalid": "Введите корректный URL, например https://example.com/webhook."
         }
     },
     "errors": {

@@ -227,10 +227,6 @@
             "viewRelease": "查看发布",
             "youReUpToDate": "你是最新的！"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "添加密钥或 2FA",
-            "secureYourAccount": "保护您的帐户"
-        },
         "activityTab": {
             "actionType": "动作类型",
             "actionsThisWeek": "本周行动",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "为所有在线代理触发升级",
             "versionDistribution": "版本分布",
             "versions": "版本",
-            "viewDetails": "查看详情"
+            "viewDetails": "查看详情",
+            "selectAVersionFirst": "请先选择一个版本"
         },
         "ai": {
             "assistant": "助手"
@@ -612,7 +609,8 @@
             "remote": "偏僻的",
             "restoreDrills": "恢复演习",
             "turnOnProtectionOrClickBack": "打开保护或单击立即备份。",
-            "verifyRemoteCopy": "验证远程复制"
+            "verifyRemoteCopy": "验证远程复制",
+            "onlySuccessfulBackupsCanBeRestored": "只能恢复成功的备份"
         },
         "backupTabs": {
             "schedules": "计划",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "自动上传新备份到远程存储",
             "b2GbMonth": "B2（美元/GB/月）",
             "backUpNow": "立即备份",
+            "backUpShort": "备份",
             "backblazeB2": "逆光B2",
             "backupDeleted": "备份已删除",
             "backupName": "备份名称",
@@ -667,6 +666,7 @@
             "database": "数据库",
             "databaseBackupCreated": "已创建数据库备份",
             "databaseName": "数据库名称",
+            "databaseNameRequired": "请输入数据库名称。",
             "databaseOnly": "仅数据库",
             "databaseType": "数据库类型",
             "delete": "删除{{name}}",
@@ -721,6 +721,7 @@
             "secretKey": "秘密钥匙",
             "selectApplication": "选择服务",
             "serverkitIsFreeTheseAreYour": "ServerKit 是免费的——这些是您自己的存储成本。 Local 是您的服务器磁盘（如果您不跟踪它，则保留为 0）。 S3/B2 是您的云提供商每月/GB 的费用。",
+            "serviceRequired": "请选择服务。",
             "settingsSaved": "设置已保存",
             "siteService": "站点/服务",
             "storageConfigurationSaved": "存储配置已保存",
@@ -883,7 +884,8 @@
             "selectSize": "选择尺码",
             "serverDestroyed": "服务器被毁",
             "serverName": "服务器名称",
-            "serverProvisioningInitiated": "已启动服务器配置"
+            "serverProvisioningInitiated": "已启动服务器配置",
+            "enterANameAndChooseAProvider": "请先输入名称并选择提供商"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "将在 Cloudflare DNS 中创建该主机名的 CNAME，指向隧道。",
@@ -969,7 +971,10 @@
             "sortAToZ": "按 A 到 Z 排序",
             "sortHighToLow": "从高到低排序",
             "sortLowToHigh": "从低到高排序",
-            "sortZToA": "按 Z 到 A 排序"
+            "sortZToA": "按 Z 到 A 排序",
+            "alreadyTheFirstColumn": "已经是第一列",
+            "alreadyTheLastColumn": "已经是最后一列",
+            "noFilterOnThisColumn": "此列没有筛选条件"
         },
         "columnsMenu": {
             "columns": "专栏",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "给助理留言",
             "noResources": "未找到可访问的资源",
             "searchResources": "搜索资源…",
-            "send": "发送"
+            "send": "发送",
+            "setUpTheAssistantFirst": "请先设置助手",
+            "typeAMessageFirst": "请先输入消息"
         },
         "configDiffModal": {
             "applyRestorePoint": "应用恢复点",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "该服务器的公共IP",
             "useStarttlsRecommended": "使用 STARTTLS（推荐）",
             "whereDoIGetThis": "如何获取？",
-            "yourAccountEmailGlobalKeySimplest": "您的帐户电子邮件 + 全局密钥。设置最简单，但授予完全帐户访问权限。"
+            "yourAccountEmailGlobalKeySimplest": "您的帐户电子邮件 + 全局密钥。设置最简单，但授予完全帐户访问权限。",
+            "setUpTheOauthAppFirst": "请先设置 OAuth 应用"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "连接前，请先在“设置”中添加 GitHub OAuth 应用凭据。",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "搜索存储库",
             "serviceName": "服务名称",
             "systemdUnitOptional": "systemd 单元（可选）",
-            "uploadTheArchive": "上传归档文件"
+            "uploadTheArchive": "上传归档文件",
+            "setUpGithubInSettingsFirst": "请先在设置中配置 GitHub"
         },
         "connectionsHub": {
             "authorizedViaOauth": "已通过 OAuth 授权",
@@ -1337,7 +1346,8 @@
             "toRun": "运行。",
             "writeSqlAboveAndPress": "在上面写入SQL并按",
             "writesEnabledBeCareful": "启用写入——小心",
-            "writesOn": "写入已开启"
+            "writesOn": "写入已开启",
+            "runAQueryWithResultsFirst": "请先运行有结果的查询"
         },
         "consoleToolbar": {
             "allLevels": "所有级别",
@@ -1353,7 +1363,8 @@
             "searchLogs": "搜索日志...",
             "showTheDeploymentDetailsAgain": "再次显示部署详细信息",
             "timestamps": "时间戳",
-            "wrap": "裹"
+            "wrap": "裹",
+            "noMatchesToJumpTo": "没有可跳转的匹配项"
         },
         "containerOpsPanel": {
             "actionFailed": "操作失败",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "没有产生任何输出。",
             "noRunsRecordedYet": "尚未记录任何运行。",
             "noRunsYet": "尚无运行",
-            "noScheduledJobsFoundCreateYour": "没有找到预定的工作。创建您的第一个 cron 作业来自动执行任务。",
             "paused": "已暂停",
             "runHistory": "运行历史",
             "runHistoryIsAnAdminOnly": "运行历史记录是仅限管理员使用的界面。",
@@ -1607,7 +1617,8 @@
             "undo": "撤消",
             "unnamedJob": "未命名任务",
             "untracked": "未跟踪",
-            "whatDoesThisJobDo": "这份工作是做什么的？"
+            "whatDoesThisJobDo": "这份工作是做什么的？",
+            "enterANameCommandAndScheduleFirst": "请先填写名称、命令和计划"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 个字段：分钟、小时、日、月、工作日。",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "删除 Cron 作业",
             "scheduleACommandOnTheHost": "在主机 crontab 上安排命令。以代理用户身份运行。",
             "scheduleIsRequired": "需要安排时间表",
-            "serverOffline": "服务器离线"
-        },
-        "cutoverDrawer": {
-            "answer": "回答",
-            "applyCutover": "应用割接",
-            "applyDnsCutover": "应用 DNS 切换吗？",
-            "applying": "正在申请…",
-            "atTheBoxWhereTheImported": "在导入站点现在所在的框中。首先对其当前记录进行快照，因此始终可以恢复切换。",
-            "capturing": "捕捉…",
-            "checkPropagation": "检查传播情况",
-            "cutoverApplied": "切换已应用 —",
-            "cutoverAppliedNowPointsAt": "已应用切换 — {{domain}} 现在指向 {{value}}",
-            "cutoverFinishedWithErrorsReviewBelow": "切换已完成，但有错误。请查看以下内容并根据需要恢复。",
-            "cutoverFinishedWithErrorsReviewThe": "切换完成后出现错误 — 查看结果并考虑恢复。",
-            "deletedCreatedRecords_one": "已删除切换过程中创建的 1 条记录。",
-            "deletedCreatedRecords_other": "已删除切换过程中创建的 {{count}} 条记录。",
-            "dnsCutover": "DNS切换",
-            "matchesNewTarget": "与新目标匹配",
-            "new": "新建",
-            "newAddressTarget": "新地址（目标）",
-            "newTarget": "新目标",
-            "noChangesToApplyForThe": "没有任何更改适用于所选记录类型。",
-            "notFullyPropagated": "尚未完全传播",
-            "nowPointsAt": "现在指向",
-            "oneClickRestoresTheSnapshotCaptured": "单击即可恢复此转换之前捕获的快照 - 包括删除转换创建的任何记录。",
-            "plannedChanges": "计划变更",
-            "propagated": "已传播",
-            "propagating": "传播中",
-            "propagation": "传播",
-            "providerZoneId": "提供商区域 ID",
-            "publicResolversCacheTheOldAddress": "公共解析器缓存旧地址，直到其 TTL 过期。检查新地址在哪里生效。",
-            "recordTypes": "记录类型",
-            "recordTypes2": "记录类型",
-            "recordsCaptured": "捕获的记录",
-            "repoint": "重新指向",
-            "repointsRecords_one": "这会将 {{domain}} 的 {{types}} 记录重新指向 {{target}}。快照可让您还原。",
-            "repointsRecords_other": "这会将 {{domain}} 的 {{types}} 记录重新指向 {{target}}。快照可让您还原。",
-            "resolver": "旋转变压器",
-            "restoredRecords_one": "已恢复 1 条记录。",
-            "restoredRecords_other": "已恢复 {{count}} 条记录。",
-            "revertCutover": "恢复切换",
-            "revertFinishedWithErrorsCheckThe": "恢复已完成的错误 — 检查结果。",
-            "revertedRestoredSPreCutoverRecords": "已恢复 — 恢复了 {{domain}} 的切换前记录",
-            "reverting": "正在恢复...",
-            "review": "审查",
-            "rollBack": "回滚",
-            "snapshotPreview": "快照和预览",
-            "theDnsProviderSZoneIdentifier": "DNS 提供商的区域标识符",
-            "theIpOrHostnameForCname": "记录应指向的 IP（或 CNAME 的主机名）。",
-            "thisDomainHasNoConnectedProvider": "该域没有连接的提供商区域 - 切换需要一个来读取和写入记录。",
-            "verify": "核实"
+            "serverOffline": "服务器离线",
+            "failedToLoadCronJobs": "无法加载 cron 任务。"
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "此仪表板上还没有小部件。"
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "单击进行排序 · Shift+单击添加排序级别",
             "loading": "加载中",
             "noRowsMatchTheActiveColumn": "没有行与活动列过滤器匹配。",
+            "scrollableTable": "可滚动表格",
             "selectAllRows": "选择所有行",
-            "selectRow": "选择行"
+            "selectRow": "选择行",
+            "sortAColumnFirst": "请先按某一列排序"
         },
         "dataTableFooter": {
             "nextPage": "下一页",
@@ -1776,7 +1740,8 @@
             "updateOverview": "更新概览",
             "updatingDatabaseSchema": "正在更新数据库架构...",
             "weRecommendBackingUpYourDatabase": "我们建议在应用更新之前备份您的数据库。",
-            "whichDoesNotExistInThis": "，此构建中不存在 - 通常是添加迁移然后恢复的分支。在将模式标记回已知版本之前，无法升级该模式："
+            "whichDoesNotExistInThis": "，此构建中不存在 - 通常是添加迁移然后恢复的分支。在将模式标记回已知版本之前，无法升级该模式：",
+            "createABackupFirst": "请先创建备份"
         },
         "databases": {
             "backUpDatabase": "备份数据库",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "在 Linux 上，确保 Docker 守护进程已启动",
             "retryConnection": "重试连接",
             "targets": "目标",
-            "toUseDockerManagement": "使用 Docker 管理：",
             "verifyTheUserHasPermissionsTo": "验证用户是否有访问Docker的权限",
             "volumes": "卷"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "刷新记录",
             "regenerateToken": "重新生成令牌",
             "thisDomainIsnTSetUp": "尚未在 ServerKit 中为 DNS 设置此域。",
-            "tokenRegenerated": "令牌重新生成"
+            "tokenRegenerated": "令牌重新生成",
+            "enterTheRecordContentFirst": "请先输入记录内容"
         },
         "domainField": {
             "alreadyAttached": "{{name}} 已关联到某个服务。",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "为 {{name}} 禁用 SSL？",
             "dismissError": "消除错误",
             "dnsProvider": "DNS提供商",
+            "domainRequired": "请输入有效的域名。",
             "domainVerificationFailed": "域验证失败：{{error}}",
             "domainVerifiedIp": "域名已验证！ IP：{{ipaddress}}",
             "emailAddress": "电子邮件地址",
@@ -2292,6 +2258,7 @@
             "rowsFields": "{{n}} 行 · {{fields}} 字段 · {{value}}",
             "searchDomains": "搜索域...",
             "selectAnApplication": "选择一个服务",
+            "serviceRequired": "请选择服务。",
             "setAsPrimaryDomain": "设置为主域",
             "sslCertificate": "SSL证书",
             "sslExpires": "{{days}}d 到期",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "使用 SHA256 校验和验证您的下载：",
             "windows": "视窗：",
             "windowsPowershell": "Windows（PowerShell）",
-            "withTheServerRegistrationToken": "与服务器注册令牌。"
+            "withTheServerRegistrationToken": "与服务器注册令牌。",
+            "noBuildPublishedForThisPlatform": "此平台尚未发布构建"
         },
         "drawerHeader": {
             "aiSettings": "人工智能设置",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "尝试不同的搜索词或浏览另一个文件夹。",
             "typeZA": "Z-A型",
             "types": "类型",
+            "up": "上一级",
             "upDelDeleteF2RenameA": "⌫ 向上 · Del 删除 · F2 重命名 · ⌘A 全部",
             "updatedAt": "更新于 {{time}}",
             "upload": "上传",
@@ -2809,10 +2778,12 @@
             "videos": "视频",
             "volumes": "卷",
             "webConfig": "网页配置",
-            "willBeCreatedIn": "将创建于："
+            "willBeCreatedIn": "将创建于：",
+            "nothingToGoBackTo": "没有可返回的页面",
+            "nothingToGoForwardTo": "没有可前进的页面",
+            "alreadyAtTheTopFolder": "已在最上层文件夹"
         },
         "fileRow": {
-            "deselect": "取消选择",
             "rename": "重命名",
             "select": "选择"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "全部清除",
             "noFilters": "无过滤器",
             "showResults_one": "显示 {{count}} 个{{noun}}",
-            "showResults_other": "显示 {{count}} 个{{noun}}"
+            "showResults_other": "显示 {{count}} 个{{noun}}",
+            "noFiltersApplied": "未应用任何筛选"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 或 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "趋势",
             "unusuallyHigh": "异常偏高",
             "unusuallyLow": "异常偏低",
-            "zScore": "Z 分数"
+            "zScore": "Z 分数",
+            "selectAServerFirst": "请先选择服务器"
         },
         "fleetProxy": {
             "apps": "服务",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "重置视图更改",
             "rowDensity": "行密度",
             "rowsInThisView": "此视图中的行",
-            "selectedRows": "选定的行"
+            "selectedRows": "选定的行",
+            "selectSomeRowsFirst": "请先选择若干行"
         },
         "gridViewPicker": {
             "builtIn": "内置",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "从当前过滤器和列开始",
             "unsaved": "未保存",
             "unsetAsDefault": "取消默认",
-            "viewOptions": "{{name}} 选项"
+            "viewOptions": "{{name}} 选项",
+            "enterAViewNameFirst": "请先输入视图名称"
         },
         "groupMenu": {
             "group": "分组",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "配置已保存。重新启动服务以应用更改。",
             "failedToSaveConfiguration": "保存配置失败",
             "gunicornConfiguration": "Gunicorn 配置",
-            "loadingGunicornConfiguration": "正在加载 Gunicorn 配置..."
+            "loadingGunicornConfiguration": "正在加载 Gunicorn 配置...",
+            "failedToLoadConfiguration": "无法加载 Gunicorn 配置。"
         },
         "hints": {
             "appBound": "瓶颈在服务本身。在其前面缓存整个页面，或为其提供更大的服务器。",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "没有要转换的内容——没有找到指令。",
             "pasteTheContentsOfAnApache": "粘贴 Apache 的内容",
             "reason": "原因",
-            "rewriteengineOnRewritecondRequestFilenameF": "重写引擎开启\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\n重写规则。 /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "重写引擎开启\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\n重写规则。 /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "请先粘贴 .htaccess 规则"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 或 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "确认",
             "tryAgain": "重试",
             "whereTheDumpLives": "垃圾场所在的地方",
-            "working": "处理中…"
+            "working": "处理中…",
+            "chooseADumpFileFirst": "请先选择转储文件",
+            "chooseATargetDatabaseFirst": "请先选择目标数据库",
+            "importFinished": "导入已完成",
+            "onlyAdminsCanImport": "只有管理员可以导入",
+            "typeTheDatabaseNameToConfirm": "输入数据库名称以确认"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "来自 cPanel 完整帐户备份的 cpmove / backup-*.tar.gz 存档。",
@@ -3344,7 +3326,9 @@
             "unknownAge": "时间未知",
             "viewChanges": "查看更改",
             "watchingADocrootHashesEveryFile": "观察文档根对上传/缓存目录之外的每个文件进行哈希处理，因此每个服务都可以选择加入。",
-            "whatChanged": "发生了什么变化"
+            "whatChanged": "发生了什么变化",
+            "createABaselineFirst": "请先创建基线",
+            "notAvailableOnThisServer": "此服务器上不可用"
         },
         "invitationsTab": {
             "copyInviteLink": "复制邀请链接",
@@ -3394,7 +3378,8 @@
             "exitCode": "（退出码 {{code}}）",
             "streamingProgress": "流媒体进度...",
             "waitingForTheAgentToBegin": "等待代理开始...",
-            "working": "处理中…"
+            "working": "处理中…",
+            "waitForTheJobToFinish": "请等待任务完成"
         },
         "jobs": {
             "activity": "活动",
@@ -3501,7 +3486,9 @@
             "logFiles": "日志文件",
             "noLogFilesFound": "未找到日志文件",
             "searchPattern": "搜索模式...",
-            "selectALogFile": "选择一个日志文件以查看其内容。"
+            "selectALogFile": "选择一个日志文件以查看其内容。",
+            "selectALogFileFirst": "请先选择日志文件",
+            "nothingToDownloadYet": "暂无可下载的内容"
         },
         "loginLinksSection": {
             "allowedIp": "允许的IP",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "没有声明主机权限。",
             "pasteAGithubRepoOwnerRepo": "粘贴 GitHub 存储库（owner/repo 或 Owner/repo@tag）、发布 URL 或直接 zip 链接。您将在其登陆之前预览安装的内容。",
             "preview": "预览",
-            "signatureInvalid": "签名无效",
             "signatureMismatch": "签名与此归档文件不匹配。",
-            "signed": "签名·",
-            "signedUnknownPublisher": "签名·未知出版商",
             "theDownloadMayHaveBeenTampered": "下载的内容可能已被篡改——请勿安装。",
             "thisExtensionRequests": "此扩展请求：",
             "thisReleaseCarriesNoPublisherSignature": "此版本没有发布者签名。它将以完整的面板权限运行 - 仅当您信任源时才安装。",
             "thisReleaseIsSignedButThe": "此版本已签名，但该面板未固定发布者密钥，因此无法验证签名。将其视为未签名。",
-            "unsigned": "未签名",
             "uploadAnExtensionZipWith": "上传扩展 zip",
             "useAnAbsolutePathThatExists": "使用后端主机上或后端容器内存在的绝对路径。",
             "zip": "拉链"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "加载扩展目录失败",
             "couldntToggle": "启用或停用扩展失败",
             "couldntUninstall": "卸载扩展失败",
-            "declaredPermissionsWhatThePanelHas": "声明的权限、小组观察到的内容以及待处理的 Python 依赖项",
-            "disabling": "正在停用…",
-            "enabling": "正在启用…",
             "extensionConfigurationSaved": "已保存扩展配置",
             "extensionDisabled": "扩展已禁用",
             "extensionEnabled": "启用扩展",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "使用无法验证的签名进行安装？",
             "installWithoutChecksumVerification": "安装时不进行校验和验证？",
             "installed": "已安装",
-            "installedExtensions": "已安装的扩展",
             "installedHotReloadShouldPickIt": "已安装“{{displayname}}”。热重载应该会拾取它；如果蓝图路由没有出现，请重新启动后端。",
             "installedRestartBackendIfBlueprintRoutes": "已安装“{{displayname}}”。如果蓝图路由没有出现，请重新启动后端。",
             "installing": "正在安装…",
@@ -3665,33 +3644,21 @@
             "purgeData": "清除数据",
             "registry": "注册表",
             "registryInstallFailed": "注册表安装失败",
-            "releaseZipIsSignedThePanel": "发布 zip 已签名；面板在安装时验证 ed25519 签名",
             "removingThisExtensionStopsItsRoutes": "删除此扩展会停止其路由和 UI 贡献。",
             "resetFilters": "重置过滤器",
             "reviewed": "已审核",
             "screenshots": "截图",
             "searchExtensions": "搜索扩展...",
-            "signed": "签名",
-            "signedWithPublisherKeyWhichThis": "使用发布者密钥“{{publisherKeyId}}”进行签名，此面板不会固定该密钥",
             "sourceRepo": "源代码库",
             "thisExtensionDeclaresNoConfigurationFields": "此扩展未声明任何配置字段。",
             "thisExtensionRequests": "此扩展请求：",
-            "thisReleaseCarriesNoPublisherSignature": "此版本没有发布者签名",
             "uninstall": "卸载{{displayname}}？",
-            "uninstalling": "正在卸载…",
-            "unknownSigner": "签名者未知",
             "unreviewed": "未经审查",
-            "unsigned": "未签名",
             "update": "更新",
             "updateAnyway": "仍然更新",
-            "updateAvailableV": "可用更新 → v",
             "updating": "正在更新…",
-            "versionByAuthor": "v{{version}} · 作者 {{author}}"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "允许成员运行策划的操作",
-            "letWorkspaceMembersRunASmall": "让工作区成员针对他们可以访问的服务运行一小组精心策划的参数化操作（例如调整服务的备份频率）。每个操作都会根据固定模式进行验证并进行审核记录 - 任何自由文本都不会到达服务器 shell。关闭此选项可禁用整个成员操作界面。",
-            "memberActions": "会员行动"
+            "versionByAuthor": "v{{version}} · 作者 {{author}}",
+            "installShort": "安装"
         },
         "message": {
             "somethingWentWrong": "出现了问题。"
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "每分钟收集一次指标",
             "noHistoricalDataYet": "还没有历史数据",
             "realTimePerformance": "实时表现",
-            "systemMetrics": "系统指标"
+            "systemMetrics": "系统指标",
+            "loadingMetricsHistory": "正在加载指标历史…"
         },
         "metricsTab": {
             "activeRunning": "活动（运行中）",
@@ -3732,7 +3700,8 @@
             "processes": "进程",
             "serviceStatus": "服务状态",
             "startTheServiceToViewResource": "启动服务以查看资源指标。",
-            "workers": "工作进程"
+            "workers": "工作进程",
+            "failedToLoadMetrics": "无法加载指标。"
         },
         "microCachePanel": {
             "assetCachingSaved": "资源缓存设置已保存",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "创建具有相同名称和完全权限的用户",
             "creating": "正在创建…",
             "databaseCreated": "数据库已创建",
-            "databaseName": "数据库名称 *",
+            "databaseName": "数据库名称",
             "encoding": "编码",
             "engine": "引擎",
             "fromTheTemplateCatalog": "从模板目录",
@@ -3836,7 +3805,9 @@
             "running": "运行中",
             "saveTheseCredentialsThePasswordWon": "保存这些凭据 - 密码将不会再次显示。",
             "userCreated": "用户已创建",
-            "username": "用户名 *"
+            "username": "用户名",
+            "databaseNameInvalid": "只能使用字母、数字和下划线。",
+            "databaseNameRequired": "请输入数据库名称。"
         },
         "modeToggle": {
             "assistant": "助手",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "上面触发",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "警报触发时去往何处",
-            "wouldAlertNow": "现在会触发警报"
+            "wouldAlertNow": "现在会触发警报",
+            "couldntLoadMonitoringData": "无法加载监控数据。"
         },
         "monitoringOverview": {
             "activeAlerts": "活动警报",
@@ -4018,7 +3990,8 @@
             "runTest": "运行测试",
             "running": "正在运行…",
             "speedTest": "速度测试",
-            "tested": "已测试"
+            "tested": "已测试",
+            "loadingHosts": "正在加载主机"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "没有此文本的 200 响应将被视为中断。",
@@ -4048,7 +4021,6 @@
             "monitoring": "监控 {{name}}",
             "nextCheck": "下一步检查",
             "noMonitorsMatch": "没有匹配的监控项",
-            "nothingIsBeingWatchedYet": "目前还没有任何内容被关注",
             "offForSelfSignedCertificatesOn": "对于内部主机上的自签名证书关闭。",
             "pause": "暂停",
             "paused": "已暂停{{name}}",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "宕机的监控项",
             "mostRecentResults": "最新结果",
             "noChecksRecordedYetTheScheduler": "尚未记录任何检查 - 调度程序轮询每个监视器的时间间隔。",
-            "nothingIsBeingWatchedYet": "目前还没有任何内容被关注"
+            "nothingIsBeingWatchedYet": "目前还没有任何内容被关注",
+            "couldntLoadMonitors": "无法加载监控项。"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "创建网络来连接容器。",
@@ -4111,7 +4084,10 @@
             "registering": "正在注册…",
             "review": "审查",
             "uploadAndDeploy": "上传并部署",
-            "uploading": "正在上传…"
+            "uploading": "正在上传…",
+            "completeTheSourceDetailsFirst": "请先完成来源详情",
+            "fillInTheRequiredDetailsFirst": "请先填写必填信息",
+            "finishThePreviousStepFirst": "请先完成上一步"
         },
         "notFound": {
             "browseExtensions": "浏览扩展",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "没有未读通知。",
             "notifications": "通知",
             "success": "成功",
-            "unread": "未读"
+            "unread": "未读",
+            "noFiltersToReset": "没有可重置的筛选"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com、team@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "切换“操作”停靠栏",
             "title": "操作",
             "unreadCount": "{{count}} 条未读",
-            "waitingForLogs": "正在等待运行日志…"
+            "waitingForLogs": "正在等待运行日志…",
+            "enterTheRequiredValueFirst": "请先输入所需的值"
         },
         "organizationTabs": {
             "projects": "项目",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "正在加载包...",
             "package": "包裹",
             "packageNameEGRequestsFlask": "包名称（例如 requests、flask==2.0.0）",
-            "requirementsTxtUpdated": "要求.txt 已更新"
+            "requirementsTxtUpdated": "要求.txt 已更新",
+            "failedToLoadPackages": "无法加载软件包。"
         },
         "pageContextMap": {
             "application": "服务",
@@ -4484,7 +4463,6 @@
             "emailAddress": "电子邮件地址",
             "memberSince": "会员自",
             "profileSettings": "配置文件设置",
-            "role": "角色",
             "saveChanges": "保存更改"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "主机的 Nginx 正在处理反向代理。切换到上面的 Traefik 或 Caddy 来运行托管 Docker 代理堆栈。",
             "thisServerSActiveProxyIs": "该服务器的活动代理是",
             "traefik": "Traefik",
-            "whichExpects": "，期望"
+            "whichExpects": "，期望",
+            "noChangesToSave": "没有可保存的更改",
+            "selectADifferentProxyFirst": "请先选择其他代理"
         },
         "pruneButton": {
             "cleaning": "正在清理…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "负载必须是有效的 JSON",
             "permanentlyDeleteThisMessage": "永久删除此消息？",
             "priority": "优先级",
-            "queue": "队列",
             "queueBus": "队列总线",
             "readOnly": "只读",
             "requeue": "重新排队",
@@ -4702,7 +4681,6 @@
             "total": "总计"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "调整过滤器或搜索查询以查看您的队列。",
             "allGroups": "所有组",
             "anyStatus": "任何状态",
             "areYouSureYouWantTo": "您确定要删除“{{value}}”及其所有消息吗？",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}} 个步骤",
             "unavailable": "配方目录不可用",
             "unavailableHint": "无法访问注册表，且没有内置副本。",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "请先解决上方的阻碍项",
+            "selectATargetServerFirst": "请先选择目标服务器"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "加载回收站失败",
@@ -4840,16 +4820,21 @@
             "basicAuth": "基本授权",
             "betweenServers": "在 {{privateServer}} 和 {{edgeServer}} 之间",
             "edgeServerPublicIpFrontsThe": "边缘服务器（公共 IP — 位于隧道前面）",
+            "edgeServerRequired": "请选择边缘服务器。",
             "exposeALocalService": "公开本地服务",
+            "exposeAPrivateServicePublicly": "公开一个私有服务。",
             "exposeAServiceRunningOnA": "通过两个代理之间的 WireGuard 隧道将私有计算机上运行的服务（在 NAT 后面，无端口转发）公开给公共主机名。",
             "exposeService": "暴露服务",
+            "exposeServicesOn": "公开服务于",
             "exposeServicesRunningOn": "公开运行于的服务",
+            "exposeShort": "公开",
             "exposed": "暴露的{{hostname}}",
             "failedToExposeService": "暴露服务失败",
             "failedToLoadTunnels": "加载隧道失败",
             "failedToRemoveService": "删除服务失败",
             "failedToTearDownTunnel": "拆除隧道失败",
             "handshakeAt": "握手于 {{time}}",
+            "hostnameRequired": "请输入有效的公开主机名。",
             "httpsLetSEncrypt": "HTTPS（Let's Encrypt）",
             "loadingTunnels": "装载隧道",
             "noHandshakeYetIfThisPersists": "尚未握手 — 如果这种情况持续存在，私有主机到边缘的出站 UDP 可能会被阻止（需要中继）。",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "该服务器没有隧道",
             "noTunnelsYet": "还没有隧道",
             "obtainACertificateOnTheEdge": "获得边缘证书。",
+            "passwordRequired": "请输入密码。",
             "pickAPublicIpEdgeServer": "选择一个公共 IP 边缘服务器，ServerKit 将通过 WireGuard 将其与 {{value}} 配对。",
             "pickAPublicIpEdgeServer2": "选择一个公共 IP 边缘服务器和一个私有主机，ServerKit 将通过 WireGuard 将它们配对并发布您的服务 - 无需更改路由器。",
+            "pickAPublicIpEdgeServerShort": "选择一个具有公网 IP 的边缘服务器。",
+            "pickAnEdgeAndAPrivateHost": "选择一个边缘服务器和一个私有主机。",
             "pickTwoDifferentServers": "请选择两台不同的服务器：边缘服务器位于私有主机前端。",
-            "pointAtEdge": "将 {{name}} 指向边缘服务器；之后由隧道转发。",
+            "pointAtEdgeGeneric": "将主机名指向边缘服务器；其余由隧道承载。",
+            "portRequired": "请输入服务端口。",
+            "privateHostRequired": "请选择私有主机。",
             "privateHostWhereTheServiceRuns": "私有主机（服务运行的地方）",
             "publicHostname": "公共主机名",
             "publishing": "正在发布…",
@@ -4869,13 +4859,24 @@
             "removed": "已删除 {{hostname}}",
             "requireLoginBasicAuth": "需要登录（基本身份验证）",
             "servicePort": "服务端口",
+            "status": {
+                "pending": "待处理",
+                "up": "正常",
+                "degraded": "降级",
+                "down": "已断开",
+                "error": "错误",
+                "published": "已发布",
+                "unknown": "未知"
+            },
             "tearDown": "拆除",
             "tearDownTunnel": "拆除隧道",
             "tearDownTunnel2": "拆掉隧道？",
+            "thisHost": "此主机",
             "thisRemovesTheWireguardTunnel": "这将删除 WireGuard 隧道",
             "thisServer": "该服务器",
             "toAPublicHostnameOverA": "通过 WireGuard 隧道到公共主机名。 ServerKit 将此主机与具有公共 IP 的边缘服务器配对。",
-            "tunnelTornDown": "隧道被拆除"
+            "tunnelTornDown": "隧道被拆除",
+            "usernameRequired": "请输入用户名。"
         },
         "remoteTerminal": {
             "closeTerminal": "关闭终端",
@@ -4938,15 +4939,13 @@
             "title": "流量"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "卷曲-fsSL https://get.docker.com |嘘",
             "dockerIsnTAvailable": "Docker 不可用",
             "forThisInstallSProfile": "对于此安装的配置文件。",
             "installItOnTheServerThen": "将其安装到服务器上，然后重新启动 ServerKit：",
             "needsDockerToRunContainersAnd": "需要 Docker 来运行容器，并且该服务器安装了",
             "profileWhichLeavesItOutNothing": "配置文件，将其排除在外。没有什么是锁定的——添加 Docker 会打开此页面。",
             "serverkitReChecksForDockerAutomatically": "ServerKit 自动重新检查 Docker。监控、域、证书、cron 和 DNS 无需它也能继续工作 — 请参阅",
-            "settingsSystem": "设置→系统",
-            "sudoSystemctlRestartServerkit": "sudo systemctl 重新启动 serverkit"
+            "settingsSystem": "设置→系统"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB 并且该服务器有",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "添加密钥失败：{{message}}",
             "failedToRemoveKey": "无法删除密钥：{{message}}",
             "fingerprint": "指纹",
-            "noSshKeysConfiguredForRoot": "没有为 root 用户配置 SSH 密钥。",
             "pasteYourSshPublicKeyTypically": "粘贴您的 SSH 公钥（通常来自 ~/.ssh/id_rsa.pub 或 ~/.ssh/id_ed25519.pub）",
             "publicKey": "公钥",
             "removeSshKey": "删除 SSH 密钥",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "通过您的 DNS 提供商。",
             "webrootPath": "网络根路径",
             "wildcardCertificateDns01Validation": "通配符证书（DNS-01 验证）",
-            "wildcardCertificateIssued": "颁发通配符证书"
+            "wildcardCertificateIssued": "颁发通配符证书",
+            "domainsRequired": "请至少输入一个域名。"
         },
         "sSOCallback": {
             "authenticationFailed": "认证失败",
@@ -5352,14 +5351,12 @@
             "alerts": "警报",
             "areYouSureYouWantTo": "您确定要删除该服务器吗？此操作无法撤消。",
             "backToServers": "返回服务器",
-            "copyServerId": "复制服务器 ID",
             "cron": "克朗",
             "errorLoadingServer": "加载服务器时出错",
             "failedToAcknowledgeAlert": "未能确认警报",
             "failedToPingServer": "无法 ping 服务器",
             "failedToRemoveServer": "删除服务器失败",
             "failedToResolveAlert": "无法解决警报",
-            "lastSeen": "最后一次见到",
             "limitedMode": "限定模式",
             "loadingServerDetails": "正在加载服务器详细信息",
             "metrics": "指标",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "全部升级",
             "upgradeAllPackages": "升级所有包",
             "upgradeFailedToStart": "升级无法启动",
-            "upgradingAllPackages": "升级所有包"
+            "upgradingAllPackages": "升级所有包",
+            "enterAPackageNameFirst": "请先输入软件包名称"
         },
         "serverPicker": {
             "deployToServer": "部署到服务器",
@@ -5602,6 +5600,7 @@
             "library": "图书馆",
             "nPackages": "{{n}} 个软件包",
             "nServices": "{{n}} 个服务",
+            "nameRequired": "请输入模板名称。",
             "nginxPhpFpmCertbot": "nginx\nphp-fpm\n证书机器人",
             "noReadyMadeTemplatesAreAvailable": "没有可用的现成模板。您仍可以从头创建一个。",
             "noTemplatesYet": "还没有模板",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "令牌过期",
             "ungrouped": "未分组",
             "whatHappensNext": "接下来会发生什么？",
-            "windowsPowershell": "Windows（PowerShell）"
+            "windowsPowershell": "Windows（PowerShell）",
+            "syncShort": "同步"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "你确定吗？这将永久删除该服务及其所有数据。",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "取消 {{name}} 与其链接服务的链接？",
             "unlinking": "正在取消关联…",
             "unlinkingWillResetBothAppsTo": "取消链接会将两个服务重置为独立模式。",
-            "usedForCertificateExpiryRemindersFrom": "用于 Let's Encrypt 的证书到期提醒。"
+            "usedForCertificateExpiryRemindersFrom": "用于 Let's Encrypt 的证书到期提醒。",
+            "enterADomainNameFirst": "请先输入域名"
         },
         "setupHealthWidget": {
             "allSet": "一切就绪——",
@@ -6322,7 +6323,10 @@
             "targetService": "目标服务",
             "variables": "变量",
             "variablesInThisGroupApplyTo": "该组中的变量适用于您附加到的每个资源。",
-            "whatThisGroupIsFor": "这个小组的目的是……"
+            "whatThisGroupIsFor": "这个小组的目的是……",
+            "enterAGroupNameFirst": "请先输入组名称",
+            "enterAResourceIdFirst": "请先输入资源 ID",
+            "enterAVariableNameFirst": "请先输入变量名"
         },
         "shellTab": {
             "containerShell": "容器 Shell",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "没有正在运行的容器",
             "running": "跑步...",
             "startTheServiceToAccessThe": "启动服务以访问 shell。",
-            "typeACommandBelowToExecute": "输入下面的命令以在容器中执行它。"
+            "typeACommandBelowToExecute": "输入下面的命令以在容器中执行它。",
+            "failedToLoadContainers": "无法加载容器。"
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "选择预设或构建自定义视图。只有可见的项目才会出现在侧边栏中。",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "两个编写网络服务器配置的面板将争夺所有权。将此服务器切换到",
             "upstream": "上游",
             "whatWeCheck": "检查内容",
-            "whileObserving": "在观察的同时"
+            "whileObserving": "在观察的同时",
+            "failedToLoadSurvey": "无法加载探查结果。"
         },
         "systemNotices": {
             "dismiss": "关闭{{title}}",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "使用该域名",
             "used": "已使用",
             "utcOffset": "世界标准时间偏移",
-            "version": "{{brand}}版本"
+            "version": "{{brand}}版本",
+            "enterADomainFirst": "请先输入域名",
+            "selectADifferentTimezoneFirst": "请先选择其他时区"
         },
         "tableDataTab": {
             "column": "柱子",
@@ -7148,7 +7156,8 @@
             "query": "询问",
             "structure": "结构",
             "tableView": "表格视图",
-            "zeroRows": "0 行"
+            "zeroRows": "0 行",
+            "noMoreRows": "没有更多行"
         },
         "tabs": {
             "moreTabs": "更多标签"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "截断日志文件",
             "typeUnitName": "输入单位名称...",
             "unit": "单元",
-            "useThe": "使用"
+            "useThe": "使用",
+            "failedToLoadProcesses": "无法加载进程。",
+            "selectALogFileFirst": "请先选择日志文件",
+            "remoteJournalIsNotAvailableYet": "远程日志暂不可用"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "运行已经在进行中。",
@@ -7551,7 +7563,8 @@
             "viewSaved": "查看已保存的“{{trimmed}}”",
             "viewUpdated": "查看“{{name}}”已更新",
             "views": "视图",
-            "withChanges": "” 有变化"
+            "withChanges": "” 有变化",
+            "enterAViewNameFirst": "请先输入视图名称"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "同时删除数据。此操作无法撤销。",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "负载网址",
             "retryCount": "重试次数",
             "timeoutSeconds": "超时（秒）",
-            "update": "更新"
+            "update": "更新",
+            "eventsRequired": "请至少选择一个事件。"
         },
         "webhooksTab": {
             "active": "活动",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "工作区已存档",
             "workspaceDeleted": "工作区已删除",
             "workspaceNotFound": "找不到工作区",
-            "workspaceRestored": "工作区已恢复",
-            "workspaces": "工作区"
+            "workspaceRestored": "工作区已恢复"
         },
         "workspaceMembersTab": {
             "addAMember": "添加会员",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "最大用户数（0 = 无限制）",
             "members": "会员",
             "myTeam": "我的团队",
+            "nameRequired": "请输入工作区名称。",
             "newWorkspace": "新工作区",
             "recolorsThePanelForAnyoneViewing": "为查看此工作区的任何人重新设置面板颜色。保留默认值，不设置自定义品牌。",
             "searchWorkspaces": "搜索工作区...",
@@ -7981,6 +7995,14 @@
             "users": "用户",
             "workspaceBrandColor": "工作空间品牌颜色",
             "workspaceCreated": "工作区已创建"
+        },
+        "mobileSearch": {
+            "label": "搜索",
+            "title": "搜索全部 (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "没有可重做的内容",
+            "nothingToUndo": "没有可撤销的内容"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "正在验证邀请..."
     },
     "common": {
+        "actionTarget": "{{action}}：{{subject}}",
         "actions": {
             "add": "添加",
             "back": "返回",
@@ -8063,7 +8086,8 @@
             "stop": "停止",
             "test": "测试",
             "tryAgain": "重试",
-            "uninstall": "卸载"
+            "uninstall": "卸载",
+            "new": "新建"
         },
         "checking": "检查...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "加载中…",
         "more": "更多的",
+        "moreActions": "更多操作",
+        "moreInfoAbout": "关于{{subject}}的更多信息",
         "moreSections": "更多栏目",
         "page": "页",
         "retry": "重试",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}小时",
             "justNow": "现在",
             "minutesShort": "{{count}}米"
+        },
+        "validation": {
+            "domainEmpty": "请输入域名。",
+            "domainInvalid": "请输入有效的域名。",
+            "emailInvalid": "请输入有效的电子邮件地址。",
+            "required": "此字段为必填项。",
+            "urlInvalid": "请输入有效的 URL，例如 https://example.com/webhook。"
         }
     },
     "errors": {

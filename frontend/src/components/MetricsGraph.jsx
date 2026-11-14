@@ -6,6 +6,7 @@ import {
 import { Cpu, MemoryStick, HardDrive, TrendingUp } from 'lucide-react';
 import api from '../services/api';
 import { useTranslation } from 'react-i18next';
+import EmptyState from './EmptyState';
 import { Button as SharedButton } from '@/components/ui/button';
 import { formatDate, formatTime } from '@/utils/intl';
 
@@ -124,8 +125,8 @@ const MetricsGraph = ({ compact = false, timezone, serverId }) => {
 
     if (loading && !data) {
         return (
-            <div className="metrics-graph-card loading">
-                <div className="loading-spinner" />
+            <div className="metrics-graph-card">
+                <EmptyState loading loadingVariant="chart" title={t('app.metricsGraph.loadingMetricsHistory', 'Loading metrics history…')} />
             </div>
         );
     }

@@ -491,7 +491,7 @@ class RemoteDockerService:
     # ==================== Utility ====================
 
     @staticmethod
-    def get_available_servers() -> List[Dict[str, Any]]:
+    def get_available_servers(user=None) -> List[Dict[str, Any]]:
         """
         Get list of available servers for Docker operations.
 
@@ -510,9 +510,11 @@ class RemoteDockerService:
         # Get remote servers
         connected_ids = set(agent_registry.get_connected_servers())
 
-        remote_servers = Server.query.filter(
-            Server.status.in_(['online', 'connecting'])
-        ).all()
+        query = Server.query.filter(Server.status.in_(['online', 'connecting']))
+        if user is not None:
+            from app.services.workspace_service import WorkspaceService
+            query = WorkspaceService.filter_accessible_servers(query, user)
+        remote_servers = query.all()
 
         for server in remote_servers:
             has_docker_perm = server.has_permission('docker:container:read')

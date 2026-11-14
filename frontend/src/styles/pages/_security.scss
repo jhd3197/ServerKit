@@ -9,7 +9,8 @@
 .security-page {
     // ── card chrome (all tabs) ──────────────────────────────
     .tab-content {
-        .card {
+        .card,
+        .section-intro--banner {
             background: var(--surface);
             border: 1px solid var(--border-soft);
         }
@@ -26,6 +27,17 @@
                 font-size: $text-xs;
                 font-weight: $font-weight-semibold;
                 color: var(--text-faint);
+
+                // One line: the subtitle suffix gives way first (ellipsis).
+                white-space: nowrap;
+
+                // Subtitle suffix gives way first: one line, ellipsis.
+                .sec-count {
+                    min-width: 0;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
 
                 &.sec-listtitle--green { color: var(--green); }
                 &.sec-listtitle--red { color: var(--red); }
@@ -259,10 +271,11 @@
         margin-bottom: $space-2;
         border-bottom: 1px solid var(--border-soft);
 
+        // Phone: gauge beside the verdict, KPI row below at full width
         @media (max-width: $breakpoint-sm) {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: $space-4;
+            display: grid;
+            grid-template-columns: 72px minmax(0, 1fr); // gauge size
+            gap: $space-3 $space-4;
         }
     }
 
@@ -276,17 +289,29 @@
         font-size: $text-xs;
         color: var(--text-faint);
 
+        @media (max-width: $breakpoint-sm) { width: 72px; height: 72px; }
+
         svg { color: var(--text-faint); }
     }
 
     .sec-posture__summary {
         flex: 1;
         min-width: 0;
+
+        // Dissolve so verdict joins the gauge row and the KPIs span below
+        @media (max-width: $breakpoint-sm) {
+            display: contents;
+
+            // KpiBand's wrapper is the grid item, so it must do the spanning
+            .sk-kpiband-wrap { grid-column: 1 / -1; margin-bottom: 0; }
+        }
     }
 
     .sec-posture__verdict {
         margin: 0 0 $space-3;
         font-size: $text-base;
+
+        @media (max-width: $breakpoint-sm) { margin: 0; }
         font-weight: $font-weight-semibold;
         color: var(--text);
     }
@@ -296,6 +321,14 @@
         display: flex;
         flex-wrap: wrap;
         gap: $space-2 $space-5;
+
+        @media (max-width: $breakpoint-sm) {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: $space-2;
+
+            .sk-kpi { padding: $space-2; gap: $space-2; }
+        }
     }
 
     .sec-kpi {
@@ -347,6 +380,13 @@
 
         &:first-child { border-top: none; }
 
+        @media (max-width: $breakpoint-sm) {
+            padding-block: $space-2;
+
+            // The fix button already says what to do; drop the muted detail
+            &--fix .sec-posture__detail { display: none; }
+        }
+
         &--pass    .sec-posture__ico { color: var(--green); }
         &--warn    .sec-posture__ico { color: var(--amber); }
         &--unknown .sec-posture__ico { color: var(--text-ghost); }
@@ -371,6 +411,8 @@
         flex-shrink: 0;
         min-width: 124px;
         justify-content: center;
+
+        @media (max-width: $breakpoint-sm) { min-width: 0; }
     }
 
     .sec-posture__foot {
@@ -499,6 +541,7 @@
         &:focus {
             outline: none;
             border-color: var(--accent-dim);
+            box-shadow: $focus-ring;
         }
     }
 
@@ -778,19 +821,6 @@
 
 // ── Audit tab ────────────────────────────────────────────────
 .audit-tab {
-    .loading-state {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: $space-8;
-        gap: $space-4;
-
-        .spinner {
-            width: 40px;
-            height: 40px; // geometry: spinner icon
-        }
-    }
-
     .audit-results {
         display: flex;
         flex-direction: column;

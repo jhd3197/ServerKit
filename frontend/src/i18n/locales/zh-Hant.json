@@ -227,10 +227,6 @@
             "viewRelease": "檢視發布",
             "youReUpToDate": "已是最新版本！"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "新增通行金鑰或 2FA",
-            "secureYourAccount": "保護您的帳戶"
-        },
         "activityTab": {
             "actionType": "動作類型",
             "actionsThisWeek": "本週行動",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "為所有線上代理程式觸發升級",
             "versionDistribution": "版本分佈",
             "versions": "版本",
-            "viewDetails": "檢視詳細資料"
+            "viewDetails": "檢視詳細資料",
+            "selectAVersionFirst": "請先選擇一個版本"
         },
         "ai": {
             "assistant": "助理"
@@ -612,7 +609,8 @@
             "remote": "遠端",
             "restoreDrills": "還原演習",
             "turnOnProtectionOrClickBack": "開啟保護或點選立即備份。",
-            "verifyRemoteCopy": "驗證遠端複製"
+            "verifyRemoteCopy": "驗證遠端複製",
+            "onlySuccessfulBackupsCanBeRestored": "只能還原成功的備份"
         },
         "backupTabs": {
             "schedules": "排程",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "自動上傳新備份到遠端儲存",
             "b2GbMonth": "B2（美元/GB/月）",
             "backUpNow": "立即備份",
+            "backUpShort": "備份",
             "backblazeB2": "Backblaze B2",
             "backupDeleted": "備份已刪除",
             "backupName": "備份名稱",
@@ -667,6 +666,7 @@
             "database": "資料庫",
             "databaseBackupCreated": "已建立資料庫備份",
             "databaseName": "資料庫名稱",
+            "databaseNameRequired": "請輸入資料庫名稱。",
             "databaseOnly": "僅資料庫",
             "databaseType": "資料庫類型",
             "delete": "刪除{{name}}",
@@ -721,6 +721,7 @@
             "secretKey": "私密金鑰",
             "selectApplication": "選擇服務",
             "serverkitIsFreeTheseAreYour": "ServerKit 免費使用；這裡顯示的是您自行負擔的儲存費用。本機儲存空間指伺服器磁碟，若不追蹤成本，請保留為 0。S3/B2 請填入雲端服務供應商每 GB 的月費。",
+            "serviceRequired": "請選擇服務。",
             "settingsSaved": "設定已儲存",
             "siteService": "網站/服務",
             "storageConfigurationSaved": "儲存空間設定已儲存",
@@ -883,7 +884,8 @@
             "selectSize": "選擇規格",
             "serverDestroyed": "伺服器已銷毀",
             "serverName": "伺服器名稱",
-            "serverProvisioningInitiated": "已啟動伺服器佈建"
+            "serverProvisioningInitiated": "已啟動伺服器佈建",
+            "enterANameAndChooseAProvider": "請先輸入名稱並選擇提供者"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "將在 Cloudflare DNS 中建立該主機名稱的 CNAME，指向隧道。",
@@ -969,7 +971,10 @@
             "sortAToZ": "由 A 到 Z 排序",
             "sortHighToLow": "由高到低排序",
             "sortLowToHigh": "由低到高排序",
-            "sortZToA": "由 Z 到 A 排序"
+            "sortZToA": "由 Z 到 A 排序",
+            "alreadyTheFirstColumn": "已經是第一欄",
+            "alreadyTheLastColumn": "已經是最後一欄",
+            "noFilterOnThisColumn": "此欄沒有篩選條件"
         },
         "columnsMenu": {
             "columns": "欄位",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "給助理留言",
             "noResources": "找不到可存取的資源",
             "searchResources": "搜尋資源…",
-            "send": "傳送"
+            "send": "傳送",
+            "setUpTheAssistantFirst": "請先設定助理",
+            "typeAMessageFirst": "請先輸入訊息"
         },
         "configDiffModal": {
             "applyRestorePoint": "套用還原點",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "此伺服器的公用 IP 位址",
             "useStarttlsRecommended": "使用 STARTTLS（建議）",
             "whereDoIGetThis": "我從哪裡得到這個？",
-            "yourAccountEmailGlobalKeySimplest": "您的帳戶電子郵件 + 全域金鑰。設定最簡單，但授予完全帳戶存取權限。"
+            "yourAccountEmailGlobalKeySimplest": "您的帳戶電子郵件 + 全域金鑰。設定最簡單，但授予完全帳戶存取權限。",
+            "setUpTheOauthAppFirst": "請先設定 OAuth 應用程式"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "連線前，請先在「設定」中新增 GitHub OAuth 應用程式憑證。",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "搜尋儲存庫",
             "serviceName": "服務名稱",
             "systemdUnitOptional": "systemd 單元（選填）",
-            "uploadTheArchive": "上傳封存檔"
+            "uploadTheArchive": "上傳封存檔",
+            "setUpGithubInSettingsFirst": "請先在設定中配置 GitHub"
         },
         "connectionsHub": {
             "authorizedViaOauth": "已透過 OAuth 授權",
@@ -1337,7 +1346,8 @@
             "toRun": "執行。",
             "writeSqlAboveAndPress": "在上面寫入 SQL 並按",
             "writesEnabledBeCareful": "已啟用寫入功能，請謹慎操作",
-            "writesOn": "允許寫入"
+            "writesOn": "允許寫入",
+            "runAQueryWithResultsFirst": "請先執行有結果的查詢"
         },
         "consoleToolbar": {
             "allLevels": "所有層級",
@@ -1353,7 +1363,8 @@
             "searchLogs": "搜尋記錄…",
             "showTheDeploymentDetailsAgain": "再次顯示部署詳細資訊",
             "timestamps": "時間戳",
-            "wrap": "自動換行"
+            "wrap": "自動換行",
+            "noMatchesToJumpTo": "沒有可跳轉的符合項目"
         },
         "containerOpsPanel": {
             "actionFailed": "操作失敗",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "沒有產生任何輸出。",
             "noRunsRecordedYet": "尚無執行記錄。",
             "noRunsYet": "尚未執行",
-            "noScheduledJobsFoundCreateYour": "尚無排程作業。請建立第一個 Cron 作業，以自動執行工作。",
             "paused": "已暫停",
             "runHistory": "執行歷史",
             "runHistoryIsAnAdminOnly": "執行歷史記錄是僅限管理員使用的介面。",
@@ -1607,7 +1617,8 @@
             "undo": "復原",
             "unnamedJob": "未命名作業",
             "untracked": "未追蹤",
-            "whatDoesThisJobDo": "此作業的用途為何？"
+            "whatDoesThisJobDo": "此作業的用途為何？",
+            "enterANameCommandAndScheduleFirst": "請先填寫名稱、指令和排程"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 個欄位：分鐘、小時、日、月、工作日。",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "刪除 Cron 作業",
             "scheduleACommandOnTheHost": "在主機 crontab 上排程指令。以代理程式使用者身分執行。",
             "scheduleIsRequired": "需要安排時間表",
-            "serverOffline": "伺服器離線"
-        },
-        "cutoverDrawer": {
-            "answer": "回答",
-            "applyCutover": "套用切換",
-            "applyDnsCutover": "套用 DNS 切換？",
-            "applying": "正在套用…",
-            "atTheBoxWhereTheImported": "在匯入網站目前所在的主機上。系統會先為現有 DNS 記錄建立快照，因此之後仍可回復切換。",
-            "capturing": "捕捉…",
-            "checkPropagation": "檢查傳播情況",
-            "cutoverApplied": "已套用切換：",
-            "cutoverAppliedNowPointsAt": "已套用切換，{{domain}} 現在指向 {{value}}",
-            "cutoverFinishedWithErrorsReviewBelow": "切換已完成，但有錯誤。請檢視以下內容並根據需要還原。",
-            "cutoverFinishedWithErrorsReviewThe": "切換完成後出現錯誤 — 檢視結果並考慮還原。",
-            "deletedCreatedRecords_one": "已刪除切換時建立的 1 筆記錄。",
-            "deletedCreatedRecords_other": "已刪除切換時建立的 {{count}} 筆記錄。",
-            "dnsCutover": "DNS 切換",
-            "matchesNewTarget": "符合新目標",
-            "new": "新的",
-            "newAddressTarget": "新地址（目標）",
-            "newTarget": "新目標",
-            "noChangesToApplyForThe": "沒有任何變更適用於所選記錄類型。",
-            "notFullyPropagated": "尚未完全傳播",
-            "nowPointsAt": "現在指向",
-            "oneClickRestoresTheSnapshotCaptured": "點選即可還原切換前建立的快照，包括刪除切換時新增的記錄。",
-            "plannedChanges": "計畫變更",
-            "propagated": "已傳播",
-            "propagating": "傳播中",
-            "propagation": "傳播",
-            "providerZoneId": "提供者區域 ID",
-            "publicResolversCacheTheOldAddress": "公用 DNS 解析器會快取舊位址，直到 TTL 到期。請確認新位址在哪些位置已生效。",
-            "recordTypes": "記錄類型",
-            "recordTypes2": "記錄類型",
-            "recordsCaptured": "擷取的記錄",
-            "repoint": "重新指向",
-            "repointsRecords_one": "此操作會將 {{domain}} 的 {{types}} 記錄重新指向 {{target}}。可透過快照還原。",
-            "repointsRecords_other": "此操作會將 {{domain}} 的 {{types}} 記錄重新指向 {{target}}。可透過快照還原。",
-            "resolver": "DNS 解析器",
-            "restoredRecords_one": "已還原 1 筆記錄。",
-            "restoredRecords_other": "已還原 {{count}} 筆記錄。",
-            "revertCutover": "還原切換",
-            "revertFinishedWithErrorsCheckThe": "還原作業已完成，但發生錯誤；請檢查結果。",
-            "revertedRestoredSPreCutoverRecords": "還原 — 還原 {{domain}} 的切換前記錄",
-            "reverting": "正在還原…",
-            "review": "審查",
-            "rollBack": "復原",
-            "snapshotPreview": "快照和預覽",
-            "theDnsProviderSZoneIdentifier": "DNS 供應商的區域識別碼",
-            "theIpOrHostnameForCname": "記錄應指向的 IP（或 CNAME 的主機名稱）。",
-            "thisDomainHasNoConnectedProvider": "此網域尚未連線至 DNS 提供者的區域；切換時需要讀取並寫入該區域的記錄。",
-            "verify": "核實"
+            "serverOffline": "伺服器離線",
+            "failedToLoadCronJobs": "無法載入 cron 工作。"
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "此儀表板上還沒有小工具。"
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "點選即可排序；按住 Shift 再點選可新增排序層級",
             "loading": "載入中",
             "noRowsMatchTheActiveColumn": "沒有資料列符合目前的欄位篩選條件。",
+            "scrollableTable": "可捲動表格",
             "selectAllRows": "選取所有資料列",
-            "selectRow": "選取資料列"
+            "selectRow": "選取資料列",
+            "sortAColumnFirst": "請先依某一欄排序"
         },
         "dataTableFooter": {
             "nextPage": "下一頁",
@@ -1776,7 +1740,8 @@
             "updateOverview": "更新概覽",
             "updatingDatabaseSchema": "正在更新資料庫架構…",
             "weRecommendBackingUpYourDatabase": "建議在套用更新前先備份資料庫。",
-            "whichDoesNotExistInThis": "，但此建置中沒有該版本，通常是新增遷移的分支後來遭到還原。在將資料庫架構標記回已知修訂版本前，無法進行升級："
+            "whichDoesNotExistInThis": "，但此建置中沒有該版本，通常是新增遷移的分支後來遭到還原。在將資料庫架構標記回已知修訂版本前，無法進行升級：",
+            "createABackupFirst": "請先建立備份"
         },
         "databases": {
             "backUpDatabase": "備份資料庫",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "在 Linux 上，確保 Docker 守護程式已啟動",
             "retryConnection": "重試連線",
             "targets": "目標",
-            "toUseDockerManagement": "使用 Docker 管理：",
             "verifyTheUserHasPermissionsTo": "驗證使用者是否有權限存取 Docker",
             "volumes": "磁碟區"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "重新整理記錄",
             "regenerateToken": "重新產生權杖",
             "thisDomainIsnTSetUp": "此網域尚未在 ServerKit 中設定 DNS。",
-            "tokenRegenerated": "權杖重新產生"
+            "tokenRegenerated": "權杖重新產生",
+            "enterTheRecordContentFirst": "請先輸入記錄內容"
         },
         "domainField": {
             "alreadyAttached": "{{name}} 已連結到某個服務。",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "為 {{name}} 停用 SSL？",
             "dismissError": "消除錯誤",
             "dnsProvider": "DNS 供應商",
+            "domainRequired": "請輸入有效的網域。",
             "domainVerificationFailed": "網域驗證失敗：{{error}}",
             "domainVerifiedIp": "網域已驗證！IP：{{ipaddress}}",
             "emailAddress": "電子郵件",
@@ -2292,6 +2258,7 @@
             "rowsFields": "{{n}} 列 · {{fields}} 個欄位 · {{value}}",
             "searchDomains": "搜尋網域…",
             "selectAnApplication": "選擇一個服務",
+            "serviceRequired": "請選擇服務。",
             "setAsPrimaryDomain": "設為主要網域",
             "sslCertificate": "SSL 憑證",
             "sslExpires": "過期 {{days}}d",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "使用 SHA256 檢查碼驗證您的下載：",
             "windows": "Windows:",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "與伺服器註冊權杖。"
+            "withTheServerRegistrationToken": "與伺服器註冊權杖。",
+            "noBuildPublishedForThisPlatform": "此平台尚未發布建置"
         },
         "drawerHeader": {
             "aiSettings": "人工智慧設定",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "嘗試不同的搜尋字詞或瀏覽另一個資料夾。",
             "typeZA": "類型 Z-A",
             "types": "類型",
+            "up": "上一層",
             "upDelDeleteF2RenameA": "⌫ 向上 · Del 刪除 · F2 重新命名 · ⌘A 全部",
             "updatedAt": "更新於 {{time}}",
             "upload": "上傳",
@@ -2809,10 +2778,12 @@
             "videos": "影片",
             "volumes": "磁碟區",
             "webConfig": "網頁設定",
-            "willBeCreatedIn": "將建立於："
+            "willBeCreatedIn": "將建立於：",
+            "nothingToGoBackTo": "沒有可返回的頁面",
+            "nothingToGoForwardTo": "沒有可前進的頁面",
+            "alreadyAtTheTopFolder": "已在最上層資料夾"
         },
         "fileRow": {
-            "deselect": "取消選擇",
             "rename": "重新命名",
             "select": "選擇"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "全部清除",
             "noFilters": "沒有篩選條件",
             "showResults_one": "顯示 {{count}} 個{{noun}}",
-            "showResults_other": "顯示 {{count}} 個{{noun}}"
+            "showResults_other": "顯示 {{count}} 個{{noun}}",
+            "noFiltersApplied": "未套用任何篩選"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 或 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "趨勢",
             "unusuallyHigh": "異常偏高",
             "unusuallyLow": "異常偏低",
-            "zScore": "Z 分數"
+            "zScore": "Z 分數",
+            "selectAServerFirst": "請先選擇伺服器"
         },
         "fleetProxy": {
             "apps": "服務",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "重設檢視方式的變更",
             "rowDensity": "資料列密度",
             "rowsInThisView": "此檢視中的資料列",
-            "selectedRows": "已選取的資料列"
+            "selectedRows": "已選取的資料列",
+            "selectSomeRowsFirst": "請先選取若干列"
         },
         "gridViewPicker": {
             "builtIn": "內建",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "從目前的篩選條件與欄開始",
             "unsaved": "未儲存",
             "unsetAsDefault": "取消預設",
-            "viewOptions": "{{name}} 選項"
+            "viewOptions": "{{name}} 選項",
+            "enterAViewNameFirst": "請先輸入檢視名稱"
         },
         "groupMenu": {
             "group": "分組",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "設定已儲存。請重新啟動服務以套用變更。",
             "failedToSaveConfiguration": "儲存設定失敗",
             "gunicornConfiguration": "Gunicorn 設定",
-            "loadingGunicornConfiguration": "正在載入 Gunicorn 設定…"
+            "loadingGunicornConfiguration": "正在載入 Gunicorn 設定…",
+            "failedToLoadConfiguration": "無法載入 Gunicorn 設定。"
         },
         "hints": {
             "appBound": "瓶頸在服務本身。請在其前方快取整個頁面，或為其提供更大的伺服器。",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "沒有要轉換的內容－沒有找到指令。",
             "pasteTheContentsOfAnApache": "貼上 Apache 的內容",
             "reason": "原因",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine On\nRewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "請先貼上 .htaccess 規則"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 或 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "確認",
             "tryAgain": "再試一次",
             "whereTheDumpLives": "傾印檔位置",
-            "working": "處理中…"
+            "working": "處理中…",
+            "chooseADumpFileFirst": "請先選擇傾印檔案",
+            "chooseATargetDatabaseFirst": "請先選擇目標資料庫",
+            "importFinished": "匯入已完成",
+            "onlyAdminsCanImport": "只有管理員可以匯入",
+            "typeTheDatabaseNameToConfirm": "輸入資料庫名稱以確認"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "來自 cPanel 完整帳戶備份的 cpmove / backup-*.tar.gz 存檔。",
@@ -3344,7 +3326,9 @@
             "unknownAge": "時間未知",
             "viewChanges": "檢視變更",
             "watchingADocrootHashesEveryFile": "監看網站根目錄時，系統會對上傳與快取目錄以外的所有檔案計算雜湊，因此須由各服務個別啟用。",
-            "whatChanged": "發生了什麼變化"
+            "whatChanged": "發生了什麼變化",
+            "createABaselineFirst": "請先建立基準線",
+            "notAvailableOnThisServer": "此伺服器上無法使用"
         },
         "invitationsTab": {
             "copyInviteLink": "複製邀請連結",
@@ -3394,7 +3378,8 @@
             "exitCode": "（結束代碼 {{code}}）",
             "streamingProgress": "串流進度…",
             "waitingForTheAgentToBegin": "等待代理程式開始…",
-            "working": "處理中…"
+            "working": "處理中…",
+            "waitForTheJobToFinish": "請等待工作完成"
         },
         "jobs": {
             "activity": "活動",
@@ -3501,7 +3486,9 @@
             "logFiles": "記錄檔",
             "noLogFilesFound": "未找到記錄檔",
             "searchPattern": "搜尋模式…",
-            "selectALogFile": "選擇記錄檔以檢視其內容。"
+            "selectALogFile": "選擇記錄檔以檢視其內容。",
+            "selectALogFileFirst": "請先選擇記錄檔",
+            "nothingToDownloadYet": "尚無可下載的內容"
         },
         "loginLinksSection": {
             "allowedIp": "允許的 IP",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "沒有宣告主機權限。",
             "pasteAGithubRepoOwnerRepo": "請貼上 GitHub 儲存庫（owner/repo 或 owner/repo@tag）、版本網址，或直接提供 ZIP 連結。安裝前可預覽內容。",
             "preview": "預覽",
-            "signatureInvalid": "簽名無效",
             "signatureMismatch": "簽章與此封存檔不符。",
-            "signed": "簽名·",
-            "signedUnknownPublisher": "已簽署 · 未知發布者",
             "theDownloadMayHaveBeenTampered": "下載的內容可能已被竄改—請勿安裝。",
             "thisExtensionRequests": "此擴充請求：",
             "thisReleaseCarriesNoPublisherSignature": "此版本沒有發布者簽署。它將以完整的面板權限執行 - 僅當您信任來源時才安裝。",
             "thisReleaseIsSignedButThe": "此版本已簽名，但該面板未固定發布者金鑰，因此無法驗證簽名。將其視為未簽名。",
-            "unsigned": "未簽署",
             "uploadAnExtensionZipWith": "請上傳擴充功能 ZIP 檔，並將",
             "useAnAbsolutePathThatExists": "請使用後端主機或後端容器內的現有絕對路徑。",
             "zip": "ZIP 壓縮檔"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "無法載入擴充功能目錄",
             "couldntToggle": "無法開啟或關閉擴充功能",
             "couldntUninstall": "無法解除安裝擴充功能",
-            "declaredPermissionsWhatThePanelHas": "宣告的權限、面板觀察到的使用情形及待安裝的 Python 相依套件",
-            "disabling": "正在停用…",
-            "enabling": "正在啟用…",
             "extensionConfigurationSaved": "已儲存擴充設定",
             "extensionDisabled": "擴充功能已停用",
             "extensionEnabled": "啟用擴充",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "使用無法驗證的簽章進行安裝？",
             "installWithoutChecksumVerification": "不驗證檢查碼就安裝？",
             "installed": "已安裝",
-            "installedExtensions": "已安裝的擴充",
             "installedHotReloadShouldPickIt": "已安裝「{{displayname}}」。熱重新載入應會自動載入；若未出現 Blueprint 路由，請重新啟動後端。",
             "installedRestartBackendIfBlueprintRoutes": "安裝“{{displayname}}”。如果藍圖路由沒有出現，請重新啟動後端。",
             "installing": "正在安裝…",
@@ -3665,33 +3644,21 @@
             "purgeData": "清除資料",
             "registry": "擴充功能目錄",
             "registryInstallFailed": "擴充功能目錄安裝失敗",
-            "releaseZipIsSignedThePanel": "發布 zip 已簽名；面板在安裝時驗證 ed25519 簽名",
             "removingThisExtensionStopsItsRoutes": "移除此擴充功能後，其路由與介面功能將無法使用。",
             "resetFilters": "重設篩選條件",
             "reviewed": "已審核",
             "screenshots": "截圖",
             "searchExtensions": "搜尋擴充…",
-            "signed": "已簽署",
-            "signedWithPublisherKeyWhichThis": "使用發布者金鑰「{{publisherKeyId}}」簽名，該面板未固定該金鑰",
             "sourceRepo": "原始程式碼庫",
             "thisExtensionDeclaresNoConfigurationFields": "此擴充未宣告任何設定欄位。",
             "thisExtensionRequests": "此擴充請求：",
-            "thisReleaseCarriesNoPublisherSignature": "此版本沒有發布者簽名",
             "uninstall": "解除安裝{{displayname}}？",
-            "uninstalling": "正在解除安裝…",
-            "unknownSigner": "簽名者未知",
             "unreviewed": "未經審查",
-            "unsigned": "未簽署",
             "update": "更新",
             "updateAnyway": "仍要更新",
-            "updateAvailableV": "可用更新 → v",
             "updating": "正在更新…",
-            "versionByAuthor": "v{{version}} · 作者：{{author}}"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "允許成員執行預先定義的操作",
-            "letWorkspaceMembersRunASmall": "允許工作區成員對有權存取的服務執行少數預先定義的操作，例如調整備份頻率。系統會依固定格式驗證並記錄每次操作，不會將任意文字傳給伺服器 shell。關閉此選項即可停用所有成員操作。",
-            "memberActions": "成員操作"
+            "versionByAuthor": "v{{version}} · 作者：{{author}}",
+            "installShort": "安裝"
         },
         "message": {
             "somethingWentWrong": "發生錯誤。"
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "每分鐘收集一次指標",
             "noHistoricalDataYet": "還沒有歷史資料",
             "realTimePerformance": "即時表現",
-            "systemMetrics": "系統指標"
+            "systemMetrics": "系統指標",
+            "loadingMetricsHistory": "正在載入指標歷程…"
         },
         "metricsTab": {
             "activeRunning": "作用中（執行中）",
@@ -3732,7 +3700,8 @@
             "processes": "處理程序",
             "serviceStatus": "服務狀態",
             "startTheServiceToViewResource": "啟動服務以檢視資源指標。",
-            "workers": "工作程序"
+            "workers": "工作程序",
+            "failedToLoadMetrics": "無法載入指標。"
         },
         "microCachePanel": {
             "assetCachingSaved": "靜態資源快取設定已儲存",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "建立具有相同名稱和完全權限的使用者",
             "creating": "正在建立…",
             "databaseCreated": "資料庫已建立",
-            "databaseName": "資料庫名稱 *",
+            "databaseName": "資料庫名稱",
             "encoding": "編碼",
             "engine": "引擎",
             "fromTheTemplateCatalog": "從範本目錄",
@@ -3836,7 +3805,9 @@
             "running": "執行中",
             "saveTheseCredentialsThePasswordWon": "儲存這些憑證 - 密碼將不會再次顯示。",
             "userCreated": "使用者已建立",
-            "username": "使用者名稱 *"
+            "username": "使用者名稱",
+            "databaseNameInvalid": "只能使用字母、數字和底線。",
+            "databaseNameRequired": "請輸入資料庫名稱。"
         },
         "modeToggle": {
             "assistant": "助理",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "高於此值時觸發",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "警報觸發時去往何處",
-            "wouldAlertNow": "目前會觸發警報"
+            "wouldAlertNow": "目前會觸發警報",
+            "couldntLoadMonitoringData": "無法載入監控資料。"
         },
         "monitoringOverview": {
             "activeAlerts": "活動警報",
@@ -4018,7 +3990,8 @@
             "runTest": "執行測試",
             "running": "正在執行…",
             "speedTest": "速度測試",
-            "tested": "已測試"
+            "tested": "已測試",
+            "loadingHosts": "正在載入主機"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "沒有此文字的 200 回應將被視為中斷。",
@@ -4048,7 +4021,6 @@
             "monitoring": "監控{{name}}",
             "nextCheck": "下次檢查",
             "noMonitorsMatch": "沒有符合條件的監測器",
-            "nothingIsBeingWatchedYet": "目前還沒有任何內容被關注",
             "offForSelfSignedCertificatesOn": "對於內部主機上的自簽名憑證關閉。",
             "pause": "暫停",
             "paused": "已暫停 {{name}}",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "停機的監測器",
             "mostRecentResults": "最新結果",
             "noChecksRecordedYetTheScheduler": "尚未記錄任何檢查結果；排程器會依各監測器的間隔進行檢查。",
-            "nothingIsBeingWatchedYet": "目前還沒有任何內容被關注"
+            "nothingIsBeingWatchedYet": "目前還沒有任何內容被關注",
+            "couldntLoadMonitors": "無法載入監控項。"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "建立網路來連線容器。",
@@ -4111,7 +4084,10 @@
             "registering": "正在註冊…",
             "review": "審查",
             "uploadAndDeploy": "上傳並部署",
-            "uploading": "正在上傳…"
+            "uploading": "正在上傳…",
+            "completeTheSourceDetailsFirst": "請先完成來源詳細資料",
+            "fillInTheRequiredDetailsFirst": "請先填寫必填資訊",
+            "finishThePreviousStepFirst": "請先完成上一步"
         },
         "notFound": {
             "browseExtensions": "瀏覽擴充",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "沒有未讀通知。",
             "notifications": "通知",
             "success": "成功",
-            "unread": "未讀"
+            "unread": "未讀",
+            "noFiltersToReset": "沒有可重設的篩選"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "切換操作面板",
             "title": "作業",
             "unreadCount": "{{count}} 則未讀",
-            "waitingForLogs": "正在等待執行記錄…"
+            "waitingForLogs": "正在等待執行記錄…",
+            "enterTheRequiredValueFirst": "請先輸入必要的值"
         },
         "organizationTabs": {
             "projects": "專案",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "正在載入套件…",
             "package": "套件",
             "packageNameEGRequestsFlask": "套件名稱（例如 requests、flask==2.0.0）",
-            "requirementsTxtUpdated": "requirements.txt 已更新"
+            "requirementsTxtUpdated": "requirements.txt 已更新",
+            "failedToLoadPackages": "無法載入套件。"
         },
         "pageContextMap": {
             "application": "服務",
@@ -4484,7 +4463,6 @@
             "emailAddress": "電子郵件",
             "memberSince": "會員自",
             "profileSettings": "個人資料設定",
-            "role": "角色",
             "saveChanges": "儲存變更"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "主機的 Nginx 正在處理反向代理。切換到上面的 Traefik 或 Caddy 以執行託管 Docker 代理堆疊。",
             "thisServerSActiveProxyIs": "該伺服器的活動代理是",
             "traefik": "Traefik",
-            "whichExpects": "，期望"
+            "whichExpects": "，期望",
+            "noChangesToSave": "沒有可儲存的變更",
+            "selectADifferentProxyFirst": "請先選擇其他代理"
         },
         "pruneButton": {
             "cleaning": "正在清理…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "有效負載必須有效 JSON",
             "permanentlyDeleteThisMessage": "永久刪除此訊息？",
             "priority": "優先順序",
-            "queue": "佇列",
             "queueBus": "佇列匯流排",
             "readOnly": "唯讀",
             "requeue": "重新排隊",
@@ -4702,7 +4681,6 @@
             "total": "總計"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "調整篩選條件或搜尋字串以檢視您的佇列。",
             "allGroups": "所有群組",
             "anyStatus": "任何狀態",
             "areYouSureYouWantTo": "您確定要刪除“{{value}}”及其所有訊息嗎？",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}} 個步驟",
             "unavailable": "配方目錄不可用",
             "unavailableHint": "無法連線到線上來源，且沒有隨附的副本。",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "請先解決上方的阻礙項目",
+            "selectATargetServerFirst": "請先選擇目標伺服器"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "無法載入資源回收筒。",
@@ -4840,16 +4820,21 @@
             "basicAuth": "基本驗證",
             "betweenServers": "介於 {{privateServer}} 與 {{edgeServer}} 之間",
             "edgeServerPublicIpFrontsThe": "邊緣伺服器（具有公用 IP 位址，作為隧道入口）",
+            "edgeServerRequired": "請選擇邊緣伺服器。",
             "exposeALocalService": "公開本機服務",
+            "exposeAPrivateServicePublicly": "公開私人服務。",
             "exposeAServiceRunningOnA": "透過兩個代理程式之間的 WireGuard 隧道，將私人主機上執行的服務（位於 NAT 後方且未設定連接埠轉送）公開至可對外存取的主機名稱。",
             "exposeService": "暴露服務",
+            "exposeServicesOn": "公開服務於",
             "exposeServicesRunningOn": "將",
+            "exposeShort": "公開",
             "exposed": "外露{{hostname}}",
             "failedToExposeService": "暴露服務失敗",
             "failedToLoadTunnels": "載入隧道失敗",
             "failedToRemoveService": "刪除服務失敗",
             "failedToTearDownTunnel": "拆除隧道失敗",
             "handshakeAt": "交握於 {{time}}",
+            "hostnameRequired": "請輸入有效的公開主機名稱。",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "正在載入隧道",
             "noHandshakeYetIfThisPersists": "尚未完成交握。如果持續發生，私人主機傳往邊緣伺服器的 UDP 封包可能遭到封鎖，需要使用中繼。",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "該伺服器沒有隧道",
             "noTunnelsYet": "還沒有隧道",
             "obtainACertificateOnTheEdge": "在邊緣取得憑證。",
+            "passwordRequired": "請輸入密碼。",
             "pickAPublicIpEdgeServer": "請選擇具有公用 IP 位址的邊緣伺服器，ServerKit 會透過 WireGuard 與 {{value}} 配對。",
             "pickAPublicIpEdgeServer2": "選擇具有公用 IP 的邊緣伺服器及私人主機，ServerKit 就會透過 WireGuard 配對兩者並公開服務，無須變更路由器設定。",
+            "pickAPublicIpEdgeServerShort": "請選擇具有公用 IP 的邊緣伺服器。",
+            "pickAnEdgeAndAPrivateHost": "請選擇邊緣伺服器與私人主機。",
             "pickTwoDifferentServers": "請選擇兩部不同的伺服器：邊緣伺服器位於私人主機前端。",
-            "pointAtEdge": "將 {{name}} 指向邊緣伺服器，隧道會從那裡轉送流量。",
+            "pointAtEdgeGeneric": "將主機名稱指向邊緣伺服器；其餘由隧道承載。",
+            "portRequired": "請輸入服務連接埠。",
+            "privateHostRequired": "請選擇私有主機。",
             "privateHostWhereTheServiceRuns": "私有主機（服務運作的地方）",
             "publicHostname": "公開主機名稱",
             "publishing": "正在發佈…",
@@ -4869,13 +4859,24 @@
             "removed": "已刪除 {{hostname}}",
             "requireLoginBasicAuth": "需要登入（基本驗證）",
             "servicePort": "服務連接埠",
+            "status": {
+                "pending": "待處理",
+                "up": "正常",
+                "degraded": "降級",
+                "down": "已中斷",
+                "error": "錯誤",
+                "published": "已發布",
+                "unknown": "未知"
+            },
             "tearDown": "拆除",
             "tearDownTunnel": "拆除隧道",
             "tearDownTunnel2": "拆掉隧道？",
+            "thisHost": "此主機",
             "thisRemovesTheWireguardTunnel": "這將刪除 WireGuard 隧道",
             "thisServer": "該伺服器",
             "toAPublicHostnameOverA": "上執行的服務透過 WireGuard 隧道公開至對外可存取的主機名稱。ServerKit 會將此主機與具有公用 IP 位址的邊緣伺服器配對。",
-            "tunnelTornDown": "隧道被拆除"
+            "tunnelTornDown": "隧道被拆除",
+            "usernameRequired": "請輸入使用者名稱。"
         },
         "remoteTerminal": {
             "closeTerminal": "關閉終端機",
@@ -4938,15 +4939,13 @@
             "title": "流量"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | sh",
             "dockerIsnTAvailable": "Docker 不可用",
             "forThisInstallSProfile": "對於此安裝的設定檔。",
             "installItOnTheServerThen": "在伺服器上安裝，然後重新啟動 ServerKit：",
             "needsDockerToRunContainersAnd": "需要 Docker 才能執行容器，但此伺服器安裝時選用的",
             "profileWhichLeavesItOutNothing": "設定檔未包含 Docker。此頁面沒有鎖定任何功能；安裝 Docker 後即可使用。",
             "serverkitReChecksForDockerAutomatically": "ServerKit 自動重新檢查 Docker。監控、網域、憑證、cron 和 DNS 無需它即可繼續工作 — 請參閱",
-            "settingsSystem": "設定→系統",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "設定→系統"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB 且該伺服器有",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "新增金鑰失敗：{{message}}",
             "failedToRemoveKey": "無法刪除金鑰：{{message}}",
             "fingerprint": "指紋",
-            "noSshKeysConfiguredForRoot": "沒有為 root 使用者設定 SSH 金鑰。",
             "pasteYourSshPublicKeyTypically": "貼上您的 SSH 公鑰（通常來自 ~/.ssh/id_rsa.pub 或 ~/.ssh/id_ed25519.pub）",
             "publicKey": "公鑰",
             "removeSshKey": "移除 SSH 金鑰",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "透過您的 DNS 提供者。",
             "webrootPath": "網站根目錄路徑",
             "wildcardCertificateDns01Validation": "萬用字元憑證（DNS-01 驗證）",
-            "wildcardCertificateIssued": "簽發萬用字元憑證"
+            "wildcardCertificateIssued": "簽發萬用字元憑證",
+            "domainsRequired": "請至少輸入一個網域。"
         },
         "sSOCallback": {
             "authenticationFailed": "認證失敗",
@@ -5352,14 +5351,12 @@
             "alerts": "警報",
             "areYouSureYouWantTo": "您確定要刪除該伺服器嗎？此操作無法復原。",
             "backToServers": "回到伺服器",
-            "copyServerId": "複製伺服器 ID",
             "cron": "Cron",
             "errorLoadingServer": "載入伺服器時出錯",
             "failedToAcknowledgeAlert": "未能確認警報",
             "failedToPingServer": "無法 ping 伺服器",
             "failedToRemoveServer": "刪除伺服器失敗",
             "failedToResolveAlert": "無法解決警報",
-            "lastSeen": "最近上線時間",
             "limitedMode": "限定模式",
             "loadingServerDetails": "正在載入伺服器詳細資訊",
             "metrics": "指標",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "全部升級",
             "upgradeAllPackages": "升級所有套件",
             "upgradeFailedToStart": "升級無法啟動",
-            "upgradingAllPackages": "正在升級所有套件"
+            "upgradingAllPackages": "正在升級所有套件",
+            "enterAPackageNameFirst": "請先輸入套件名稱"
         },
         "serverPicker": {
             "deployToServer": "部署到伺服器",
@@ -5602,6 +5600,7 @@
             "library": "範本庫",
             "nPackages": "{{n}} 個套件",
             "nServices": "{{n}} 個服務",
+            "nameRequired": "請輸入範本名稱。",
             "nginxPhpFpmCertbot": "nginx\nphp-fpm\ncertbot",
             "noReadyMadeTemplatesAreAvailable": "沒有可用的現成範本。您仍可從頭建立一個。",
             "noTemplatesYet": "還沒有範本",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "權杖過期",
             "ungrouped": "未分組",
             "whatHappensNext": "接下來會發生什麼事？",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "同步"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "你確定嗎？這將永久刪除該服務及其所有資料。",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "取消 {{name}} 與其連結服務的連結？",
             "unlinking": "正在取消連結…",
             "unlinkingWillResetBothAppsTo": "取消連結會將兩個服務重設為獨立模式。",
-            "usedForCertificateExpiryRemindersFrom": "用於 Let's Encrypt 的憑證到期提醒。"
+            "usedForCertificateExpiryRemindersFrom": "用於 Let's Encrypt 的憑證到期提醒。",
+            "enterADomainNameFirst": "請先輸入網域名稱"
         },
         "setupHealthWidget": {
             "allSet": "一切就緒——",
@@ -6322,7 +6323,10 @@
             "targetService": "目標服務",
             "variables": "變數",
             "variablesInThisGroupApplyTo": "該組中的變數適用於您附加到的每個資源。",
-            "whatThisGroupIsFor": "此群組的用途…"
+            "whatThisGroupIsFor": "此群組的用途…",
+            "enterAGroupNameFirst": "請先輸入群組名稱",
+            "enterAResourceIdFirst": "請先輸入資源 ID",
+            "enterAVariableNameFirst": "請先輸入變數名稱"
         },
         "shellTab": {
             "containerShell": "容器 Shell",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "沒有正在執行的容器",
             "running": "執行中…",
             "startTheServiceToAccessThe": "啟動服務以存取 shell。",
-            "typeACommandBelowToExecute": "輸入下面的命令以在容器中執行它。"
+            "typeACommandBelowToExecute": "輸入下面的命令以在容器中執行它。",
+            "failedToLoadContainers": "無法載入容器。"
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "選擇預設或建立自訂檢視。只有可見的選項才會出現在側邊欄。",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "兩個編寫網頁伺服器設定的面板將爭奪所有權。將此伺服器切換到",
             "upstream": "上游",
             "whatWeCheck": "檢查項目",
-            "whileObserving": "在觀察的同時"
+            "whileObserving": "在觀察的同時",
+            "failedToLoadSurvey": "無法載入探查結果。"
         },
         "systemNotices": {
             "dismiss": "關閉{{title}}",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "使用該網域",
             "used": "已使用",
             "utcOffset": "UTC 時差",
-            "version": "{{brand}} 版本"
+            "version": "{{brand}} 版本",
+            "enterADomainFirst": "請先輸入網域",
+            "selectADifferentTimezoneFirst": "請先選擇其他時區"
         },
         "tableDataTab": {
             "column": "欄位",
@@ -7148,7 +7156,8 @@
             "query": "查詢",
             "structure": "結構",
             "tableView": "表格檢視",
-            "zeroRows": "0 列"
+            "zeroRows": "0 列",
+            "noMoreRows": "沒有更多列"
         },
         "tabs": {
             "moreTabs": "更多標籤"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "截斷記錄檔",
             "typeUnitName": "輸入單元名稱…",
             "unit": "單元",
-            "useThe": "使用"
+            "useThe": "使用",
+            "failedToLoadProcesses": "無法載入程序。",
+            "selectALogFileFirst": "請先選擇記錄檔",
+            "remoteJournalIsNotAvailableYet": "遠端日誌尚不可用"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "執行已經在進行中。",
@@ -7551,7 +7563,8 @@
             "viewSaved": "已儲存檢視「{{trimmed}}」",
             "viewUpdated": "已更新檢視「{{name}}」",
             "views": "檢視",
-            "withChanges": "」並儲存變更"
+            "withChanges": "」並儲存變更",
+            "enterAViewNameFirst": "請先輸入檢視名稱"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "同時刪除資料。此動作無法復原。",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "酬載網址",
             "retryCount": "重試次數",
             "timeoutSeconds": "逾時（秒）",
-            "update": "更新"
+            "update": "更新",
+            "eventsRequired": "請至少選擇一個事件。"
         },
         "webhooksTab": {
             "active": "使用中",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "工作區已存檔",
             "workspaceDeleted": "工作區已刪除",
             "workspaceNotFound": "找不到工作區",
-            "workspaceRestored": "工作區已還原",
-            "workspaces": "工作區"
+            "workspaceRestored": "工作區已還原"
         },
         "workspaceMembersTab": {
             "addAMember": "新增會員",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "最大使用者數（0 = 無限制）",
             "members": "成員",
             "myTeam": "我的團隊",
+            "nameRequired": "請輸入工作區名稱。",
             "newWorkspace": "新工作區",
             "recolorsThePanelForAnyoneViewing": "為檢視此工作區的任何人重新設定面板顏色。保留預設值，不設定自訂品牌。",
             "searchWorkspaces": "搜尋工作區…",
@@ -7981,6 +7995,14 @@
             "users": "使用者",
             "workspaceBrandColor": "工作區品牌色彩",
             "workspaceCreated": "工作區已建立"
+        },
+        "mobileSearch": {
+            "label": "搜尋",
+            "title": "搜尋全部 (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "沒有可重做的內容",
+            "nothingToUndo": "沒有可復原的內容"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "正在驗證邀請…"
     },
     "common": {
+        "actionTarget": "{{action}}：{{subject}}",
         "actions": {
             "add": "新增",
             "back": "回到上一頁",
@@ -8063,7 +8086,8 @@
             "stop": "停止",
             "test": "測試",
             "tryAgain": "再試一次",
-            "uninstall": "解除安裝"
+            "uninstall": "解除安裝",
+            "new": "新增"
         },
         "checking": "檢查中…",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "載入中…",
         "more": "更多",
+        "moreActions": "更多操作",
+        "moreInfoAbout": "關於{{subject}}的更多資訊",
         "moreSections": "更多區段",
         "page": "頁",
         "retry": "重試",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}h",
             "justNow": "剛剛",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "請輸入網域。",
+            "domainInvalid": "請輸入有效的網域。",
+            "emailInvalid": "請輸入有效的電子郵件地址。",
+            "required": "此欄位為必填。",
+            "urlInvalid": "請輸入有效的 URL，例如 https://example.com/webhook。"
         }
     },
     "errors": {

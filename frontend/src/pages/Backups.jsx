@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import useTabParam from '../hooks/useTabParam';
-import { Upload, Check, AlertTriangle, Archive, Clock, Database, Package, FolderArchive, HardDrive, History, Cloud, RefreshCw, Trash2, Plus, FileArchive, DollarSign } from 'lucide-react';
+import { Upload, Check, AlertTriangle, Archive, Clock, Database, Package, FolderArchive, HardDrive, History, Cloud, RefreshCw, Trash2, FileArchive, DollarSign } from 'lucide-react';
 import api from '../services/api';
 import { formatBytes } from '@/utils/formatBytes';
 import { scrollBehavior } from '@/utils/reducedMotion';
@@ -8,8 +8,10 @@ import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { FormField, FormRow } from '../components/FormField';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
@@ -21,6 +23,7 @@ import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
     GridToolsMenu, GridFilterDrawer,
 } from '@/components/ds/grid';
+import BackupStorageNotice from '../components/backups/BackupStorageNotice';
 import BackupsOverview from '../components/backups/BackupsOverview';
 import SchedulesTable from '../components/backups/SchedulesTable';
 import AddScheduleModal from '../components/backups/AddScheduleModal';
@@ -36,6 +39,7 @@ import useFocusParam from '../hooks/useFocusParam';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // `backups` is kept as an alias so old /backups/backups links still resolve to
 // the archive, which now answers to `snapshots`.
@@ -148,6 +152,7 @@ const Backups = () => {
     const [apps, setApps] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [storageWarning, setStorageWarning] = useState(false);
     const [rawTab, setActiveTab] = useTabParam('/backups', VALID_TABS);
     const activeTab = TAB_ALIASES[rawTab] || rawTab;
     const [search, setSearch] = useState('');
@@ -183,6 +188,17 @@ const Backups = () => {
         fileName: ''
     });
 
+    const needsDb = backupForm.type === 'database' || (backupForm.type === 'application' && backupForm.includeDb);
+    const backupErrors = useFieldErrors({
+        application: backupForm.type !== 'application' || backupForm.applicationId
+            ? null : t('app.backups.serviceRequired', 'Choose a service.'),
+        'file-paths': backupForm.type !== 'files' || backupForm.filePaths.trim()
+            ? null : t('app.backups.enterAtLeastOneFilePath', 'Enter at least one file path'),
+        'db-name': needsDb && !backupForm.dbName.trim()
+            ? t('app.backups.databaseNameRequired', 'Enter the database name.') : null,
+    }, 'backup');
+    const closeBackup = () => { setShowBackupModal(false); backupErrors.reset(); };
+
     // Config form state
     const [configForm, setConfigForm] = useState({
         enabled: false,
@@ -216,6 +232,7 @@ const Backups = () => {
             ]);
 
             setBackups(backupsRes.backups || []);
+            setStorageWarning(Boolean(backupsRes.warning || statsRes?.warning));
             setStats(statsRes);
             setConfig(configRes);
             if (refreshSchedules) await reloadSchedules();
@@ -257,6 +274,7 @@ const Backups = () => {
 
     const handleCreateBackup = async (e) => {
         e.preventDefault();
+        if (!backupErrors.attempt()) return;
         try {
             if (backupForm.type === 'application') {
                 const dbConfig = backupForm.includeDb ? {
@@ -289,7 +307,7 @@ const Backups = () => {
             window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
                 detail: { type: 'backup-created' },
             }));
-            setShowBackupModal(false);
+            closeBackup();
             resetBackupForm();
             loadData();
         } catch (err) {
@@ -684,15 +702,20 @@ const Backups = () => {
     useTopbarActions(() => (
         <>
             {activeTab === 'schedules' && !backupsManaged ? (
-                <Button size="sm" onClick={() => setShowScheduleModal(true)}>
-                    <Plus size={16} />
-                    {t('app.backups.newSchedule', 'New schedule')}
-                </Button>
+                <PagePrimaryButton
+                    id="backups-new-schedule"
+                    label={t('app.backups.newSchedule', 'New schedule')}
+                    shortLabel={t('common.actions.new', 'New')}
+                    onClick={() => setShowScheduleModal(true)}
+                />
             ) : (
-                <Button size="sm" onClick={() => setShowBackupModal(true)}>
-                    <Archive size={16} />
-                    {t('app.backups.backUpNow', 'Back up now')}
-                </Button>
+                <PagePrimaryButton
+                    id="backups-back-up"
+                    icon={Archive}
+                    label={t('app.backups.backUpNow', 'Back up now')}
+                    shortLabel={t('app.backups.backUpShort', 'Back up')}
+                    onClick={() => setShowBackupModal(true)}
+                />
             )}
             {activeTab === 'snapshots' && (
                 <SearchField
@@ -720,6 +743,7 @@ const Backups = () => {
     if (loading) {
         return (
             <div className="sk-tabgroup__inner backups-page">
+                {topbarChrome}
                 <EmptyState loading loadingVariant="table" size="lg" title={t('app.backups.loadingBackupData', 'Loading backup data…')} />
             </div>
         );
@@ -735,6 +759,10 @@ const Backups = () => {
                 </div>
             )}
 
+            {storageWarning && (
+                <BackupStorageNotice onStorage={activeTab === 'storage' ? undefined : () => setActiveTab('storage')} />
+            )}
+
             {/* Overview answers "is my data safe?" — the KPI band, the
                 activity heatmap, the destinations and the recent feed. The
                 archive table it used to sit on top of is now its own section. */}
@@ -746,6 +774,7 @@ const Backups = () => {
                     schedules={schedules}
                     backups={backups}
                     onGo={setActiveTab}
+                    storageWarning={storageWarning}
                 />
             )}
 
@@ -1102,7 +1131,7 @@ const Backups = () => {
                         </SharedCardHeader>
                         <SharedCardContent variant="legacy" className="card-body">
                             <p className="form-help">
-                                {t('app.backups.serverkitIsFreeTheseAreYour', "ServerKit is free. These are your own storage costs. Local is your server disk (leave at 0 if you don't track it). S3/B2 are your cloud provider's $/GB/month.")}
+                                {t('app.backups.storageCostsShort', 'Your own storage costs.')} <InfoTip>{t('app.backups.serverkitIsFreeTheseAreYour', "ServerKit is free. These are your own storage costs. Local is your server disk (leave at 0 if you don't track it). S3/B2 are your cloud provider's $/GB/month.")}</InfoTip>
                             </p>
                             <form onSubmit={handleSaveRates}>
                                 <FormRow>
@@ -1153,7 +1182,7 @@ const Backups = () => {
             )}
 
             {/* Create Backup Modal */}
-            <Modal open={showBackupModal} onClose={() => setShowBackupModal(false)} title={t('app.backups.createBackup', 'Create backup')}>
+            <Modal open={showBackupModal} onClose={closeBackup} title={t('app.backups.createBackup', 'Create backup')}>
                         <form onSubmit={handleCreateBackup} data-walkthrough="backup-create-form">
                                 <div className="form-group">
                                     <label htmlFor="backup-type">{t('app.backups.backupType', 'Backup type')}</label>
@@ -1172,14 +1201,12 @@ const Backups = () => {
 
                                 {backupForm.type === 'application' && (
                                     <>
-                                        <div className="form-group">
-                                            <label htmlFor="backup-application">{t('app.backups.application', 'Service')}</label>
+                                        <FormField label={t('app.backups.application', 'Service')} htmlFor="backup-application" required error={backupErrors.error('application')}>
                                             <Select
                                                 value={backupForm.applicationId}
                                                 onValueChange={(applicationId) => setBackupForm({...backupForm, applicationId})}
-                                                required
                                             >
-                                                <SelectTrigger id="backup-application">
+                                                <SelectTrigger id="backup-application" onBlur={() => backupErrors.touch('application')}>
                                                     <SelectValue placeholder={t('app.backups.selectApplication', 'Select service')} />
                                                 </SelectTrigger>
                                                 <SelectContent>
@@ -1188,7 +1215,7 @@ const Backups = () => {
                                                     ))}
                                                 </SelectContent>
                                             </Select>
-                                        </div>
+                                        </FormField>
 
                                         <div className="form-group">
                                             <label className="checkbox-label">
@@ -1205,8 +1232,7 @@ const Backups = () => {
 
                                 {backupForm.type === 'files' && (
                                     <>
-                                        <div className="form-group">
-                                            <label htmlFor={`${fieldId}-backup-name`}>{t('app.backups.backupNameOptional', 'Backup name (optional)')}</label>
+                                        <FormField label={t('app.backups.backupNameOptional', 'Backup name (optional)')} htmlFor={`${fieldId}-backup-name`}>
                                             <Input
                                                 id={`${fieldId}-backup-name`}
                                                 type="text"
@@ -1214,19 +1240,23 @@ const Backups = () => {
                                                 onChange={(e) => setBackupForm({...backupForm, fileName: e.target.value})}
                                                 placeholder="my-config-backup"
                                             />
-                                        </div>
-                                        <div className="form-group">
-                                            <label htmlFor={`${fieldId}-file-paths`}>{t('app.backups.fileDirectoryPathsOnePerLine', 'File/Directory Paths (one per line)')}</label>
+                                        </FormField>
+                                        <FormField
+                                            label={t('app.backups.fileDirectoryPathsOnePerLine', 'File/Directory Paths (one per line)')}
+                                            htmlFor="backup-file-paths"
+                                            required
+                                            error={backupErrors.error('file-paths')}
+                                            hint={t('app.backups.enterAbsolutePathsToFilesOr', 'Enter absolute paths to files or directories to backup.')}
+                                        >
                                             <Textarea
-                                                id={`${fieldId}-file-paths`}
+                                                id="backup-file-paths"
                                                 value={backupForm.filePaths}
                                                 onChange={(e) => setBackupForm({...backupForm, filePaths: e.target.value})}
+                                                onBlur={() => backupErrors.touch('file-paths')}
                                                 placeholder={"/etc/nginx/nginx.conf\n/var/www/mysite/config\n/home/user/.env"}
                                                 rows={5}
-                                                required
                                             />
-                                            <span className="form-help">{t('app.backups.enterAbsolutePathsToFilesOr', 'Enter absolute paths to files or directories to backup.')}</span>
-                                        </div>
+                                        </FormField>
                                     </>
                                 )}
 
@@ -1246,16 +1276,15 @@ const Backups = () => {
                                             </Select>
                                         </div>
 
-                                        <div className="form-group">
-                                            <label htmlFor={`${fieldId}-db-name`}>{t('app.backups.databaseName', 'Database name')}</label>
+                                        <FormField label={t('app.backups.databaseName', 'Database name')} htmlFor="backup-db-name" required error={backupErrors.error('db-name')}>
                                             <Input
-                                                id={`${fieldId}-db-name`}
+                                                id="backup-db-name"
                                                 type="text"
                                                 value={backupForm.dbName}
                                                 onChange={(e) => setBackupForm({...backupForm, dbName: e.target.value})}
-                                                required
+                                                onBlur={() => backupErrors.touch('db-name')}
                                             />
-                                        </div>
+                                        </FormField>
 
                                         <div className="form-row">
                                             <div className="form-group">
@@ -1291,7 +1320,7 @@ const Backups = () => {
                                     </>
                                 )}
                             <div className="modal-actions">
-                                <Button type="button" variant="outline" onClick={() => setShowBackupModal(false)}>
+                                <Button type="button" variant="outline" onClick={closeBackup}>
                                     {t('common.actions.cancel', 'Cancel')}
                                 </Button>
                                 <Button type="submit" data-walkthrough="backup-create-submit">{t('app.backups.createBackup', 'Create backup')}</Button>

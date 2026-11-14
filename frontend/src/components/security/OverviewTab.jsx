@@ -6,6 +6,7 @@ import { useContributions } from '@/plugins/contributions';
 import { Button } from '@/components/ui/button';
 import { Pill, ScoreGauge, KpiBand, MetricCard } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
+import useMediaQuery from '../../hooks/useMediaQuery';
 import {
     ShieldCheck,
     RefreshCw,
@@ -15,7 +16,10 @@ import {
     Siren,
     Bug,
     Radar,
+    Puzzle,
+    Bell,
 } from 'lucide-react';
+import InfoTip from '@/components/InfoTip';
 import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
 
 // Status glyph per check state — paired with the label so state never relies on
@@ -24,6 +28,7 @@ const STATE_ICON = { pass: CheckCircle2, warn: AlertTriangle, unknown: Circle };
 
 const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
     const { t } = useTranslation();
+    const phone = useMediaQuery('(max-width: 640px)'); // = $breakpoint-sm
     // One action runs at a time; `busyKey` names it so only that row spins and
     // the rest disable (no double-submits against the same daemon).
     const [busyKey, setBusyKey] = useState(null);
@@ -132,7 +137,7 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                 <SharedCardContent variant="legacy" className="card-body">
                     <div className="sec-posture__top">
                         {score !== null ? (
-                            <ScoreGauge value={score} size={104} stroke={9} color={scoreColor} label="posture" />
+                            <ScoreGauge value={score} size={phone ? 72 : 104} stroke={phone ? 7 : 9} color={scoreColor} label="posture" />
                         ) : (
                             <div className="sec-posture__pending">
                                 <RefreshCw size={18} className="sec-spin" />
@@ -174,7 +179,7 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                             const Icon = STATE_ICON[c.state];
                             const rowBusy = busyKey === c.key;
                             return (
-                                <div key={c.key} className={`sec-posture__check sec-posture__check--${c.state}`}>
+                                <div key={c.key} className={`sec-posture__check sec-posture__check--${c.state}${c.fix ? ' sec-posture__check--fix' : ''}`}>
                                     <Icon size={15} className="sec-posture__ico" />
                                     <span className="sec-posture__label">{c.label}</span>
                                     <span className="sec-posture__detail">{c.detail}</span>
@@ -196,17 +201,22 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                         })}
                     </div>
 
-                    <p className="sec-hint sec-posture__foot">
+                    <div className="sec-posture__foot tip-chip-row">
                         {!hasSecurityExtensions && (
                             <>
-                                {t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the')}
-                                {' '}
-                                <Link to="/marketplace">{t('app.overviewTab.marketplaceLink', 'Extensions')}</Link>
-                                {'. '}
+                                <Link to="/marketplace" className="tip-chip tip-chip--accent">
+                                    <Puzzle aria-hidden="true" />
+                                    {t('app.overviewTab.marketplaceLink', 'Extensions')}
+                                </Link>
+                                <InfoTip subject={t('app.overviewTab.marketplaceLink', 'Extensions')}>{t('app.overviewTab.moreSecurityTools', 'More security tools (malware scanning, brute-force protection, vulnerability scans, auto-updates) are available as extensions in the Extensions marketplace.')}</InfoTip>
                             </>
                         )}
-                        {t('app.overviewTab.addAlertDeliveryChannelsDiscordSlack', 'Add alert delivery channels (Discord, Slack, Telegram) in Settings → Notifications.')}
-                    </p>
+                        <Link to="/settings/notifications" className="tip-chip tip-chip--accent">
+                            <Bell aria-hidden="true" />
+                            {t('app.overviewTab.notificationsLink', 'Notifications')}
+                        </Link>
+                        <InfoTip subject={t('app.overviewTab.notificationsLink', 'Notifications')}>{t('app.overviewTab.addAlertDeliveryChannelsDiscordSlack', 'Add alert delivery channels (Discord, Slack, Telegram) in Settings → Notifications.')}</InfoTip>
+                    </div>
                 </SharedCardContent>
             </SharedCard>
         </div>

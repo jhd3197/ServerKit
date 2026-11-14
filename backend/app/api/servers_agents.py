@@ -5,9 +5,10 @@ import os
 import re
 import requests
 from app.models.server import AgentVersion, Server
+from app.services import permission_levels
 from flask import Response, current_app, jsonify, redirect, request
 from app.middleware.rbac import admin_required, developer_required
-from app.exceptions import agent_offline, field_required, not_found
+from app.exceptions import agent_offline, field_required
 from app.services.agent_registry import agent_registry
 from datetime import datetime, timedelta
 from app import db
@@ -16,7 +17,7 @@ from app.services.remote_command_dispatcher import dispatch_agent_command
 from app.services.agent_fleet_service import fleet_service
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.api._request import json_object
-from app.api.servers import _get_external_base_url, servers_bp
+from app.api.servers import _get_external_base_url, _get_operable_server, servers_bp
 
 
 # ==================== Installation Scripts ====================
@@ -160,9 +161,7 @@ def get_install_instructions(server_id):
     Returns installation commands with the correct API endpoint. Registration
     tokens are only shown when they are generated, so the UI supplies the token.
     """
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    server = _get_operable_server(server_id)
 
     # Check if server has a valid registration token
     if not server.registration_token_hash:
@@ -180,8 +179,11 @@ def get_install_instructions(server_id):
     # Get base URL
     base_url = _get_external_base_url()
     api_url = f"{base_url}/api/v1/servers"
+    level = (permission_levels.normalize(request.args.get('level'))
+             or server.requested_permission_level or 'monitor')
 
     return jsonify({
+        'permission_level': level,
         'linux': {
             # Download-then-run rather than `curl … | sudo bash`: in a pipeline
             # the shell reports bash's exit status, so a failed download exits 0
@@ -189,7 +191,7 @@ def get_install_instructions(server_id):
             'one_liner': (
                 f'curl -fsSL {api_url}/install.sh -o /tmp/serverkit-agent-install.sh '
                 f'&& sudo bash /tmp/serverkit-agent-install.sh '
-                f'--token "YOUR_TOKEN" --server "{base_url}"'
+                f'--token "YOUR_TOKEN" --server "{base_url}" --level {level}'
             ),
             'manual': [
                 f'# Download the script',
@@ -197,17 +199,17 @@ def get_install_instructions(server_id):
                 f'chmod +x install.sh',
                 f'',
                 f'# Run installation',
-                f'sudo ./install.sh --token "YOUR_TOKEN" --server "{base_url}"'
+                f'sudo ./install.sh --token "YOUR_TOKEN" --server "{base_url}" --level {level}'
             ]
         },
         'windows': {
-            'one_liner': f'irm {api_url}/install.ps1 | iex; Install-ServerKitAgent -Token "YOUR_TOKEN" -Server "{base_url}"',
+            'one_liner': f'irm {api_url}/install.ps1 | iex; Install-ServerKitAgent -Token "YOUR_TOKEN" -Server "{base_url}" -Level {level}',
             'manual': [
                 f'# Download the script (run in PowerShell as Administrator)',
                 f'Invoke-WebRequest -Uri "{api_url}/install.ps1" -OutFile install.ps1',
                 f'',
                 f'# Run installation',
-                f'.\\install.ps1 -Token "YOUR_TOKEN" -Server "{base_url}"'
+                f'.\\install.ps1 -Token "YOUR_TOKEN" -Server "{base_url}" -Level {level}'
             ]
         },
         'note': 'Replace YOUR_TOKEN with the registration token shown in the UI'
@@ -411,7 +413,8 @@ def _compare_versions(v1, v2):
             elif a > b:
                 return 1
         return 0
-    except:
+    except (ValueError, AttributeError, TypeError):
+        current_app.logger.warning('Could not compare versions %r and %r', v1, v2)
         return 0
 
 
@@ -492,9 +495,7 @@ def trigger_agent_update(server_id):
     service across the fleet, so it must not be reachable by read-only viewers
     (every other state-changing server route is already @developer_required).
     """
-    server = Server.query.get(server_id)
-    if not server:
-        raise not_found('server')
+    _get_operable_server(server_id)
 
     if not agent_registry.is_agent_connected(server_id):
         raise agent_offline()

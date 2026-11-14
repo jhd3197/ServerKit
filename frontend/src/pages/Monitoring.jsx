@@ -1,11 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
-import EmptyState from '../components/EmptyState';
+import { Skeleton } from '../components/Skeleton';
+import { KpiBand } from '@/components/ds';
+import ErrorState from '../components/ErrorState';
 import DoctorPanel from '../components/monitoring/DoctorPanel';
 import MonitoringOverview from '../components/monitoring/MonitoringOverview';
+import { useMonitorsSummary } from '../components/monitoring/useMonitorsSummary';
 import FleetCapacityPanel from '../components/monitoring/FleetCapacityPanel';
 import FleetThresholdsPanel from '../components/monitoring/FleetThresholdsPanel';
 import ServerScopePicker from '../components/monitoring/ServerScopePicker';
@@ -61,6 +64,9 @@ const RULE_ICONS = {
     load_average: GaugeIcon,
 };
 
+// Loaded-card footprints (px) the first-load placeholder reserves.
+const MON_SKELETON = { monitors: 110, kpi: 118, panel: 270 };
+
 const SPEEDTEST_POLL_INTERVAL_MS = 3000;
 const SPEEDTEST_POLL_TIMEOUT_MS = 90000;
 
@@ -92,6 +98,7 @@ const Monitoring = () => {
     // Bumped by the top-bar Refresh so the scope-driven panels reload with the
     // host-scoped data instead of each growing a refresh button of its own.
     const [refreshKey, setRefreshKey] = useState(0);
+    const monitorsSummary = useMonitorsSummary(refreshKey, activeTab === 'overview');
 
     const loadSpeedTest = async () => {
         try {
@@ -226,6 +233,14 @@ const Monitoring = () => {
         }
     };
 
+    // The speed-test wait loop outlives a navigation unless it checks this:
+    // it kept polling for 90s and toasted on whatever page came next.
+    const mountedRef = useRef(true);
+    useEffect(() => {
+        mountedRef.current = true;  // StrictMode re-mounts after a cleanup
+        return () => { mountedRef.current = false; };
+    }, []);
+
     const handleRunSpeedTest = async () => {
         try {
             setSpeedTestRunning(true);
@@ -234,6 +249,7 @@ const Monitoring = () => {
             const deadline = Date.now() + SPEEDTEST_POLL_TIMEOUT_MS;
             while (Date.now() < deadline) {
                 await new Promise((resolve) => setTimeout(resolve, SPEEDTEST_POLL_INTERVAL_MS));
+                if (!mountedRef.current) return;
                 const res = await loadSpeedTest();
                 const latest = res?.last_result;
                 if (latest?.tested_at && latest.tested_at !== previousTestedAt) {
@@ -242,11 +258,12 @@ const Monitoring = () => {
                     return;
                 }
             }
+            if (!mountedRef.current) return;
             toast.warning(t('app.monitoring.speedTestIsStillRunningRefresh', 'Speed test is still running. Refresh in a moment.'));
         } catch (err) {
             toastError(toast, t('app.monitoring.failedToStartSpeedTest', "Couldn't start the speed test."), err);
         } finally {
-            setSpeedTestRunning(false);
+            if (mountedRef.current) setSpeedTestRunning(false);
         }
     };
 
@@ -285,10 +302,41 @@ const Monitoring = () => {
         [status?.enabled, scope, servers.length, scopeLabel]
     );
 
-    if (loading) {
+    if (loading || (activeTab === 'overview' && !monitorsSummary.loaded)) {
         return (
             <div className="sk-tabgroup__inner monitoring-page">
-                <EmptyState loading loadingVariant="chart" size="lg" title={t('app.monitoring.loadingMonitoringData', 'Loading monitoring data')} />
+                {/* Same footprint as the loaded overview, so content replaces it in place. */}
+                <div
+                    className="mon-overview"
+                    role="status"
+                    aria-busy="true"
+                    aria-label={t('app.monitoring.loadingMonitoringData', 'Loading monitoring data')}
+                >
+                    <Skeleton variant="block" height={MON_SKELETON.monitors} radius={12} />
+                    <Skeleton variant="line" width={90} height={10} />
+                    <KpiBand max={4}>
+                        {[0, 1, 2, 3].map((i) => <Skeleton key={i} variant="block" height={MON_SKELETON.kpi} radius={12} />)}
+                    </KpiBand>
+                    {[0, 1].map((row) => (
+                        <div className="mon-grid2" key={row}>
+                            <Skeleton variant="block" height={MON_SKELETON.panel} radius={12} />
+                            <Skeleton variant="block" height={MON_SKELETON.panel} radius={12} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    // Nothing loaded and the request failed: show the failure, not an empty overview.
+    if (error && !status) {
+        return (
+            <div className="sk-tabgroup__inner monitoring-page">
+                <ErrorState
+                    title={t('app.monitoring.couldntLoadMonitoringData', "Couldn't load monitoring data.")}
+                    message={error}
+                    onRetry={loadData}
+                />
             </div>
         );
     }
@@ -315,6 +363,7 @@ const Monitoring = () => {
                     thresholds={thresholds}
                     onScopeChange={setScope}
                     refreshKey={refreshKey}
+                    monitorsSummary={monitorsSummary}
                 />
             )}
 

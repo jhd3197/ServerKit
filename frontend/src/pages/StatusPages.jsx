@@ -7,13 +7,16 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Pill } from '@/components/ds';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { Pill, SegControl } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import CopyField from '../components/CopyField';
 import { useTranslation } from 'react-i18next';
@@ -112,6 +115,7 @@ const StatusPages = () => {
     const [selectedPage, setSelectedPage] = useState(null);
     const [components, setComponents] = useState([]);
     const [incidents, setIncidents] = useState([]);
+    const [detailTab, setDetailTab] = useState('components');
     const [showCreatePage, setShowCreatePage] = useState(false);
     const [showCreateComponent, setShowCreateComponent] = useState(false);
     // Monitors are first-class now (core /api/v1/monitors) — a status page
@@ -125,6 +129,22 @@ const StatusPages = () => {
     const [pageForm, setPageForm] = useState(defaultPageForm);
     const [compForm, setCompForm] = useState(defaultCompForm);
     const [incidentForm, setIncidentForm] = useState(defaultIncidentForm);
+
+    const required = t('common.validation.required', 'This field is required.');
+    const pageErrors = useFieldErrors({
+        name: pageForm.name.trim() ? null : required,
+        slug: pageForm.slug.trim() ? null : required,
+    }, `${fieldId}-page`);
+    const compErrors = useFieldErrors({
+        name: compForm.name.trim() ? null : required,
+        target: compForm.check_target.trim() ? null : required,
+    }, `${fieldId}-comp`);
+    const incidentErrors = useFieldErrors({
+        title: incidentForm.title.trim() ? null : required,
+    }, `${fieldId}-incident`);
+    const closePage = () => { setShowCreatePage(false); pageErrors.reset(); };
+    const closeComponent = () => { setShowCreateComponent(false); compErrors.reset(); };
+    const closeIncident = () => { setShowCreateIncident(false); incidentErrors.reset(); };
 
     const isAdmin = Boolean(user?.is_admin);
 
@@ -231,31 +251,35 @@ const StatusPages = () => {
     };
 
     const handleCreatePage = async () => {
+        if (!pageErrors.attempt()) return;
         try {
             const page = await api.createStatusPage({
                 ...pageForm,
                 slug: normalizeSlug(pageForm.slug),
             });
             toast.success(t('app.statusPages.statusPageCreated', 'Status page created'));
-            setShowCreatePage(false);
+            closePage();
             setPageForm(defaultPageForm);
             setPages((current) => [...current, page].sort((a, b) => a.name.localeCompare(b.name)));
             await loadPageDetails(page);
         } catch (err) {
+            if (pageErrors.fromServer(err)) return;
             toastError(toast, t('app.statusPages.failedToCreateStatusPage', "Couldn't create the status page."), err);
         }
     };
 
     const handleCreateComponent = async () => {
         if (!selectedPage) return;
+        if (!compErrors.attempt()) return;
         try {
             await api.createStatusComponent(selectedPage.id, compForm);
             toast.success(t('app.statusPages.componentAdded', 'Component added'));
-            setShowCreateComponent(false);
+            closeComponent();
             setCompForm(defaultCompForm);
             await loadPageDetails(selectedPage);
             await loadPages();
         } catch (err) {
+            if (compErrors.fromServer(err)) return;
             toastError(toast, t('app.statusPages.failedToAddComponent', "Couldn't add the component."), err);
         }
     };
@@ -272,13 +296,15 @@ const StatusPages = () => {
 
     const handleCreateIncident = async () => {
         if (!selectedPage) return;
+        if (!incidentErrors.attempt()) return;
         try {
             await api.createStatusIncident(selectedPage.id, incidentForm);
             toast.success(t('app.statusPages.incidentCreated', 'Incident created'));
-            setShowCreateIncident(false);
+            closeIncident();
             setIncidentForm(defaultIncidentForm);
             await loadPageDetails(selectedPage);
         } catch (err) {
+            if (incidentErrors.fromServer(err)) return;
             toastError(toast, t('app.statusPages.failedToCreateIncident', "Couldn't create the incident."), err);
         }
     };
@@ -336,14 +362,16 @@ const StatusPages = () => {
                     {t('common.actions.refresh', 'Refresh')}
                 </Button>
                 {isAdmin && (
-                    <Button size="sm" onClick={() => setShowCreatePage(true)}>
-                        <Plus size={16} />
-                        {t('app.statusPages.createPage', 'Create page')}
-                    </Button>
+                    <PagePrimaryButton
+                        id="status-pages-create"
+                        label={t('app.statusPages.createPage', 'Create page')}
+                        shortLabel={t('common.actions.create', 'Create')}
+                        onClick={() => setShowCreatePage(true)}
+                    />
                 )}
             </>
         ),
-        [isAdmin]
+        [isAdmin, !!selectedPage, detailTab]
     );
 
     if (loading) return <PageLoader />;
@@ -423,13 +451,19 @@ const StatusPages = () => {
                             </div>
                         </div>
 
-                        <Tabs defaultValue="components">
-                            <TabsList>
-                                <TabsTrigger value="components">{t('app.statusPages.components', 'Components')}</TabsTrigger>
-                                <TabsTrigger value="incidents">{t('app.statusPages.incidents', 'Incidents')}</TabsTrigger>
-                                <TabsTrigger value="settings">{t('app.statusPages.page', 'Page')}</TabsTrigger>
-                            </TabsList>
-
+                        <div className="sk-viewswitch">
+                            <SegControl
+                                aria-label={t('app.statusPages.views', 'Status page views')}
+                                value={detailTab}
+                                onChange={setDetailTab}
+                                options={[
+                                    { value: 'components', label: t('app.statusPages.components', 'Components') },
+                                    { value: 'incidents', label: t('app.statusPages.incidents', 'Incidents') },
+                                    { value: 'settings', label: t('app.statusPages.page', 'Page') },
+                                ]}
+                            />
+                        </div>
+                        <Tabs value={detailTab} onValueChange={setDetailTab}>
                             <TabsContent value="components">
                                 <div className="status-actions-bar">
                                     {isAdmin && (
@@ -564,7 +598,7 @@ const StatusPages = () => {
                                                             ))}
                                                         </>
                                                     )}
-                                                    <Button size="sm" variant="ghost" onClick={() => setDeleteConfirm({ type: 'incident', item: incident })}>
+                                                    <Button size="sm" variant="ghost" onClick={() => setDeleteConfirm({ type: 'incident', item: incident })} aria-label={t('common.actions.delete', 'Delete')}>
                                                         <Trash2 size={14} />
                                                     </Button>
                                                 </div>
@@ -612,40 +646,38 @@ const StatusPages = () => {
 
             <Modal
                 open={showCreatePage}
-                onClose={() => setShowCreatePage(false)}
+                onClose={closePage}
+                onSubmit={handleCreatePage}
                 title={t('app.statusPages.createStatusPage', 'Create status page')}
                 size="lg"
                 className="status-modal"
                 footer={(
                     <>
-                        <Button variant="outline" onClick={() => setShowCreatePage(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button onClick={handleCreatePage} disabled={!pageForm.name.trim() || !pageForm.slug.trim()}>
+                        <Button type="button" variant="outline" onClick={closePage}>{t('common.actions.cancel', 'Cancel')}</Button>
+                        <Button type="submit">
                             {t('common.actions.create', 'Create')}
                         </Button>
                     </>
                 )}
             >
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-page-name`}>{t('common.labels.name', 'Name')}</label>
-                    <Input id={`${fieldId}-page-name`} value={pageForm.name} onChange={(e) => handlePageNameChange(e.target.value)} autoFocus />
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-page-slug`}>{t('app.statusPages.slug', 'Slug')}</label>
+                <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-page-name`} required error={pageErrors.error('name')}>
+                    <Input id={`${fieldId}-page-name`} value={pageForm.name} onChange={(e) => { pageErrors.clear('name'); handlePageNameChange(e.target.value); }} onBlur={() => pageErrors.touch('name')} autoFocus />
+                </FormField>
+                <FormField label={t('app.statusPages.slug', 'Slug')} htmlFor={`${fieldId}-page-slug`} required hint={`/status/${pageForm.slug || 'my-services'}`} error={pageErrors.error('slug')}>
                     <Input id={`${fieldId}-page-slug`}
                         value={pageForm.slug}
-                        onChange={(e) => setPageForm({ ...pageForm, slug: normalizeSlug(e.target.value) })}
+                        onChange={(e) => { pageErrors.clear('slug'); setPageForm({ ...pageForm, slug: normalizeSlug(e.target.value) }); }}
+                        onBlur={() => pageErrors.touch('slug')}
                         placeholder="my-services"
                     />
-                    <span className="form-help">/status/{pageForm.slug || 'my-services'}</span>
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-page-description`}>{t('common.labels.description', 'Description')}</label>
+                </FormField>
+                <FormField label={t('common.labels.description', 'Description')} htmlFor={`${fieldId}-page-description`}>
                     <Textarea id={`${fieldId}-page-description`}
                         value={pageForm.description}
                         onChange={(e) => setPageForm({ ...pageForm, description: e.target.value })}
                         rows={3}
                     />
-                </div>
+                </FormField>
             </Modal>
 
             <Modal
@@ -684,30 +716,28 @@ const StatusPages = () => {
 
             <Modal
                 open={showCreateComponent}
-                onClose={() => setShowCreateComponent(false)}
+                onClose={closeComponent}
+                onSubmit={handleCreateComponent}
                 title={t('app.statusPages.addComponent', 'New component')}
                 size="lg"
                 className="status-modal"
                 footer={(
                     <>
-                        <Button variant="outline" onClick={() => setShowCreateComponent(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button onClick={handleCreateComponent} disabled={!compForm.name.trim() || !compForm.check_target.trim()}>
+                        <Button type="button" variant="outline" onClick={closeComponent}>{t('common.actions.cancel', 'Cancel')}</Button>
+                        <Button type="submit">
                             {t('app.statusPages.createComponent', 'Create component')}
                         </Button>
                     </>
                 )}
             >
                 <div className="status-modal-grid">
-                    <div className="form-group">
-                        <label htmlFor={`${fieldId}-comp-name`}>{t('common.labels.name', 'Name')}</label>
-                        <Input id={`${fieldId}-comp-name`} value={compForm.name} onChange={(e) => setCompForm({ ...compForm, name: e.target.value })} autoFocus />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor={`${fieldId}-comp-group`}>{t('app.statusPages.group', 'Group')}</label>
+                    <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-comp-name`} required error={compErrors.error('name')}>
+                        <Input id={`${fieldId}-comp-name`} value={compForm.name} onChange={(e) => { compErrors.clear('name'); setCompForm({ ...compForm, name: e.target.value }); }} onBlur={() => compErrors.touch('name')} autoFocus />
+                    </FormField>
+                    <FormField label={t('app.statusPages.group', 'Group')} htmlFor={`${fieldId}-comp-group`}>
                         <Input id={`${fieldId}-comp-group`} value={compForm.group} onChange={(e) => setCompForm({ ...compForm, group: e.target.value })} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="status-comp-check-type">{t('app.statusPages.checkType', 'Check type')}</label>
+                    </FormField>
+                    <FormField label={t('app.statusPages.checkType', 'Check type')} htmlFor="status-comp-check-type">
                         <Select
                             value={compForm.check_type}
                             onValueChange={(v) => setCompForm({ ...compForm, check_type: v })}
@@ -720,58 +750,55 @@ const StatusPages = () => {
                                 <SelectItem value="ping">{t('app.statusPages.ping', 'Ping')}</SelectItem>
                             </SelectContent>
                         </Select>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor={`${fieldId}-comp-target`}>{t('common.labels.target', 'Target')}</label>
+                    </FormField>
+                    <FormField label={t('common.labels.target', 'Target')} htmlFor={`${fieldId}-comp-target`} required error={compErrors.error('target')}>
                         <Input id={`${fieldId}-comp-target`}
                             value={compForm.check_target}
-                            onChange={(e) => setCompForm({ ...compForm, check_target: e.target.value })}
+                            onChange={(e) => { compErrors.clear('target'); setCompForm({ ...compForm, check_target: e.target.value }); }}
+                            onBlur={() => compErrors.touch('target')}
                             placeholder={CHECK_TARGET_PLACEHOLDERS[compForm.check_type]}
                         />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor={`${fieldId}-comp-interval`}>{t('app.statusPages.interval', 'Interval')}</label>
+                    </FormField>
+                    <FormField label={t('app.statusPages.interval', 'Interval')} htmlFor={`${fieldId}-comp-interval`}>
                         <Input id={`${fieldId}-comp-interval`}
                             type="number"
                             min="30"
                             value={compForm.check_interval}
                             onChange={(e) => setCompForm({ ...compForm, check_interval: parseInt(e.target.value, 10) || 60 })}
                         />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor={`${fieldId}-comp-timeout`}>{t('app.statusPages.timeout', 'Timeout')}</label>
+                    </FormField>
+                    <FormField label={t('app.statusPages.timeout', 'Timeout')} htmlFor={`${fieldId}-comp-timeout`}>
                         <Input id={`${fieldId}-comp-timeout`}
                             type="number"
                             min="1"
                             value={compForm.check_timeout}
                             onChange={(e) => setCompForm({ ...compForm, check_timeout: parseInt(e.target.value, 10) || 10 })}
                         />
-                    </div>
+                    </FormField>
                 </div>
             </Modal>
 
             <Modal
                 open={showCreateIncident}
-                onClose={() => setShowCreateIncident(false)}
+                onClose={closeIncident}
+                onSubmit={handleCreateIncident}
                 title={t('app.statusPages.createIncident', 'Create incident')}
                 size="lg"
                 className="status-modal"
                 footer={(
                     <>
-                        <Button variant="outline" onClick={() => setShowCreateIncident(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button onClick={handleCreateIncident} disabled={!incidentForm.title.trim()}>
+                        <Button type="button" variant="outline" onClick={closeIncident}>{t('common.actions.cancel', 'Cancel')}</Button>
+                        <Button type="submit">
                             {t('app.statusPages.createIncident', 'Create incident')}
                         </Button>
                     </>
                 )}
             >
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-incident-title`}>{t('common.labels.title', 'Title')}</label>
-                    <Input id={`${fieldId}-incident-title`} value={incidentForm.title} onChange={(e) => setIncidentForm({ ...incidentForm, title: e.target.value })} autoFocus />
-                </div>
+                <FormField label={t('common.labels.title', 'Title')} htmlFor={`${fieldId}-incident-title`} required error={incidentErrors.error('title')}>
+                    <Input id={`${fieldId}-incident-title`} value={incidentForm.title} onChange={(e) => { incidentErrors.clear('title'); setIncidentForm({ ...incidentForm, title: e.target.value }); }} onBlur={() => incidentErrors.touch('title')} autoFocus />
+                </FormField>
                 <div className="status-modal-grid">
-                    <div className="form-group">
-                        <label htmlFor="status-incident-status">{t('common.labels.status', 'Status')}</label>
+                    <FormField label={t('common.labels.status', 'Status')} htmlFor="status-incident-status">
                         <Select
                             value={incidentForm.status}
                             onValueChange={(v) => setIncidentForm({ ...incidentForm, status: v })}
@@ -783,9 +810,8 @@ const StatusPages = () => {
                                 ))}
                             </SelectContent>
                         </Select>
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="status-incident-impact">{t('app.statusPages.impact', 'Impact')}</label>
+                    </FormField>
+                    <FormField label={t('app.statusPages.impact', 'Impact')} htmlFor="status-incident-impact">
                         <Select
                             value={incidentForm.impact}
                             onValueChange={(v) => setIncidentForm({ ...incidentForm, impact: v })}
@@ -797,16 +823,15 @@ const StatusPages = () => {
                                 ))}
                             </SelectContent>
                         </Select>
-                    </div>
+                    </FormField>
                 </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-incident-body`}>{t('common.labels.description', 'Description')}</label>
+                <FormField label={t('common.labels.description', 'Description')} htmlFor={`${fieldId}-incident-body`}>
                     <Textarea id={`${fieldId}-incident-body`}
                         value={incidentForm.body}
                         onChange={(e) => setIncidentForm({ ...incidentForm, body: e.target.value })}
                         rows={4}
                     />
-                </div>
+                </FormField>
             </Modal>
 
             <ConfirmDialog

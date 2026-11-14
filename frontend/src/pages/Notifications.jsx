@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell, CheckCheck, ScrollText, X } from 'lucide-react';
+import { Bell, CheckCheck, Filter, RotateCcw, ScrollText, X } from 'lucide-react';
 import api from '../services/api';
 import PageLayout from '../layouts/PageLayout';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,8 @@ import { useAuth } from '../contexts/useAuth.js';
 import { useNotifications } from '../contexts/useNotifications.js';
 import { timeAgo } from '../utils/time';
 import { useTranslation } from 'react-i18next';
+import { Sheet, SheetTrigger, SheetClose, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 const SEVERITY_DOT = {
     critical: '#fb6f6f',
@@ -46,6 +48,14 @@ export default function Notifications() {
     const [unreadCount, setUnreadCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [hasMore, setHasMore] = useState(false);
+    const compact = useMediaQuery('(max-width: 1359px)');
+    const activeFilters = (category ? 1 : 0) + (severity ? 1 : 0);
+
+    const clearFilters = () => { setCategory(''); setSeverity(''); };
+    const activePills = [
+        category && { key: 'category', set: setCategory, ...CATEGORY_CHIPS.find((c) => c.key === category) },
+        severity && { key: 'severity', set: setSeverity, ...SEVERITY_CHIPS.find((c) => c.key === severity) },
+    ].filter(Boolean);
 
     const fetchPage = useCallback(async (startOffset, replace) => {
         setLoading(true);
@@ -89,51 +99,7 @@ export default function Notifications() {
         fetchPage(0, true);
     };
 
-    // Live system notices (admin config hints) come from the shared context so they
-    // surface here too, above the bus history.
-    const noticeItems = (ctxItems || []).filter((it) => it.kind === 'notice');
-
-    return (
-        <PageLayout
-            icon={<Bell size={18} />}
-            title={t('app.notifications.notifications', 'Notifications')}
-            meta={unreadCount ? `${unreadCount} unread` : 'All caught up'}
-            actions={(
-                <>
-                    {isAdmin && (
-                        <Button variant="ghost" size="sm" onClick={() => navigate('/admin/notifications')}>
-                            <ScrollText size={15} /> {t('app.notifications.deliveryLog', 'Delivery log')}
-                        </Button>
-                    )}
-                    <Button variant="outline" size="sm" onClick={onMarkAll} disabled={!unreadCount}>
-                        <CheckCheck size={15} /> {category ? t('app.notifications.markCategoryRead', 'Mark {{category}} read', { category }) : t('app.notifications.markAllRead', 'Mark all read')}
-                    </Button>
-                </>
-            )}
-        >
-            <div className="sk-notif-page">
-                <div className="sk-notif-page__filters" role="tablist" aria-label={t('app.notifications.filterNotifications', 'Filter notifications')}>
-                    <Button variant="unstyled"
-                        type="button"
-                        role="tab"
-                        aria-selected={!unreadOnly}
-                        className={!unreadOnly ? 'is-active' : ''}
-                        onClick={() => setUnreadOnly(false)}
-                    >
-                        {t('common.labels.all', 'All')}
-                    </Button>
-                    <Button variant="unstyled"
-                        type="button"
-                        role="tab"
-                        aria-selected={unreadOnly}
-                        className={unreadOnly ? 'is-active' : ''}
-                        onClick={() => setUnreadOnly(true)}
-                    >
-                        {t('app.notifications.unread', 'Unread')}
-                    </Button>
-                </div>
-
-                <div className="sk-notif-page__chips">
+    const categoryChips = (
                     <div className="sk-notif-chipset" aria-label={t('app.notifications.filterByCategory', 'Filter by category')}>
                         {CATEGORY_CHIPS.map((c) => (
                             <Button variant="unstyled"
@@ -146,6 +112,8 @@ export default function Notifications() {
                             </Button>
                         ))}
                     </div>
+    );
+    const severityChips = (
                     <div className="sk-notif-chipset" aria-label={t('app.notifications.filterBySeverity', 'Filter by severity')}>
                         {SEVERITY_CHIPS.map((s) => (
                             <Button variant="unstyled"
@@ -158,15 +126,118 @@ export default function Notifications() {
                             </Button>
                         ))}
                     </div>
+    );
+    const chipsets = <>{categoryChips}{severityChips}</>;
+
+    // Live system notices (admin config hints) come from the shared context so they
+    // surface here too, above the bus history.
+    const noticeItems = (ctxItems || []).filter((it) => it.kind === 'notice');
+
+    const emptyState = (
+        <div className={`sk-notif-page__state${noticeItems.length > 0 ? ' sk-notif-page__state--compact' : ''}`}>
+            <Bell size={26} aria-hidden="true" />
+            <p>{activeFilters > 0 ? t('app.notifications.noMatching', 'No matching notifications.') : unreadOnly ? t('app.notifications.noUnreadNotifications', 'No unread notifications.') : t('app.notifications.noNotificationsYet', 'No notifications yet.')}</p>
+            {activeFilters > 0 && (
+                <Button variant="outline" size="sm" onClick={clearFilters}>{t('app.notifications.clearFilters', 'Clear filters')}</Button>
+            )}
+        </div>
+    );
+
+    return (
+        <PageLayout
+            icon={<Bell size={18} />}
+            title={t('app.notifications.notifications', 'Notifications')}
+            meta={unreadCount ? t('app.notifications.unreadCount', '{{count}} unread', { count: unreadCount }) : t('app.notifications.allCaughtUp', 'All caught up')}
+            actions={(
+                <>
+                    {isAdmin && (
+                        <Button variant="ghost" size="sm" onClick={() => navigate('/admin/notifications')}>
+                            <ScrollText size={15} /> {t('app.notifications.deliveryLog', 'Delivery log')}
+                        </Button>
+                    )}
+                    <Button variant="outline" size="sm" onClick={onMarkAll} disabled={!unreadCount} disabledReason={t('app.notifications.noUnreadNotifications', 'No unread notifications.')}>
+                        <CheckCheck size={15} /> {category ? t('app.notifications.markCategoryRead', 'Mark {{category}} read', { category }) : t('app.notifications.markAllRead', 'Mark all read')}
+                    </Button>
+                </>
+            )}
+        >
+            <div className="sk-notif-page">
+                <div className="sk-notif-page__toolbar">
+                    <div className="sk-notif-page__filters" role="tablist" aria-label={t('app.notifications.filterNotifications', 'Filter notifications')}>
+                        <Button variant="unstyled"
+                            type="button"
+                            role="tab"
+                            aria-selected={!unreadOnly}
+                            className={!unreadOnly ? 'is-active' : ''}
+                            onClick={() => setUnreadOnly(false)}
+                        >
+                            {t('common.labels.all', 'All')}
+                        </Button>
+                        <Button variant="unstyled"
+                            type="button"
+                            role="tab"
+                            aria-selected={unreadOnly}
+                            className={unreadOnly ? 'is-active' : ''}
+                            onClick={() => setUnreadOnly(true)}
+                        >
+                            {t('app.notifications.unread', 'Unread')}
+                        </Button>
+                    </div>
+                    {compact ? (
+                        <Sheet>
+                            <SheetTrigger asChild>
+                                <Button variant="outline" size="sm" className={`sk-notif-page__filter-btn${activeFilters ? ' is-active' : ''}`} aria-label={t('app.notifications.filters', 'Filters')}>
+                                    <Filter size={15} aria-hidden="true" />
+                                    {activeFilters > 0 && <span className="sk-notif-page__filter-count">{activeFilters}</span>}
+                                </Button>
+                            </SheetTrigger>
+                            <SheetContent side="bottom" className="info-tip__sheet" overlayClassName="info-tip__overlay" aria-describedby={undefined}>
+                                <SheetTitle className="info-tip__sheet-title">{t('app.notifications.filters', 'Filters')}</SheetTitle>
+                                <div className="sk-notif-page__sheet">
+                                    <span className="sk-notif-page__sheet-label">{t('app.notifications.category', 'Category')}</span>
+                                    {categoryChips}
+                                    <span className="sk-notif-page__sheet-label">{t('common.labels.severity', 'Severity')}</span>
+                                    {severityChips}
+                                </div>
+                                <div className="sk-notif-page__sheet-footer">
+                                    <Button variant="outline" disabled={!activeFilters} disabledReason={t('app.notifications.noFiltersToReset', 'No filters to reset')} onClick={clearFilters}>
+                                        <RotateCcw size={15} aria-hidden="true" /> {t('app.notifications.reset', 'Reset')}
+                                    </Button>
+                                    <SheetClose asChild>
+                                        <Button>{t('app.notifications.done', 'Done')}</Button>
+                                    </SheetClose>
+                                </div>
+                            </SheetContent>
+                        </Sheet>
+                    ) : (
+                        <div className="sk-notif-page__chips">
+                            {chipsets}
+                            {activeFilters > 0 && (
+                                <Button variant="ghost" size="sm" onClick={clearFilters}>
+                                    <X size={15} aria-hidden="true" /> {t('app.notifications.clear', 'Clear')}
+                                </Button>
+                            )}
+                        </div>
+                    )}
+                    {compact && activePills.length > 0 && (
+                        <div className="sk-notif-page__pills">
+                            {activePills.map((p) => {
+                                const { label } = p;
+                                return (
+                                    <Button variant="unstyled" type="button" key={p.key} className="sk-notif-pill" onClick={() => p.set('')}
+                                        aria-label={t('app.notifications.removeFilter', 'Remove filter {{label}}', { label })}>
+                                        {label} <X size={12} aria-hidden="true" />
+                                    </Button>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
 
                 {loading && items.length === 0 && noticeItems.length === 0 ? (
                     <div className="sk-notif-page__state">{t('common.loading', 'Loading…')}</div>
                 ) : items.length === 0 && noticeItems.length === 0 ? (
-                    <div className="sk-notif-page__state">
-                        <Bell size={26} aria-hidden="true" />
-                        <p>{unreadOnly ? t('app.notifications.noUnreadNotifications', 'No unread notifications.') : t('app.notifications.noNotificationsYet', 'No notifications yet.')}</p>
-                    </div>
+                    emptyState
                 ) : (
                     <ul className="sk-notif-page__list">
                         {noticeItems.map((item) => (
@@ -220,6 +291,8 @@ export default function Notifications() {
                         ))}
                     </ul>
                 )}
+
+                {!loading && items.length === 0 && noticeItems.length > 0 && activeFilters > 0 && emptyState}
 
                 {hasMore && !loading && (
                     <div className="sk-notif-page__more">

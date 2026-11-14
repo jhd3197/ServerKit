@@ -249,6 +249,7 @@
         &:focus {
             outline: none;
             border-color: var(--accent-primary);
+            box-shadow: $focus-ring;
         }
     }
 
@@ -1252,6 +1253,7 @@
         &:focus {
             outline: none;
             border-color: var(--primary-color, #6366f1);
+            box-shadow: $focus-ring;
         }
 
         &:disabled {

@@ -225,6 +225,7 @@ const WorkspaceSettingsTab = ({ wsId, ws, onUpdate, user, isCurrent, onSetActive
                                 type="button"
                                 key={s.id}
                                 className={`ws-settings__navitem ${section === s.id ? 'is-active' : ''}`}
+                                aria-current={section === s.id ? 'page' : undefined}
                                 onClick={() => setSection(s.id)}
                             >
                                 <s.icon size={15} />

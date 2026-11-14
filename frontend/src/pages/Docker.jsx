@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { MetricCard, KpiBand } from '@/components/ds';
 import ServerPicker from '../components/ServerPicker';
 import PageLayout from '@/layouts/PageLayout';
-import { Box, Layers, HardDrive, Network as NetworkIcon, Package } from 'lucide-react';
+import { Box, Boxes, ChevronDown, Download, Power, RefreshCw, UserCheck, Layers, HardDrive, Network as NetworkIcon, Package } from 'lucide-react';
 import {
     ServerContext,
     VALID_TABS,
@@ -27,6 +27,7 @@ const Docker = () => {
     const [activeTab] = useTabParam('/docker', VALID_TABS);
     const [dockerStatus, setDockerStatus] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [retrying, setRetrying] = useState(false);
     const [selectedServer, setSelectedServer] = useState(LOCAL_DOCKER_TARGET);
     const [availableServers, setAvailableServers] = useState([LOCAL_DOCKER_TARGET]);
     const [stats, setStats] = useState({
@@ -65,8 +66,8 @@ const Docker = () => {
         return () => { cancelled = true; };
     }, []);
 
-    async function checkDockerStatus() {
-        setLoading(true);
+    async function checkDockerStatus(silent = false) {
+        if (!silent) setLoading(true);
         try {
             if (selectedServer.id === 'local') {
                 const status = await api.getDockerStatus();
@@ -91,6 +92,12 @@ const Docker = () => {
             setDockerStatus({ installed: false, error: err.message });
             setLoading(false);
         }
+    }
+
+    async function retry() {
+        setRetrying(true);
+        await checkDockerStatus(true);
+        setRetrying(false);
     }
 
     async function loadStats() {
@@ -165,51 +172,6 @@ const Docker = () => {
         return `${total} B`;
     }
 
-    if (loading) {
-        return <EmptyState loading loadingVariant="table" title={t('app.docker.checkingDockerStatus', 'Checking Docker status…')} />;
-    }
-
-    if (!dockerStatus?.installed) {
-        return (
-            <PageLayout className="docker-page" icon={<Box size={18} />} title={t('common.labels.docker', 'Docker')}>
-                <div className="docker-unavailable">
-                    <div className="docker-unavailable-icon">
-                        <svg viewBox="0 0 24 24" width="64" height="64" stroke="currentColor" fill="none" strokeWidth="1">
-                            <rect x="2" y="7" width="5" height="5" rx="1"/>
-                            <rect x="9" y="7" width="5" height="5" rx="1"/>
-                            <rect x="16" y="7" width="5" height="5" rx="1"/>
-                            <rect x="2" y="14" width="5" height="5" rx="1"/>
-                            <rect x="9" y="14" width="5" height="5" rx="1"/>
-                            <path d="M21 12c0 4-3 7-8 7s-8-3-8-7" strokeDasharray="2 2"/>
-                        </svg>
-                    </div>
-                    <h2>{t('app.docker.dockerNotAvailable', 'Docker not available')}</h2>
-                    <p className="docker-unavailable-message">
-                        {t('app.docker.dockerIsNotInstalledOrNot', 'Docker is not installed or not running on this system.')}
-                    </p>
-                    <div className="docker-unavailable-details">
-                        <code>{dockerStatus?.error || t('app.docker.couldntConnectToDaemon', "Couldn't connect to the Docker daemon.")}</code>
-                    </div>
-                    <div className="docker-unavailable-help">
-                        <h4>{t('app.docker.toUseDockerManagement', 'To use Docker management:')}</h4>
-                        <ul>
-                            <li>{t('app.docker.ensureDockerDesktopIsInstalledAnd', 'Ensure Docker Desktop is installed and running')}</li>
-                            <li>{t('app.docker.onLinuxMakeSureTheDocker', 'On Linux, make sure the Docker daemon is started')}</li>
-                            <li>{t('app.docker.verifyTheUserHasPermissionsTo', 'Verify the user has permissions to access Docker')}</li>
-                        </ul>
-                    </div>
-                    <Button onClick={checkDockerStatus}>
-                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" strokeWidth="2">
-                            <path d="M23 4v6h-6M1 20v-6h6"/>
-                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                        </svg>
-                        {t('app.docker.retryConnection', 'Retry connection')}
-                    </Button>
-                </div>
-            </PageLayout>
-        );
-    }
-
     const tabs = [
         { id: 'containers', label: t('app.docker.containers', 'Containers'), icon: Box },
         { id: 'compose', label: t('app.docker.compose', 'Compose'), icon: Package },
@@ -217,6 +179,60 @@ const Docker = () => {
         { id: 'volumes', label: t('app.docker.volumes', 'Volumes'), icon: HardDrive },
         { id: 'networks', label: t('app.docker.networks', 'Networks'), icon: NetworkIcon },
     ].map(({ id, label, icon: Icon }) => ({ to: `/docker/${id}`, label, icon: <Icon size={15} /> }));
+
+    if (loading) {
+        return (
+            <PageLayout className="docker-page" icon={<Box size={18} />} title={t('common.labels.docker', 'Docker')} tabs={tabs}>
+                <EmptyState loading loadingVariant="table" title={t('app.docker.checkingDockerStatus', 'Checking Docker status…')} />
+            </PageLayout>
+        );
+    }
+
+    if (!dockerStatus?.installed) {
+        return (
+            <PageLayout className="docker-page" icon={<Box size={18} />} title={t('common.labels.docker', 'Docker')}>
+                <div className="docker-unavailable">
+                    <div className="docker-unavailable-icon">
+                        <Boxes size={32} />
+                    </div>
+                    <h2>{t('app.docker.dockerNotAvailable', 'Docker not available')}</h2>
+                    <p className="docker-unavailable-message">
+                        {t('app.docker.dockerIsNotInstalledOrNot', 'Docker is not installed or not running on this system.')}
+                    </p>
+                    <ul className="docker-unavailable-steps">
+                        <li title={t('app.docker.ensureDockerDesktopIsInstalledAnd', 'Ensure Docker Desktop is installed and running')}>
+                            <Download size={18} />
+                            <span>{t('app.docker.installDocker', 'Install Docker')}</span>
+                        </li>
+                        <li title={t('app.docker.onLinuxMakeSureTheDocker', 'On Linux, make sure the Docker daemon is started')}>
+                            <Power size={18} />
+                            <span>{t('app.docker.startTheDaemon', 'Start the daemon')}</span>
+                        </li>
+                        <li title={t('app.docker.verifyTheUserHasPermissionsTo', 'Verify the user has permissions to access Docker')}>
+                            <UserCheck size={18} />
+                            <span>{t('app.docker.grantAccess', 'Grant access')}</span>
+                        </li>
+                    </ul>
+                    <details className="docker-unavailable-disclosure">
+                        <summary>
+                            {t('app.docker.details', 'Details')}
+                            <ChevronDown size={14} />
+                        </summary>
+                        <code>{dockerStatus?.error || t('app.docker.couldntConnectToDaemon', "Couldn't connect to the Docker daemon.")}</code>
+                        <ul>
+                            <li>{t('app.docker.ensureDockerDesktopIsInstalledAnd', 'Ensure Docker Desktop is installed and running')}</li>
+                            <li>{t('app.docker.onLinuxMakeSureTheDocker', 'On Linux, make sure the Docker daemon is started')}</li>
+                            <li>{t('app.docker.verifyTheUserHasPermissionsTo', 'Verify the user has permissions to access Docker')}</li>
+                        </ul>
+                    </details>
+                    <Button onClick={retry} disabled={retrying}>
+                        <RefreshCw size={16} className={retrying ? 'docker-unavailable-spin' : undefined} />
+                        {t('app.docker.retryConnection', 'Retry connection')}
+                    </Button>
+                </div>
+            </PageLayout>
+        );
+    }
 
     const hasMultipleTargets = availableServers.length > 1;
 

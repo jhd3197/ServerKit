@@ -4,6 +4,7 @@ import { ClipboardCheck } from 'lucide-react';
 import api from '../../services/api';
 import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
+import InfoTip from '@/components/InfoTip';
 import { Button } from '@/components/ui/button';
 import { ScoreGauge } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
@@ -59,18 +60,21 @@ const AuditTab = () => {
                     {!audit && !loading && !error && (
                         <EmptyState
                             icon={ClipboardCheck}
-                            title={t('app.auditTab.runASecurityAuditToCheck', 'Run a security audit to check your server\'s configuration.')}
+                            title={t('app.auditTab.noAuditYet', 'No audit yet')}
+                            description={(
+                                <>
+                                    {t('app.auditTab.checkThisServersSecurityPosture', "Check this server's security posture.")}
+                                    <InfoTip>{t('app.auditTab.runASecurityAuditToCheck', "Run a security audit to check your server's configuration and get a score with findings to fix.")}</InfoTip>
+                                </>
+                            )}
                         />
                     )}
 
-                    {loading && (
-                        <div className="loading-state">
-                            <div className="spinner"></div>
-                            <p>{t('app.auditTab.runningSecurityAudit', 'Running security audit…')}</p>
-                        </div>
+                    {loading && !audit && (
+                        <EmptyState loading loadingVariant="detail" title={t('app.auditTab.runningSecurityAudit', 'Running security audit…')} />
                     )}
 
-                    {audit && !loading && (
+                    {audit && (
                         <div className="audit-results">
                             <div className="sec-audit-score">
                                 <ScoreGauge

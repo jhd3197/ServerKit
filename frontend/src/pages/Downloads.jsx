@@ -3,8 +3,10 @@ import api from '../services/api';
 import { Button } from '@/components/ui/button';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import CopyField from '../components/CopyField';
+import InfoTip from '../components/InfoTip';
 import { scrollBehavior } from '@/utils/reducedMotion';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '../components/EmptyState';
 import { formatDate } from '@/utils/intl';
 
 // Platform icons as SVG components
@@ -134,10 +136,7 @@ function Downloads() {
     if (loading) {
         return (
             <div className="sk-tabgroup__inner downloads-page">
-                <div className="loading-container">
-                    <div className="loading-spinner"></div>
-                    <p>{t('app.downloads.loadingVersionInformation', 'Loading version information…')}</p>
-                </div>
+                <EmptyState loading loadingVariant="detail" title={t('app.downloads.loadingVersionInformation', 'Loading version information…')} />
             </div>
         );
     }
@@ -181,10 +180,8 @@ function Downloads() {
                     </div>
 
                     <section className="downloads-section">
-                        <h2>{t('app.downloads.directDownloads', 'Direct downloads')}</h2>
-                        <p className="section-description">
-                            {t('app.downloads.downloadTheAgentBinaryForYour', 'Download the agent binary for your platform. After downloading, follow the installation instructions below.')}
-                        </p>
+                        <h2>{t('app.downloads.directDownloads', 'Direct downloads')}
+                            {' '}<InfoTip>{t('app.downloads.downloadTheAgentBinaryForYour', 'Download the agent binary for your platform. After downloading, follow the installation instructions below.')}</InfoTip></h2>
 
                         <div className="download-cards">
                             {platforms.map((platform) => {
@@ -208,6 +205,7 @@ function Downloads() {
                                             className="download-btn"
                                             onClick={() => handleDownload(platform.os, platform.archKey)}
                                             disabled={!isAvailable}
+                                            disabledReason={t('app.downloads.noBuildPublishedForThisPlatform', 'No build published for this platform yet')}
                                         >
                                             <DownloadIcon />
                                             {isAvailable ? t('common.actions.download', 'Download') : t('app.downloads.notAvailable', 'Not available')}
@@ -219,10 +217,9 @@ function Downloads() {
                     </section>
 
                     <section className="downloads-section">
-                        <h2>{t('app.downloads.quickInstallCommands', 'Quick install commands')}</h2>
-                        <p className="section-description">
-                            {t('app.downloads.useTheseOneLinerCommandsTo', 'Use these one-liner commands to download and install the agent. Replace')} <code>YOUR_TOKEN</code> {t('app.downloads.withTheServerRegistrationToken', 'with the server registration token.')}
-                        </p>
+                        <h2>{t('app.downloads.quickInstallCommands', 'Quick install commands')}
+                            {' '}<InfoTip>{t('app.downloads.useTheseOneLinerCommandsTo', 'Use these one-liner commands to download and install the agent. Replace')} <code>YOUR_TOKEN</code> {t('app.downloads.withTheServerRegistrationToken', 'with the server registration token.')}</InfoTip></h2>
+                        <p className="section-description">{t('app.downloads.replaceTokenHint', 'Replace')} <code>YOUR_TOKEN</code></p>
 
                         <div className="install-commands">
                             <div className="command-block">

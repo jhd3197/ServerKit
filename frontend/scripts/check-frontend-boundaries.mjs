@@ -86,7 +86,6 @@ const LEGACY_COLOR_LITERALS = new Map(Object.entries({
     'styles/pages/_file-manager.scss': 10,
     'styles/pages/_git.scss': 6,
     'styles/pages/_import-wizard.scss': 1,
-    'styles/pages/_marketplace.scss': 2,
     'styles/pages/_notification-center.scss': 4,
     'styles/pages/_settings.scss': 14,
     'styles/pages/_setup-wizard.scss': 5,
@@ -227,7 +226,7 @@ for (const file of LEGACY_POLLERS.keys()) {
 const ADOPTION_CEILINGS = [
     {
         name: 'raw api.* calls in pages/ (E1: useServerQuery/useServerMutation)',
-        ceiling: 398,
+        ceiling: 371,
         include: (file) => file.startsWith('pages/'),
         pattern: /\bapi\s*\.\s*\w+\s*\(/g,
     },
@@ -241,7 +240,7 @@ const ADOPTION_CEILINGS = [
     },
     {
         name: 'hand-rolled form-group blocks (F2: FormField/useForm)',
-        ceiling: 321,
+        ceiling: 206,
         include: (file) => file.startsWith('pages/') || file.startsWith('components/'),
         pattern: /form-group/g,
     },

@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import ProtectionStatusCard from './ProtectionStatusCard';
 import ScheduleCard from './ScheduleCard';
 import BackupHistoryList from './BackupHistoryList';
+import ErrorState from '../ErrorState';
 import BackupCalendar from './BackupCalendar';
 import BackupDetailDrawer from './BackupDetailDrawer';
 import RestoreDrawer from './RestoreDrawer';
@@ -40,6 +41,7 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
     const [view, setView] = useState(null);   // policy view payload
     const [runs, setRuns] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const [saving, setSaving] = useState(false);
     const [backingUp, setBackingUp] = useState(false);
     const [drilling, setDrilling] = useState(false);
@@ -77,7 +79,9 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
             ]);
             setView(policyView);
             setRuns(runsResp?.runs || []);
+            setLoadError(null);
         } catch (err) {
+            setLoadError(err);
             toastError(toast, t('app.protectionPanel.failedToLoadProtectionSettings', "Couldn't load protection settings."), err);
         } finally {
             setLoading(false);
@@ -274,6 +278,12 @@ export default function ProtectionPanel({ targetType, targetId, targetName, show
                             <BackupCalendar
                                 runs={runs}
                                 onDayClick={(date) => { setDayFilter(date); setHistoryView('list'); }}
+                            />
+                        ) : loadError && !view ? (
+                            <ErrorState
+                                title={t('app.protectionPanel.failedToLoadProtectionSettings', "Couldn't load protection settings.")}
+                                error={loadError}
+                                onRetry={() => { setLoading(true); load(); }}
                             />
                         ) : (
                             <BackupHistoryList

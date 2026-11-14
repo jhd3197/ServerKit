@@ -1,15 +1,18 @@
 import { useCallback, useState, useEffect, useMemo  } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Layers, Plus, Square, Play, RotateCw, GitBranch, Github, FolderOpen, FileArchive, FolderKanban, ArrowDownToLine } from 'lucide-react';
+import { Layers, Plus, Square, Play, RotateCw, GitBranch, FolderOpen, FileArchive, FolderKanban, ArrowDownToLine } from 'lucide-react';
+import { SiGithub as Github } from 'react-icons/si';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { getServiceType, getStatusConfig, formatRelativeTime } from '../utils/serviceTypes';
 import ResourceListPage from '../components/layouts/ResourceListPage';
+import InfoTip from '@/components/InfoTip';
 import BandwidthSparkline from '../components/BandwidthSparkline';
 import { formatBytes } from '../utils/formatBytes';
 import { Pill, ServiceTile, EnvTag, SearchField, serviceStatusKind } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Label } from '@/components/ui/label';
 import {
     Select,
@@ -200,18 +203,18 @@ const Services = () => {
 
     useTopbarActions(() =>
         <>
-            <Button variant="outline" size="sm" asChild>
-                <Link to="/imports">
+            <Button variant="outline" size="sm" asChild title={t('app.services.importASite', 'Import a site')}>
+                <Link to="/imports" aria-label={t('app.services.importASite', 'Import a site')}>
                     <ArrowDownToLine size={16} />
-                    {t('app.services.importASite', 'Import a site')}
+                    {t('common.actions.import', 'Import')}
                 </Link>
             </Button>
-            <Button size="sm" asChild>
-                <Link to="/services/new">
-                    <Plus size={16} />
-                    {t('app.services.newService', 'New service')}
-                </Link>
-            </Button>
+            <PagePrimaryButton
+                id="services-new"
+                label={t('app.services.newService', 'New service')}
+                shortLabel={t('common.actions.new', 'New')}
+                to="/services/new"
+            />
             <SearchField
                 value={searchTerm}
                 onSearch={setSearchTerm}
@@ -399,7 +402,7 @@ const Services = () => {
         <ResourceListPage
             className="services-page"
             loading={loading}
-            loadingTitle="Loading services..."
+            loadingTitle={t('app.services.loadingServices', 'Loading services...')}
             storageKey="serverkit-list-services"
             viewPageKey="services"
             noun="services"
@@ -430,16 +433,19 @@ const Services = () => {
                 </>
             }
             emptyIcon={Layers}
-            emptyTitle="No services found"
-            emptyDescription="Connect a repository or install a template to get started"
+            emptyTitle={t('app.services.noServicesYet', 'No services yet')}
+            emptyDescription={<>{t('app.services.emptyShort', 'Connect a repo or install a template.')} <InfoTip subject={t('app.services.noServicesYet', 'No services yet')}>{t('app.services.emptyFull', 'Connect a Git repository, upload files, or install a ready-made template to deploy your first service.')}</InfoTip></>}
             emptyAction={
                 <Button asChild>
-                    <Link to="/services/new">{t('app.services.createService', 'New service')}</Link>
+                    <Link to="/services/new">
+                        <Plus size={16} />
+                        {t('app.services.createService', 'New service')}
+                    </Link>
                 </Button>
             }
             filteredEmptyIcon={Layers}
-            filteredEmptyTitle="No services found"
-            filteredEmptyDescription="Try adjusting your search or filter"
+            filteredEmptyTitle={t('app.services.noServicesFound', 'No services found')}
+            filteredEmptyDescription={t('app.services.tryAdjustingFilter', 'Try adjusting your search or filter')}
         >
             <MoveToProjectDialog
                 open={showMoveDialog}

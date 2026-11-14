@@ -328,8 +328,8 @@ const InvitationsTab = () => {
 
             {error && <div className="error-message" role="alert">{error}</div>}
 
-            {loading ? (
-                <div className="loading-state">{t('app.invitationsTab.loadingInvitations', 'Loading invitations…')}</div>
+            {loading && invitations.length === 0 ? (
+                <EmptyState loading loadingVariant="table" loadingRows={4} title={t('app.invitationsTab.loadingInvitations', 'Loading invitations…')} />
             ) : invitations.length === 0 && !error ? (
                 <EmptyState title={t('app.invitationsTab.noInvitationsYet', 'No invitations yet')} />
             ) : (

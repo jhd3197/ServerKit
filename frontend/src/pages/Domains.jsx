@@ -8,11 +8,15 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useAuth } from '../contexts/useAuth.js';
 import EmptyState from '../components/EmptyState';
+import InfoTip from '@/components/InfoTip';
 import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import DomainField from '@/components/DomainField';
 import { attachDomain } from '@/services/attachDomain';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -167,6 +171,14 @@ const Domains = () => {
     const [acmeContact, setAcmeContact] = useState('');
     const [actionLoading, setActionLoading] = useState(false);
 
+    const addErrors = useFieldErrors({
+        app: selectedAppId ? null : t('app.domains.serviceRequired', 'Choose a service.'),
+        domain: domainName ? null : (domainInfo && !domainInfo.empty
+            ? t('app.domains.domainRequired', 'Enter a valid domain.')
+            : t('common.validation.domainEmpty', 'Enter a domain.')),
+    }, fieldId);
+    const closeAdd = () => { setShowAddModal(false); addErrors.reset(); };
+
     useEffect(() => { loadData(); }, []);
 
     // The panel remembers one Let's Encrypt contact; this modal used to ask
@@ -242,18 +254,25 @@ const Domains = () => {
 
     async function handleAddDomain(e) {
         e.preventDefault();
-        if (!domainName || !selectedAppId) return;
+        if (!addErrors.attempt()) return;
         const appId = parseInt(selectedAppId, 10);
         try {
             setActionLoading(true);
             await attachDomain(appId, domainName, domainInfo, { isPrimary });
-            setShowAddModal(false);
+            closeAdd();
             setDomainName('');
             setSelectedAppId('');
             setIsPrimary(false);
             loadData();
         } catch (err) {
-            setError(err.message);
+            // Field-keyed errors, or a message that is plainly about the
+            // domain name (duplicate / invalid), land at the field; anything
+            // else stays in the banner.
+            const msg = err?.message || '';
+            const pinned = addErrors.fromServer(err)
+                || (/\b(domain|hostname)\b/i.test(msg) && /already|exists|invalid|in use|taken|not allowed/i.test(msg)
+                    && addErrors.fromServer({ errors: { domain: msg } }));
+            if (!pinned) setError(msg);
         } finally {
             setActionLoading(false);
         }
@@ -618,9 +637,12 @@ const Domains = () => {
     // two fixed-width icon buttons.
     useTopbarActions(() => (
         <>
-            <Button size="sm" onClick={() => setShowAddModal(true)}>
-                <Plus size={15} /> {t('app.domains.addDomain', 'Add domain')}
-            </Button>
+            <PagePrimaryButton
+                id="domains-add"
+                label={t('app.domains.addDomain', 'Add domain')}
+                shortLabel={t('common.actions.add', 'Add')}
+                onClick={() => setShowAddModal(true)}
+            />
             <Button variant="outline" size="sm" onClick={loadData}>
                 <RefreshCw size={15} /> {t('app.domains.checkDns', 'Check DNS')}
             </Button>
@@ -665,7 +687,12 @@ const Domains = () => {
                 <EmptyState
                     icon={Globe}
                     title={t('app.domains.noDomainsYet', 'No domains yet')}
-                    description={t('app.domains.attachADomainToAnApplication', 'Attach a domain to a service, or connect a DNS provider to see its zones here.')}
+                    description={(
+                        <>
+                            {t('app.domains.attachADomainOrConnectDns', 'Attach a domain or connect DNS.')}
+                            <InfoTip>{t('app.domains.attachADomainToAnApplication', 'Attach a domain to a service, or connect a DNS provider to see its zones here.')}</InfoTip>
+                        </>
+                    )}
                     action={<Button onClick={() => setShowAddModal(true)}><Plus size={16} /> {t('app.domains.addDomain2', 'Add domain')}</Button>}
                 />
             ) : (
@@ -895,31 +922,31 @@ const Domains = () => {
             </Drawer>
 
             {/* ── Add Domain Modal ───────────────────────────── */}
-            <Modal open={showAddModal} onClose={() => setShowAddModal(false)} title={t('app.domains.addDomain2', 'Add domain')}>
-                <form onSubmit={handleAddDomain}>
-                    <div className="form-group">
-                        <Label htmlFor={`${fieldId}-app`}>{t('app.domains.application', 'Service')}</Label>
-                        <Select value={selectedAppId} onValueChange={setSelectedAppId} required>
-                            <SelectTrigger id={`${fieldId}-app`}><SelectValue placeholder={t('app.domains.selectAnApplication', 'Select a service')} /></SelectTrigger>
+            <Modal open={showAddModal} onClose={closeAdd} title={t('app.domains.addDomain2', 'Add domain')}>
+                <form onSubmit={handleAddDomain} noValidate>
+                    <FormField label={t('app.domains.application', 'Service')} htmlFor={`${fieldId}-app`} required error={addErrors.error('app')}>
+                        <Select value={selectedAppId} onValueChange={(v) => { addErrors.clear('app'); setSelectedAppId(v); }}>
+                            <SelectTrigger id={`${fieldId}-app`} onBlur={() => addErrors.touch('app')}><SelectValue placeholder={t('app.domains.selectAnApplication', 'Select a service')} /></SelectTrigger>
                             <SelectContent>
                                 {apps.map(app => (
                                     <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>
                                 ))}
                             </SelectContent>
                         </Select>
-                    </div>
-                    <div className="form-group">
-                        <Label htmlFor={`${fieldId}-domain`}>{t('common.labels.domain', 'Domain')}</Label>
+                    </FormField>
+                    <FormField label={t('common.labels.domain', 'Domain')} htmlFor={`${fieldId}-domain`} required error={addErrors.error('domain')}>
                         {showAddModal && (
+                            <div onBlur={() => addErrors.touch('domain')}>
                             <DomainField
                                 id={`${fieldId}-domain`}
                                 exclude={domains.map((d) => d.name)}
                                 rejectExisting
-                                onChange={(name, info) => { setDomainName(name); setDomainInfo(info); }}
+                                onChange={(name, info) => { addErrors.clear('domain'); setDomainName(name); setDomainInfo(info); }}
                                 disabled={actionLoading}
                             />
+                            </div>
                         )}
-                    </div>
+                    </FormField>
                     {domainInfo?.mode !== 'subdomain' && (
                         <div className="form-group">
                             <label className="checkbox-label">
@@ -929,8 +956,8 @@ const Domains = () => {
                         </div>
                     )}
                     <div className="modal-actions">
-                        <Button type="button" variant="outline" onClick={() => setShowAddModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button type="submit" disabled={actionLoading || !domainName || !selectedAppId}>{actionLoading ? t('app.domains.adding', 'Adding…') : t('app.domains.addDomain', 'Add domain')}</Button>
+                        <Button type="button" variant="outline" onClick={closeAdd}>{t('common.actions.cancel', 'Cancel')}</Button>
+                        <Button type="submit" disabled={actionLoading}>{actionLoading ? t('app.domains.adding', 'Adding…') : t('app.domains.addDomain', 'Add domain')}</Button>
                     </div>
                 </form>
             </Modal>

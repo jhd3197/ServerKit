@@ -227,10 +227,6 @@
             "viewRelease": "Voir la version",
             "youReUpToDate": "Vous êtes à jour !"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "Ajouter un mot de passe ou 2FA",
-            "secureYourAccount": "Sécurisez votre compte"
-        },
         "activityTab": {
             "actionType": "Type d'action",
             "actionsThisWeek": "actions cette semaine",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "Mise à niveau déclenchée pour tous les agents en ligne",
             "versionDistribution": "Distribution des versions",
             "versions": "Versions",
-            "viewDetails": "Afficher les détails"
+            "viewDetails": "Afficher les détails",
+            "selectAVersionFirst": "Sélectionnez d'abord une version"
         },
         "ai": {
             "assistant": "Assistant"
@@ -612,7 +609,8 @@
             "remote": "Télécommande",
             "restoreDrills": "Restaurer les exercices",
             "turnOnProtectionOrClickBack": "Activez la protection ou cliquez sur Sauvegarder maintenant.",
-            "verifyRemoteCopy": "Vérifier la copie à distance"
+            "verifyRemoteCopy": "Vérifier la copie à distance",
+            "onlySuccessfulBackupsCanBeRestored": "Seules les sauvegardes réussies peuvent être restaurées"
         },
         "backupTabs": {
             "schedules": "Horaires",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "Télécharger automatiquement de nouvelles sauvegardes sur le stockage distant",
             "b2GbMonth": "B2 ($/Go/mois)",
             "backUpNow": "Sauvegarder maintenant",
+            "backUpShort": "Sauvegarder",
             "backblazeB2": "Backblaze B2",
             "backupDeleted": "Sauvegarde supprimée",
             "backupName": "Nom de la sauvegarde",
@@ -667,6 +666,7 @@
             "database": "Base de données",
             "databaseBackupCreated": "Sauvegarde de base de données créée",
             "databaseName": "Nom de la base de données",
+            "databaseNameRequired": "Saisissez le nom de la base de données.",
             "databaseOnly": "Base de données uniquement",
             "databaseType": "Type de base de données",
             "delete": "Supprimer {{name}}",
@@ -721,6 +721,7 @@
             "secretKey": "Clé secrète",
             "selectApplication": "Sélectionnez un service",
             "serverkitIsFreeTheseAreYour": "ServerKit est gratuit : ce sont vos propres frais de stockage. Local est le disque de votre serveur (laissez-le à 0 si vous ne le suivez pas). S3/B2 représentent le $/Go/mois de votre fournisseur de cloud.",
+            "serviceRequired": "Choisissez un service.",
             "settingsSaved": "Paramètres enregistrés",
             "siteService": "Site/Service",
             "storageConfigurationSaved": "Configuration de stockage enregistrée",
@@ -883,7 +884,8 @@
             "selectSize": "Sélectionnez la taille",
             "serverDestroyed": "Serveur détruit",
             "serverName": "Nom du serveur",
-            "serverProvisioningInitiated": "Approvisionnement du serveur lancé"
+            "serverProvisioningInitiated": "Approvisionnement du serveur lancé",
+            "enterANameAndChooseAProvider": "Saisissez d'abord un nom et choisissez un fournisseur"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "Un CNAME pour ce nom d'hôte sera créé dans Cloudflare DNS, pointant vers le tunnel.",
@@ -969,7 +971,10 @@
             "sortAToZ": "Trier de A à Z",
             "sortHighToLow": "Trier par ordre décroissant",
             "sortLowToHigh": "Trier par ordre croissant",
-            "sortZToA": "Trier de Z à A"
+            "sortZToA": "Trier de Z à A",
+            "alreadyTheFirstColumn": "Déjà la première colonne",
+            "alreadyTheLastColumn": "Déjà la dernière colonne",
+            "noFilterOnThisColumn": "Aucun filtre sur cette colonne"
         },
         "columnsMenu": {
             "columns": "Colonnes",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "Envoyez un message à l'assistant",
             "noResources": "Aucune ressource accessible trouvée",
             "searchResources": "Rechercher des ressources…",
-            "send": "Envoyer"
+            "send": "Envoyer",
+            "setUpTheAssistantFirst": "Configurez d'abord l'assistant",
+            "typeAMessageFirst": "Saisissez d'abord un message"
         },
         "configDiffModal": {
             "applyRestorePoint": "Appliquer le point de restauration",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "L'adresse IP publique de ce serveur",
             "useStarttlsRecommended": "Utilisez STARTTLS (recommandé)",
             "whereDoIGetThis": "Où puis-je trouver ça ?",
-            "yourAccountEmailGlobalKeySimplest": "Email de votre compte + clé globale. Le plus simple à configurer, mais accorde un accès complet au compte."
+            "yourAccountEmailGlobalKeySimplest": "Email de votre compte + clé globale. Le plus simple à configurer, mais accorde un accès complet au compte.",
+            "setUpTheOauthAppFirst": "Configurez d'abord l'application OAuth"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "Ajoutez les identifiants de l'application OAuth GitHub dans les Paramètres avant de vous connecter.",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "Rechercher des référentiels",
             "serviceName": "Nom du service",
             "systemdUnitOptional": "Unité systemd (en option)",
-            "uploadTheArchive": "Téléverser l'archive"
+            "uploadTheArchive": "Téléverser l'archive",
+            "setUpGithubInSettingsFirst": "Configurez d'abord GitHub dans les paramètres"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Autorisé via OAuth",
@@ -1337,7 +1346,8 @@
             "toRun": "pour exécuter.",
             "writeSqlAboveAndPress": "Écrivez SQL ci-dessus et appuyez sur",
             "writesEnabledBeCareful": "Écritures activées - soyez prudent",
-            "writesOn": "Écritures activées"
+            "writesOn": "Écritures activées",
+            "runAQueryWithResultsFirst": "Exécutez d'abord une requête avec résultats"
         },
         "consoleToolbar": {
             "allLevels": "Tous les niveaux",
@@ -1353,7 +1363,8 @@
             "searchLogs": "Rechercher des journaux…",
             "showTheDeploymentDetailsAgain": "Afficher à nouveau les détails du déploiement",
             "timestamps": "Horodatages",
-            "wrap": "Envelopper"
+            "wrap": "Envelopper",
+            "noMatchesToJumpTo": "Aucune correspondance où aller"
         },
         "containerOpsPanel": {
             "actionFailed": "L'action a échoué",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "Aucune sortie produite.",
             "noRunsRecordedYet": "Aucune exécution enregistrée pour le moment.",
             "noRunsYet": "Aucune exécution pour le moment",
-            "noScheduledJobsFoundCreateYour": "Aucune tâche planifiée trouvée. Créez votre première tâche cron pour automatiser les tâches.",
             "paused": "En pause",
             "runHistory": "Historique d'exécution",
             "runHistoryIsAnAdminOnly": "L’historique des exécutions est une surface réservée aux administrateurs.",
@@ -1607,7 +1617,8 @@
             "undo": "Défaire",
             "unnamedJob": "Tâche sans nom",
             "untracked": "Non suivi",
-            "whatDoesThisJobDo": "A quoi sert ce travail ?"
+            "whatDoesThisJobDo": "A quoi sert ce travail ?",
+            "enterANameCommandAndScheduleFirst": "Saisissez d'abord un nom, une commande et une planification"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 champs : minute, heure, jour, mois, jour de la semaine.",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "Supprimer la tâche Cron",
             "scheduleACommandOnTheHost": "Planifiez une commande sur l'hôte crontab. S'exécute en tant qu'utilisateur agent.",
             "scheduleIsRequired": "Un horaire est requis",
-            "serverOffline": "Serveur hors ligne"
-        },
-        "cutoverDrawer": {
-            "answer": "Répondre",
-            "applyCutover": "Appliquer le basculement",
-            "applyDnsCutover": "Appliquer le basculement DNS ?",
-            "applying": "Candidature…",
-            "atTheBoxWhereTheImported": "à la boîte où réside désormais le site importé. Ses enregistrements actuels sont d'abord instantanés, de sorte que le changement peut toujours être annulé.",
-            "capturing": "Capturer…",
-            "checkPropagation": "Vérifier la propagation",
-            "cutoverApplied": "Basculement appliqué –",
-            "cutoverAppliedNowPointsAt": "Transition appliquée – {{domain}} pointe désormais sur {{value}}.",
-            "cutoverFinishedWithErrorsReviewBelow": "Le basculement s'est terminé avec des erreurs. Consultez ci-dessous et revenez si nécessaire.",
-            "cutoverFinishedWithErrorsReviewThe": "Le basculement s'est terminé avec des erreurs : examinez les résultats et envisagez de revenir en arrière.",
-            "deletedCreatedRecords_one": "1 enregistrement créé par la bascule a été supprimé.",
-            "deletedCreatedRecords_other": "{{count}} enregistrements créés par la bascule ont été supprimés.",
-            "dnsCutover": "Basculement DNS",
-            "matchesNewTarget": "Correspond à la nouvelle cible",
-            "new": "Nouveau",
-            "newAddressTarget": "Nouvelle adresse (cible)",
-            "newTarget": "nouvelle cible",
-            "noChangesToApplyForThe": "Aucune modification à appliquer pour les types d'enregistrement sélectionnés.",
-            "notFullyPropagated": "Pas entièrement propagé",
-            "nowPointsAt": "pointe maintenant vers",
-            "oneClickRestoresTheSnapshotCaptured": "Un clic restaure l'instantané capturé avant ce basculement, y compris en supprimant tous les enregistrements créés par le basculement.",
-            "plannedChanges": "Modifications prévues",
-            "propagated": "Propagé",
-            "propagating": "Propagation",
-            "propagation": "Propagation",
-            "providerZoneId": "Identifiant de la zone du fournisseur",
-            "publicResolversCacheTheOldAddress": "Les résolveurs publics mettent en cache l'ancienne adresse jusqu'à l'expiration de leur durée de vie. Vérifiez où la nouvelle adresse a pris effet.",
-            "recordTypes": "Types d'enregistrements",
-            "recordTypes2": "types d'enregistrement",
-            "recordsCaptured": "enregistrements capturés",
-            "repoint": "Repointage",
-            "repointsRecords_one": "Cela redirige l'enregistrement {{types}} de {{domain}} vers {{target}}. L'instantané vous permet de revenir en arrière.",
-            "repointsRecords_other": "Cela redirige les enregistrements {{types}} de {{domain}} vers {{target}}. L'instantané vous permet de revenir en arrière.",
-            "resolver": "Résolveur",
-            "restoredRecords_one": "1 enregistrement restauré.",
-            "restoredRecords_other": "{{count}} enregistrements restaurés.",
-            "revertCutover": "Annuler le basculement",
-            "revertFinishedWithErrorsCheckThe": "Revenir terminé avec des erreurs - vérifiez les résultats.",
-            "revertedRestoredSPreCutoverRecords": "Rétabli : restauration des enregistrements préalables au basculement de {{domain}}",
-            "reverting": "Revenant…",
-            "review": "Revoir",
-            "rollBack": "Revenir en arrière",
-            "snapshotPreview": "Instantané et aperçu",
-            "theDnsProviderSZoneIdentifier": "l'identifiant de zone du fournisseur DNS",
-            "theIpOrHostnameForCname": "L'adresse IP (ou le nom d'hôte pour CNAME) vers laquelle les enregistrements doivent pointer.",
-            "thisDomainHasNoConnectedProvider": "Ce domaine n'a pas de zone de fournisseur connectée : le basculement en a besoin pour lire et écrire des enregistrements.",
-            "verify": "Vérifier"
+            "serverOffline": "Serveur hors ligne",
+            "failedToLoadCronJobs": "Impossible de charger les tâches cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "Aucun widget pour l'instant sur ce tableau de bord."
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "Cliquez pour trier · Maj+clic pour ajouter un niveau de tri",
             "loading": "Chargement",
             "noRowsMatchTheActiveColumn": "Aucune ligne ne correspond aux filtres de colonnes actifs.",
+            "scrollableTable": "Tableau défilant",
             "selectAllRows": "Sélectionner toutes les lignes",
-            "selectRow": "Sélectionner une ligne"
+            "selectRow": "Sélectionner une ligne",
+            "sortAColumnFirst": "Triez d'abord une colonne"
         },
         "dataTableFooter": {
             "nextPage": "Page suivante",
@@ -1776,7 +1740,8 @@
             "updateOverview": "Présentation de la mise à jour",
             "updatingDatabaseSchema": "Mise à jour du schéma de base de données...",
             "weRecommendBackingUpYourDatabase": "Nous vous recommandons de sauvegarder votre base de données avant d'appliquer les mises à jour.",
-            "whichDoesNotExistInThis": ", qui n'existe pas dans cette version - généralement une branche qui a ajouté une migration puis a été annulée. Le schéma ne peut pas être mis à niveau tant qu'il n'est pas réinitialisé à une révision connue :"
+            "whichDoesNotExistInThis": ", qui n'existe pas dans cette version - généralement une branche qui a ajouté une migration puis a été annulée. Le schéma ne peut pas être mis à niveau tant qu'il n'est pas réinitialisé à une révision connue :",
+            "createABackupFirst": "Créez d'abord une sauvegarde"
         },
         "databases": {
             "backUpDatabase": "Sauvegarder la base de données",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "Sur Linux, assurez-vous que le démon Docker est démarré",
             "retryConnection": "Réessayer la connexion",
             "targets": "Cibles",
-            "toUseDockerManagement": "Pour utiliser la gestion Docker :",
             "verifyTheUserHasPermissionsTo": "Vérifiez que l'utilisateur dispose des autorisations nécessaires pour accéder à Docker.",
             "volumes": "Volumes"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "Actualiser les enregistrements",
             "regenerateToken": "Régénérer le jeton",
             "thisDomainIsnTSetUp": "Ce domaine n'est pas encore configuré pour DNS dans ServerKit.",
-            "tokenRegenerated": "Jeton régénéré"
+            "tokenRegenerated": "Jeton régénéré",
+            "enterTheRecordContentFirst": "Saisissez d'abord le contenu de l'enregistrement"
         },
         "domainField": {
             "alreadyAttached": "{{name}} est déjà rattaché à un service.",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "Désactiver SSL pour {{name}} ?",
             "dismissError": "Ignorer l'erreur",
             "dnsProvider": "Fournisseur DNS",
+            "domainRequired": "Saisissez un domaine valide.",
             "domainVerificationFailed": "Échec de la vérification du domaine : {{error}}",
             "domainVerifiedIp": "Domaine vérifié ! IP : {{ipaddress}}",
             "emailAddress": "Adresse email",
@@ -2292,6 +2258,7 @@
             "rowsFields": "Lignes {{n}} · Champs {{fields}} · {{value}}",
             "searchDomains": "Rechercher des domaines…",
             "selectAnApplication": "Sélectionnez un service",
+            "serviceRequired": "Choisissez un service.",
             "setAsPrimaryDomain": "Définir comme domaine principal",
             "sslCertificate": "Certificat SSL",
             "sslExpires": "Expire {{days}}d",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "Vérifiez votre téléchargement à l'aide des sommes de contrôle SHA256 :",
             "windows": "Fenêtres :",
             "windowsPowershell": "Windows (PowerShell)",
-            "withTheServerRegistrationToken": "avec le jeton d'enregistrement du serveur."
+            "withTheServerRegistrationToken": "avec le jeton d'enregistrement du serveur.",
+            "noBuildPublishedForThisPlatform": "Aucune version publiée pour cette plateforme pour l'instant"
         },
         "drawerHeader": {
             "aiSettings": "Paramètres de l'IA",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "Essayez un autre terme de recherche ou parcourez un autre dossier.",
             "typeZA": "Type Z-A",
             "types": "Espèces",
+            "up": "Dossier parent",
             "upDelDeleteF2RenameA": "⌫ Haut · Supprimer · F2 Renommer · ⌘A Tout",
             "updatedAt": "Mis à jour {{time}}",
             "upload": "Télécharger",
@@ -2809,10 +2778,12 @@
             "videos": "Vidéos",
             "volumes": "Volumes",
             "webConfig": "Configuration Web",
-            "willBeCreatedIn": "Sera créé dans :"
+            "willBeCreatedIn": "Sera créé dans :",
+            "nothingToGoBackTo": "Rien en arrière",
+            "nothingToGoForwardTo": "Rien en avant",
+            "alreadyAtTheTopFolder": "Déjà dans le dossier racine"
         },
         "fileRow": {
-            "deselect": "Désélectionner",
             "rename": "Rebaptiser",
             "select": "Sélectionner"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "Tout effacer",
             "noFilters": "pas de filtres",
             "showResults_one": "Afficher {{count}} {{noun}}",
-            "showResults_other": "Afficher {{count}} {{noun}}s"
+            "showResults_other": "Afficher {{count}} {{noun}}s",
+            "noFiltersApplied": "Aucun filtre appliqué"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 ou 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "S'orienter",
             "unusuallyHigh": "Anormalement élevé",
             "unusuallyLow": "Anormalement bas",
-            "zScore": "Score Z"
+            "zScore": "Score Z",
+            "selectAServerFirst": "Sélectionnez d'abord un serveur"
         },
         "fleetProxy": {
             "apps": "Services",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "Réinitialiser les modifications d'affichage",
             "rowDensity": "Densité des rangs",
             "rowsInThisView": "Lignes dans cette vue",
-            "selectedRows": "Lignes sélectionnées"
+            "selectedRows": "Lignes sélectionnées",
+            "selectSomeRowsFirst": "Sélectionnez d'abord des lignes"
         },
         "gridViewPicker": {
             "builtIn": "Intégré",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "Commencer à partir des filtres et colonnes actuels",
             "unsaved": "Non enregistré",
             "unsetAsDefault": "Retirer comme vue par défaut",
-            "viewOptions": "Options de {{name}}"
+            "viewOptions": "Options de {{name}}",
+            "enterAViewNameFirst": "Saisissez d'abord un nom de vue"
         },
         "groupMenu": {
             "group": "Grouper",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "Configuration enregistrée. Redémarrez le service pour appliquer les modifications.",
             "failedToSaveConfiguration": "Échec de l'enregistrement de la configuration",
             "gunicornConfiguration": "Configuration du Gunicorn",
-            "loadingGunicornConfiguration": "Chargement de la configuration du Gunicorn..."
+            "loadingGunicornConfiguration": "Chargement de la configuration du Gunicorn...",
+            "failedToLoadConfiguration": "Impossible de charger la configuration de Gunicorn."
         },
         "hints": {
             "appBound": "Le service lui-même est le goulot d'étranglement. Mettez des pages entières en cache devant lui, ou donnez-lui un serveur plus puissant.",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "Rien à convertir — aucune directive trouvée.",
             "pasteTheContentsOfAnApache": "Collez le contenu d'un Apache",
             "reason": "Raison",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine sur \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine sur \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "Collez d'abord des règles .htaccess"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 ou 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "pour confirmer",
             "tryAgain": "Essayer à nouveau",
             "whereTheDumpLives": "Où vit la décharge",
-            "working": "En cours…"
+            "working": "En cours…",
+            "chooseADumpFileFirst": "Choisissez d'abord un fichier de sauvegarde",
+            "chooseATargetDatabaseFirst": "Choisissez d'abord une base de données cible",
+            "importFinished": "Importation terminée",
+            "onlyAdminsCanImport": "Seuls les administrateurs peuvent importer",
+            "typeTheDatabaseNameToConfirm": "Saisissez le nom de la base de données pour confirmer"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "Une archive cpmove / backup-*.tar.gz à partir de la sauvegarde complète du compte de cPanel.",
@@ -3344,7 +3326,9 @@
             "unknownAge": "âge inconnu",
             "viewChanges": "Voir les modifications",
             "watchingADocrootHashesEveryFile": "Regarder un docroot hache chaque fichier en dehors des répertoires de téléchargement/cache, c'est donc une option par service.",
-            "whatChanged": "Ce qui a changé"
+            "whatChanged": "Ce qui a changé",
+            "createABaselineFirst": "Créez d'abord une référence",
+            "notAvailableOnThisServer": "Non disponible sur ce serveur"
         },
         "invitationsTab": {
             "copyInviteLink": "Copier le lien d'invitation",
@@ -3394,7 +3378,8 @@
             "exitCode": "(code de sortie {{code}})",
             "streamingProgress": "Progression du streaming…",
             "waitingForTheAgentToBegin": "En attendant que l'agent commence…",
-            "working": "En cours…"
+            "working": "En cours…",
+            "waitForTheJobToFinish": "Attendez la fin de la tâche"
         },
         "jobs": {
             "activity": "Activité",
@@ -3501,7 +3486,9 @@
             "logFiles": "Fichiers journaux",
             "noLogFilesFound": "Aucun fichier journal trouvé",
             "searchPattern": "Modèle de recherche...",
-            "selectALogFile": "Sélectionnez un fichier journal pour afficher son contenu."
+            "selectALogFile": "Sélectionnez un fichier journal pour afficher son contenu.",
+            "selectALogFileFirst": "Sélectionnez d'abord un fichier journal",
+            "nothingToDownloadYet": "Rien à télécharger pour l'instant"
         },
         "loginLinksSection": {
             "allowedIp": "IP autorisée",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "Aucune autorisation d'hôte déclarée.",
             "pasteAGithubRepoOwnerRepo": "Collez un dépôt GitHub (propriétaire/repo ou propriétaire/repo@tag), une version URL ou un lien zip direct. Vous aurez un aperçu de ce qui s'installe avant son arrivée.",
             "preview": "Aperçu",
-            "signatureInvalid": "Signature invalide",
             "signatureMismatch": "La signature ne correspond pas à cette archive.",
-            "signed": "Signé ·",
-            "signedUnknownPublisher": "Signé · éditeur inconnu",
             "theDownloadMayHaveBeenTampered": "Le téléchargement a peut-être été falsifié – ne l’installez pas.",
             "thisExtensionRequests": "Cette extension demande :",
             "thisReleaseCarriesNoPublisherSignature": "Cette version ne porte aucune signature d'éditeur. Il fonctionnera avec tous les privilèges du panneau – installez-le uniquement si vous faites confiance à la source.",
             "thisReleaseIsSignedButThe": "Cette version est signée, mais la clé de l'éditeur n'est pas épinglée par ce panneau, la signature ne peut donc pas être vérifiée. Traitez-le comme non signé.",
-            "unsigned": "Non signé",
             "uploadAnExtensionZipWith": "Téléchargez une extension zip avec",
             "useAnAbsolutePathThatExists": "Utilisez un chemin absolu qui existe sur l’hôte backend ou à l’intérieur du conteneur backend.",
             "zip": "Fermeture éclair"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "Impossible de charger le catalogue d'extensions.",
             "couldntToggle": "Impossible d'activer ou de désactiver l'extension.",
             "couldntUninstall": "Impossible de désinstaller l'extension.",
-            "declaredPermissionsWhatThePanelHas": "Autorisations déclarées, ce que le panneau a observé et dépendances Python en attente",
-            "disabling": "Désactivation…",
-            "enabling": "Activation…",
             "extensionConfigurationSaved": "Configuration de l'extension enregistrée",
             "extensionDisabled": "Extension désactivée",
             "extensionEnabled": "Extension activée",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "Installer avec une signature invérifiable ?",
             "installWithoutChecksumVerification": "Installer sans vérification de la somme de contrôle ?",
             "installed": "Installée",
-            "installedExtensions": "Extensions installées",
             "installedHotReloadShouldPickIt": "\"{{displayname}}\" installé. Le rechargement à chaud devrait le récupérer ; redémarrez le backend si les itinéraires du plan n'apparaissent pas.",
             "installedRestartBackendIfBlueprintRoutes": "\"{{displayname}}\" installé. Redémarrez le backend si les itinéraires du modèle n'apparaissent pas.",
             "installing": "Installation…",
@@ -3665,33 +3644,21 @@
             "purgeData": "Purger les données",
             "registry": "Enregistrement",
             "registryInstallFailed": "L'installation du registre a échoué",
-            "releaseZipIsSignedThePanel": "Le zip de version est signé ; le panneau vérifie la signature ed25519 lors de l'installation",
             "removingThisExtensionStopsItsRoutes": "La suppression de cette extension arrête ses itinéraires et ses contributions à l'interface utilisateur.",
             "resetFilters": "Réinitialiser les filtres",
             "reviewed": "Révisé",
             "screenshots": "Captures d'écran",
             "searchExtensions": "Rechercher des extensions…",
-            "signed": "Signé",
-            "signedWithPublisherKeyWhichThis": "Signé avec la clé d'éditeur « {{publisherKeyId}} », que ce panneau n'épingle pas",
             "sourceRepo": "Dépôt source",
             "thisExtensionDeclaresNoConfigurationFields": "Cette extension ne déclare aucun champ de configuration.",
             "thisExtensionRequests": "Cette extension demande :",
-            "thisReleaseCarriesNoPublisherSignature": "Cette version ne porte aucune signature d'éditeur",
             "uninstall": "Désinstaller {{displayname}} ?",
-            "uninstalling": "Désinstallation…",
-            "unknownSigner": "Signataire inconnu",
             "unreviewed": "Non révisé",
-            "unsigned": "Non signé",
             "update": "Mise à jour",
             "updateAnyway": "Mettre à jour quand même",
-            "updateAvailableV": "Mise à jour disponible → v",
             "updating": "Mise à jour…",
-            "versionByAuthor": "v{{version}} · par {{author}}"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "Autoriser les membres à exécuter des actions organisées",
-            "letWorkspaceMembersRunASmall": "Permettez aux membres de l'espace de travail d'exécuter un petit ensemble d'actions organisées et paramétrées (comme l'ajustement de la fréquence de sauvegarde d'un service) pour les services qu'ils peuvent atteindre. Chaque action est validée par rapport à un schéma fixe et consignée dans un audit : aucun texte libre n'atteint jamais le shell du serveur. Désactivez cette option pour désactiver toute la surface d'action des membres.",
-            "memberActions": "Actions des membres"
+            "versionByAuthor": "v{{version}} · par {{author}}",
+            "installShort": "Installer"
         },
         "message": {
             "somethingWentWrong": "Une erreur s'est produite."
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "Les métriques sont collectées chaque minute",
             "noHistoricalDataYet": "Pas encore de données historiques",
             "realTimePerformance": "Performances en temps réel",
-            "systemMetrics": "Métriques du système"
+            "systemMetrics": "Métriques du système",
+            "loadingMetricsHistory": "Chargement de l'historique des métriques…"
         },
         "metricsTab": {
             "activeRunning": "Actif (en cours d'exécution)",
@@ -3732,7 +3700,8 @@
             "processes": "Processus",
             "serviceStatus": "Statut du service",
             "startTheServiceToViewResource": "Démarrez le service pour afficher les métriques de ressources.",
-            "workers": "Workers"
+            "workers": "Workers",
+            "failedToLoadMetrics": "Impossible de charger les métriques."
         },
         "microCachePanel": {
             "assetCachingSaved": "Mise en cache des ressources enregistrée",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "Créer un utilisateur avec le même nom et tous les privilèges",
             "creating": "Création…",
             "databaseCreated": "Base de données créée",
-            "databaseName": "Nom de la base de données *",
+            "databaseName": "Nom de la base de données",
             "encoding": "Codage",
             "engine": "Moteur",
             "fromTheTemplateCatalog": "du catalogue de modèles",
@@ -3836,7 +3805,9 @@
             "running": "en cours d'exécution",
             "saveTheseCredentialsThePasswordWon": "Enregistrez ces informations d'identification : le mot de passe ne sera plus affiché.",
             "userCreated": "Utilisateur créé",
-            "username": "Nom d'utilisateur *"
+            "username": "Nom d'utilisateur",
+            "databaseNameInvalid": "Utilisez uniquement des lettres, des chiffres et des tirets bas.",
+            "databaseNameRequired": "Saisissez le nom de la base de données."
         },
         "modeToggle": {
             "assistant": "Assistant",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "Déclencheur ci-dessus",
             "webhook": "Webhook",
             "whereAnAlertGoesWhenIt": "Où va une alerte lorsqu'elle se déclenche",
-            "wouldAlertNow": "Alerterait maintenant"
+            "wouldAlertNow": "Alerterait maintenant",
+            "couldntLoadMonitoringData": "Impossible de charger les données de supervision."
         },
         "monitoringOverview": {
             "activeAlerts": "Alertes actives",
@@ -4018,7 +3990,8 @@
             "runTest": "Lancer le test",
             "running": "Exécution…",
             "speedTest": "Test de vitesse",
-            "tested": "Testé"
+            "tested": "Testé",
+            "loadingHosts": "Chargement des hôtes"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "Une réponse de 200 sans ce texte compte comme une panne.",
@@ -4048,7 +4021,6 @@
             "monitoring": "Surveillance {{name}}",
             "nextCheck": "Vérification suivante",
             "noMonitorsMatch": "Aucun moniteur ne correspond",
-            "nothingIsBeingWatchedYet": "Rien n'est encore regardé",
             "offForSelfSignedCertificatesOn": "Désactivé pour les certificats auto-signés sur les hôtes internes.",
             "pause": "Pause",
             "paused": "En pause {{name}}",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "Moniteurs en panne",
             "mostRecentResults": "Résultats les plus récents",
             "noChecksRecordedYetTheScheduler": "Aucune vérification enregistrée pour l'instant : le planificateur interroge les intervalles de chaque moniteur.",
-            "nothingIsBeingWatchedYet": "Rien n'est encore regardé"
+            "nothingIsBeingWatchedYet": "Rien n'est encore regardé",
+            "couldntLoadMonitors": "Impossible de charger les moniteurs."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "Créez un réseau pour connecter les conteneurs.",
@@ -4111,7 +4084,10 @@
             "registering": "Enregistrement…",
             "review": "Revoir",
             "uploadAndDeploy": "Téléverser et déployer",
-            "uploading": "Téléversement…"
+            "uploading": "Téléversement…",
+            "completeTheSourceDetailsFirst": "Renseignez d'abord les détails de la source",
+            "fillInTheRequiredDetailsFirst": "Renseignez d'abord les informations requises",
+            "finishThePreviousStepFirst": "Terminez d'abord l'étape précédente"
         },
         "notFound": {
             "browseExtensions": "Parcourir les extensions",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "Aucune notification non lue.",
             "notifications": "Notifications",
             "success": "Succès",
-            "unread": "Non lu"
+            "unread": "Non lu",
+            "noFiltersToReset": "Aucun filtre à réinitialiser"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@exemple.com, équipe@exemple.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "Afficher/masquer le panneau Opérations",
             "title": "Opérations",
             "unreadCount": "{{count}} non lues",
-            "waitingForLogs": "En attente des journaux d'exécution…"
+            "waitingForLogs": "En attente des journaux d'exécution…",
+            "enterTheRequiredValueFirst": "Saisissez d'abord la valeur requise"
         },
         "organizationTabs": {
             "projects": "Projets",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "Chargement des paquets...",
             "package": "Emballer",
             "packageNameEGRequestsFlask": "Nom du package (par exemple, requêtes, flask==2.0.0)",
-            "requirementsTxtUpdated": "exigences.txt mis à jour"
+            "requirementsTxtUpdated": "exigences.txt mis à jour",
+            "failedToLoadPackages": "Impossible de charger les paquets."
         },
         "pageContextMap": {
             "application": "Service",
@@ -4484,7 +4463,6 @@
             "emailAddress": "Adresse email",
             "memberSince": "Membre depuis",
             "profileSettings": "Paramètres du profil",
-            "role": "Rôle",
             "saveChanges": "Enregistrer les modifications"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "Le Nginx de l'hôte gère le proxy inverse. Basculez vers Traefik ou Caddy ci-dessus pour exécuter à la place une pile proxy Docker gérée.",
             "thisServerSActiveProxyIs": "Le proxy actif de ce serveur est",
             "traefik": "Traefik",
-            "whichExpects": ", qui attend"
+            "whichExpects": ", qui attend",
+            "noChangesToSave": "Aucune modification à enregistrer",
+            "selectADifferentProxyFirst": "Sélectionnez d'abord un autre proxy"
         },
         "pruneButton": {
             "cleaning": "Nettoyage…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "La charge utile doit être valide JSON",
             "permanentlyDeleteThisMessage": "Supprimer définitivement ce message ?",
             "priority": "Priorité",
-            "queue": "File d'attente",
             "queueBus": "Bus de file d'attente",
             "readOnly": "Lecture seule",
             "requeue": "Remettre en file d'attente",
@@ -4702,7 +4681,6 @@
             "total": "Total"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "Ajustez les filtres ou la requête de recherche pour voir vos files d'attente.",
             "allGroups": "Tous les groupes",
             "anyStatus": "N'importe quel statut",
             "areYouSureYouWantTo": "Etes-vous sûr de vouloir supprimer « {{value}} » et tous ses messages ?",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}} étapes",
             "unavailable": "Catalogue de recettes indisponible",
             "unavailableHint": "Le registre est injoignable et aucune copie intégrée n'est présente.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "Résolvez d'abord les blocages ci-dessus",
+            "selectATargetServerFirst": "Sélectionnez d'abord un serveur cible"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "Impossible de charger la corbeille.",
@@ -4840,16 +4820,21 @@
             "basicAuth": "Authentification de base",
             "betweenServers": "entre {{privateServer}} et {{edgeServer}}",
             "edgeServerPublicIpFrontsThe": "Serveur Edge (IP publique – devant le tunnel)",
+            "edgeServerRequired": "Choisissez le serveur edge.",
             "exposeALocalService": "Exposer un service local",
+            "exposeAPrivateServicePublicly": "Exposez un service privé publiquement.",
             "exposeAServiceRunningOnA": "Exposez un service exécuté sur une machine privée (derrière NAT, pas de redirection de port) à un nom d'hôte public via un tunnel WireGuard entre deux de vos agents.",
             "exposeService": "Exposer le service",
+            "exposeServicesOn": "Exposer les services sur",
             "exposeServicesRunningOn": "Exposer les services exécutés sur",
+            "exposeShort": "Exposer",
             "exposed": "Exposé {{hostname}}",
             "failedToExposeService": "Échec de l'exposition du service",
             "failedToLoadTunnels": "Échec du chargement des tunnels",
             "failedToRemoveService": "Échec de la suppression du service",
             "failedToTearDownTunnel": "Impossible de démolir le tunnel",
             "handshakeAt": "poignée de main {{time}}",
+            "hostnameRequired": "Saisissez un nom d'hôte public valide.",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "Tunnels de chargement",
             "noHandshakeYetIfThisPersists": "Pas encore de prise de contact — si cela persiste, le UDP sortant de l'hôte privé vers le Edge peut être bloqué (un relais est nécessaire).",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "Aucun tunnel pour ce serveur",
             "noTunnelsYet": "Pas encore de tunnel",
             "obtainACertificateOnTheEdge": "Obtenez un certificat sur le bord.",
+            "passwordRequired": "Saisissez un mot de passe.",
             "pickAPublicIpEdgeServer": "Choisissez un serveur périphérique IP public et ServerKit l'associera à {{value}} via WireGuard.",
             "pickAPublicIpEdgeServer2": "Choisissez un serveur périphérique IP public et un hôte privé, et ServerKit les couplera via WireGuard et publiera votre service – aucune modification du routeur n'est nécessaire.",
+            "pickAPublicIpEdgeServerShort": "Choisissez un serveur edge à IP publique.",
+            "pickAnEdgeAndAPrivateHost": "Choisissez un serveur edge et un hôte privé.",
             "pickTwoDifferentServers": "Choisissez deux serveurs différents : le serveur edge fait office de façade pour l'hôte privé.",
-            "pointAtEdge": "Pointez {{name}} vers le serveur edge ; le tunnel l'achemine à partir de là.",
+            "pointAtEdgeGeneric": "Faites pointer le nom d'hôte vers le serveur edge ; le tunnel prend le relais à partir de là.",
+            "portRequired": "Saisissez le port du service.",
+            "privateHostRequired": "Choisissez l'hôte privé.",
             "privateHostWhereTheServiceRuns": "Hôte privé (où le service s'exécute)",
             "publicHostname": "Nom d'hôte public",
             "publishing": "Publication…",
@@ -4869,13 +4859,24 @@
             "removed": "{{hostname}} supprimé",
             "requireLoginBasicAuth": "Exiger une connexion (authentification de base)",
             "servicePort": "Port de service",
+            "status": {
+                "pending": "en attente",
+                "up": "actif",
+                "degraded": "dégradé",
+                "down": "hors service",
+                "error": "erreur",
+                "published": "publié",
+                "unknown": "inconnu"
+            },
             "tearDown": "Démolir",
             "tearDownTunnel": "Démolir le tunnel",
             "tearDownTunnel2": "Démolir le tunnel ?",
+            "thisHost": "cet hôte",
             "thisRemovesTheWireguardTunnel": "Cela supprime le tunnel WireGuard",
             "thisServer": "ce serveur",
             "toAPublicHostnameOverA": "à un nom d'hôte public via un tunnel WireGuard. ServerKit associe cet hôte à un serveur Edge doté d'une adresse IP publique.",
-            "tunnelTornDown": "Tunnel démoli"
+            "tunnelTornDown": "Tunnel démoli",
+            "usernameRequired": "Saisissez un nom d'utilisateur."
         },
         "remoteTerminal": {
             "closeTerminal": "Fermer le terminal",
@@ -4938,15 +4939,13 @@
             "title": "Trafic"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | merde",
             "dockerIsnTAvailable": "Docker n'est pas disponible",
             "forThisInstallSProfile": "pour le profil de cette installation.",
             "installItOnTheServerThen": "Installez-le sur le serveur, puis redémarrez ServerKit :",
             "needsDockerToRunContainersAnd": "a besoin de Docker pour exécuter des conteneurs, et ce serveur a été installé avec le",
             "profileWhichLeavesItOutNothing": "profil, ce qui le laisse de côté. Rien n'est verrouillé : l'ajout de Docker active cette page.",
             "serverkitReChecksForDockerAutomatically": "ServerKit revérifie automatiquement Docker. La surveillance, les domaines, les certificats, cron et DNS continuent de fonctionner sans lui — voir",
-            "settingsSystem": "Paramètres → Système",
-            "sudoSystemctlRestartServerkit": "sudo systemctl redémarrer le kit de serveur"
+            "settingsSystem": "Paramètres → Système"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "Mo et ce serveur a",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "Échec de l'ajout de la clé : {{message}}",
             "failedToRemoveKey": "Échec de la suppression de la clé : {{message}}",
             "fingerprint": "Empreinte digitale",
-            "noSshKeysConfiguredForRoot": "Aucune clé SSH configurée pour l'utilisateur root.",
             "pasteYourSshPublicKeyTypically": "Collez votre clé publique SSH (généralement depuis ~/.ssh/id_rsa.pub ou ~/.ssh/id_ed25519.pub)",
             "publicKey": "Clé publique",
             "removeSshKey": "Supprimer la clé SSH",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "via votre fournisseur DNS.",
             "webrootPath": "Chemin de la racine Web",
             "wildcardCertificateDns01Validation": "Certificat générique (validation DNS-01)",
-            "wildcardCertificateIssued": "Certificat Wildcard délivré"
+            "wildcardCertificateIssued": "Certificat Wildcard délivré",
+            "domainsRequired": "Saisissez au moins un domaine."
         },
         "sSOCallback": {
             "authenticationFailed": "Échec de l'authentification",
@@ -5352,14 +5351,12 @@
             "alerts": "Alertes",
             "areYouSureYouWantTo": "Êtes-vous sûr de vouloir supprimer ce serveur ? Cette action ne peut pas être annulée.",
             "backToServers": "Retour aux serveurs",
-            "copyServerId": "Copier l'ID du serveur",
             "cron": "Cron",
             "errorLoadingServer": "Erreur lors du chargement du serveur",
             "failedToAcknowledgeAlert": "Échec de l'accusé de réception de l'alerte",
             "failedToPingServer": "Échec du ping du serveur",
             "failedToRemoveServer": "Échec de la suppression du serveur",
             "failedToResolveAlert": "Échec de la résolution de l'alerte",
-            "lastSeen": "vu pour la dernière fois",
             "limitedMode": "Mode limité",
             "loadingServerDetails": "Chargement des détails du serveur",
             "metrics": "Métrique",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "Tout mettre à niveau",
             "upgradeAllPackages": "Mettre à niveau tous les packages",
             "upgradeFailedToStart": "La mise à niveau n'a pas pu démarrer",
-            "upgradingAllPackages": "Mise à niveau de tous les packages"
+            "upgradingAllPackages": "Mise à niveau de tous les packages",
+            "enterAPackageNameFirst": "Saisissez d'abord un nom de paquet"
         },
         "serverPicker": {
             "deployToServer": "Déployer sur le serveur",
@@ -5602,6 +5600,7 @@
             "library": "Bibliothèque",
             "nPackages": "{{n}} paquets",
             "nServices": "{{n}} services",
+            "nameRequired": "Saisissez un nom de modèle.",
             "nginxPhpFpmCertbot": "nginx \n php-fpm \n certbot",
             "noReadyMadeTemplatesAreAvailable": "Aucun modèle prêt à l'emploi n'est disponible. Vous pouvez toujours en créer un de zéro.",
             "noTemplatesYet": "Aucun modèle pour l'instant",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "Le jeton expire",
             "ungrouped": "Non groupé",
             "whatHappensNext": "Que se passe-t-il ensuite ?",
-            "windowsPowershell": "Windows (PowerShell)"
+            "windowsPowershell": "Windows (PowerShell)",
+            "syncShort": "Synchro"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "Es-tu sûr? Cela supprimera définitivement le service et toutes ses données.",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "Dissocier le {{name}} de son service lié ?",
             "unlinking": "Dissociation…",
             "unlinkingWillResetBothAppsTo": "La dissociation réinitialisera les deux services en mode autonome.",
-            "usedForCertificateExpiryRemindersFrom": "Utilisé pour les rappels d’expiration de certificat de Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "Utilisé pour les rappels d’expiration de certificat de Let's Encrypt.",
+            "enterADomainNameFirst": "Saisissez d'abord un nom de domaine"
         },
         "setupHealthWidget": {
             "allSet": "Tout est prêt -",
@@ -6322,7 +6323,10 @@
             "targetService": "Service cible",
             "variables": "Variables",
             "variablesInThisGroupApplyTo": "Les variables de ce groupe s'appliquent à chaque ressource à laquelle vous l'attachez.",
-            "whatThisGroupIsFor": "A quoi sert ce groupe…"
+            "whatThisGroupIsFor": "A quoi sert ce groupe…",
+            "enterAGroupNameFirst": "Saisissez d'abord un nom de groupe",
+            "enterAResourceIdFirst": "Saisissez d'abord un ID de ressource",
+            "enterAVariableNameFirst": "Saisissez d'abord un nom de variable"
         },
         "shellTab": {
             "containerShell": "Shell du conteneur",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "Aucun conteneur en cours d'exécution",
             "running": "En cours d'exécution...",
             "startTheServiceToAccessThe": "Démarrez le service pour accéder au shell.",
-            "typeACommandBelowToExecute": "Tapez une commande ci-dessous pour l'exécuter dans le conteneur."
+            "typeACommandBelowToExecute": "Tapez une commande ci-dessous pour l'exécuter dans le conteneur.",
+            "failedToLoadContainers": "Impossible de charger les conteneurs."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "Choisissez un préréglage ou créez une vue personnalisée. Seuls les éléments visibles apparaissent dans votre barre latérale.",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "Deux panels rédigeant la configuration du serveur Web se disputeront la propriété. Basculez ce serveur vers",
             "upstream": "En amont",
             "whatWeCheck": "Ce que nous vérifions",
-            "whileObserving": "en observant"
+            "whileObserving": "en observant",
+            "failedToLoadSurvey": "Impossible de charger l'inventaire."
         },
         "systemNotices": {
             "dismiss": "Ignorer {{title}}",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "Utiliser ce domaine",
             "used": "Utilisé",
             "utcOffset": "Décalage UTC",
-            "version": "Version {{brand}}"
+            "version": "Version {{brand}}",
+            "enterADomainFirst": "Saisissez d'abord un domaine",
+            "selectADifferentTimezoneFirst": "Sélectionnez d'abord un autre fuseau horaire"
         },
         "tableDataTab": {
             "column": "Colonne",
@@ -7148,7 +7156,8 @@
             "query": "Requête",
             "structure": "Structure",
             "tableView": "Vue tableau",
-            "zeroRows": "0 ligne"
+            "zeroRows": "0 ligne",
+            "noMoreRows": "Plus aucune ligne"
         },
         "tabs": {
             "moreTabs": "Plus d'onglets"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "Tronquer le fichier journal",
             "typeUnitName": "Tapez le nom de l’unité…",
             "unit": "Unité",
-            "useThe": "Utilisez le"
+            "useThe": "Utilisez le",
+            "failedToLoadProcesses": "Impossible de charger les processus.",
+            "selectALogFileFirst": "Sélectionnez d'abord un fichier journal",
+            "remoteJournalIsNotAvailableYet": "Le journal distant n'est pas encore disponible"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "Une course est déjà en cours.",
@@ -7551,7 +7563,8 @@
             "viewSaved": "Voir \"{{trimmed}}\" enregistré",
             "viewUpdated": "Voir \"{{name}}\" mis à jour",
             "views": "Vues",
-            "withChanges": "\" avec des changements"
+            "withChanges": "\" avec des changements",
+            "enterAViewNameFirst": "Saisissez d'abord un nom de vue"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "Supprimer aussi les données. Cette action est irréversible.",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "Charge utile URL",
             "retryCount": "Nombre de tentatives",
             "timeoutSeconds": "Délai d'expiration (secondes)",
-            "update": "Mettre à jour"
+            "update": "Mettre à jour",
+            "eventsRequired": "Sélectionnez au moins un événement."
         },
         "webhooksTab": {
             "active": "Actif",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "Espace de travail archivé",
             "workspaceDeleted": "Espace de travail supprimé",
             "workspaceNotFound": "Espace de travail introuvable",
-            "workspaceRestored": "Espace de travail restauré",
-            "workspaces": "Espaces de travail"
+            "workspaceRestored": "Espace de travail restauré"
         },
         "workspaceMembersTab": {
             "addAMember": "Ajouter un membre",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "Nombre maximum d'utilisateurs (0 = illimité)",
             "members": "Membres",
             "myTeam": "Mon équipe",
+            "nameRequired": "Saisissez un nom d'espace de travail.",
             "newWorkspace": "Nouvel espace de travail",
             "recolorsThePanelForAnyoneViewing": "Recolore le panneau pour toute personne consultant cet espace de travail. Laissez la valeur par défaut pour aucune marque personnalisée.",
             "searchWorkspaces": "Rechercher des espaces de travail…",
@@ -7981,6 +7995,14 @@
             "users": "Utilisateurs",
             "workspaceBrandColor": "Couleur de la marque de l'espace de travail",
             "workspaceCreated": "Espace de travail créé"
+        },
+        "mobileSearch": {
+            "label": "Rechercher",
+            "title": "Tout rechercher (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "Rien à rétablir",
+            "nothingToUndo": "Rien à annuler"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "Validation de l'invitation…"
     },
     "common": {
+        "actionTarget": "{{action}} : {{subject}}",
         "actions": {
             "add": "Ajouter",
             "back": "Dos",
@@ -8063,7 +8086,8 @@
             "stop": "Arrêt",
             "test": "Test",
             "tryAgain": "Essayer à nouveau",
-            "uninstall": "Désinstaller"
+            "uninstall": "Désinstaller",
+            "new": "Nouveau"
         },
         "checking": "Vérification...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "Chargement…",
         "more": "Plus",
+        "moreActions": "Plus d’actions",
+        "moreInfoAbout": "Plus d’infos sur {{subject}}",
         "moreSections": "Plus de rubriques",
         "page": "Page",
         "retry": "Réessayer",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}h",
             "justNow": "tout à l' heure",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "Saisissez un domaine.",
+            "domainInvalid": "Saisissez un domaine valide.",
+            "emailInvalid": "Saisissez une adresse e-mail valide.",
+            "required": "Ce champ est obligatoire.",
+            "urlInvalid": "Saisissez une URL valide, par ex. https://example.com/webhook."
         }
     },
     "errors": {

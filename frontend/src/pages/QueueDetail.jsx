@@ -13,8 +13,11 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import EmptyState from '../components/EmptyState';
+import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import { Tip } from '@/components/ui/tooltip';
+import PageLayout from '../layouts/PageLayout';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -110,6 +113,8 @@ const QueueDetail = () => {
     const { confirm } = useConfirm();
 
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
+    const [messagesError, setMessagesError] = useState(null);
     const [queue, setQueue] = useState(null);
     const [group, setGroup] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -134,6 +139,7 @@ const QueueDetail = () => {
 
     const loadMeta = useCallback(async () => {
         try {
+            setLoadError(null);
             const [queueRes, groupRes] = await Promise.all([
                 api.getQueue(groupSlug, queueSlug),
                 api.getQueueGroup(groupSlug).catch(() => null),
@@ -141,12 +147,12 @@ const QueueDetail = () => {
             setQueue(queueRes.queue || null);
             setGroup(groupRes?.group || null);
         } catch (err) {
-            toastError(toast, t('app.queueDetail.couldntLoadQueue', "Couldn't load the queue."), err);
-            navigate('/queue');
+            // Stay on the page with a Retry rather than bouncing away from a transient failure.
+            setLoadError(err.message || t('app.queueDetail.couldntLoadQueue', "Couldn't load the queue."));
         } finally {
             setLoading(false);
         }
-    }, [groupSlug, queueSlug, navigate, t, toast]);
+    }, [groupSlug, queueSlug, t]);
 
     const loadMessages = useCallback(async (status) => {
         try {
@@ -155,7 +161,9 @@ const QueueDetail = () => {
                 limit: 100,
             });
             setMessages(res.messages || []);
+            setMessagesError(null);
         } catch (err) {
+            setMessagesError(err.message || t('app.queueDetail.couldntLoadMessages', "Couldn't load messages."));
             toastError(toast, t('app.queueDetail.couldntLoadMessages', "Couldn't load messages."), err);
         }
     }, [groupSlug, queueSlug, t, toast]);
@@ -327,45 +335,62 @@ const QueueDetail = () => {
 
     if (loading) {
         return (
-            <div className="queue-page queue-page--loading">
-                <div className="queue-loading-card">
-                    <Inbox size={24} />
-                    <span>{t('app.queueDetail.loadingQueue', 'Loading queue…')}</span>
-                </div>
-            </div>
+            <PageLayout className="queue-page" icon={<Inbox size={18} />} title={queueSlug}>
+                <EmptyState loading loadingVariant="table" size="lg" title={t('app.queueDetail.loadingQueue', 'Loading queue…')} />
+            </PageLayout>
+        );
+    }
+
+    if (loadError && !queue) {
+        return (
+            <PageLayout className="queue-page" icon={<Inbox size={18} />} title={queueSlug}>
+                <ErrorState
+                    title={t('app.queueDetail.couldntLoadQueue', "Couldn't load the queue.")}
+                    message={loadError}
+                    onRetry={() => { setLoading(true); loadMeta(); loadMessages(statusFilter); }}
+                />
+            </PageLayout>
         );
     }
 
     return (
-        <div className="queue-page queue-detail">
-            <div className="queue-detail-header">
-                <Button variant="unstyled" type="button" className="queue-back" onClick={() => navigate('/queue')}>
-                    <ArrowLeft size={16} /> {t('app.queueDetail.queueBus', 'Queue bus')}
-                </Button>
-                <div className="queue-detail-headline">
-                    <div className="queue-workbar-title">
-                        <span>{t('app.queueDetail.queue', 'Queue')}</span>
-                        <h1>{queue?.name || queueSlug}</h1>
-                        <em>{groupSlug} / {queueSlug}</em>
-                    </div>
-                    <div className="queue-detail-actions">
-                        {viewOnly && (
-                            <span className="queue-readonly-badge">
-                                <Lock size={12} /> {t('app.queueDetail.readOnly', 'Read-only')}
-                            </span>
-                        )}
-                        {!viewOnly && (
-                            <Button variant="outline" onClick={() => setShowSend(true)}>
-                                <Send size={16} /> {t('app.queueDetail.sendMessage', 'Send message')}
-                            </Button>
-                        )}
-                        <Button variant="outline" onClick={() => { loadMeta(); loadMessages(statusFilter); }}>
-                            <RefreshCw size={16} /> {t('common.actions.refresh', 'Refresh')}
+        <PageLayout
+            className="queue-page"
+            icon={<Inbox size={18} />}
+            title={queue?.name || queueSlug}
+            meta={(
+                <>
+                    <span>{groupSlug} / {queueSlug}</span>
+                    {viewOnly && (
+                        <span className="queue-readonly-badge">
+                            <Lock size={12} /> {t('app.queueDetail.readOnly', 'Read-only')}
+                        </span>
+                    )}
+                </>
+            )}
+            actions={(
+                <>
+                    <Tip content={t('app.queueDetail.queueBus', 'Queue bus')}>
+                        <Button variant="ghost" size="icon" aria-label={t('app.queueDetail.queueBus', 'Queue bus')} onClick={() => navigate('/queue')}>
+                            <ArrowLeft size={16} />
                         </Button>
-                    </div>
-                </div>
-            </div>
-
+                    </Tip>
+                    {!viewOnly && (
+                        <Tip content={t('app.queueDetail.sendMessage', 'Send message')}>
+                            <Button variant="ghost" size="icon" aria-label={t('app.queueDetail.sendMessage', 'Send message')} onClick={() => setShowSend(true)}>
+                                <Send size={16} />
+                            </Button>
+                        </Tip>
+                    )}
+                    <Tip content={t('common.actions.refresh', 'Refresh')}>
+                        <Button variant="ghost" size="icon" aria-label={t('common.actions.refresh', 'Refresh')} onClick={() => { loadMeta(); loadMessages(statusFilter); }}>
+                            <RefreshCw size={16} />
+                        </Button>
+                    </Tip>
+                </>
+            )}
+        >
+          <div className="queue-detail">
             <KpiBand>
                 <MetricCard label={t('app.queueDetail.total', 'Total')} value={stats.total || 0} />
                 {STATUS_ORDER.map(s => (
@@ -422,7 +447,14 @@ const QueueDetail = () => {
 
                     <SortChipBar columns={columns} sorts={sorts} onChange={setSorts} />
 
-                    {messages.length === 0 ? (
+                    {messages.length === 0 && messagesError ? (
+                        <ErrorState
+                            compact
+                            title={t('app.queueDetail.couldntLoadMessages', "Couldn't load messages.")}
+                            message={messagesError}
+                            onRetry={() => loadMessages(statusFilter)}
+                        />
+                    ) : messages.length === 0 ? (
                         <EmptyState
                             icon={Inbox}
                             title={t('app.queueDetail.noMessages', 'No messages')}
@@ -512,7 +544,8 @@ const QueueDetail = () => {
             </Modal>
 
             <GridFilterDrawer {...chrome.drawerProps} />
-        </div>
+          </div>
+        </PageLayout>
     );
 };
 

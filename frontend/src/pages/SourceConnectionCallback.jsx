@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Github, Gitlab, GitBranch, Loader2 } from 'lucide-react';
+import { GitBranch, Loader2 } from 'lucide-react';
+import { SiGithub as Github, SiGitlab as Gitlab } from 'react-icons/si';
 import { SiBitbucket } from 'react-icons/si';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';

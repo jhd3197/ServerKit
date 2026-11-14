@@ -16,12 +16,14 @@ import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
 import {
-    SearchField, FilterDrawer, FilterButton, countActiveFilters, Drawer,
+    SearchField, FilterDrawer, countActiveFilters, Drawer,
     DataTableFooter, CatalogCard, CatalogGrid,
 } from '@/components/ds';
-import { useTableChrome, GridViewPicker, GridToolsMenu } from '@/components/ds/grid';
+import { useTableChrome, GridViewPicker, GridToolsMenu, GridFilterButton } from '@/components/ds/grid';
 import ServerPicker from '@/components/ServerPicker';
 import PortField from '@/components/PortField';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { LOCAL_SERVER_ID } from '@/utils/serverTarget';
 import { useTopbarChrome } from '@/hooks/useTopbarActions';
 import { applyTableSorts, useTableSort } from '@/hooks/useTableSort';
@@ -513,19 +515,10 @@ const Templates = () => {
                 onSearch={setSearchQueryFilter}
                 placeholder={t('app.templates.searchTemplates', 'Search templates…')}
             />
-            <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
+            <GridFilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
             <GridToolsMenu {...chrome.toolsProps} onRefresh={() => Promise.all([loadCategories(), loadTemplates()])} />
         </>,
     );
-
-    if (loading) {
-        return (
-            <div className="sk-tabgroup__inner">
-                {topbarChrome}
-                <EmptyState loading loadingVariant="cards" title={t('app.templates.loadingTemplates', 'Loading templates')} />
-            </div>
-        );
-    }
 
     return (
         <div className="sk-tabgroup__inner templates-page">
@@ -568,7 +561,14 @@ const Templates = () => {
             {loadError && templates.length > 0 && (
                 <ErrorState compact error={loadError} onRetry={loadTemplates} />
             )}
-            {loadError && templates.length === 0 ? (
+            {/* Loading lives in the results area only: the toolbar above (and the
+                search box in the top bar) stay mounted so typing a query never
+                tears them down. Stale cards stay visible, dimmed, while the next
+                request is in flight. */}
+            <div className="templates-page__results" aria-busy={loading} data-busy={loading && templates.length > 0 ? 'true' : undefined}>
+            {loading && templates.length === 0 && !loadError ? (
+                <EmptyState loading loadingVariant="cards" title={t('app.templates.loadingTemplates', 'Loading templates')} />
+            ) : loadError && templates.length === 0 ? (
                 <ErrorState
                     title={t('app.templates.couldntLoadTemplates', "Couldn't load templates.")}
                     error={loadError}
@@ -598,7 +598,7 @@ const Templates = () => {
                                 tag={isRepo ? t('app.templates.gitRepo', 'Git repo') : t('app.templates.oneClick', 'One-click')}
                                 featured={isFeatured(template)}
                                 description={template.description}
-                                facts={(template.categories || []).slice(0, 2).join(' · ')}
+                                chips={(template.categories || []).slice(0, 3)}
                                 onClick={deployManaged ? undefined : () => handleDeploy(template)}
                                 action={!deployManaged && (
                                     <Button variant="outline" size="sm" onClick={() => handleDeploy(template)}>
@@ -610,6 +610,7 @@ const Templates = () => {
                     })}
                 </CatalogGrid>
             )}
+            </div>
 
             {/* Under the cards, not above them: `templates` is what the category
                 and search query returned, `sortedTemplates` is what the kind
@@ -754,8 +755,17 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
     const domainPreview = baseDomain && appName && isLocalTarget && !isRepo
         ? `${appName}.${baseDomain}` : null;
 
+    const visibleVars = (template.variables || []).filter(v => !v.hidden);
+    // A password with a default is auto-generated, so it may stay empty.
+    const isRequiredVar = (v) => v.required && !(v.type === 'password' && v.default);
+    const fe = useFieldErrors(Object.fromEntries(visibleVars.map(v => [
+        `var-${v.name}`,
+        isRequiredVar(v) && !variables[v.name] ? t('common.validation.required', 'This field is required.') : null,
+    ])), fieldId);
+
     async function handleInstall(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         setInstalling(true);
         setErrors([]);
 
@@ -838,8 +848,6 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
         }
     }
 
-    const visibleVars = (template.variables || []).filter(v => !v.hidden);
-
     return (
         <Drawer
             flush
@@ -851,7 +859,7 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
             width={520}
             className="sk-formdrawer"
         >
-            <form onSubmit={handleInstall} className="sk-formdrawer__form">
+            <form onSubmit={handleInstall} className="sk-formdrawer__form" noValidate>
                 <div className="sk-formdrawer__body">
                     {errors.length > 0 && (
                         <div className="alert alert-danger">
@@ -938,18 +946,20 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                         <div className="sk-formdrawer__field">
                             <span className="sk-formdrawer__label">{t('app.templates.configuration', 'Settings')}</span>
                             {visibleVars.map(variable => (
-                                <div key={variable.name} className="form-group">
-                                    <label htmlFor={`${fieldId}-var-${variable.name}`}>
-                                        {variable.name}
-                                        {variable.required && ' *'}
-                                    </label>
+                                <FormField
+                                    key={variable.name}
+                                    label={variable.name}
+                                    htmlFor={`${fieldId}-var-${variable.name}`}
+                                    required={isRequiredVar(variable)}
+                                    hint={variable.description || undefined}
+                                    error={fe.error(`var-${variable.name}`)}
+                                >
                                     {variable.options ? (
                                         <Select
                                             value={variables[variable.name] || ''}
-                                            onValueChange={(v) => setVariables({...variables, [variable.name]: v})}
-                                            required={variable.required}
+                                            onValueChange={(v) => { fe.clear(`var-${variable.name}`); setVariables({...variables, [variable.name]: v}); }}
                                         >
-                                            <SelectTrigger id={`${fieldId}-var-${variable.name}`} aria-label={variable.name}>
+                                            <SelectTrigger id={`${fieldId}-var-${variable.name}`} aria-label={variable.name} onBlur={() => fe.touch(`var-${variable.name}`)}>
                                                 <SelectValue placeholder={t('app.templates.select', 'Select…')} />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -964,34 +974,30 @@ const InstallModal = ({ template, onClose, onSuccess, renderIcon }) => {
                                         <PortField
                                             id={`${fieldId}-var-${variable.name}`}
                                             value={variables[variable.name] || ''}
-                                            onChange={(port) => setVariables({...variables, [variable.name]: port === '' ? '' : String(port)})}
+                                            onChange={(port) => { fe.clear(`var-${variable.name}`); setVariables({...variables, [variable.name]: port === '' ? '' : String(port)}); }}
                                             host={isLocalTarget}
                                             placeholder={variable.default || ''}
-                                            required={variable.required}
                                         />
                                     ) : variable.type === 'password' ? (
                                         <Input
                                             id={`${fieldId}-var-${variable.name}`}
                                             type="password"
                                             value={variables[variable.name] || ''}
-                                            onChange={(e) => setVariables({...variables, [variable.name]: e.target.value})}
+                                            onChange={(e) => { fe.clear(`var-${variable.name}`); setVariables({...variables, [variable.name]: e.target.value}); }}
+                                            onBlur={() => fe.touch(`var-${variable.name}`)}
                                             placeholder={variable.default ? '(auto-generated)' : ''}
-                                            required={variable.required && !variable.default}
                                         />
                                     ) : (
                                         <Input
                                             id={`${fieldId}-var-${variable.name}`}
                                             type="text"
                                             value={variables[variable.name] || ''}
-                                            onChange={(e) => setVariables({...variables, [variable.name]: e.target.value})}
+                                            onChange={(e) => { fe.clear(`var-${variable.name}`); setVariables({...variables, [variable.name]: e.target.value}); }}
+                                            onBlur={() => fe.touch(`var-${variable.name}`)}
                                             placeholder={variable.default || ''}
-                                            required={variable.required}
                                         />
                                     )}
-                                    {variable.description && (
-                                        <span className="form-help">{variable.description}</span>
-                                    )}
-                                </div>
+                                </FormField>
                             ))}
                         </div>
                     )}

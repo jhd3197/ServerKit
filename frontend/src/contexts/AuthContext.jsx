@@ -5,6 +5,26 @@ import { presetForUseCases } from '../components/sidebarItems';
 
 import { AuthContext } from './useAuth.js';
 
+// /auth/setup-status -> context state. One mapping for the first load and
+// every refresh: two hand-kept copies had already drifted (the refresh one
+// dropped defaultLanguage).
+function toSetupStatus(status) {
+    return {
+        needsSetup: status.needs_setup,
+        registrationEnabled: status.registration_enabled,
+        setupCodeRequired: !!status.setup_code_required,
+        ssoProviders: status.sso_providers || [],
+        passwordLoginEnabled: status.password_login_enabled !== false,
+        panelTitle: status.panel_title || import.meta.env.VITE_PANEL_TITLE || 'ServerKit',
+        publicTitle: status.public_title || 'Control Panel',
+        loginLayout: status.login_layout || 'centered',
+        defaultLanguage: status.default_language || null,
+        needsMigration: status.needs_migration || false,
+        migrationInfo: status.migration_info || null,
+        checked: true
+    };
+}
+
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -47,10 +67,11 @@ export function AuthProvider({ children }) {
                 const data = await api.getCurrentUser();
                 setUser(data.user);
             } catch (error) {
-                if (error.status !== 401) {
-                    console.error('Auth check failed:', error);
-                }
-                api.clearTokens();
+                // Only a 401 means the session is gone. A restarting backend
+                // (502, "database is locked") or a dropped connection must not
+                // delete a refresh token that is still good.
+                if (error.status === 401) api.clearTokens();
+                else console.error('Auth check failed:', error);
             }
         }
         setLoading(false);
@@ -58,21 +79,7 @@ export function AuthProvider({ children }) {
 
     const checkSetupStatus = useCallback(async function checkSetupStatus(retries = 3) {
         try {
-            const status = await api.getSetupStatus();
-            setSetupStatus({
-                needsSetup: status.needs_setup,
-                registrationEnabled: status.registration_enabled,
-                setupCodeRequired: !!status.setup_code_required,
-                ssoProviders: status.sso_providers || [],
-                passwordLoginEnabled: status.password_login_enabled !== false,
-                panelTitle: status.panel_title || import.meta.env.VITE_PANEL_TITLE || 'ServerKit',
-                publicTitle: status.public_title || 'Control Panel',
-                loginLayout: status.login_layout || 'centered',
-                defaultLanguage: status.default_language || null,
-                needsMigration: status.needs_migration || false,
-                migrationInfo: status.migration_info || null,
-                checked: true
-            });
+            setSetupStatus(toSetupStatus(await api.getSetupStatus()));
 
             // Always check auth — user may be mid-onboarding wizard with valid session
             await checkAuth();
@@ -108,20 +115,7 @@ export function AuthProvider({ children }) {
 
     async function refreshSetupStatus() {
         try {
-            const status = await api.getSetupStatus();
-            setSetupStatus({
-                needsSetup: status.needs_setup,
-                registrationEnabled: status.registration_enabled,
-                setupCodeRequired: !!status.setup_code_required,
-                ssoProviders: status.sso_providers || [],
-                passwordLoginEnabled: status.password_login_enabled !== false,
-                panelTitle: status.panel_title || import.meta.env.VITE_PANEL_TITLE || 'ServerKit',
-                publicTitle: status.public_title || 'Control Panel',
-                loginLayout: status.login_layout || 'centered',
-                needsMigration: status.needs_migration || false,
-                migrationInfo: status.migration_info || null,
-                checked: true
-            });
+            setSetupStatus(toSetupStatus(await api.getSetupStatus()));
         } catch (error) {
             console.error('Failed to refresh setup status:', error);
         }

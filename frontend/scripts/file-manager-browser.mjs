@@ -163,7 +163,8 @@ try {
     await late.evaluate(() => window.release('/home/projects'));
     await late.waitForTimeout(100);
     assert.equal(await late.getByText('inside-projects.txt').count(), 0);
-    assert.equal(await late.getByTitle('Back', { exact: true }).isDisabled(), true,
+    // Back carries a disabledReason, so it is aria-disabled (focusable), not natively disabled.
+    assert.equal(await late.getByRole('button', { name: 'Back', exact: true }).getAttribute('aria-disabled'), 'true',
         'navigation history must not cross storage targets');
     console.log('PASS late local responses and history cannot cross a target switch');
 
@@ -346,7 +347,7 @@ try {
     await deepLink.evaluate(() => window.release('/var/www'));
     await deepLink.getByText('inside-www.txt', { exact: true }).waitFor();
     assert.equal(await deepLink.getByText('projects', { exact: true }).count(), 0);
-    assert.equal(await deepLink.getByTitle('Back', { exact: true }).isDisabled(), true);
+    assert.equal(await deepLink.getByRole('button', { name: 'Back', exact: true }).getAttribute('aria-disabled'), 'true');
     console.log('PASS initial deep links retain their directory and history');
 
     const clearing = await browser.newPage();

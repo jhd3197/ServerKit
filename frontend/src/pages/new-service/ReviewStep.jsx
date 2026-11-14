@@ -18,6 +18,7 @@ import {
     APP_TYPE_OPTIONS, BUILD_METHOD_OPTIONS, formatAppType, formatBuildMethod,
 } from './useNewServiceForm';
 import { Button as SharedButton } from '@/components/ui/button';
+import InfoTip from '@/components/InfoTip';
 
 // Step 3 — Review & deploy. Only renders cards that have real data; the core
 // fields live in one grid, Advanced keeps the genuinely rare bits.
@@ -340,7 +341,7 @@ const ReviewStep = ({ form }) => {
                     {advancedOpen && (
                         <div className="new-service-page__advanced">
                             <p className="new-service-page__advanced-note">
-                                {t('app.reviewStep.detectedManifestSettingsDockerfilePathBuild', 'Detected manifest settings (Dockerfile path, build/start commands) are applied automatically when present. Override the fields above if the detection is wrong.')}
+                                {t('app.reviewStep.detectedManifestSettingsDockerfilePathBuildShort', 'Detected manifest settings apply automatically.')} <InfoTip>{t('app.reviewStep.detectedManifestSettingsDockerfilePathBuild', 'Detected manifest settings (Dockerfile path, build/start commands) are applied automatically when present. Override the fields above if the detection is wrong.')}</InfoTip>
                             </p>
                         </div>
                     )}

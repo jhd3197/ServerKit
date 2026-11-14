@@ -218,13 +218,10 @@ const MigrationHistoryTab = () => {
         }
     }
 
-    if (loading) {
+    if (loading && revisions.length === 0) {
         return (
             <div className="settings-section">
-                <div className="loading-state">
-                    <Loader size={20} className="spin" />
-                    <span>{t('app.migrationHistoryTab.loadingMigrationHistory', 'Loading migration history…')}</span>
-                </div>
+                <EmptyState loading loadingVariant="table" loadingRows={5} title={t('app.migrationHistoryTab.loadingMigrationHistory', 'Loading migration history…')} />
             </div>
         );
     }

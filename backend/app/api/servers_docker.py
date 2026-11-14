@@ -2,11 +2,11 @@
 
 Registered on the shared ``servers_bp`` blueprint (see app.api.servers)."""
 from app.services.remote_docker_service import RemoteDockerService
-from app.middleware.rbac import developer_required
+from app.middleware.rbac import developer_required, get_current_user
 from app.exceptions import field_required
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask import jsonify, request
-from app.api.servers import _agent_failure_status, servers_bp
+from app.api.servers import _agent_failure_status, _get_operable_server, servers_bp
 from app.api._request import json_object
 
 
@@ -17,7 +17,7 @@ from app.api._request import json_object
 @jwt_required()
 def get_available_servers():
     """Get list of servers available for Docker operations"""
-    servers = RemoteDockerService.get_available_servers()
+    servers = RemoteDockerService.get_available_servers(get_current_user())
     return jsonify(servers)
 
 
@@ -25,6 +25,7 @@ def get_available_servers():
 @jwt_required()
 def list_remote_containers(server_id):
     """List containers on a remote server"""
+    _get_operable_server(server_id)
     all_containers = request.args.get('all', 'false').lower() == 'true'
     user_id = get_jwt_identity()
 
@@ -40,6 +41,7 @@ def list_remote_containers(server_id):
 @jwt_required()
 def inspect_remote_container(server_id, container_id):
     """Inspect a container on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.inspect_container(server_id, container_id, user_id=user_id)
@@ -54,6 +56,7 @@ def inspect_remote_container(server_id, container_id):
 @developer_required
 def start_remote_container(server_id, container_id):
     """Start a container on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.start_container(server_id, container_id, user_id=user_id)
@@ -68,6 +71,7 @@ def start_remote_container(server_id, container_id):
 @developer_required
 def stop_remote_container(server_id, container_id):
     """Stop a container on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
     timeout = data.get('timeout')
@@ -84,6 +88,7 @@ def stop_remote_container(server_id, container_id):
 @developer_required
 def restart_remote_container(server_id, container_id):
     """Restart a container on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
     timeout = data.get('timeout')
@@ -100,6 +105,7 @@ def restart_remote_container(server_id, container_id):
 @developer_required
 def remove_remote_container(server_id, container_id):
     """Remove a container on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     force = request.args.get('force', 'false').lower() == 'true'
     remove_volumes = request.args.get('v', 'false').lower() == 'true'
@@ -120,6 +126,7 @@ def remove_remote_container(server_id, container_id):
 @jwt_required()
 def get_remote_container_stats(server_id, container_id):
     """Get container stats from a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.get_container_stats(server_id, container_id, user_id=user_id)
@@ -141,6 +148,7 @@ def get_remote_container_logs(server_id, container_id):
         since: Show logs since timestamp
         timestamps: Include timestamps (default true)
     """
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     tail = request.args.get('tail', '100')
     since = request.args.get('since')
@@ -162,6 +170,7 @@ def get_remote_container_logs(server_id, container_id):
 @jwt_required()
 def list_remote_images(server_id):
     """List images on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.list_images(server_id, user_id=user_id)
@@ -176,6 +185,7 @@ def list_remote_images(server_id):
 @developer_required
 def pull_remote_image(server_id):
     """Pull an image on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
 
@@ -194,6 +204,7 @@ def pull_remote_image(server_id):
 @developer_required
 def remove_remote_image(server_id, image_id):
     """Remove an image on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     force = request.args.get('force', 'false').lower() == 'true'
 
@@ -209,6 +220,7 @@ def remove_remote_image(server_id, image_id):
 @jwt_required()
 def list_remote_volumes(server_id):
     """List volumes on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.list_volumes(server_id, user_id=user_id)
@@ -223,6 +235,7 @@ def list_remote_volumes(server_id):
 @developer_required
 def remove_remote_volume(server_id, volume_name):
     """Remove a volume on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     force = request.args.get('force', 'false').lower() == 'true'
 
@@ -238,6 +251,7 @@ def remove_remote_volume(server_id, volume_name):
 @jwt_required()
 def list_remote_networks(server_id):
     """List networks on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.list_networks(server_id, user_id=user_id)
@@ -252,6 +266,7 @@ def list_remote_networks(server_id):
 @developer_required
 def remove_remote_network(server_id, network_id):
     """Remove a network on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.remove_network(server_id, network_id, user_id=user_id)
@@ -266,6 +281,7 @@ def remove_remote_network(server_id, network_id):
 @jwt_required()
 def get_remote_system_metrics(server_id):
     """Get system metrics from a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.get_system_metrics(server_id, user_id=user_id)
@@ -280,6 +296,7 @@ def get_remote_system_metrics(server_id):
 @jwt_required()
 def get_remote_system_info(server_id):
     """Get system info from a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.get_system_info(server_id, user_id=user_id)
@@ -296,6 +313,7 @@ def get_remote_system_info(server_id):
 @jwt_required()
 def list_remote_compose_projects(server_id):
     """List compose projects on a remote server"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
 
     result = RemoteDockerService.compose_list(server_id, user_id=user_id)
@@ -310,6 +328,7 @@ def list_remote_compose_projects(server_id):
 @developer_required
 def remote_compose_ps(server_id):
     """List containers for a compose project"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
 
@@ -332,6 +351,7 @@ def remote_compose_ps(server_id):
 @developer_required
 def remote_compose_up(server_id):
     """Start a compose project"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
 
@@ -356,6 +376,7 @@ def remote_compose_up(server_id):
 @developer_required
 def remote_compose_down(server_id):
     """Stop a compose project"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
 
@@ -380,6 +401,7 @@ def remote_compose_down(server_id):
 @developer_required
 def remote_compose_logs(server_id):
     """Get logs from a compose project"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
 
@@ -404,6 +426,7 @@ def remote_compose_logs(server_id):
 @developer_required
 def remote_compose_restart(server_id):
     """Restart a compose project or specific service"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
 
@@ -427,6 +450,7 @@ def remote_compose_restart(server_id):
 @developer_required
 def remote_compose_pull(server_id):
     """Pull images for a compose project"""
+    _get_operable_server(server_id)
     user_id = get_jwt_identity()
     data = json_object()
 

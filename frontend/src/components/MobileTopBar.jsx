@@ -1,16 +1,17 @@
-import { Menu, X } from 'lucide-react';
+import { Menu, Plus, Search, X } from 'lucide-react';
 import { t } from '../i18n/t';
 import { useTheme } from '../contexts/useTheme.js';
 import ServerKitLogo from './ServerKitLogo';
 import NotificationBell from './NotificationBell';
-import QuickCreate from './QuickCreate';
 import { Button as SharedButton } from '@/components/ui/button';
+import { useRegisteredPrimaryAction } from '../contexts/pagePrimaryAction.js';
 
 // Fixed header shown only on narrow viewports (< 768px). Houses the
 // hamburger toggle that opens the sidebar as an off-canvas drawer, since
 // the persistent sidebar is hidden at this width. Hidden on desktop via CSS.
 const MobileTopBar = ({ navOpen, onToggle }) => {
     const { whiteLabel } = useTheme();
+    const primary = useRegisteredPrimaryAction();
     const branded = whiteLabel?.enabled;
     const brandName = branded ? (whiteLabel.brandName || 'Brand') : 'ServerKit';
     const showCustomLogo = branded && whiteLabel.logoData && whiteLabel.mode !== 'text_only';
@@ -43,7 +44,28 @@ const MobileTopBar = ({ navOpen, onToggle }) => {
                 <span className="mobile-topbar__name">{brandName}</span>
             </div>
             <div className="mobile-topbar__actions">
-                <QuickCreate />
+                <SharedButton variant="unstyled"
+                    type="button"
+                    className="quick-create"
+                    title={t('app.mobileSearch.title', 'Search everything (Ctrl K)')}
+                    aria-label={t('app.mobileSearch.label', 'Search')}
+                    onClick={() => window.dispatchEvent(new CustomEvent('serverkit:open-palette'))}
+                >
+                    <Search size={16} aria-hidden="true" />
+                </SharedButton>
+                {primary && (
+                    <SharedButton variant="unstyled"
+                        type="button"
+                        className="quick-create"
+                        title={primary.label}
+                        aria-label={primary.label}
+                        disabled={primary.disabled}
+                        disabledReason={primary.disabledReason}
+                        onClick={primary.run}
+                    >
+                        <Plus size={16} />
+                    </SharedButton>
+                )}
                 <NotificationBell />
             </div>
         </header>

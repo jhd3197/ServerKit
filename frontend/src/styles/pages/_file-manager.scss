@@ -302,7 +302,7 @@ $ft-default:  #646b7a;
             width: 100%;
 
             &::placeholder { color: $text-tertiary; }
-            &:focus { outline: none; }
+            &:focus-visible { outline-offset: -2px; }
         }
 
         .search-field-clear {
@@ -394,8 +394,9 @@ $ft-default:  #646b7a;
         }
 
         > span {
-            width: 78px;
-            min-width: 0;
+            width: auto;
+            min-width: 78px;
+            white-space: nowrap;
             text-align: start;
         }
 
@@ -860,6 +861,7 @@ $ft-default:  #646b7a;
 
             &:focus {
                 border-color: var(--accent-dim);
+                box-shadow: $focus-ring;
             }
         }
     }
@@ -1138,7 +1140,8 @@ $ft-default:  #646b7a;
         @include transition(all);
         user-select: none;
 
-        &:hover {
+        &:hover,
+        &:focus-within {
             background: var(--surface-2);
 
             .file-card-check { opacity: 1; }
@@ -1320,7 +1323,8 @@ $ft-default:  #646b7a;
 
             &:last-child { border-bottom: none; }
 
-            &:hover {
+            &:hover,
+            &:focus-within {
                 background: var(--surface-2);
                 .col-actions .row-action { opacity: 1; }
                 .col-check .checkbox { border-color: $border-hover; }
@@ -1378,6 +1382,7 @@ $ft-default:  #646b7a;
     &.select-mode .file-list .file-list-header .col-check,
     &.select-mode .file-list .file-item .col-check,
     .file-list .file-item:hover .col-check,
+    .file-list .file-item:focus-within .col-check,
     .file-list .file-item.selected .col-check {
         opacity: 1;
     }
@@ -1407,6 +1412,7 @@ $ft-default:  #646b7a;
         opacity: 0;
         @include transition(all);
 
+        &:focus-visible { opacity: 1; }
         &:hover { background: var(--surface-3); color: var(--text); }
         &.danger:hover { @include status-variant($danger, $danger-bg); }
     }
@@ -1776,7 +1782,7 @@ $drawer-width: 520px;
         color: $text-primary;
         min-height: 280px;
 
-        &:focus { outline: none; }
+        &:focus-visible { outline-offset: -2px; }
         &[readonly] { background: $bg-body; }
     }
 
@@ -1852,7 +1858,7 @@ $drawer-width: 520px;
             .toolbar-left,
             .toolbar-right { width: 100%; justify-content: flex-start; }
 
-            .toolbar-right { flex-wrap: wrap; }
+            .toolbar-right { flex-wrap: wrap; gap: $space-1; }
 
             .search-field {
                 order: -1;
@@ -1862,9 +1868,10 @@ $drawer-width: 520px;
             }
 
             .file-toolbar-select {
-                flex: 1;
+                flex: 0 1 auto;
 
-                > span { width: 100%; }
+                > span { min-width: 0; }
+                > svg:not(.ui-select-icon) { display: none; }
             }
 
             .file-mount-chip { display: none; }

@@ -13,6 +13,7 @@ import { useOperations } from '@/contexts/OperationsContext';
 import DiskReclaimModal from './DiskReclaimModal';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 
 // The fleet sweep fans out across agents over the network, so it is a job
@@ -249,7 +250,7 @@ const DoctorPanel = () => {
                 </div>
 
                 <p className="doctor-panel__blurb">
-                    {t('app.doctorPanel.oneSweepAcrossManagedConfigurationDrift', 'One sweep across managed configuration drift, core services, certificates, disk headroom and the database. Nothing is repaired automatically; every fix is a button you press.')}
+                    {t('app.doctorPanel.sweepShort', 'One sweep, no automatic repairs.')} <InfoTip>{t('app.doctorPanel.oneSweepAcrossManagedConfigurationDrift', 'One sweep across managed configuration drift, core services, certificates, disk headroom and the database. Nothing is repaired automatically; every fix is a button you press.')}</InfoTip>
                     {report?.ran_at && <span className="doctor-panel__ranat"> {t('app.doctorPanel.lastRun', 'Last run')} {formatRanAt(report.ran_at)}.</span>}
                 </p>
 
@@ -304,7 +305,7 @@ const DoctorPanel = () => {
                 </div>
 
                 <p className="doctor-panel__blurb">
-                    {t('app.doctorPanel.theSameHealthSweepAcrossEvery', 'The same health sweep across every paired server. It runs as a background job because it talks to each agent over the network; a server that is offline keeps its last known findings instead of dropping out.')}
+                    {t('app.doctorPanel.fleetSweepShort', 'Health sweep across every paired server.')} <InfoTip>{t('app.doctorPanel.theSameHealthSweepAcrossEvery', 'The same health sweep across every paired server. It runs as a background job because it talks to each agent over the network; a server that is offline keeps its last known findings instead of dropping out.')}</InfoTip>
                     {fleet?.ran_at && <span className="doctor-panel__ranat"> {t('app.doctorPanel.lastSweep', 'Last sweep')} {formatRanAt(fleet.ran_at)}.</span>}
                 </p>
 

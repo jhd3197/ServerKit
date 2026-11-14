@@ -262,7 +262,7 @@ function RemoveByName({ onRemove }) {
                 placeholder={t('app.serverPackagesTab.packageName', 'package name')}
                 size="sm"
             />
-            <Button type="submit" variant="outline" size="sm" disabled={!name.trim()}>
+            <Button type="submit" variant="outline" size="sm" disabled={!name.trim()} disabledReason={t('app.serverPackagesTab.enterAPackageNameFirst', 'Enter a package name first')}>
                 {t('common.actions.uninstall', 'Uninstall')}
             </Button>
         </form>

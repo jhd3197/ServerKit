@@ -227,10 +227,6 @@
             "viewRelease": "عرض الإصدار",
             "youReUpToDate": "أنت على اطلاع!"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "أضف مفتاح مرور أو 2FA",
-            "secureYourAccount": "تأمين حسابك"
-        },
         "activityTab": {
             "actionType": "نوع الإجراء",
             "actionsThisWeek": "الإجراءات هذا الأسبوع",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "تم تفعيل الترقية لجميع الوكلاء عبر الإنترنت",
             "versionDistribution": "توزيع الإصدار",
             "versions": "الإصدارات",
-            "viewDetails": "عرض التفاصيل"
+            "viewDetails": "عرض التفاصيل",
+            "selectAVersionFirst": "اختر إصدارًا أولًا"
         },
         "ai": {
             "assistant": "المساعد"
@@ -612,7 +609,8 @@
             "remote": "بعيد",
             "restoreDrills": "استعادة التدريبات",
             "turnOnProtectionOrClickBack": "قم بتشغيل الحماية أو انقر فوق النسخ الاحتياطي الآن.",
-            "verifyRemoteCopy": "التحقق من النسخة البعيدة"
+            "verifyRemoteCopy": "التحقق من النسخة البعيدة",
+            "onlySuccessfulBackupsCanBeRestored": "يمكن استعادة النسخ الاحتياطية الناجحة فقط"
         },
         "backupTabs": {
             "schedules": "الجداول الزمنية",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "التحميل التلقائي للنسخ الاحتياطية الجديدة إلى وحدة التخزين البعيدة",
             "b2GbMonth": "B2 (دولار/جيجابايت/شهر)",
             "backUpNow": "قم بالنسخ الاحتياطي الآن",
+            "backUpShort": "نسخ احتياطي",
             "backblazeB2": "بلاك بليز B2",
             "backupDeleted": "تم حذف النسخة الاحتياطية",
             "backupName": "اسم النسخة الاحتياطية",
@@ -667,6 +666,7 @@
             "database": "قاعدة البيانات",
             "databaseBackupCreated": "تم إنشاء نسخة احتياطية لقاعدة البيانات",
             "databaseName": "اسم قاعدة البيانات",
+            "databaseNameRequired": "أدخل اسم قاعدة البيانات.",
             "databaseOnly": "قاعدة البيانات فقط",
             "databaseType": "نوع قاعدة البيانات",
             "delete": "حذف {{name}}",
@@ -721,6 +721,7 @@
             "secretKey": "المفتاح السري",
             "selectApplication": "حدد الخدمة",
             "serverkitIsFreeTheseAreYour": "ServerKit مجاني — وهذه هي تكاليف التخزين الخاصة بك. Local هو قرص الخادم الخاص بك (اتركه عند 0 إذا لم تقم بتتبعه). S3/B2 هما $/GB/الشهر لموفر الخدمة السحابية الخاص بك.",
+            "serviceRequired": "اختر خدمة.",
             "settingsSaved": "تم حفظ الإعدادات",
             "siteService": "الموقع/الخدمة",
             "storageConfigurationSaved": "تم حفظ تكوين التخزين",
@@ -883,7 +884,8 @@
             "selectSize": "اختر الحجم",
             "serverDestroyed": "تم تدمير الخادم",
             "serverName": "اسم الخادم",
-            "serverProvisioningInitiated": "بدأ توفير الخادم"
+            "serverProvisioningInitiated": "بدأ توفير الخادم",
+            "enterANameAndChooseAProvider": "أدخل اسمًا واختر مزوّدًا أولًا"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "سيتم إنشاء CNAME لاسم المضيف هذا في Cloudflare DNS، مع الإشارة إلى النفق.",
@@ -969,7 +971,10 @@
             "sortAToZ": "الترتيب من A إلى Z",
             "sortHighToLow": "الترتيب من الأعلى إلى الأدنى",
             "sortLowToHigh": "الترتيب من الأدنى إلى الأعلى",
-            "sortZToA": "الترتيب من Z إلى A"
+            "sortZToA": "الترتيب من Z إلى A",
+            "alreadyTheFirstColumn": "هذا هو العمود الأول بالفعل",
+            "alreadyTheLastColumn": "هذا هو العمود الأخير بالفعل",
+            "noFilterOnThisColumn": "لا يوجد مرشح على هذا العمود"
         },
         "columnsMenu": {
             "columns": "أعمدة",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "مراسلة المساعد",
             "noResources": "لم يتم العثور على موارد يمكن الوصول إليها",
             "searchResources": "البحث في الموارد…",
-            "send": "يرسل"
+            "send": "يرسل",
+            "setUpTheAssistantFirst": "أعدّ المساعد أولاً",
+            "typeAMessageFirst": "اكتب رسالة أولاً"
         },
         "configDiffModal": {
             "applyRestorePoint": "تطبيق نقطة الاستعادة",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "عنوان IP العام لهذا الخادم",
             "useStarttlsRecommended": "استخدم STARTTLS (مستحسن)",
             "whereDoIGetThis": "أين يمكنني الحصول على هذا؟",
-            "yourAccountEmailGlobalKeySimplest": "البريد الإلكتروني الخاص بحسابك + المفتاح العام. أبسط من حيث الإعداد، ولكنه يمنح الوصول الكامل إلى الحساب."
+            "yourAccountEmailGlobalKeySimplest": "البريد الإلكتروني الخاص بحسابك + المفتاح العام. أبسط من حيث الإعداد، ولكنه يمنح الوصول الكامل إلى الحساب.",
+            "setUpTheOauthAppFirst": "أعدّ تطبيق OAuth أولاً"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "أضف بيانات اعتماد تطبيق GitHub OAuth في الإعدادات قبل الاتصال.",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "مستودعات البحث",
             "serviceName": "اسم الخدمة",
             "systemdUnitOptional": "وحدة systemd (اختياري)",
-            "uploadTheArchive": "رفع الأرشيف"
+            "uploadTheArchive": "رفع الأرشيف",
+            "setUpGithubInSettingsFirst": "أعدّ GitHub في الإعدادات أولاً"
         },
         "connectionsHub": {
             "authorizedViaOauth": "مُخوَّل عبر OAuth",
@@ -1337,7 +1346,8 @@
             "toRun": "للتشغيل.",
             "writeSqlAboveAndPress": "اكتب SQL أعلاه ثم اضغط",
             "writesEnabledBeCareful": "تم تمكين الكتابة - كن حذرًا",
-            "writesOn": "الكتابة مفعّلة"
+            "writesOn": "الكتابة مفعّلة",
+            "runAQueryWithResultsFirst": "شغّل استعلاماً له نتائج أولاً"
         },
         "consoleToolbar": {
             "allLevels": "كل المستويات",
@@ -1353,7 +1363,8 @@
             "searchLogs": "سجلات البحث...",
             "showTheDeploymentDetailsAgain": "أظهر تفاصيل النشر مرة أخرى",
             "timestamps": "الطوابع الزمنية",
-            "wrap": "طَوّق"
+            "wrap": "طَوّق",
+            "noMatchesToJumpTo": "لا توجد نتائج مطابقة للانتقال إليها"
         },
         "containerOpsPanel": {
             "actionFailed": "فشل الإجراء",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "لم يتم إنتاج أي إخراج.",
             "noRunsRecordedYet": "لم يتم تسجيل أي عمليات تشغيل حتى الآن.",
             "noRunsYet": "لا توجد عمليات تشغيل بعد",
-            "noScheduledJobsFoundCreateYour": "لم يتم العثور على وظائف مجدولة. قم بإنشاء أول مهمة cron لأتمتة المهام.",
             "paused": "متوقف مؤقتًا",
             "runHistory": "سجل التشغيل",
             "runHistoryIsAnAdminOnly": "سجل التشغيل هو سطح مخصص للمسؤول فقط.",
@@ -1607,7 +1617,8 @@
             "undo": "تراجع",
             "unnamedJob": "مهمة بدون اسم",
             "untracked": "غير متتبَّع",
-            "whatDoesThisJobDo": "ماذا تفعل هذه الوظيفة؟"
+            "whatDoesThisJobDo": "ماذا تفعل هذه الوظيفة؟",
+            "enterANameCommandAndScheduleFirst": "أدخل الاسم والأمر والجدولة أولاً"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 حقول: الدقيقة، الساعة، اليوم، الشهر، أيام الأسبوع.",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "حذف مهمة Cron",
             "scheduleACommandOnTheHost": "جدولة أمر على المضيف crontab. يعمل كمستخدم وكيل.",
             "scheduleIsRequired": "الجدول الزمني مطلوب",
-            "serverOffline": "الخادم غير متصل"
-        },
-        "cutoverDrawer": {
-            "answer": "إجابة",
-            "applyCutover": "تطبيق التحويل",
-            "applyDnsCutover": "هل تريد تطبيق تحويل DNS؟",
-            "applying": "جارٍ التقديم…",
-            "atTheBoxWhereTheImported": "في المربع الذي يوجد به الموقع المستورد الآن. يتم أخذ لقطة لسجلاته الحالية أولاً، لذلك يمكن دائمًا الرجوع إلى التبديل.",
-            "capturing": "جارٍ الالتقاط…",
-            "checkPropagation": "تحقق من الانتشار",
-            "cutoverApplied": "تم تطبيق التحويل:",
-            "cutoverAppliedNowPointsAt": "تم تطبيق التقسيم — {{domain}} يشير الآن إلى {{value}}",
-            "cutoverFinishedWithErrorsReviewBelow": "انتهى القطع مع وجود أخطاء. قم بالمراجعة أدناه والعودة إذا لزم الأمر.",
-            "cutoverFinishedWithErrorsReviewThe": "انتهت عملية الاستبدال مع وجود أخطاء — راجع النتائج وفكر في العودة.",
-            "deletedCreatedRecords_one": "تم حذف سجل واحد أنشأه التحويل.",
-            "deletedCreatedRecords_other": "تم حذف {{count}} سجل أنشأها التحويل.",
-            "dnsCutover": "تحويل DNS",
-            "matchesNewTarget": "يطابق الهدف الجديد",
-            "new": "جديد",
-            "newAddressTarget": "العنوان الجديد (الهدف)",
-            "newTarget": "هدف جديد",
-            "noChangesToApplyForThe": "لا توجد تغييرات لتطبيقها على أنواع السجلات المحددة.",
-            "notFullyPropagated": "لم ينتشر بالكامل",
-            "nowPointsAt": "يشير الآن إلى",
-            "oneClickRestoresTheSnapshotCaptured": "تعمل نقرة واحدة على استعادة اللقطة التي تم التقاطها قبل عملية الاستبدال هذه - بما في ذلك حذف أي سجلات أنشأها هذا الاستبدال.",
-            "plannedChanges": "التغييرات المخطط لها",
-            "propagated": "انتشر",
-            "propagating": "جارٍ الانتشار",
-            "propagation": "الانتشار",
-            "providerZoneId": "معرف منطقة المزود",
-            "publicResolversCacheTheOldAddress": "تقوم وحدات الحل العامة بتخزين العنوان القديم حتى تنتهي صلاحية TTL الخاصة بهم. تحقق من مكان تفعيل العنوان الجديد.",
-            "recordTypes": "أنواع السجلات",
-            "recordTypes2": "أنواع السجلات",
-            "recordsCaptured": "السجلات التي تم التقاطها",
-            "repoint": "إعادة نقطة",
-            "repointsRecords_one": "يعيد هذا توجيه سجل {{types}} لـ {{domain}} إلى {{target}}. تتيح لك اللقطة التراجع.",
-            "repointsRecords_other": "يعيد هذا توجيه سجلات {{types}} لـ {{domain}} إلى {{target}}. تتيح لك اللقطة التراجع.",
-            "resolver": "محلل",
-            "restoredRecords_one": "تمت استعادة سجل واحد.",
-            "restoredRecords_other": "تمت استعادة {{count}} سجل.",
-            "revertCutover": "التراجع عن التحويل",
-            "revertFinishedWithErrorsCheckThe": "انتهت عملية العودة مع وجود أخطاء — تحقق من النتائج.",
-            "revertedRestoredSPreCutoverRecords": "تمت العودة - تمت استعادة سجلات {{domain}} السابقة للتحويل",
-            "reverting": "جارٍ التراجع…",
-            "review": "مراجعة",
-            "rollBack": "التراجع",
-            "snapshotPreview": "لقطة ومعاينة",
-            "theDnsProviderSZoneIdentifier": "معرف منطقة موفر DNS",
-            "theIpOrHostnameForCname": "عنوان IP (أو اسم المضيف لـ CNAME) الذي يجب أن تشير إليه السجلات.",
-            "thisDomainHasNoConnectedProvider": "لا يحتوي هذا المجال على منطقة موفر متصلة — يحتاج الانتقال إلى منطقة موفر لقراءة السجلات وكتابتها.",
-            "verify": "يؤكد"
+            "serverOffline": "الخادم غير متصل",
+            "failedToLoadCronJobs": "تعذّر تحميل مهام cron."
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "لا توجد أدوات على لوحة القيادة هذه حتى الآن."
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "انقر للفرز · Shift+النقر لإضافة مستوى الفرز",
             "loading": "تحميل",
             "noRowsMatchTheActiveColumn": "لا توجد صفوف تتطابق مع عوامل تصفية الأعمدة النشطة.",
+            "scrollableTable": "جدول قابل للتمرير",
             "selectAllRows": "حدد كافة الصفوف",
-            "selectRow": "حدد الصف"
+            "selectRow": "حدد الصف",
+            "sortAColumnFirst": "رتّب حسب عمود أولاً"
         },
         "dataTableFooter": {
             "nextPage": "الصفحة التالية",
@@ -1776,7 +1740,8 @@
             "updateOverview": "نظرة عامة على التحديث",
             "updatingDatabaseSchema": "جارٍ تحديث مخطط قاعدة البيانات...",
             "weRecommendBackingUpYourDatabase": "نوصي بعمل نسخة احتياطية لقاعدة البيانات الخاصة بك قبل تطبيق التحديثات.",
-            "whichDoesNotExistInThis": "، وهو غير موجود في هذا الإصدار - عادةً ما يكون فرعًا أضاف عملية ترحيل ثم تمت إعادته بعد ذلك. لا يمكن ترقية المخطط حتى يتم إعادته إلى مراجعة معروفة:"
+            "whichDoesNotExistInThis": "، وهو غير موجود في هذا الإصدار - عادةً ما يكون فرعًا أضاف عملية ترحيل ثم تمت إعادته بعد ذلك. لا يمكن ترقية المخطط حتى يتم إعادته إلى مراجعة معروفة:",
+            "createABackupFirst": "أنشئ نسخة احتياطية أولًا"
         },
         "databases": {
             "backUpDatabase": "النسخ الاحتياطي لقاعدة البيانات",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "على Linux، تأكد من بدء تشغيل البرنامج الخفي Docker",
             "retryConnection": "أعد محاولة الاتصال",
             "targets": "الأهداف",
-            "toUseDockerManagement": "لاستخدام إدارة Docker:",
             "verifyTheUserHasPermissionsTo": "تحقق من أن المستخدم لديه أذونات للوصول إلى Docker",
             "volumes": "وحدات التخزين"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "تحديث السجلات",
             "regenerateToken": "إعادة إنشاء الرمز المميز",
             "thisDomainIsnTSetUp": "لم يتم إعداد هذا المجال لـ DNS في ServerKit حتى الآن.",
-            "tokenRegenerated": "تم إعادة إنشاء الرمز المميز"
+            "tokenRegenerated": "تم إعادة إنشاء الرمز المميز",
+            "enterTheRecordContentFirst": "أدخل محتوى السجل أولاً"
         },
         "domainField": {
             "alreadyAttached": "{{name}} مرتبط بالفعل بخدمة.",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "هل تريد تعطيل SSL لـ {{name}}؟",
             "dismissError": "تجاهل الخطأ",
             "dnsProvider": "مزود DNS",
+            "domainRequired": "أدخل نطاقًا صالحًا.",
             "domainVerificationFailed": "فشل التحقق من المجال: {{error}}",
             "domainVerifiedIp": "تم التحقق من المجال! إب: {{ipaddress}}",
             "emailAddress": "عنوان البريد الإلكتروني",
@@ -2292,6 +2258,7 @@
             "rowsFields": "صفوف {{n}} · حقول {{fields}} · {{value}}",
             "searchDomains": "مجالات البحث...",
             "selectAnApplication": "حدد خدمة",
+            "serviceRequired": "اختر خدمة.",
             "setAsPrimaryDomain": "تعيين كمجال أساسي",
             "sslCertificate": "شهادة SSL",
             "sslExpires": "تنتهي الصلاحية {{days}}d",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "تحقق من التنزيل باستخدام المجموع الاختباري SHA256:",
             "windows": "ويندوز:",
             "windowsPowershell": "ويندوز (باورشيل)",
-            "withTheServerRegistrationToken": "مع رمز تسجيل الخادم."
+            "withTheServerRegistrationToken": "مع رمز تسجيل الخادم.",
+            "noBuildPublishedForThisPlatform": "لم يُنشر أي إصدار لهذه المنصة بعد"
         },
         "drawerHeader": {
             "aiSettings": "إعدادات الذكاء الاصطناعي",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "جرّب مصطلح بحث مختلفًا أو تصفح مجلدًا آخر.",
             "typeZA": "اكتب Z-A",
             "types": "أنواع",
+            "up": "أعلى",
             "upDelDeleteF2RenameA": "⌫ لأعلى · ديل حذف · إعادة تسمية F2 · ⌘A الكل",
             "updatedAt": "تم التحديث {{time}}",
             "upload": "رفع",
@@ -2809,10 +2778,12 @@
             "videos": "فيديوهات",
             "volumes": "وحدات التخزين",
             "webConfig": "تكوين الويب",
-            "willBeCreatedIn": "سيتم إنشاؤها في:"
+            "willBeCreatedIn": "سيتم إنشاؤها في:",
+            "nothingToGoBackTo": "لا يوجد ما يمكن الرجوع إليه",
+            "nothingToGoForwardTo": "لا يوجد ما يمكن التقدم إليه",
+            "alreadyAtTheTopFolder": "أنت بالفعل في المجلد الأعلى"
         },
         "fileRow": {
-            "deselect": "قم بإلغاء التحديد",
             "rename": "إعادة تسمية",
             "select": "يختار"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "مسح الكل",
             "noFilters": "لا المرشحات",
             "showResults_one": "إظهار {{count}} {{noun}}",
-            "showResults_other": "إظهار {{count}} {{noun}}"
+            "showResults_other": "إظهار {{count}} {{noun}}",
+            "noFiltersApplied": "لا توجد مرشحات مطبّقة"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 أو 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "اتجاه",
             "unusuallyHigh": "مرتفع بشكل غير معتاد",
             "unusuallyLow": "منخفض بشكل غير معتاد",
-            "zScore": "درجة Z"
+            "zScore": "درجة Z",
+            "selectAServerFirst": "اختر خادمًا أولًا"
         },
         "fleetProxy": {
             "apps": "الخدمات",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "إعادة ضبط تغييرات العرض",
             "rowDensity": "كثافة الصف",
             "rowsInThisView": "الصفوف في طريقة العرض هذه",
-            "selectedRows": "صفوف مختارة"
+            "selectedRows": "صفوف مختارة",
+            "selectSomeRowsFirst": "حدّد بعض الصفوف أولاً"
         },
         "gridViewPicker": {
             "builtIn": "بنيت في",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "ابدأ من المرشحات والأعمدة الحالية",
             "unsaved": "غير محفوظ",
             "unsetAsDefault": "إلغاء التعيين كافتراضي",
-            "viewOptions": "خيارات {{name}}"
+            "viewOptions": "خيارات {{name}}",
+            "enterAViewNameFirst": "أدخل اسم العرض أولاً"
         },
         "groupMenu": {
             "group": "تجميع",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "تم حفظ التكوين. أعد تشغيل الخدمة لتطبيق التغييرات.",
             "failedToSaveConfiguration": "فشل حفظ التكوين",
             "gunicornConfiguration": "تكوين Gunicorn",
-            "loadingGunicornConfiguration": "جارٍ تحميل تكوين Gunicorn..."
+            "loadingGunicornConfiguration": "جارٍ تحميل تكوين Gunicorn...",
+            "failedToLoadConfiguration": "تعذّر تحميل إعدادات Gunicorn."
         },
         "hints": {
             "appBound": "الخدمة نفسها هي عنق الزجاجة. خزّن الصفحات كاملة مؤقتًا أمامها، أو امنحها خادمًا أكبر.",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "لا يوجد شيء للتحويل — لم يتم العثور على أي توجيهات.",
             "pasteTheContentsOfAnApache": "لصق محتويات أباتشي",
             "reason": "سبب",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine على \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine على \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule . /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "الصق قواعد .htaccess أولاً"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 أو 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "للتأكيد",
             "tryAgain": "حاول ثانية",
             "whereTheDumpLives": "حيث يعيش المكب",
-            "working": "جارٍ العمل…"
+            "working": "جارٍ العمل…",
+            "chooseADumpFileFirst": "اختر ملف النسخة (dump) أولاً",
+            "chooseATargetDatabaseFirst": "اختر قاعدة البيانات الهدف أولاً",
+            "importFinished": "اكتمل الاستيراد",
+            "onlyAdminsCanImport": "يمكن للمسؤولين فقط الاستيراد",
+            "typeTheDatabaseNameToConfirm": "اكتب اسم قاعدة البيانات للتأكيد"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "أرشيف cpmove / Backup-*.tar.gz من النسخة الاحتياطية الكاملة للحساب في cPanel.",
@@ -3344,7 +3326,9 @@
             "unknownAge": "عمر غير معروف",
             "viewChanges": "عرض التغييرات",
             "watchingADocrootHashesEveryFile": "تؤدي مشاهدة docroot إلى تجزئة كل ملف خارج مجلدات التحميل/التخزين المؤقت، لذلك يتم الاشتراك لكل خدمة.",
-            "whatChanged": "ما تغير"
+            "whatChanged": "ما تغير",
+            "createABaselineFirst": "أنشئ خط أساس أولاً",
+            "notAvailableOnThisServer": "غير متاح على هذا الخادم"
         },
         "invitationsTab": {
             "copyInviteLink": "انسخ رابط الدعوة",
@@ -3394,7 +3378,8 @@
             "exitCode": "(رمز الخروج {{code}})",
             "streamingProgress": "تقدم البث…",
             "waitingForTheAgentToBegin": "في انتظار الوكيل ليبدأ...",
-            "working": "جارٍ العمل…"
+            "working": "جارٍ العمل…",
+            "waitForTheJobToFinish": "انتظر حتى تنتهي المهمة"
         },
         "jobs": {
             "activity": "نشاط",
@@ -3501,7 +3486,9 @@
             "logFiles": "ملفات السجل",
             "noLogFilesFound": "لم يتم العثور على ملفات السجل",
             "searchPattern": "نمط البحث...",
-            "selectALogFile": "اختر ملف سجل لعرض محتوياته."
+            "selectALogFile": "اختر ملف سجل لعرض محتوياته.",
+            "selectALogFileFirst": "اختر ملف سجل أولًا",
+            "nothingToDownloadYet": "لا يوجد شيء للتنزيل بعد"
         },
         "loginLinksSection": {
             "allowedIp": "IP المسموح به",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "لم يتم الإعلان عن أذونات المضيف.",
             "pasteAGithubRepoOwnerRepo": "قم بلصق الريبو GitHub (المالك/الريبو أو المالك/repo@tag)، أو إصدار URL، أو رابط مضغوط مباشر. ستقوم بمعاينة ما يتم تثبيته قبل وصوله.",
             "preview": "معاينة",
-            "signatureInvalid": "التوقيع غير صالح",
             "signatureMismatch": "التوقيع لا يطابق هذا الأرشيف.",
-            "signed": "تم التوقيع ·",
-            "signedUnknownPublisher": "التوقيع · ناشر غير معروف",
             "theDownloadMayHaveBeenTampered": "ربما تم التلاعب بالتنزيل، فلا تقم بتثبيته.",
             "thisExtensionRequests": "يطلب هذا الملحق:",
             "thisReleaseCarriesNoPublisherSignature": "لا يحمل هذا الإصدار أي توقيع للناشر. سيتم تشغيله بامتيازات اللوحة الكاملة - قم بالتثبيت فقط إذا كنت تثق في المصدر.",
             "thisReleaseIsSignedButThe": "تم توقيع هذا الإصدار، لكن مفتاح الناشر غير مثبت بواسطة هذه اللوحة، لذلك لا يمكن التحقق من التوقيع. تعامل معها على أنها غير موقعة.",
-            "unsigned": "غير موقعة",
             "uploadAnExtensionZipWith": "قم بتحميل امتداد مضغوط باستخدام",
             "useAnAbsolutePathThatExists": "استخدم المسار المطلق الموجود على مضيف الواجهة الخلفية أو داخل حاوية الواجهة الخلفية.",
             "zip": "أَزِيز"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "فشل تحميل كتالوج الامتدادات.",
             "couldntToggle": "فشل تشغيل الامتداد أو إيقافه.",
             "couldntUninstall": "فشل إلغاء تثبيت الامتداد.",
-            "declaredPermissionsWhatThePanelHas": "الأذونات المعلنة، وما لاحظته اللجنة، وتبعيات Python المعلقة",
-            "disabling": "جارٍ التعطيل…",
-            "enabling": "جارٍ التفعيل…",
             "extensionConfigurationSaved": "تم حفظ تكوين الإضافة",
             "extensionDisabled": "تم تعطيل الإضافة",
             "extensionEnabled": "تم تمكين الامتداد",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "التثبيت بتوقيع لا يمكن التحقق منه؟",
             "installWithoutChecksumVerification": "هل تريد التثبيت بدون التحقق من المجموع الاختباري؟",
             "installed": "مثبت",
-            "installedExtensions": "الإضافات المثبتة",
             "installedHotReloadShouldPickIt": "تم تثبيت \"{{displayname}}\". يجب أن يلتقطه التحديث السريع؛ أعد تشغيل الواجهة الخلفية إذا لم تظهر مسارات المخطط.",
             "installedRestartBackendIfBlueprintRoutes": "تم تثبيت \"{{displayname}}\". أعد تشغيل الواجهة الخلفية إذا لم تظهر مسارات المخطط.",
             "installing": "جارٍ التثبيت…",
@@ -3665,33 +3644,21 @@
             "purgeData": "تطهير البيانات",
             "registry": "التسجيل",
             "registryInstallFailed": "فشل تثبيت التسجيل",
-            "releaseZipIsSignedThePanel": "تم توقيع الإصدار المضغوط؛ تتحقق اللوحة من توقيع ed25519 عند التثبيت",
             "removingThisExtensionStopsItsRoutes": "تؤدي إزالة هذا الامتداد إلى إيقاف مساراته ومساهمات واجهة المستخدم.",
             "resetFilters": "إعادة تعيين المرشحات",
             "reviewed": "تمت المراجعة",
             "screenshots": "لقطات الشاشة",
             "searchExtensions": "ملحقات البحث...",
-            "signed": "وقعت",
-            "signedWithPublisherKeyWhichThis": "تم التوقيع باستخدام مفتاح الناشر \"{{publisherKeyId}}\"، والذي لا تقوم هذه اللوحة بتثبيته",
             "sourceRepo": "الريبو المصدر",
             "thisExtensionDeclaresNoConfigurationFields": "يعلن هذا الملحق عدم وجود حقول التكوين.",
             "thisExtensionRequests": "يطلب هذا الملحق:",
-            "thisReleaseCarriesNoPublisherSignature": "لا يحمل هذا الإصدار أي توقيع للناشر",
             "uninstall": "إلغاء تثبيت {{displayname}}؟",
-            "uninstalling": "جارٍ إلغاء التثبيت…",
-            "unknownSigner": "موقع غير معروف",
             "unreviewed": "لم تتم مراجعته",
-            "unsigned": "غير موقعة",
             "update": "تحديث",
             "updateAnyway": "التحديث على أي حال",
-            "updateAvailableV": "التحديث متاح → v",
             "updating": "جارٍ التحديث…",
-            "versionByAuthor": "v{{version}} · بواسطة {{author}}"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "السماح للأعضاء بتنفيذ الإجراءات المنسقة",
-            "letWorkspaceMembersRunASmall": "اسمح لأعضاء مساحة العمل بتشغيل مجموعة صغيرة من الإجراءات المنسقة والمحددة (مثل ضبط تكرار النسخ الاحتياطي لإحدى الخدمات) للخدمات التي يمكنهم الوصول إليها. يتم التحقق من صحة كل إجراء وفقًا لمخطط ثابت وتسجيل التدقيق - لا يصل أي نص حر إلى غلاف الخادم على الإطلاق. قم بإيقاف تشغيل هذا لتعطيل سطح عمل العضو بالكامل.",
-            "memberActions": "إجراءات الأعضاء"
+            "versionByAuthor": "v{{version}} · بواسطة {{author}}",
+            "installShort": "تثبيت"
         },
         "message": {
             "somethingWentWrong": "حدث خطأ ما."
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "يتم جمع المقاييس كل دقيقة",
             "noHistoricalDataYet": "لا توجد بيانات تاريخية حتى الآن",
             "realTimePerformance": "الأداء في الوقت الحقيقي",
-            "systemMetrics": "مقاييس النظام"
+            "systemMetrics": "مقاييس النظام",
+            "loadingMetricsHistory": "جارٍ تحميل سجل المقاييس…"
         },
         "metricsTab": {
             "activeRunning": "نشط (قيد التشغيل)",
@@ -3732,7 +3700,8 @@
             "processes": "العمليات",
             "serviceStatus": "حالة الخدمة",
             "startTheServiceToViewResource": "ابدأ الخدمة لعرض مقاييس الموارد.",
-            "workers": "العمال"
+            "workers": "العمال",
+            "failedToLoadMetrics": "تعذّر تحميل المقاييس."
         },
         "microCachePanel": {
             "assetCachingSaved": "تم حفظ التخزين المؤقت للأصول",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "قم بإنشاء مستخدم بنفس الاسم والامتيازات الكاملة",
             "creating": "جارٍ الإنشاء…",
             "databaseCreated": "تم إنشاء قاعدة البيانات",
-            "databaseName": "اسم قاعدة البيانات *",
+            "databaseName": "اسم قاعدة البيانات",
             "encoding": "الترميز",
             "engine": "محرك",
             "fromTheTemplateCatalog": "من كتالوج القالب",
@@ -3836,7 +3805,9 @@
             "running": "قيد التشغيل",
             "saveTheseCredentialsThePasswordWon": "احفظ بيانات الاعتماد هذه — لن يتم عرض كلمة المرور مرة أخرى.",
             "userCreated": "تم إنشاء المستخدم",
-            "username": "اسم المستخدم *"
+            "username": "اسم المستخدم",
+            "databaseNameInvalid": "استخدم الأحرف والأرقام والشرطة السفلية فقط.",
+            "databaseNameRequired": "أدخل اسم قاعدة البيانات."
         },
         "modeToggle": {
             "assistant": "مساعد",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "الزناد أعلاه",
             "webhook": "خطاف ويب",
             "whereAnAlertGoesWhenIt": "أين يذهب التنبيه عند إطلاقه",
-            "wouldAlertNow": "سيُطلق تنبيهًا الآن"
+            "wouldAlertNow": "سيُطلق تنبيهًا الآن",
+            "couldntLoadMonitoringData": "تعذّر تحميل بيانات المراقبة."
         },
         "monitoringOverview": {
             "activeAlerts": "التنبيهات النشطة",
@@ -4018,7 +3990,8 @@
             "runTest": "تشغيل الاختبار",
             "running": "جارٍ التشغيل…",
             "speedTest": "اختبار السرعة",
-            "tested": "تم اختباره"
+            "tested": "تم اختباره",
+            "loadingHosts": "جارٍ تحميل المضيفات"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "تعتبر الاستجابة 200 بدون هذا النص بمثابة انقطاع.",
@@ -4048,7 +4021,6 @@
             "monitoring": "مراقبة {{name}}",
             "nextCheck": "الاختيار التالي",
             "noMonitorsMatch": "لا توجد مراقبات مطابقة",
-            "nothingIsBeingWatchedYet": "لا شيء يتم مراقبته بعد",
             "offForSelfSignedCertificatesOn": "إيقاف تشغيل الشهادات الموقعة ذاتيًا على المضيفين الداخليين.",
             "pause": "يوقف",
             "paused": "تم إيقاف {{name}} مؤقتًا",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "مراقبات متوقفة",
             "mostRecentResults": "أحدث النتائج",
             "noChecksRecordedYetTheScheduler": "لم يتم تسجيل أي عمليات تحقق حتى الآن - يقوم المجدول بالاستقصاء على الفاصل الزمني لكل جهاز عرض.",
-            "nothingIsBeingWatchedYet": "لا شيء يتم مراقبته بعد"
+            "nothingIsBeingWatchedYet": "لا شيء يتم مراقبته بعد",
+            "couldntLoadMonitors": "تعذّر تحميل أجهزة المراقبة."
         },
         "networksTab": {
             "createANetworkToConnectContainers": "إنشاء شبكة لربط الحاويات.",
@@ -4111,7 +4084,10 @@
             "registering": "جارٍ التسجيل…",
             "review": "مراجعة",
             "uploadAndDeploy": "رفع ونشر",
-            "uploading": "جارٍ الرفع…"
+            "uploading": "جارٍ الرفع…",
+            "completeTheSourceDetailsFirst": "أكمل تفاصيل المصدر أولًا",
+            "fillInTheRequiredDetailsFirst": "أكمل البيانات المطلوبة أولًا",
+            "finishThePreviousStepFirst": "أنهِ الخطوة السابقة أولًا"
         },
         "notFound": {
             "browseExtensions": "تصفح الامتدادات",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "لا توجد إشعارات غير مقروءة.",
             "notifications": "إشعارات",
             "success": "نجاح",
-            "unread": "غير مقروءة"
+            "unread": "غير مقروءة",
+            "noFiltersToReset": "لا توجد مرشحات لإعادة ضبطها"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com، team@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "تبديل شريط العمليات",
             "title": "العمليات",
             "unreadCount": "{{count}} غير مقروءة",
-            "waitingForLogs": "في انتظار سجلات التشغيل…"
+            "waitingForLogs": "في انتظار سجلات التشغيل…",
+            "enterTheRequiredValueFirst": "أدخل القيمة المطلوبة أولاً"
         },
         "organizationTabs": {
             "projects": "المشاريع",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "جارٍ تحميل الحزم...",
             "package": "طَرد",
             "packageNameEGRequestsFlask": "اسم الحزمة (على سبيل المثال، الطلبات، القارورة==2.0.0)",
-            "requirementsTxtUpdated": "تم تحديث المتطلبات.txt"
+            "requirementsTxtUpdated": "تم تحديث المتطلبات.txt",
+            "failedToLoadPackages": "تعذّر تحميل الحزم."
         },
         "pageContextMap": {
             "application": "الخدمة",
@@ -4484,7 +4463,6 @@
             "emailAddress": "عنوان البريد الإلكتروني",
             "memberSince": "عضو منذ",
             "profileSettings": "إعدادات الملف الشخصي",
-            "role": "دور",
             "saveChanges": "حفظ التغييرات"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "يتعامل Nginx الخاص بالمضيف مع الوكيل العكسي. قم بالتبديل إلى Traefik أو Caddy أعلاه لتشغيل مكدس وكيل Docker المُدار بدلاً من ذلك.",
             "thisServerSActiveProxyIs": "الوكيل النشط لهذا الخادم هو",
             "traefik": "Traefik",
-            "whichExpects": "، الذي يتوقع"
+            "whichExpects": "، الذي يتوقع",
+            "noChangesToSave": "لا توجد تغييرات للحفظ",
+            "selectADifferentProxyFirst": "اختر وكيلًا مختلفًا أولًا"
         },
         "pruneButton": {
             "cleaning": "جارٍ التنظيف…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "يجب أن تكون الحمولة صالحة JSON",
             "permanentlyDeleteThisMessage": "هل تريد حذف هذه الرسالة نهائيًا؟",
             "priority": "أولوية",
-            "queue": "طابور",
             "queueBus": "حافلة الانتظار",
             "readOnly": "للقراءة فقط",
             "requeue": "قائمة الانتظار",
@@ -4702,7 +4681,6 @@
             "total": "المجموع"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "اضبط عوامل التصفية أو استعلام البحث لرؤية قوائم الانتظار الخاصة بك.",
             "allGroups": "جميع المجموعات",
             "anyStatus": "أي حالة",
             "areYouSureYouWantTo": "هل أنت متأكد أنك تريد حذف \"{{value}}\" وجميع رسائله؟",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}} خطوات",
             "unavailable": "كتالوج الوصفات غير متاح",
             "unavailableHint": "تعذر الوصول إلى السجل ولا توجد نسخة مضمَّنة.",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "عالج العوائق أعلاه أولاً",
+            "selectATargetServerFirst": "اختر خادماً هدفاً أولاً"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "فشل تحميل سلة المهملات.",
@@ -4840,16 +4820,21 @@
             "basicAuth": "المصادقة الأساسية",
             "betweenServers": "بين {{privateServer}} و{{edgeServer}}",
             "edgeServerPublicIpFrontsThe": "خادم Edge (عنوان IP العام — أمام النفق)",
+            "edgeServerRequired": "اختر خادم الحافة.",
             "exposeALocalService": "إتاحة خدمة محلية",
+            "exposeAPrivateServicePublicly": "إتاحة خدمة خاصة للعامة.",
             "exposeAServiceRunningOnA": "اكشف خدمة تعمل على جهاز خاص (خلف NAT، بدون إعادة توجيه المنفذ) لاسم مضيف عام عبر نفق WireGuard بين اثنين من وكلائك.",
             "exposeService": "إتاحة الخدمة",
+            "exposeServicesOn": "إتاحة الخدمات على",
             "exposeServicesRunningOn": "إتاحة الخدمات العاملة على",
+            "exposeShort": "كشف",
             "exposed": "مكشوف {{hostname}}",
             "failedToExposeService": "تعذّرت إتاحة الخدمة.",
             "failedToLoadTunnels": "فشل تحميل الأنفاق",
             "failedToRemoveService": "فشل في إزالة الخدمة",
             "failedToTearDownTunnel": "فشل في هدم النفق",
             "handshakeAt": "المصافحة {{time}}",
+            "hostnameRequired": "أدخل اسم مضيف عام صالحًا.",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "تحميل الأنفاق",
             "noHandshakeYetIfThisPersists": "لا توجد مصافحة حتى الآن — إذا استمر هذا الأمر، فقد يتم حظر UDP الصادر للمضيف الخاص إلى الحافة (يلزم وجود مرحل).",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "لا توجد أنفاق لهذا الخادم",
             "noTunnelsYet": "لا توجد أنفاق حتى الآن",
             "obtainACertificateOnTheEdge": "الحصول على شهادة على الحافة.",
+            "passwordRequired": "أدخل كلمة المرور.",
             "pickAPublicIpEdgeServer": "اختر خادم حافة IP عام وسيقوم ServerKit بإقرانه مع {{value}} عبر WireGuard.",
             "pickAPublicIpEdgeServer2": "اختر خادم حافة IP عام ومضيفًا خاصًا، وسيعمل ServerKit على إقرانهما عبر WireGuard ونشر خدمتك - دون الحاجة إلى إجراء تغييرات على جهاز التوجيه.",
+            "pickAPublicIpEdgeServerShort": "اختر خادم حافة بعنوان IP عام.",
+            "pickAnEdgeAndAPrivateHost": "اختر خادم حافة ومضيفًا خاصًا.",
             "pickTwoDifferentServers": "اختر خادمين مختلفين: خادم الحافة يقف أمام المضيف الخاص.",
-            "pointAtEdge": "وجّه {{name}} إلى خادم الحافة؛ والنفق ينقله من هناك.",
+            "pointAtEdgeGeneric": "وجّه اسم المضيف إلى خادم الحافة؛ ويتولى النفق نقل الحركة من هناك.",
+            "portRequired": "أدخل منفذ الخدمة.",
+            "privateHostRequired": "اختر المضيف الخاص.",
             "privateHostWhereTheServiceRuns": "مضيف خاص (حيث تعمل الخدمة)",
             "publicHostname": "اسم المضيف العام",
             "publishing": "جارٍ النشر…",
@@ -4869,13 +4859,24 @@
             "removed": "تمت إزالة {{hostname}}",
             "requireLoginBasicAuth": "يتطلب تسجيل الدخول (المصادقة الأساسية)",
             "servicePort": "منفذ الخدمة",
+            "status": {
+                "pending": "قيد الانتظار",
+                "up": "يعمل",
+                "degraded": "متدهور",
+                "down": "متوقف",
+                "error": "خطأ",
+                "published": "منشورة",
+                "unknown": "غير معروف"
+            },
             "tearDown": "هدم",
             "tearDownTunnel": "هدم النفق",
             "tearDownTunnel2": "هدم النفق؟",
+            "thisHost": "هذا المضيف",
             "thisRemovesTheWireguardTunnel": "يؤدي هذا إلى إزالة نفق WireGuard",
             "thisServer": "هذا الخادم",
             "toAPublicHostnameOverA": "إلى اسم مضيف عام عبر نفق WireGuard. يقوم ServerKit بإقران هذا المضيف بخادم طرفي له عنوان IP عام.",
-            "tunnelTornDown": "النفق هدم"
+            "tunnelTornDown": "النفق هدم",
+            "usernameRequired": "أدخل اسم المستخدم."
         },
         "remoteTerminal": {
             "closeTerminal": "إغلاق المحطة",
@@ -4938,15 +4939,13 @@
             "title": "الزيارات"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "حليقة -fsSL https://get.docker.com | ش",
             "dockerIsnTAvailable": "Docker غير متوفر",
             "forThisInstallSProfile": "لملف تعريف التثبيت هذا.",
             "installItOnTheServerThen": "قم بتثبيته على الخادم، ثم أعد تشغيل ServerKit:",
             "needsDockerToRunContainersAnd": "يحتاج إلى Docker لتشغيل الحاويات، وقد تم تثبيت هذا الخادم مع",
             "profileWhichLeavesItOutNothing": "الملف الشخصي، الذي يترك ذلك. لا يوجد شيء مقفل - تؤدي إضافة Docker إلى تشغيل هذه الصفحة.",
             "serverkitReChecksForDockerAutomatically": "يقوم ServerKit بإعادة التحقق من Docker تلقائيًا. المراقبة والمجالات والشهادات وcron وDNS يستمرون في العمل بدونها - راجع",
-            "settingsSystem": "الإعدادات → النظام",
-            "sudoSystemctlRestartServerkit": "سودو systemctl إعادة تشغيل serverkit"
+            "settingsSystem": "الإعدادات → النظام"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB وهذا الخادم لديه",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "فشلت إضافة المفتاح: {{message}}",
             "failedToRemoveKey": "فشل في إزالة المفتاح: {{message}}",
             "fingerprint": "بصمة",
-            "noSshKeysConfiguredForRoot": "لم يتم تكوين مفاتيح SSH للمستخدم الجذر.",
             "pasteYourSshPublicKeyTypically": "الصق مفتاحك العام SSH (عادةً من ~/.ssh/id_rsa.pub أو ~/.ssh/id_ed25519.pub)",
             "publicKey": "المفتاح العام",
             "removeSshKey": "قم بإزالة مفتاح SSH",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "عبر مزود DNS الخاص بك.",
             "webrootPath": "مسار ويب روت",
             "wildcardCertificateDns01Validation": "شهادة حرف البدل (التحقق من صحة DNS-01)",
-            "wildcardCertificateIssued": "تم إصدار شهادة البدل"
+            "wildcardCertificateIssued": "تم إصدار شهادة البدل",
+            "domainsRequired": "أدخل نطاقًا واحدًا على الأقل."
         },
         "sSOCallback": {
             "authenticationFailed": "فشلت المصادقة",
@@ -5352,14 +5351,12 @@
             "alerts": "التنبيهات",
             "areYouSureYouWantTo": "هل أنت متأكد أنك تريد إزالة هذا الخادم؟ لا يمكن التراجع عن هذا الإجراء.",
             "backToServers": "العودة إلى الخوادم",
-            "copyServerId": "انسخ معرف الخادم",
             "cron": "كرون",
             "errorLoadingServer": "حدث خطأ أثناء تحميل الخادم",
             "failedToAcknowledgeAlert": "فشل في الاعتراف بالتنبيه",
             "failedToPingServer": "فشل في تنفيذ الأمر ping على الخادم",
             "failedToRemoveServer": "فشل في إزالة الخادم",
             "failedToResolveAlert": "فشل في حل التنبيه",
-            "lastSeen": "شوهد آخر مرة",
             "limitedMode": "وضع محدود",
             "loadingServerDetails": "جارٍ تحميل تفاصيل الخادم",
             "metrics": "المقاييس",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "ترقية الكل",
             "upgradeAllPackages": "ترقية كافة الحزم",
             "upgradeFailedToStart": "فشل بدء الترقية",
-            "upgradingAllPackages": "ترقية كافة الباقات"
+            "upgradingAllPackages": "ترقية كافة الباقات",
+            "enterAPackageNameFirst": "أدخل اسم الحزمة أولاً"
         },
         "serverPicker": {
             "deployToServer": "نشر إلى الخادم",
@@ -5602,6 +5600,7 @@
             "library": "مكتبة",
             "nPackages": "{{n}} حزم",
             "nServices": "{{n}} خدمات",
+            "nameRequired": "أدخل اسم القالب.",
             "nginxPhpFpmCertbot": "nginx \n php-fpm \n سيرتبوت",
             "noReadyMadeTemplatesAreAvailable": "لا توجد قوالب جاهزة متاحة. لا يزال بإمكانك إنشاء قالب من البداية.",
             "noTemplatesYet": "لا توجد قوالب حتى الآن",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "تنتهي صلاحية الرمز المميز",
             "ungrouped": "غير مجمعة",
             "whatHappensNext": "ماذا سيحدث بعد ذلك؟",
-            "windowsPowershell": "ويندوز (باورشيل)"
+            "windowsPowershell": "ويندوز (باورشيل)",
+            "syncShort": "مزامنة"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "هل أنت متأكد؟ سيؤدي هذا إلى إزالة الخدمة وجميع بياناتها نهائيًا.",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "هل تريد إلغاء ربط {{name}} من الخدمة المرتبطة به؟",
             "unlinking": "جارٍ إلغاء الربط…",
             "unlinkingWillResetBothAppsTo": "سيؤدي إلغاء الارتباط إلى إعادة تعيين كلتا الخدمتين إلى الوضع المستقل.",
-            "usedForCertificateExpiryRemindersFrom": "يستخدم للتذكير بانتهاء الشهادة من Let's Encrypt."
+            "usedForCertificateExpiryRemindersFrom": "يستخدم للتذكير بانتهاء الشهادة من Let's Encrypt.",
+            "enterADomainNameFirst": "أدخل اسم النطاق أولاً"
         },
         "setupHealthWidget": {
             "allSet": "كل شيء جاهز —",
@@ -6322,7 +6323,10 @@
             "targetService": "الخدمة المستهدفة",
             "variables": "المتغيرات",
             "variablesInThisGroupApplyTo": "تنطبق المتغيرات الموجودة في هذه المجموعة على كل مورد ترفقه به.",
-            "whatThisGroupIsFor": "ما هي هذه المجموعة ل..."
+            "whatThisGroupIsFor": "ما هي هذه المجموعة ل...",
+            "enterAGroupNameFirst": "أدخل اسم المجموعة أولاً",
+            "enterAResourceIdFirst": "أدخل معرّف المورد أولاً",
+            "enterAVariableNameFirst": "أدخل اسم المتغير أولاً"
         },
         "shellTab": {
             "containerShell": "واجهة أوامر الحاوية",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "لا توجد حاويات قيد التشغيل",
             "running": "جري...",
             "startTheServiceToAccessThe": "ابدأ الخدمة للوصول إلى الصدفة.",
-            "typeACommandBelowToExecute": "اكتب أمرًا أدناه لتنفيذه في الحاوية."
+            "typeACommandBelowToExecute": "اكتب أمرًا أدناه لتنفيذه في الحاوية.",
+            "failedToLoadContainers": "تعذّر تحميل الحاويات."
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "اختر إعدادًا مسبقًا أو أنشئ طريقة عرض مخصصة. تظهر العناصر المرئية فقط في الشريط الجانبي الخاص بك.",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "سوف تتقاتل لوحتان تكتبان تكوين خادم الويب على الملكية. تحويل هذا الخادم إلى",
             "upstream": "المنبع",
             "whatWeCheck": "ما الذي نفحصه",
-            "whileObserving": "أثناء المراقبة"
+            "whileObserving": "أثناء المراقبة",
+            "failedToLoadSurvey": "تعذّر تحميل المسح."
         },
         "systemNotices": {
             "dismiss": "تجاهل {{title}}",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "استخدم هذا المجال",
             "used": "مستخدم",
             "utcOffset": "إزاحة التوقيت العالمي المنسق",
-            "version": "الإصدار {{brand}}"
+            "version": "الإصدار {{brand}}",
+            "enterADomainFirst": "أدخل نطاقًا أولًا",
+            "selectADifferentTimezoneFirst": "اختر منطقة زمنية مختلفة أولًا"
         },
         "tableDataTab": {
             "column": "عمود",
@@ -7148,7 +7156,8 @@
             "query": "استفسار",
             "structure": "بناء",
             "tableView": "عرض الجدول",
-            "zeroRows": "0 صفوف"
+            "zeroRows": "0 صفوف",
+            "noMoreRows": "لا توجد صفوف أخرى"
         },
         "tabs": {
             "moreTabs": "المزيد من علامات التبويب"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "اقتطاع ملف السجل",
             "typeUnitName": "اكتب اسم الوحدة...",
             "unit": "وحدة",
-            "useThe": "استخدم"
+            "useThe": "استخدم",
+            "failedToLoadProcesses": "تعذّر تحميل العمليات.",
+            "selectALogFileFirst": "اختر ملف سجل أولًا",
+            "remoteJournalIsNotAvailableYet": "السجل البعيد غير متاح بعد"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "التشغيل قيد التقدم بالفعل.",
@@ -7551,7 +7563,8 @@
             "viewSaved": "تم حفظ العرض \"{{trimmed}}\".",
             "viewUpdated": "عرض \"{{name}}\" محدث",
             "views": "طرق العرض",
-            "withChanges": "\"مع التغييرات"
+            "withChanges": "\"مع التغييرات",
+            "enterAViewNameFirst": "أدخل اسم العرض أولاً"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "حذف البيانات أيضًا. لا يمكن التراجع عن ذلك.",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "الحمولة URL",
             "retryCount": "إعادة المحاولة العد",
             "timeoutSeconds": "المهلة (ثواني)",
-            "update": "تحديث"
+            "update": "تحديث",
+            "eventsRequired": "حدّد حدثًا واحدًا على الأقل."
         },
         "webhooksTab": {
             "active": "نشط",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "تمت أرشفة مساحة العمل",
             "workspaceDeleted": "تم حذف مساحة العمل",
             "workspaceNotFound": "لم يتم العثور على مساحة العمل",
-            "workspaceRestored": "تمت استعادة مساحة العمل",
-            "workspaces": "مساحات العمل"
+            "workspaceRestored": "تمت استعادة مساحة العمل"
         },
         "workspaceMembersTab": {
             "addAMember": "إضافة عضو",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "الحد الأقصى للمستخدمين (0 = غير محدود)",
             "members": "أعضاء",
             "myTeam": "فريقي",
+            "nameRequired": "أدخل اسم مساحة العمل.",
             "newWorkspace": "مساحة عمل جديدة",
             "recolorsThePanelForAnyoneViewing": "إعادة تلوين اللوحة لأي شخص يقوم بعرض مساحة العمل هذه. اترك الإعداد الافتراضي بدون علامة تجارية مخصصة.",
             "searchWorkspaces": "البحث في مساحات العمل...",
@@ -7981,6 +7995,14 @@
             "users": "المستخدمين",
             "workspaceBrandColor": "لون العلامة التجارية لمساحة العمل",
             "workspaceCreated": "تم إنشاء مساحة العمل"
+        },
+        "mobileSearch": {
+            "label": "بحث",
+            "title": "البحث في كل شيء (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "لا يوجد ما يمكن إعادته",
+            "nothingToUndo": "لا يوجد ما يمكن التراجع عنه"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "جارٍ التحقق من الدعوة…"
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "يضيف",
             "back": "خلف",
@@ -8063,7 +8086,8 @@
             "stop": "قف",
             "test": "امتحان",
             "tryAgain": "حاول ثانية",
-            "uninstall": "إلغاء التثبيت"
+            "uninstall": "إلغاء التثبيت",
+            "new": "جديد"
         },
         "checking": "جارٍ التحقق...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "تحميل…",
         "more": "أكثر",
+        "moreActions": "المزيد من الإجراءات",
+        "moreInfoAbout": "مزيد من المعلومات حول {{subject}}",
         "moreSections": "المزيد من الأقسام",
         "page": "صفحة",
         "retry": "إعادة المحاولة",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}h",
             "justNow": "الآن",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "أدخل نطاقًا.",
+            "domainInvalid": "أدخل نطاقًا صالحًا.",
+            "emailInvalid": "أدخل عنوان بريد إلكتروني صالحًا.",
+            "required": "هذا الحقل مطلوب.",
+            "urlInvalid": "أدخل عنوان URL صالحًا، مثل https://example.com/webhook."
         }
     },
     "errors": {

@@ -755,6 +755,7 @@ Regenerate (backend/):
 - `POST /agent/connect`
 - `POST /agent/disconnect`
 - `POST /agent/poll`
+- `POST /agent/report`
 - `POST /agent/result`
 - `POST /ai/chat`
 - `POST /ai/chat/cancel`

@@ -19,10 +19,9 @@ import logging
 import re
 from datetime import datetime
 
-import requests
-
 from app import db
 from app.models.chat_webhook import ChatWebhookConnection
+from app.utils import safe_http
 from app.utils.crypto import encrypt_secret
 
 logger = logging.getLogger(__name__)
@@ -405,8 +404,11 @@ class ChatWebhookService:
             headers[SIGNATURE_HEADER] = 'sha256=' + signature
 
         try:
-            resp = requests.post(url, data=body, headers=headers,
-                                 timeout=_REQUEST_TIMEOUT)
+            resp = safe_http.post(url, data=body, headers=headers,
+                                  timeout=_REQUEST_TIMEOUT)
+        except safe_http.UnsafeURLError as exc:
+            # Non-retryable: the URL itself is the problem, retrying can't help.
+            return DeliveryResult.skipped(f'webhook url refused: {exc}')
         except Exception as exc:  # network error -> retryable failure
             return DeliveryResult.failed(str(exc))
 

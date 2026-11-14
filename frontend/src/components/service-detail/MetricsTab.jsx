@@ -2,6 +2,9 @@ import { useCallback, useState, useEffect, useRef } from 'react';
 import api from '../../services/api';
 import { Gauge } from '@/components/ds';
 import EmptyState from '../EmptyState';
+import { AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { errorReason } from '@/utils/errorMessage';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import { normalizeContainerStats, resolveAppContainerId } from '@/utils/containerMetrics';
@@ -15,6 +18,7 @@ const MetricsTabContent = ({ app }) => {
     const [stats, setStats] = useState(null);
     const [processInfo, setProcessInfo] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [loadError, setLoadError] = useState(null);
     const requestId = useRef(0);
 
     const isDocker = app.app_type === 'docker';
@@ -25,6 +29,7 @@ const MetricsTabContent = ({ app }) => {
     const loadMetrics = useCallback(async () => {
         const currentRequest = ++requestId.current;
         try {
+            setLoadError(null);
             if (isDocker) {
                 const data = await api.getContainers(true);
                 const runtimeId = resolveAppContainerId(
@@ -44,8 +49,7 @@ const MetricsTabContent = ({ app }) => {
             }
         } catch (err) {
             if (currentRequest !== requestId.current) return;
-            setStats(null);
-            setProcessInfo(null);
+            setLoadError(err);
             console.error('Failed to load metrics:', err);
         } finally {
             if (currentRequest === requestId.current) setLoading(false);
@@ -60,7 +64,19 @@ const MetricsTabContent = ({ app }) => {
 
 
     if (loading) {
-        return <EmptyState loading title={t('app.metricsTab.loadingMetrics', 'Loading metrics…')} />;
+        return <EmptyState loading loadingVariant="cards" loadingRows={4} title={t('app.metricsTab.loadingMetrics', 'Loading metrics…')} />;
+    }
+
+    // A failed poll replaces the numbers: stale CPU/memory would read as live.
+    if (loadError) {
+        return (
+            <EmptyState
+                icon={AlertTriangle}
+                title={t('app.metricsTab.failedToLoadMetrics', "Couldn't load metrics.")}
+                description={errorReason(loadError)}
+                action={<Button variant="outline" size="sm" onClick={() => { setLoading(true); loadMetrics(); }}>{t('common.actions.retry', 'Retry')}</Button>}
+            />
+        );
     }
 
     if (isDocker && stats) {

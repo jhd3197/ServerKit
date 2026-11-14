@@ -574,6 +574,7 @@
     }
 
     .mon-panel-hint svg { flex-shrink: 0; color: var(--green); }
+    .mon-panel-hint .info-tip { margin-inline-start: -$space-1; } // gap is 8px; the tip sits 4px after the text
 
     // Wide tables keep their own scroller so the panel never widens the page.
     .mon-table-scroll { overflow-x: auto; }

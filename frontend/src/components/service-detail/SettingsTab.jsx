@@ -46,6 +46,7 @@ import { useTranslation } from 'react-i18next';
 import { Card as SharedCard } from '@/components/ui/card';
 import { toastError } from '@/utils/errorMessage';
 import { formatDate } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // Grouped left sub-nav for the service Settings tab — mirrors the WordPress
 // detail page's settings layout: a group label per section with
@@ -628,7 +629,7 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                             disabled={attaching}
                         />
                         <div className="app-detail-actions">
-                            <Button type="submit" disabled={!newDomain.name || attaching}>
+                            <Button type="submit" disabled={!newDomain.name || attaching} disabledReason={!attaching ? t('app.settingsTab.enterADomainNameFirst', 'Enter a domain name first') : undefined}>
                                 <Globe size={14} />
                                 {attaching ? t('app.settingsTab.attaching', 'Attaching…') : t('app.settingsTab.attachDomain', 'Attach domain')}
                             </Button>
@@ -702,7 +703,7 @@ const DomainSslPanel = ({ app, domains, primaryDomain, onUpdate }) => {
                         </div>
                         <div className="modal-footer">
                             <Button type="button" variant="outline" onClick={() => setAddOpen(false)} disabled={attaching}>{t('common.actions.cancel', 'Cancel')}</Button>
-                            <Button type="submit" disabled={!newDomain.name || attaching}>
+                            <Button type="submit" disabled={!newDomain.name || attaching} disabledReason={!attaching ? t('app.settingsTab.enterADomainNameFirst', 'Enter a domain name first') : undefined}>
                                 {attaching ? t('app.settingsTab.attaching', 'Attaching…') : t('app.settingsTab.attachDomain', 'Attach domain')}
                             </Button>
                         </div>
@@ -838,7 +839,7 @@ const ManifestSection = ({ app }) => {
             ) : (
                 <div className="svc-manifest__empty">
                     <p className="hint">
-                        {t('app.settingsTab.thisProjectIsNotManagedBy', 'This project is not managed by a')} <code>serverkit.yaml</code> {t('app.settingsTab.manifestAManifestLetsYouDeclare', 'manifest. A manifest lets you declare services, domains, databases and environment requirements in one file so ServerKit can create and reconcile them for you.')}
+                        {t('app.settingsTab.thisProjectIsNotManagedBy', 'This project is not managed by a')} <code>serverkit.yaml</code> {t('app.settingsTab.manifestShort', 'manifest.')} <InfoTip>{t('app.settingsTab.manifestAManifestLetsYouDeclare', 'manifest. A manifest lets you declare services, domains, databases and environment requirements in one file so ServerKit can create and reconcile them for you.')}</InfoTip>
                     </p>
                     <p className="hint">
                         <Link to="/docs/SERVERKIT_YAML.md">{t('app.settingsTab.learnAboutServerkitYaml', 'Learn about serverkit.yaml')}</Link>

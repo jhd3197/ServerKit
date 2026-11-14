@@ -5,6 +5,7 @@ import ListToolbar from '../ds/ListToolbar';
 import { Button } from '../ui/button';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '../ui/select';
 import { useEffectiveEnvironment } from './useEffectiveEnvironment';
+import InfoTip from '@/components/InfoTip';
 
 export default function EffectiveEnvironment({ appId }) {
     const { t } = useTranslation();
@@ -27,7 +28,7 @@ export default function EffectiveEnvironment({ appId }) {
         { key: 'is_reference', header: t('effectiveEnv.value', 'Value'), render: row => row.is_reference ? t('effectiveEnv.reference', 'Reference · resolved at deployment') : t('effectiveEnv.hidden', 'Hidden') },
     ];
     return <div className="env-vars-container">
-        <p className="hint">{t('effectiveEnv.explanation', 'Managed variables for the next deployment or restart, not a live container inspection. Image and Compose-file variables are not included. Values are hidden, including references and interpolated secrets.')}</p>
+        <p className="hint">{t('effectiveEnv.explanationShort', 'Managed variables for the next deploy.')} <InfoTip>{t('effectiveEnv.explanation', 'Managed variables for the next deployment or restart, not a live container inspection. Image and Compose-file variables are not included. Values are hidden, including references and interpolated secrets.')}</InfoTip></p>
         <ListToolbar tools={<Button variant="outline" onClick={refresh} disabled={loading}>{t('effectiveEnv.refresh', 'Refresh')}</Button>}>
             {services.length > 0 ? <Select value={service || ''} onValueChange={selectService}>
                 <SelectTrigger aria-label={t('effectiveEnv.service', 'Compose service')}><SelectValue /></SelectTrigger>

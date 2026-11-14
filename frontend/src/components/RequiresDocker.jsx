@@ -2,6 +2,11 @@ import { Link } from 'react-router-dom';
 import { Boxes, Terminal } from 'lucide-react';
 import { useResourceTier } from '../contexts/useResourceTier.js';
 import { useTranslation } from 'react-i18next';
+import InfoTip from './InfoTip';
+import CopyButton from './CopyButton';
+
+// Shell commands are literal — never route them through t().
+const COMMANDS = ['curl -fsSL https://get.docker.com | sh', 'sudo systemctl restart serverkit'];
 
 /**
  * Explains a Dockerless install instead of letting the page fail at click time.
@@ -31,7 +36,10 @@ const RequiresDocker = ({ children, what = 'This page' }) => {
             <h2 className="requires-docker__title">{t('app.requiresDocker.dockerIsnTAvailable', 'Docker isn\'t available')}</h2>
 
             <p className="requires-docker__text">
-                {what} {t('app.requiresDocker.needsDockerToRunContainersAnd', 'needs Docker to run containers, and this server was installed with the')} <strong>{profileLabel}</strong> {t('app.requiresDocker.profileWhichLeavesItOutNothing', 'profile, which leaves it out. Nothing is locked; adding Docker turns this page on.')}
+                {what} {t('app.requiresDocker.needsDocker', 'needs Docker.')}
+                {' '}<InfoTip>
+                    {what} {t('app.requiresDocker.needsDockerToRunContainersAnd', 'needs Docker to run containers, and this server was installed with the')} <strong>{profileLabel}</strong> {t('app.requiresDocker.profileWhichLeavesItOutNothing', 'profile, which leaves it out. Nothing is locked; adding Docker turns this page on.')}
+                </InfoTip>
             </p>
 
             <div className="requires-docker__how">
@@ -39,17 +47,21 @@ const RequiresDocker = ({ children, what = 'This page' }) => {
                     <Terminal size={15} />
                     {t('app.requiresDocker.installItOnTheServerThen', 'Install it on the server, then restart ServerKit:')}
                 </div>
-                <code className="requires-docker__cmd">
-                    {t('app.requiresDocker.curlFsslHttpsGetDockerCom', 'curl -fsSL https://get.docker.com | sh')}
-                </code>
-                <code className="requires-docker__cmd">
-                    {t('app.requiresDocker.sudoSystemctlRestartServerkit', 'sudo systemctl restart serverkit')}
-                </code>
+                {COMMANDS.map((cmd) => (
+                    <div className="requires-docker__cmd" key={cmd}>
+                        <code className="requires-docker__cmd-text">{cmd}</code>
+                        <CopyButton value={cmd} label={t('app.requiresDocker.copyCommand', 'Copy command')} copiedLabel={t('app.requiresDocker.copied', 'Copied!')} />
+                    </div>
+                ))}
             </div>
 
             <p className="requires-docker__footnote">
-                {t('app.requiresDocker.serverkitReChecksForDockerAutomatically', 'ServerKit re-checks for Docker automatically. Monitoring, domains, certificates, cron and DNS keep working without it. See')}{' '}
-                <Link to="/settings/system">{t('app.requiresDocker.settingsSystem', 'Settings → System')}</Link> {t('app.requiresDocker.forThisInstallSProfile', 'for this install\'s profile.')}
+                {t('app.requiresDocker.checkedAutomatically', 'Re-checked automatically.')}{' '}
+                <Link to="/settings/system">{t('app.requiresDocker.settingsSystem', 'Settings → System')}</Link>
+                {' '}<InfoTip subject={t('app.requiresDocker.checkedAutomatically', 'Re-checked automatically.')}>
+                    {t('app.requiresDocker.serverkitReChecksForDockerAutomatically', 'ServerKit re-checks for Docker automatically. Monitoring, domains, certificates, cron and DNS keep working without it. See')}{' '}
+                    {t('app.requiresDocker.settingsSystem', 'Settings → System')} {t('app.requiresDocker.forThisInstallSProfile', 'for this install\'s profile.')}
+                </InfoTip>
             </p>
         </div>
     );

@@ -124,6 +124,7 @@ export function GridToolsMenu({
                             type="button"
                             className={cn('sk-gridmenu__opt', scope === 'picked' && 'is-on')}
                             disabled={!selectedRows.length}
+                            disabledReason={t('app.gridToolsMenu.selectSomeRowsFirst', 'Select some rows first')}
                             onClick={() => setScope('picked')}
                         >
                             <span className="sk-gridmenu__box"><Check size={11} /></span>

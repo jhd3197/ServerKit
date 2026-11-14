@@ -5,6 +5,7 @@ import { PageTopbar } from '@/components/ds';
 import { useContributions } from '@/plugins/contributions';
 import { sanitizeSvgInner } from '@/utils/sanitizeSvg';
 import { translateLabel } from '@/i18n/labels';
+import { useExtensionUpdates } from '@/hooks/useExtensionUpdates';
 
 // Generic shell for a PageTopbar tab group (Servers, Domains, Services, Files,
 // Monitoring, Marketplace, …). A parent route renders the PageTopbar + routed
@@ -65,6 +66,9 @@ export default function TabGroupLayout({ tabs, groupId }) {
     // useTopbarChrome.
     const [chromeSlot, setChromeSlot] = useState(null);
     const { tabs: contributedTabs } = useContributions();
+    // Tab `badge` keys resolve to counts here (hook called unconditionally;
+    // `enabled` keeps groups without an updates badge from fetching).
+    const updates = useExtensionUpdates({ enabled: (tabs || []).some((tab) => tab?.badge === 'updates') });
 
     const outletContext = useMemo(
         () => ({ setTopbarActions: setActions, topbarChromeSlot: chromeSlot, hasTopbarChrome: true }),
@@ -77,7 +81,11 @@ export default function TabGroupLayout({ tabs, groupId }) {
     const mergedTabs = useMemo(() => {
         const coreTabs = (Array.isArray(tabs) ? tabs : [])
             .filter((tab) => tab && typeof tab.to === 'string' && tab.to.length > 0)
-            .map((tab) => ({ ...tab, label: translateLabel(translate, tab) }));
+            .map((tab) => ({
+                ...tab,
+                label: translateLabel(translate, tab),
+                badgeCount: tab.badge === 'updates' ? updates.count : undefined,
+            }));
 
         if (!groupId) return coreTabs;
         const extras = (contributedTabs || [])
@@ -102,7 +110,7 @@ export default function TabGroupLayout({ tabs, groupId }) {
             merged.splice(idx, 0, tab);
         }
         return merged;
-    }, [tabs, groupId, contributedTabs, translate]);
+    }, [tabs, groupId, contributedTabs, translate, updates.count]);
 
     // The group renders no page title: the tab strip IS the heading, so it runs
     // flush-left in the bar (the active tab already names the section, as does

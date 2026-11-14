@@ -50,12 +50,12 @@
     // ---- Text (existing names, remapped to the new 4-tier ramp) ----
     --text-primary: #e9ebf0;     // = --text
     --text-secondary: #9aa1af;   // = --text-dim
-    --text-tertiary: #646b7a;    // = --text-faint
+    --text-tertiary: #868e9c;    // = --text-faint
 
     // ---- Text (new prototype names) ----
     --text: #e9ebf0;
     --text-dim: #9aa1af;
-    --text-faint: #646b7a;
+    --text-faint: #868e9c;
     --text-ghost: #444b58;
 
     // ---- Accent (existing names; defaults match the new periwinkle.
@@ -142,10 +142,10 @@
     // ---- Text ----
     --text-primary: #161a23;
     --text-secondary: #515a6b;
-    --text-tertiary: #79818f;
+    --text-tertiary: #5f6777;
     --text: #161a23;
     --text-dim: #515a6b;
-    --text-faint: #79818f;
+    --text-faint: #5f6777;
     --text-ghost: #a6adba;
 
     // ---- Accent washes (lighter on light surfaces) ----
@@ -199,10 +199,10 @@
 
         --text-primary: #161a23;
         --text-secondary: #515a6b;
-        --text-tertiary: #79818f;
+        --text-tertiary: #5f6777;
         --text: #161a23;
         --text-dim: #515a6b;
-        --text-faint: #79818f;
+        --text-faint: #5f6777;
         --text-ghost: #a6adba;
 
         --accent-bg: rgba(109, 124, 255, 0.10);

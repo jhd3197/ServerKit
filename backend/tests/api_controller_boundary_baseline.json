@@ -3,7 +3,7 @@
   "policy": "Exact reviewed inventory of direct persistence, subprocess, and filesystem mutation calls in Flask API controllers. New calls are forbidden; remove entries as controllers delegate to services.",
   "counts": {
     "filesystem": 8,
-    "persistence": 468
+    "persistence": 445
   },
   "owners": {
     "api/admin.py": {
@@ -78,10 +78,6 @@
       "owner": "ServerKit backend / files domain",
       "rationale": "Legacy files controllers still cross a persistence or host-operation boundary; move each call into an app.services use case before removing it."
     },
-    "api/fleet.py": {
-      "owner": "ServerKit backend / fleet domain",
-      "rationale": "Legacy fleet controllers still cross a persistence or host-operation boundary; move each call into an app.services use case before removing it."
-    },
     "api/git.py": {
       "owner": "ServerKit backend / git domain",
       "rationale": "Legacy git controllers still cross a persistence or host-operation boundary; move each call into an app.services use case before removing it."
@@ -113,10 +109,6 @@
     "api/private_urls.py": {
       "owner": "ServerKit backend / private urls domain",
       "rationale": "Legacy private urls controllers still cross a persistence or host-operation boundary; move each call into an app.services use case before removing it."
-    },
-    "api/proxy.py": {
-      "owner": "ServerKit backend / proxy domain",
-      "rationale": "Legacy proxy controllers still cross a persistence or host-operation boundary; move each call into an app.services use case before removing it."
     },
     "api/python.py": {
       "owner": "ServerKit backend / python domain",
@@ -465,7 +457,6 @@
     "api/domains.py::enable_ssl::persistence::Application.query_active().filter_by(id=domain.application_id).first()::1",
     "api/domains.py::enable_ssl::persistence::Domain.query_active().filter_by(id=domain_id).first()::1",
     "api/domains.py::enable_ssl::persistence::User.query.get(current_user_id)::1",
-    "api/domains.py::enable_ssl::persistence::db.session.commit()::1",
     "api/domains.py::get_domain::persistence::Application.query_active().filter_by(id=domain.application_id).first()::1",
     "api/domains.py::get_domain::persistence::Domain.query_active().filter_by(id=domain_id).first()::1",
     "api/domains.py::get_domain::persistence::User.query.get(current_user_id)::1",
@@ -491,7 +482,6 @@
     "api/domains.py::verify_domain::persistence::Domain.query_active().filter_by(id=domain_id).first()::1",
     "api/environments.py::create_environment::persistence::db.session.commit()::1",
     "api/files.py::upload_file::filesystem::os.makedirs(parent)::1",
-    "api/fleet.py::list_targets::persistence::Server.query.get(server_id)::1",
     "api/git.py::_webhook_visible_to::persistence::Application.query.get(webhook.app_id)::1",
     "api/git.py::get_deployment::persistence::Application.query_active().filter_by(id=deployment.app_id).first()::1",
     "api/git.py::get_deployment::persistence::GitDeployment.query.get(deployment_id)::1",
@@ -537,7 +527,6 @@
     "api/private_urls.py::update_private_url::persistence::Application.query_active().filter_by(id=app_id).first()::1",
     "api/private_urls.py::update_private_url::persistence::User.query.get(current_user_id)::1",
     "api/private_urls.py::update_private_url::persistence::db.session.commit()::1",
-    "api/proxy.py::_require_server::persistence::Server.query.get(server_id)::1",
     "api/python.py::create_django_app::persistence::db.session.add(app)::1",
     "api/python.py::create_django_app::persistence::db.session.commit()::1",
     "api/python.py::create_flask_app::persistence::db.session.add(app)::1",
@@ -557,7 +546,6 @@
     "api/recipes.py::submit_recipe_handoff::persistence::DeploymentJob.query.get(job_id)::1",
     "api/secrets_webhooks.py::create_vault::persistence::Workspace.query.get(explicit_ws)::1",
     "api/servers.py::acknowledge_alert::persistence::SecurityAlert.query.get(alert_id)::1",
-    "api/servers.py::compare_server_metrics::persistence::Server.query.get(server_id)::1",
     "api/servers.py::compare_server_metrics::persistence::ServerMetrics.query.filter_by(server_id=server_id).order_by(ServerMetrics.timestamp.desc()).limit(limit).all()::1",
     "api/servers.py::create_group::persistence::db.session.add(group)::1",
     "api/servers.py::create_group::persistence::db.session.commit()::1",
@@ -568,48 +556,29 @@
     "api/servers.py::delete_group::persistence::ServerGroup.query.get(group_id)::1",
     "api/servers.py::delete_group::persistence::db.session.commit()::1",
     "api/servers.py::delete_group::persistence::db.session.delete(group)::1",
-    "api/servers.py::delete_server::persistence::Server.query.get(server_id)::1",
     "api/servers.py::delete_server::persistence::db.session.commit()::1",
     "api/servers.py::delete_server::persistence::db.session.delete(server)::1",
-    "api/servers.py::get_allowed_ips::persistence::Server.query.get(server_id)::1",
-    "api/servers.py::get_command_history::persistence::Server.query.get(server_id)::1",
     "api/servers.py::get_command_history::persistence::ServerCommand.query.filter_by(server_id=server_id).order_by(ServerCommand.created_at.desc()).limit(limit).all()::1",
     "api/servers.py::get_connection_info::persistence::AgentSession.query.filter_by(server_id=server_id, is_active=True).first()::1",
-    "api/servers.py::get_connection_info::persistence::Server.query.get(server_id)::1",
     "api/servers.py::get_group::persistence::ServerGroup.query.get(group_id)::1",
-    "api/servers.py::get_server::persistence::Server.query.get(server_id)::1",
     "api/servers.py::get_server::persistence::db.session.commit()::1",
     "api/servers.py::get_server::persistence::db.session.rollback()::1",
-    "api/servers.py::get_server_metrics::persistence::Server.query.get(server_id)::1",
     "api/servers.py::get_server_metrics::persistence::ServerMetrics.query.filter_by(server_id=server_id)::1",
-    "api/servers.py::get_server_onboarding_status::persistence::Server.query.get(server_id)::1",
-    "api/servers.py::get_server_security_alerts::persistence::Server.query.get(server_id)::1",
-    "api/servers.py::get_server_status::persistence::Server.query.get(server_id)::1",
-    "api/servers.py::get_servers_overview::persistence::Server.query.options(joinedload(Server.group)).all()::1",
     "api/servers.py::list_groups::persistence::ServerGroup.query.all()::1",
-    "api/servers.py::ping_server::persistence::Server.query.get(server_id)::1",
     "api/servers.py::regenerate_token::persistence::db.session.commit()::1",
-    "api/servers.py::register_agent::persistence::Server.query.filter(Server.registration_token_hash.isnot(None)).all()::1",
     "api/servers.py::register_agent::persistence::db.session.commit()::1",
     "api/servers.py::resolve_alert::persistence::SecurityAlert.query.get(alert_id)::1",
-    "api/servers.py::retry_server_onboarding::persistence::Server.query.get(server_id)::1",
-    "api/servers.py::rotate_api_key::persistence::Server.query.get(server_id)::1",
     "api/servers.py::rotate_api_key::persistence::db.session.commit()::1",
     "api/servers.py::set_server_workspace::persistence::Server.query.filter_by(workspace_id=ws.id).count()::1",
     "api/servers.py::set_server_workspace::persistence::Workspace.query.get(target)::1",
     "api/servers.py::set_server_workspace::persistence::db.session.commit()::1",
-    "api/servers.py::start_server_onboarding::persistence::Server.query.get(server_id)::1",
-    "api/servers.py::update_allowed_ips::persistence::Server.query.get(server_id)::1",
     "api/servers.py::update_allowed_ips::persistence::db.session.commit()::1",
     "api/servers.py::update_group::persistence::ServerGroup.query.get(group_id)::1",
     "api/servers.py::update_group::persistence::db.session.commit()::1",
-    "api/servers.py::update_server::persistence::Server.query.get(server_id)::1",
     "api/servers.py::update_server::persistence::db.session.commit()::1",
     "api/servers_agents.py::add_agent_version::persistence::db.session.add(version)::1",
     "api/servers_agents.py::add_agent_version::persistence::db.session.commit()::1",
-    "api/servers_agents.py::get_install_instructions::persistence::Server.query.get(server_id)::1",
     "api/servers_agents.py::list_agent_versions::persistence::AgentVersion.query.order_by(AgentVersion.version.desc()).all()::1",
-    "api/servers_agents.py::trigger_agent_update::persistence::Server.query.get(server_id)::1",
     "api/servers_agents.py::upgrade_fleet::persistence::Server.query.filter_by(status='online').all()::1",
     "api/shared_resources.py::_check_resource_write::persistence::ManagedDatabase.query_active().filter_by(id=int(resource_id)).first()::1",
     "api/shared_resources.py::_check_resource_write::persistence::Server.query.get(str(resource_id))::1",

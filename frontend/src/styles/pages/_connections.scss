@@ -274,10 +274,12 @@
         }
     }
 
-    .form-group {
+    .form-group,
+    .form-field {
         display: flex;
         flex-direction: column;
         gap: $space-tight;
+        margin-bottom: 0;
     }
 }
 

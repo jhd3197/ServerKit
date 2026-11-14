@@ -79,7 +79,7 @@ try {
             await route.fulfill({ json: payload });
         });
         await page.goto(`${base}tests/browser/settings.html`);
-        await page.getByText('Loading users…', { exact: true }).waitFor();
+        await page.getByRole('status', { name: 'Loading users…' }).waitFor();
         resolveUsers();
         await page.locator('.users-table').first().getByText('needs-mfa', { exact: true }).waitFor();
         await page.getByText('invite@example.test', { exact: true }).waitFor();

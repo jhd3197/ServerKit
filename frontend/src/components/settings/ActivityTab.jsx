@@ -126,7 +126,7 @@ const ActivityTab = () => {
     }
 
     if (loading) {
-        return <div className="activity-tab"><div className="loading-state">{t('app.activityTab.loadingActivity', 'Loading activity…')}</div></div>;
+        return <div className="activity-tab"><EmptyState loading loadingVariant="feed" loadingRows={6} title={t('app.activityTab.loadingActivity', 'Loading activity…')} /></div>;
     }
 
     const maxCount = summary?.top_users?.length
@@ -260,11 +260,8 @@ const ActivityTab = () => {
                     )}
                 </div>
 
-                {feedLoading ? (
-                    <div className="loading-state">
-                        <div className="spinner" />
-                        {t('app.activityTab.loadingLogs', 'Loading logs…')}
-                    </div>
+                {feedLoading && logs.length === 0 ? (
+                    <EmptyState loading loadingVariant="feed" loadingRows={6} title={t('app.activityTab.loadingLogs', 'Loading logs…')} />
                 ) : logsError && logs.length === 0 ? (
                     <ErrorState
                         title={t('app.activityTab.couldntLoadAuditLogs', "Couldn't load audit logs.")}
@@ -304,7 +301,7 @@ const ActivityTab = () => {
                     table, so it keeps its own markup; only the pager is
                     standardized onto the shared DataTableFooter (paged mode).
                     Fetch logic and pagination state are unchanged. */}
-                {!feedLoading && logs.length > 0 && (
+                {logs.length > 0 && (
                     <DataTableFooter
                         shown={logs.length}
                         total={pagination.total}

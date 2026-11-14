@@ -694,6 +694,14 @@ networks where WebSocket is blocked.
 > `async_mode='threading'`; the **gevent-websocket worker class double-answers
 > the WS handshake and breaks WebSocket**.
 >
+>
+> **Thread ceiling.** In threading mode every open WebSocket — each browser tab
+> and each agent — and every agent on the long-poll fallback (which waits up to
+> 25s per poll and then polls again) holds one gunicorn thread for as long as it
+> stays connected. With the default 100 threads that is roughly 60 agents plus
+> 40 open tabs before ordinary HTTP requests start queueing and the UI stalls
+> without a clear error. Size `SERVERKIT_THREADS` for the fleet.
+>
 > Scaling to multiple workers without a shared backplane (e.g. a Redis message
 > queue) will silently misroute or drop commands for agents connected to a
 > different worker. See [HORIZONTAL_SCALING_SPEC.md](HORIZONTAL_SCALING_SPEC.md)

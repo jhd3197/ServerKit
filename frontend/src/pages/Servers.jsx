@@ -1,12 +1,16 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, Folder, Plus, RefreshCw, Server as ServerLucideIcon, X } from 'lucide-react';
+import { Ban, ChevronRight, ClipboardPaste, Container, Cpu, Database, Flame, Folder, Hash, HardDrive, KeyRound, Lock, MemoryStick, Plus, RefreshCw, Server as ServerLucideIcon, Terminal, X } from 'lucide-react';
+import InfoTip from '../components/InfoTip';
+import IconStepStrip from '../components/IconStepStrip';
+import LevelIllustration from '../components/servers/LevelIllustrations';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
@@ -29,6 +33,9 @@ import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
 import { toastError } from '@/utils/errorMessage';
 import { formatDate } from '@/utils/intl';
+import {
+    DEFAULT_LEVEL, PERMISSION_LEVELS, buildInstallCommands, levelAllows, levelKind, serverHealth,
+} from '@/utils/agentPermissionLevel';
 
 // Radix Select items cannot use '' — stands in for "no group".
 const NO_GROUP = '__none';
@@ -231,6 +238,38 @@ const SERVER_COLUMNS = [
             return <Pill kind={statusKind(status)}>{status}</Pill>;
         },
     },
+    {
+        key: 'level',
+        headerKey: 'app.servers.levelColumn', header: 'Level',
+        sortable: true,
+        type: 'enum',
+        // NULL is a legacy agent that predates levels, which acts as full.
+        value: (server) => server.permission_level_effective || 'full',
+        sortValue: (server) => server.permission_level_effective || 'full',
+        groupable: true,
+        render: (server) => {
+            const level = server.permission_level_effective || 'full';
+            return (
+                <Pill kind={levelKind(level)} dot={false}>
+                    {levelLabel(level)}
+                </Pill>
+            );
+        },
+    },
+    {
+        key: 'health',
+        headerKey: 'app.servers.health', header: 'Health',
+        sortable: false,
+        render: (server) => {
+            const health = serverHealth(server);
+            const detail = health.failing.length ? ` (${health.failing.join(', ')})` : '';
+            return (
+                <Pill kind={health.kind} title={detail || undefined}>
+                    {healthLabel(health.code) + detail}
+                </Pill>
+            );
+        },
+    },
     meterColumn('cpu', 'CPU', 'cpu_percent'),
     meterColumn('memory', 'Memory', 'memory_percent'),
     meterColumn('disk', 'Disk', 'disk_percent'),
@@ -345,12 +384,15 @@ const Servers = () => {
             <Button variant="outline" size="sm" onClick={() => setShowGroupModal(true)}>
                 <Folder size={16} /> {t('app.servers.groups', 'Groups')}
             </Button>
-            <Button variant="outline" size="sm" onClick={loadData} disabled={loading}>
-                <RefreshCw size={16} className={loading ? 'spin' : ''} /> {t('app.servers.sync', 'Sync')}
+            <Button variant="outline" size="sm" onClick={loadData} disabled={loading} title={t('app.servers.sync', 'Sync')} aria-label={t('app.servers.sync', 'Sync')}>
+                <RefreshCw size={16} className={loading ? 'spin' : ''} /> {t('app.servers.syncShort', 'Sync')}
             </Button>
-            <Button size="sm" onClick={() => setShowAddModal(true)}>
-                <Plus size={16} /> {t('app.servers.addServer', 'Add server')}
-            </Button>
+            <PagePrimaryButton
+                id="servers-add"
+                label={t('app.servers.addServer', 'Add server')}
+                shortLabel={t('common.actions.add', 'Add')}
+                onClick={() => setShowAddModal(true)}
+            />
             <SearchField
                 value={searchTerm}
                 onSearch={setSearchTerm}
@@ -392,6 +434,7 @@ const Servers = () => {
     if (loading) {
         return (
             <div className="sk-tabgroup__inner servers-page">
+                {topbarChrome}
                 <EmptyState loading loadingVariant="table" title={t('app.servers.scanningFleet', 'Scanning fleet…')} />
             </div>
         );
@@ -425,7 +468,7 @@ const Servers = () => {
                     icon={ServerLucideIcon}
                     title={servers.length === 0 ? t('app.servers.noServersYet', 'No servers yet') : t('app.servers.noServersMatchTheseFilters', 'No servers match these filters')}
                     description={servers.length === 0
-                        ? t('app.servers.pairAnAgentAndTheMachine', 'Pair an agent and the server shows up here with its CPU, memory and disk alongside every other server you run.')
+                        ? <>{t('app.servers.pairShort', 'Pair an agent to add it.')} <InfoTip>{t('app.servers.pairAnAgentAndTheMachine', 'Pair an agent and the server shows up here with its CPU, memory and disk alongside every other server you run.')}</InfoTip></>
                         : t('app.servers.adjustTheSearchOrClearThe', 'Adjust the search or clear the column filters to see your servers.')}
                     action={servers.length === 0 ? (
                         <Button onClick={() => setShowAddModal(true)}>
@@ -647,11 +690,11 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
     return (
         <form className="server-setup-form" onSubmit={handleClaim}>
             <div className="server-setup-form__body">
-                <div className="pair-instructions">
-                    <p>
-                        {t('app.servers.onTheTargetMachineStartThe', 'On the target server, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.')}
-                    </p>
-                </div>
+                <IconStepStrip steps={[
+                    { icon: <Terminal />, label: t('app.servers.stepStartAgent', 'Start agent'), info: t('app.servers.onTheTargetMachineStartThe', 'On the target server, start the agent. It will display a 6-character pair code and a passphrase. Enter both below.') },
+                    { icon: <Hash />, label: t('app.servers.stepReadCode', 'Read code'), info: t('app.servers.theCodeIsShownInThe', 'The code is shown in the terminal output or system tray.') },
+                    { icon: <KeyRound />, label: t('app.servers.stepEnterBoth', 'Enter both') },
+                ]} />
 
                 <div className="form-group">
                     <label htmlFor={`${fieldId}-code`}>{t('app.servers.pairCode', 'Pair code')}</label>
@@ -671,7 +714,6 @@ const PairAgentForm = ({ groups, onClose, onClaimed }) => {
                         className="server-pair-code"
                         required
                     />
-                    <span className="form-hint">{t('app.servers.theCodeIsShownInThe', 'The code is shown in the terminal output or system tray.')}</span>
                     {lookupError && <div className="error-message server-pair-error">{lookupError}</div>}
                 </div>
 
@@ -766,12 +808,113 @@ const EXPIRY_OPTIONS = [
 ];
 const DEFAULT_EXPIRY = 7 * 24 * 60 * 60;
 
+const SET_HINT = 'serverkit-agent permissions set <level>';
+
+const levelLabel = (level) => {
+    if (level === 'monitor') return t('app.servers.levelMonitor', 'Monitor');
+    if (level === 'protect') return t('app.servers.levelProtect', 'Protect');
+    return t('app.servers.levelFull', 'Full');
+};
+
+const healthLabel = (code) => {
+    switch (code) {
+        case 'healthy': return t('app.servers.healthHealthy', 'Healthy');
+        case 'degraded': return t('app.servers.healthDegraded', 'Degraded');
+        case 'failing': return t('app.servers.healthFailing', 'Failing');
+        case 'stale': return t('app.servers.healthStale', 'Stale');
+        case 'offline': return t('app.servers.healthOffline', 'Offline');
+        default: return t('app.servers.healthPending', 'Pending');
+    }
+};
+
+const CAPABILITY_ICONS = {
+    cpu: [Cpu, 'CPU'],
+    memory: [MemoryStick, 'Memory'],
+    disk: [HardDrive, 'Disk'],
+    services: [ServerLucideIcon, 'Web server and PHP'],
+    database: [Database, 'Database'],
+    firewall: [Flame, 'Firewall'],
+    ban: [Ban, 'Ban (fail2ban, CrowdSec)'],
+    terminal: [Terminal, 'Terminal'],
+    docker: [Container, 'Docker'],
+    files: [Folder, 'Files'],
+};
+
+const LevelPicker = ({ value, onChange }) => {
+    const { t } = useTranslation();
+    const copy = {
+        monitor: {
+            can: t('app.servers.levelMonitorCan', 'Reports CPU, memory, disk and service health (web server, PHP-FPM, database) to this panel.'),
+            cannot: t('app.servers.levelMonitorCannot', 'Cannot run commands, open a terminal or change anything. The panel cannot send it any instructions.'),
+        },
+        protect: {
+            can: t('app.servers.levelProtectCan', 'Everything in Monitor, plus firewall, fail2ban, CrowdSec and Cloudflare origin-lock actions.'),
+            cannot: t('app.servers.levelProtectCannot', 'Cannot touch Docker, files, packages, services, shell or updates.'),
+        },
+        full: {
+            can: t('app.servers.levelFullCan', 'Everything the agent supports: Docker, files, terminal, packages, services and more.'),
+            cannot: t('app.servers.levelFullCannot', 'No restrictions. Choose this only for servers you want this panel to fully manage.'),
+        },
+    };
+    const onKeyDown = (e, level) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            onChange(level);
+        }
+    };
+    return (
+        <div className="form-group">
+            <span className="form-label" id="add-server-level-label">{t('app.servers.permissionLevel', 'Permission level')}</span>
+            <div className="level-picker" role="radiogroup" aria-labelledby="add-server-level-label">
+                {PERMISSION_LEVELS.map((level) => (
+                    <div key={level} className="level-picker__cell">
+                        <div role="radio" tabIndex={0}
+                            aria-checked={value === level}
+                            className={`level-picker__opt${value === level ? ' is-active' : ''}`}
+                            onClick={() => onChange(level)}
+                            onKeyDown={(e) => onKeyDown(e, level)}
+                        >
+                            <span className="level-picker__art"><LevelIllustration level={level} /></span>
+                            <span className="level-picker__head">{levelLabel(level)}</span>
+                            <span className="level-picker__caps">
+                                {Object.entries(CAPABILITY_ICONS).map(([cap, [Icon, label]]) => {
+                                    const allowed = levelAllows(level, cap);
+                                    const text = `${label}: ${allowed ? t('app.servers.capAllowed', 'allowed') : t('app.servers.capBlocked', 'blocked')}`;
+                                    return (
+                                        <span key={cap} role="img" aria-label={text} title={text}
+                                            className={`level-picker__cap${allowed ? '' : ' is-blocked'}`}>
+                                            <Icon size={16} aria-hidden="true" />
+                                        </span>
+                                    );
+                                })}
+                            </span>
+                        </div>
+                        <InfoTip className="level-picker__info"
+                            label={t('app.servers.levelInfo', 'What can {{level}} do?', { level: levelLabel(level) })}
+                            side="top"
+                        >
+                            <p>{copy[level].can}</p>
+                            <p>{copy[level].cannot}</p>
+                        </InfoTip>
+                    </div>
+                ))}
+            </div>
+            <span className="form-hint level-picker__note">
+                <Lock size={12} aria-hidden="true" />
+                {t('app.servers.levelEnforcedShort', 'Enforced on the server by the agent. Change with')}
+                {' '}<code>{SET_HINT}</code>
+            </span>
+        </div>
+    );
+};
+
 const AddServerModal = ({ groups, onClose, onCreated }) => {
     const { t } = useTranslation();
     const [mode, setMode] = useState('install');
     const [step, setStep] = useState(1);
     const [groupId, setGroupId] = useState('');
     const [expiresIn, setExpiresIn] = useState(DEFAULT_EXPIRY);
+    const [level, setLevel] = useState(DEFAULT_LEVEL);
     const [registrationData, setRegistrationData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -789,6 +932,7 @@ const AddServerModal = ({ groups, onClose, onCreated }) => {
             const result = await api.createServer({
                 expires_in: expiresIn,
                 group_id: groupId || undefined,
+                requested_level: level,
             });
             setRegistrationData(result);
             setStep(2);
@@ -808,13 +952,15 @@ const AddServerModal = ({ groups, onClose, onCreated }) => {
     // the operator sees one line of curl noise, the shell says success, and
     // nothing was installed. The `&&` makes a failed fetch stop the command and
     // surface curl's non-zero exit (issue #101).
-    const linuxInstallScript = registrationData ? `curl -fsSL ${window.location.origin}/api/v1/servers/install.sh -o /tmp/serverkit-agent-install.sh && \\
-  sudo bash /tmp/serverkit-agent-install.sh \\
-  --server "${window.location.origin}" \\
-  --token "${registrationData.registration_token}"` : '';
-
-    const windowsInstallScript = registrationData ? `irm ${window.location.origin}/api/v1/servers/install.ps1 | iex
-Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registrationData.registration_token}"` : '';
+    const installCommands = registrationData
+        ? buildInstallCommands({
+            origin: window.location.origin,
+            token: registrationData.registration_token,
+            level,
+        })
+        : { linux: '', windows: '' };
+    const linuxInstallScript = installCommands.linux;
+    const windowsInstallScript = installCommands.windows;
 
     // A right-side drawer, not a centred dialog: this flow is a multi-step
     // wizard with install scripts in it, and it always was a drawer — the
@@ -883,9 +1029,13 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                         <div className="server-setup-form__body">
                             {error && <div className="error-message">{error}</div>}
 
-                            <p className="section-description">
-                                {t('app.servers.generateASingleConnectionStringPaste', "Generate a single connection string. Paste it into the agent's pairing wizard, or use it with the one-liner installer. The agent's hostname becomes the server name on first connect; you can rename it later from the server's Settings tab.")}
-                            </p>
+                            <IconStepStrip steps={[
+                                { icon: <KeyRound />, label: t('app.servers.stepGenerate', 'Generate string'), info: t('app.servers.generateASingleConnectionStringPaste', "Generate a single connection string. Paste it into the agent's pairing wizard, or use it with the one-liner installer. The agent's hostname becomes the server name on first connect; you can rename it later from the server's Settings tab.") },
+                                { icon: <ClipboardPaste />, label: t('app.servers.stepPasteInAgent', 'Paste in agent') },
+                                { icon: <ServerLucideIcon />, label: t('app.servers.stepServerOnline', 'Server online') },
+                            ]} />
+
+                            <LevelPicker value={level} onChange={setLevel} />
 
                             <div className="form-row">
                                 <div className="form-group">
@@ -971,15 +1121,12 @@ Install-ServerKitAgent -Server "${window.location.origin}" -Token "${registratio
                             </details>
 
                             <div className="install-info">
-                                <h4>{t('app.servers.whatHappensNext', 'What happens next?')}</h4>
+                                <h4>{t('app.servers.whatHappensNext', 'What happens next?')} <InfoTip>{t('app.servers.theTokenIsSingleUseIf', 'The token is single-use. If you reinstall the agent later, generate a new connection string from the server\'s Settings tab.')}</InfoTip></h4>
                                 <ol>
                                     <li>{t('app.servers.openTheAgentOnYourTarget', 'Open the agent on your target server and paste the connection string.')}</li>
                                     <li>{t('app.servers.theAgentRegistersAutomaticallyAndReports', 'The agent registers automatically and reports its hostname back as the server name.')}</li>
                                     <li>{t('app.servers.theRowInThisListWill', 'The row in this list will switch from')} <strong>{t('app.servers.pending', 'Pending')}</strong> to <strong>{t('app.servers.online', 'Online')}</strong>.</li>
                                 </ol>
-                                <p className="text-muted">
-                                    {t('app.servers.theTokenIsSingleUseIf', 'The token is single-use. If you reinstall the agent later, generate a new connection string from the server\'s Settings tab.')}
-                                </p>
                             </div>
                         </div>
 

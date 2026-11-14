@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import InfoTip from '@/components/InfoTip';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
     PanelLeftClose, PanelLeftOpen, X, RefreshCw, Plus, Terminal,
@@ -891,8 +892,9 @@ export default function Databases() {
                                 type="button"
                                 className="dbx-tab dbx-tab-new"
                                 disabled={!newConsoleConn}
+                                disabledReason={t('app.databases.selectADatabaseToOpenA', 'Select a database to open a console')}
                                 onClick={() => { if (newConsoleConn) openConsole(newConsoleConn, selectedNode.engine); }}
-                                title={newConsoleConn ? t('app.databases.newSqlConsole', 'New SQL console') : t('app.databases.selectADatabaseToOpenA', 'Select a database to open a console')}
+                                title={newConsoleConn ? t('app.databases.newSqlConsole', 'New SQL console') : undefined}
                                 aria-label={t('app.databases.newSqlConsole', 'New SQL console')}
                             >
                                 <Plus size={14} aria-hidden="true" />
@@ -941,7 +943,12 @@ export default function Databases() {
                                     title={t('app.databases.openATableOrConsole', 'Open a table or console')}
                                     description={statusLoading
                                         ? t('app.databases.checkingYourDatabaseServers', 'Checking your database servers…')
-                                        : t('app.databases.pickATableFromTheLeft', 'Pick a table from the left to browse its rows, or open a SQL console on any database. Right-click a node for more actions.')}
+                                        : (
+                                            <>
+                                                {t('app.databases.pickATable', 'Pick a table or open a console.')}
+                                                <InfoTip>{t('app.databases.pickATableFromTheLeft', 'Pick a table from the left to browse its rows, or open a SQL console on any database. Right-click a node for more actions.')}</InfoTip>
+                                            </>
+                                        )}
                                 />
                             </div>
                         ) : null}

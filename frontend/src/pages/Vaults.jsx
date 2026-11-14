@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState  } from 'react';
+import InfoTip from '@/components/InfoTip';
 import api from '../services/api';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -177,16 +179,22 @@ export default function Vaults() {
             <Button variant="outline" size="sm" onClick={() => setSelectedVault(null)}>
                 <ArrowLeft size={15} /> {t('app.vaults.allVaults', 'All vaults')}
             </Button>
-            <Button size="sm" onClick={() => setSecretForm({ open: true, name: '', value: '', description: '' })}>
-                <Plus size={15} /> {t('app.vaults.addSecret', 'Add secret')}
-            </Button>
+            <PagePrimaryButton
+                id="vaults-add-secret"
+                label={t('app.vaults.addSecret', 'Add secret')}
+                shortLabel={t('common.actions.add', 'Add')}
+                onClick={() => setSecretForm({ open: true, name: '', value: '', description: '' })}
+            />
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.vaults.searchSecrets', 'Search secrets…')} />
         </>
     ) : (
         <>
-            <Button size="sm" onClick={() => setVaultForm({ open: true, name: '', description: '', workspace_id: activeWorkspaceId })}>
-                <Plus size={15} /> {t('app.vaults.newVault', 'New vault')}
-            </Button>
+            <PagePrimaryButton
+                id="vaults-new"
+                label={t('app.vaults.newVault', 'New vault')}
+                shortLabel={t('common.actions.new', 'New')}
+                onClick={() => setVaultForm({ open: true, name: '', description: '', workspace_id: activeWorkspaceId })}
+            />
             <SearchField value={search} onSearch={setSearch} placeholder={t('app.vaults.searchVaults', 'Search vaults…')} />
         </>
     )), [selectedVault, search, activeWorkspaceId]);
@@ -255,7 +263,7 @@ export default function Vaults() {
             render: (v) => (
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                        <Button variant="ghost" size="icon"><MoreVertical size={14} /></Button>
+                        <Button variant="ghost" size="icon" aria-label={t('common.moreActions', 'More actions')}><MoreVertical size={14} /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => openVault(v.id)}>{t('common.actions.open', 'Open')}</DropdownMenuItem>
@@ -377,7 +385,7 @@ export default function Vaults() {
             onRowClick={(v) => openVault(v.id)}
             emptyIcon={KeyRound}
             emptyTitle="No vaults yet"
-            emptyDescription="A vault is an encrypted key/value store for credentials and tokens. Create one to start putting secrets in it."
+            emptyDescription={<>{t('app.vaults.emptyShort', 'Encrypted store for credentials.')} <InfoTip>{t('app.vaults.emptyFull', 'A vault is an encrypted key/value store for credentials and tokens. Create one to start putting secrets in it.')}</InfoTip></>}
             emptyAction={(
                 <Button onClick={() => setVaultForm({ open: true, name: '', description: '', workspace_id: activeWorkspaceId })}>
                     <Plus size={16} /> {t('app.vaults.createYourFirstVault', 'Create your first vault')}

@@ -227,10 +227,6 @@
             "viewRelease": "রিলিজ দেখুন",
             "youReUpToDate": "আপনি আপ টু ডেট!"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "একটি পাসকি বা 2FA যোগ করুন",
-            "secureYourAccount": "আপনার অ্যাকাউন্ট সুরক্ষিত"
-        },
         "activityTab": {
             "actionType": "অ্যাকশন টাইপ",
             "actionsThisWeek": "এই সপ্তাহে কর্ম",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "সমস্ত অনলাইন এজেন্টদের জন্য আপগ্রেড ট্রিগার হয়েছে৷",
             "versionDistribution": "সংস্করণ বিতরণ",
             "versions": "সংস্করণ",
-            "viewDetails": "বিস্তারিত দেখুন"
+            "viewDetails": "বিস্তারিত দেখুন",
+            "selectAVersionFirst": "আগে একটি সংস্করণ নির্বাচন করুন"
         },
         "ai": {
             "assistant": "অ্যাসিস্ট্যান্ট"
@@ -612,7 +609,8 @@
             "remote": "দূরবর্তী",
             "restoreDrills": "ড্রিল পুনরুদ্ধার করুন",
             "turnOnProtectionOrClickBack": "সুরক্ষা চালু করুন বা এখনই ব্যাক আপ করুন ক্লিক করুন৷",
-            "verifyRemoteCopy": "দূরবর্তী অনুলিপি যাচাই করুন"
+            "verifyRemoteCopy": "দূরবর্তী অনুলিপি যাচাই করুন",
+            "onlySuccessfulBackupsCanBeRestored": "শুধু সফল ব্যাকআপ পুনরুদ্ধার করা যায়"
         },
         "backupTabs": {
             "schedules": "সময়সূচী",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "দূরবর্তী সঞ্চয়স্থানে স্বয়ংক্রিয়ভাবে নতুন ব্যাকআপ আপলোড করুন",
             "b2GbMonth": "B2 ($/GB/মাস)",
             "backUpNow": "এখন ব্যাক আপ",
+            "backUpShort": "ব্যাকআপ",
             "backblazeB2": "ব্যাকব্লেজ B2",
             "backupDeleted": "ব্যাকআপ মুছে ফেলা হয়েছে",
             "backupName": "ব্যাকআপ নাম",
@@ -667,6 +666,7 @@
             "database": "ডাটাবেস",
             "databaseBackupCreated": "ডাটাবেস ব্যাকআপ তৈরি করা হয়েছে",
             "databaseName": "ডাটাবেসের নাম",
+            "databaseNameRequired": "ডাটাবেসের নাম লিখুন।",
             "databaseOnly": "শুধুমাত্র ডাটাবেস",
             "databaseType": "ডাটাবেস প্রকার",
             "delete": "{{name}} মুছুন",
@@ -721,6 +721,7 @@
             "secretKey": "গোপন কী",
             "selectApplication": "পরিষেবা নির্বাচন করুন",
             "serverkitIsFreeTheseAreYour": "ServerKit বিনামূল্যে — এগুলি আপনার নিজস্ব স্টোরেজ খরচ৷ স্থানীয় হল আপনার সার্ভার ডিস্ক (আপনি এটি ট্র্যাক না করলে 0 এ ছেড়ে দিন)। S3/B2 হল আপনার ক্লাউড প্রদানকারীর $/GB/মাস।",
+            "serviceRequired": "একটি সার্ভিস বেছে নিন।",
             "settingsSaved": "সেটিংস সংরক্ষিত",
             "siteService": "সাইট/পরিষেবা",
             "storageConfigurationSaved": "স্টোরেজ কনফিগারেশন সংরক্ষিত",
@@ -883,7 +884,8 @@
             "selectSize": "আকার নির্বাচন করুন",
             "serverDestroyed": "সার্ভার ধ্বংস",
             "serverName": "সার্ভারের নাম",
-            "serverProvisioningInitiated": "সার্ভার বিধান শুরু হয়েছে"
+            "serverProvisioningInitiated": "সার্ভার বিধান শুরু হয়েছে",
+            "enterANameAndChooseAProvider": "আগে একটি নাম লিখুন এবং প্রদানকারী বেছে নিন"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "এই হোস্টনামের জন্য একটি CNAME তৈরি করা হবে Cloudflare DNS, টানেলের দিকে নির্দেশ করে৷",
@@ -969,7 +971,10 @@
             "sortAToZ": "A থেকে Z সাজান",
             "sortHighToLow": "বেশি থেকে কম সাজান",
             "sortLowToHigh": "কম থেকে বেশি সাজান",
-            "sortZToA": "Z থেকে A সাজান"
+            "sortZToA": "Z থেকে A সাজান",
+            "alreadyTheFirstColumn": "এটি ইতিমধ্যেই প্রথম কলাম",
+            "alreadyTheLastColumn": "এটি ইতিমধ্যেই শেষ কলাম",
+            "noFilterOnThisColumn": "এই কলামে কোনো ফিল্টার নেই"
         },
         "columnsMenu": {
             "columns": "কলাম",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "সহকারীকে মেসেজ করুন",
             "noResources": "কোনো অ্যাক্সেসযোগ্য রিসোর্স পাওয়া যায়নি",
             "searchResources": "রিসোর্স খুঁজুন…",
-            "send": "পাঠান"
+            "send": "পাঠান",
+            "setUpTheAssistantFirst": "আগে সহকারী সেট আপ করুন",
+            "typeAMessageFirst": "আগে একটি বার্তা লিখুন"
         },
         "configDiffModal": {
             "applyRestorePoint": "রিস্টোর পয়েন্ট প্রয়োগ করুন",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "এই সার্ভারের পাবলিক আইপি",
             "useStarttlsRecommended": "STARTTLS ব্যবহার করুন (প্রস্তাবিত)",
             "whereDoIGetThis": "আমি এটা কোথায় পেতে পারি?",
-            "yourAccountEmailGlobalKeySimplest": "আপনার অ্যাকাউন্ট ইমেল + গ্লোবাল কী। সেট আপ করা সবচেয়ে সহজ, কিন্তু সম্পূর্ণ অ্যাকাউন্ট অ্যাক্সেস মঞ্জুর করে।"
+            "yourAccountEmailGlobalKeySimplest": "আপনার অ্যাকাউন্ট ইমেল + গ্লোবাল কী। সেট আপ করা সবচেয়ে সহজ, কিন্তু সম্পূর্ণ অ্যাকাউন্ট অ্যাক্সেস মঞ্জুর করে।",
+            "setUpTheOauthAppFirst": "আগে OAuth অ্যাপ সেট আপ করুন"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "সংযোগ করার আগে সেটিংসে GitHub OAuth অ্যাপের শংসাপত্র যোগ করুন।",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "সংগ্রহস্থল অনুসন্ধান করুন",
             "serviceName": "পরিষেবার নাম",
             "systemdUnitOptional": "systemd ইউনিট (ঐচ্ছিক)",
-            "uploadTheArchive": "আর্কাইভ আপলোড করুন"
+            "uploadTheArchive": "আর্কাইভ আপলোড করুন",
+            "setUpGithubInSettingsFirst": "আগে সেটিংসে GitHub সেট আপ করুন"
         },
         "connectionsHub": {
             "authorizedViaOauth": "OAuth-এর মাধ্যমে অনুমোদিত",
@@ -1337,7 +1346,8 @@
             "toRun": "চালানো",
             "writeSqlAboveAndPress": "উপরে SQL লিখুন এবং চাপুন",
             "writesEnabledBeCareful": "লিখতে সক্ষম — সতর্ক থাকুন",
-            "writesOn": "লেখা চালু"
+            "writesOn": "লেখা চালু",
+            "runAQueryWithResultsFirst": "আগে ফলাফলসহ একটি কোয়েরি চালান"
         },
         "consoleToolbar": {
             "allLevels": "সব স্তর",
@@ -1353,7 +1363,8 @@
             "searchLogs": "লগ অনুসন্ধান করুন...",
             "showTheDeploymentDetailsAgain": "স্থাপনার বিবরণ আবার দেখান",
             "timestamps": "টাইমস্ট্যাম্প",
-            "wrap": "মোড়ানো"
+            "wrap": "মোড়ানো",
+            "noMatchesToJumpTo": "যাওয়ার মতো কোনো মিল নেই"
         },
         "containerOpsPanel": {
             "actionFailed": "অ্যাকশন ব্যর্থ হয়েছে",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "কোন আউটপুট উত্পাদিত.",
             "noRunsRecordedYet": "এখনো কোনো রান রেকর্ড হয়নি।",
             "noRunsYet": "এখনো কোনো রান নেই",
-            "noScheduledJobsFoundCreateYour": "কোনো নির্ধারিত চাকরি পাওয়া যায়নি। কাজগুলি স্বয়ংক্রিয় করতে আপনার প্রথম cron কাজ তৈরি করুন৷",
             "paused": "বিরতি দেওয়া হয়েছে",
             "runHistory": "রান ইতিহাস",
             "runHistoryIsAnAdminOnly": "রান ইতিহাস হল একটি প্রশাসক-শুধুমাত্র পৃষ্ঠ।",
@@ -1607,7 +1617,8 @@
             "undo": "পূর্বাবস্থায় ফেরান",
             "unnamedJob": "নামহীন জব",
             "untracked": "ট্র্যাক করা হয়নি",
-            "whatDoesThisJobDo": "এই কাজ কি করে?"
+            "whatDoesThisJobDo": "এই কাজ কি করে?",
+            "enterANameCommandAndScheduleFirst": "আগে নাম, কমান্ড ও সময়সূচি লিখুন"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 ক্ষেত্র: মিনিট, ঘন্টা, দিন, মাস, সপ্তাহের দিন।",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "ক্রোন জব সরান",
             "scheduleACommandOnTheHost": "হোস্ট crontab-এ একটি কমান্ড নির্ধারণ করুন। এজেন্ট ব্যবহারকারী হিসেবে চলে।",
             "scheduleIsRequired": "সময়সূচী প্রয়োজন",
-            "serverOffline": "সার্ভার অফলাইন"
-        },
-        "cutoverDrawer": {
-            "answer": "উত্তর",
-            "applyCutover": "কাটওভার প্রয়োগ করুন",
-            "applyDnsCutover": "DNS কাটওভার প্রয়োগ করবেন?",
-            "applying": "আবেদন করা হচ্ছে...",
-            "atTheBoxWhereTheImported": "বাক্সে যেখানে আমদানি করা সাইট এখন বাস করে। এর বর্তমান রেকর্ডগুলি প্রথমে স্ন্যাপশট করা হয়, তাই সুইচটি সর্বদা প্রত্যাবর্তন করা যেতে পারে।",
-            "capturing": "ক্যাপচার করা হচ্ছে...",
-            "checkPropagation": "প্রচার পরীক্ষা করুন",
-            "cutoverApplied": "কাটওভার প্রয়োগ করা হয়েছে:",
-            "cutoverAppliedNowPointsAt": "কাটওভার প্রয়োগ করা হয়েছে — {{domain}} এখন {{value}} এ পয়েন্ট করে",
-            "cutoverFinishedWithErrorsReviewBelow": "কাটওভার ত্রুটি সহ সমাপ্ত. নীচে পর্যালোচনা করুন এবং প্রয়োজন হলে প্রত্যাবর্তন করুন।",
-            "cutoverFinishedWithErrorsReviewThe": "কাটওভার ত্রুটি সহ সমাপ্ত — ফলাফল পর্যালোচনা করুন এবং প্রত্যাবর্তন বিবেচনা করুন.",
-            "deletedCreatedRecords_one": "কাটওভারের তৈরি 1টি রেকর্ড মুছে ফেলা হয়েছে।",
-            "deletedCreatedRecords_other": "কাটওভারের তৈরি {{count}}টি রেকর্ড মুছে ফেলা হয়েছে।",
-            "dnsCutover": "DNS কাটওভার",
-            "matchesNewTarget": "নতুন লক্ষ্যের সাথে মেলে",
-            "new": "নতুন",
-            "newAddressTarget": "নতুন ঠিকানা (লক্ষ্য)",
-            "newTarget": "নতুন লক্ষ্য",
-            "noChangesToApplyForThe": "নির্বাচিত রেকর্ড প্রকারের জন্য আবেদন করার জন্য কোন পরিবর্তন নেই।",
-            "notFullyPropagated": "সম্পূর্ণ প্রচারিত হয়নি",
-            "nowPointsAt": "এখন নির্দেশ করে",
-            "oneClickRestoresTheSnapshotCaptured": "একটি ক্লিক এই কাটওভারের আগে ক্যাপচার করা স্ন্যাপশটকে পুনরুদ্ধার করে — তৈরি করা কাটওভারের যেকোনো রেকর্ড মুছে ফেলা সহ।",
-            "plannedChanges": "পরিকল্পিত পরিবর্তন",
-            "propagated": "প্রচারিত",
-            "propagating": "প্রচারিত হচ্ছে",
-            "propagation": "প্রচার",
-            "providerZoneId": "প্রদানকারী জোন আইডি",
-            "publicResolversCacheTheOldAddress": "সর্বজনীন সমাধানকারীরা তাদের TTL মেয়াদ শেষ না হওয়া পর্যন্ত পুরানো ঠিকানা ক্যাশ করে। নতুন ঠিকানা কোথায় কার্যকর হয়েছে তা পরীক্ষা করুন।",
-            "recordTypes": "রেকর্ড প্রকার",
-            "recordTypes2": "রেকর্ড প্রকার",
-            "recordsCaptured": "রেকর্ড ক্যাপচার করা হয়েছে",
-            "repoint": "পুনরায় পয়েন্ট করুন",
-            "repointsRecords_one": "এটি {{domain}}-এর {{types}} রেকর্ডকে {{target}}-এর দিকে পুনঃনির্দেশ করে। স্ন্যাপশট দিয়ে আপনি ফিরিয়ে আনতে পারবেন।",
-            "repointsRecords_other": "এটি {{domain}}-এর {{types}} রেকর্ডগুলিকে {{target}}-এর দিকে পুনঃনির্দেশ করে। স্ন্যাপশট দিয়ে আপনি ফিরিয়ে আনতে পারবেন।",
-            "resolver": "সমাধানকারী",
-            "restoredRecords_one": "1টি রেকর্ড পুনরুদ্ধার করা হয়েছে।",
-            "restoredRecords_other": "{{count}}টি রেকর্ড পুনরুদ্ধার করা হয়েছে।",
-            "revertCutover": "কাটওভার ফিরিয়ে দিন",
-            "revertFinishedWithErrorsCheckThe": "ত্রুটি সহ সমাপ্ত প্রত্যাবর্তন — ফলাফল পরীক্ষা করুন.",
-            "revertedRestoredSPreCutoverRecords": "প্রত্যাবর্তিত — {{domain}} এর প্রি-কাটওভার রেকর্ড পুনরুদ্ধার করা হয়েছে",
-            "reverting": "প্রত্যাবর্তন করা হচ্ছে...",
-            "review": "পর্যালোচনা",
-            "rollBack": "রোল ব্যাক",
-            "snapshotPreview": "স্ন্যাপশট এবং পূর্বরূপ",
-            "theDnsProviderSZoneIdentifier": "DNS প্রদানকারীর জোন শনাক্তকারী",
-            "theIpOrHostnameForCname": "আইপি (বা CNAME-এর জন্য হোস্টনাম) রেকর্ডগুলিকে নির্দেশ করা উচিত৷",
-            "thisDomainHasNoConnectedProvider": "এই ডোমেনের কোনো সংযুক্ত প্রদানকারী জোন নেই — কাটওভারে রেকর্ড পড়তে এবং লিখতে একজনের প্রয়োজন।",
-            "verify": "যাচাই করুন"
+            "serverOffline": "সার্ভার অফলাইন",
+            "failedToLoadCronJobs": "cron কাজগুলো লোড করা যায়নি।"
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "এই ড্যাশবোর্ডে এখনো কোনো উইজেট নেই।"
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "সাজানোর জন্য ক্লিক করুন · একটি সাজানোর স্তর যোগ করতে Shift+ক্লিক করুন",
             "loading": "লোড হচ্ছে",
             "noRowsMatchTheActiveColumn": "সক্রিয় কলাম ফিল্টারগুলির সাথে কোনো সারি মেলে না।",
+            "scrollableTable": "স্ক্রোলযোগ্য টেবিল",
             "selectAllRows": "সব সারি নির্বাচন করুন",
-            "selectRow": "সারি নির্বাচন করুন"
+            "selectRow": "সারি নির্বাচন করুন",
+            "sortAColumnFirst": "আগে একটি কলাম অনুযায়ী সাজান"
         },
         "dataTableFooter": {
             "nextPage": "পরবর্তী পৃষ্ঠা",
@@ -1776,7 +1740,8 @@
             "updateOverview": "ওভারভিউ আপডেট করুন",
             "updatingDatabaseSchema": "ডাটাবেস স্কিমা আপডেট করা হচ্ছে...",
             "weRecommendBackingUpYourDatabase": "আমরা আপডেট প্রয়োগ করার আগে আপনার ডাটাবেস ব্যাক আপ করার পরামর্শ দিই।",
-            "whichDoesNotExistInThis": ", যা এই বিল্ডে বিদ্যমান নেই — সাধারণত একটি শাখা যা একটি মাইগ্রেশন যোগ করে এবং তারপরে ফিরিয়ে দেওয়া হয়। স্কিমাটিকে আপগ্রেড করা যাবে না যতক্ষণ না এটি একটি পরিচিত সংশোধনে স্ট্যাম্প করা হয়:"
+            "whichDoesNotExistInThis": ", যা এই বিল্ডে বিদ্যমান নেই — সাধারণত একটি শাখা যা একটি মাইগ্রেশন যোগ করে এবং তারপরে ফিরিয়ে দেওয়া হয়। স্কিমাটিকে আপগ্রেড করা যাবে না যতক্ষণ না এটি একটি পরিচিত সংশোধনে স্ট্যাম্প করা হয়:",
+            "createABackupFirst": "আগে একটি ব্যাকআপ তৈরি করুন"
         },
         "databases": {
             "backUpDatabase": "ডাটাবেস ব্যাক আপ করুন",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "Linux এ, নিশ্চিত করুন যে Docker ডেমন শুরু হয়েছে",
             "retryConnection": "সংযোগ পুনরায় চেষ্টা করুন",
             "targets": "টার্গেট",
-            "toUseDockerManagement": "Docker ব্যবস্থাপনা ব্যবহার করতে:",
             "verifyTheUserHasPermissionsTo": "ব্যবহারকারীর Docker অ্যাক্সেস করার অনুমতি আছে তা যাচাই করুন",
             "volumes": "ভলিউম"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "রেকর্ড রিফ্রেশ করুন",
             "regenerateToken": "টোকেন পুনরায় তৈরি করুন",
             "thisDomainIsnTSetUp": "এই ডোমেনটি এখনও ServerKit-এ DNS-এর জন্য সেট আপ করা হয়নি।",
-            "tokenRegenerated": "টোকেন পুনরায় তৈরি করা হয়েছে"
+            "tokenRegenerated": "টোকেন পুনরায় তৈরি করা হয়েছে",
+            "enterTheRecordContentFirst": "আগে রেকর্ডের বিষয়বস্তু লিখুন"
         },
         "domainField": {
             "alreadyAttached": "{{name}} ইতিমধ্যে একটি পরিষেবার সাথে যুক্ত।",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "{{name}} এর জন্য SSL নিষ্ক্রিয় করবেন?",
             "dismissError": "ত্রুটি খারিজ",
             "dnsProvider": "DNS প্রদানকারী",
+            "domainRequired": "একটি বৈধ ডোমেইন লিখুন।",
             "domainVerificationFailed": "ডোমেন যাচাইকরণ ব্যর্থ হয়েছে: {{error}}",
             "domainVerifiedIp": "ডোমেইন যাচাই করা হয়েছে! আইপি: {{ipaddress}}",
             "emailAddress": "ইমেইল ঠিকানা",
@@ -2292,6 +2258,7 @@
             "rowsFields": "{{n}} সারি · {{fields}} ক্ষেত্র · {{value}}",
             "searchDomains": "ডোমেইন অনুসন্ধান করুন...",
             "selectAnApplication": "একটি পরিষেবা নির্বাচন করুন",
+            "serviceRequired": "একটি সার্ভিস বেছে নিন।",
             "setAsPrimaryDomain": "প্রাথমিক ডোমেন হিসেবে সেট করুন",
             "sslCertificate": "SSL শংসাপত্র",
             "sslExpires": "মেয়াদ শেষ হবে {{days}}d",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "SHA256 চেকসাম ব্যবহার করে আপনার ডাউনলোড যাচাই করুন:",
             "windows": "উইন্ডোজ:",
             "windowsPowershell": "উইন্ডোজ (পাওয়ারশেল)",
-            "withTheServerRegistrationToken": "সার্ভার রেজিস্ট্রেশন টোকেন সহ।"
+            "withTheServerRegistrationToken": "সার্ভার রেজিস্ট্রেশন টোকেন সহ।",
+            "noBuildPublishedForThisPlatform": "এই প্ল্যাটফর্মের জন্য এখনও কোনো বিল্ড প্রকাশিত হয়নি"
         },
         "drawerHeader": {
             "aiSettings": "এআই সেটিংস",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "একটি ভিন্ন অনুসন্ধান শব্দ চেষ্টা করুন বা অন্য ফোল্ডার ব্রাউজ করুন.",
             "typeZA": "Z-A টাইপ করুন",
             "types": "প্রকারভেদ",
+            "up": "উপরে",
             "upDelDeleteF2RenameA": "⌫ Up · Del Delete · F2 Rename · ⌘A All",
             "updatedAt": "আপডেট হয়েছে {{time}}",
             "upload": "আপলোড করুন",
@@ -2809,10 +2778,12 @@
             "videos": "ভিডিও",
             "volumes": "ভলিউম",
             "webConfig": "ওয়েব কনফিগারেশন",
-            "willBeCreatedIn": "এতে তৈরি করা হবে:"
+            "willBeCreatedIn": "এতে তৈরি করা হবে:",
+            "nothingToGoBackTo": "পিছনে যাওয়ার কিছু নেই",
+            "nothingToGoForwardTo": "সামনে যাওয়ার কিছু নেই",
+            "alreadyAtTheTopFolder": "ইতিমধ্যেই সর্বোচ্চ ফোল্ডারে আছেন"
         },
         "fileRow": {
-            "deselect": "অনির্বাচন করুন",
             "rename": "নাম পরিবর্তন করুন",
             "select": "নির্বাচন করুন"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "সব সাফ করুন",
             "noFilters": "কোনো ফিল্টার নেই",
             "showResults_one": "{{count}}টি {{noun}} দেখান",
-            "showResults_other": "{{count}}টি {{noun}} দেখান"
+            "showResults_other": "{{count}}টি {{noun}} দেখান",
+            "noFiltersApplied": "কোনো ফিল্টার প্রয়োগ করা হয়নি"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 বা 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "প্রবণতা",
             "unusuallyHigh": "অস্বাভাবিকভাবে বেশি",
             "unusuallyLow": "অস্বাভাবিকভাবে কম",
-            "zScore": "জেড-স্কোর"
+            "zScore": "জেড-স্কোর",
+            "selectAServerFirst": "আগে একটি সার্ভার নির্বাচন করুন"
         },
         "fleetProxy": {
             "apps": "পরিষেবা",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "ভিউ পরিবর্তন রিসেট করুন",
             "rowDensity": "সারি ঘনত্ব",
             "rowsInThisView": "এই দৃশ্যে সারি",
-            "selectedRows": "নির্বাচিত সারি"
+            "selectedRows": "নির্বাচিত সারি",
+            "selectSomeRowsFirst": "আগে কিছু সারি নির্বাচন করুন"
         },
         "gridViewPicker": {
             "builtIn": "বিল্ট ইন",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "বর্তমান ফিল্টার এবং কলাম থেকে শুরু করুন",
             "unsaved": "অসংরক্ষিত",
             "unsetAsDefault": "ডিফল্ট থেকে সরান",
-            "viewOptions": "{{name}} বিকল্প"
+            "viewOptions": "{{name}} বিকল্প",
+            "enterAViewNameFirst": "আগে ভিউয়ের নাম লিখুন"
         },
         "groupMenu": {
             "group": "গ্রুপ",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "কনফিগারেশন সংরক্ষিত. পরিবর্তনগুলি প্রয়োগ করতে পরিষেবাটি পুনরায় চালু করুন।",
             "failedToSaveConfiguration": "কনফিগারেশন সংরক্ষণ করতে ব্যর্থ হয়েছে",
             "gunicornConfiguration": "Gunicorn কনফিগারেশন",
-            "loadingGunicornConfiguration": "Gunicorn কনফিগারেশন লোড হচ্ছে..."
+            "loadingGunicornConfiguration": "Gunicorn কনফিগারেশন লোড হচ্ছে...",
+            "failedToLoadConfiguration": "Gunicorn কনফিগারেশন লোড করা যায়নি।"
         },
         "hints": {
             "appBound": "পরিষেবাটি নিজেই বাধা। এর সামনে পুরো পৃষ্ঠা ক্যাশে করুন, অথবা এটিকে একটি বড় সার্ভার দিন।",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "রূপান্তর করার জন্য কিছুই নেই - কোন নির্দেশাবলী পাওয়া যায়নি।",
             "pasteTheContentsOfAnApache": "একটি Apache এর বিষয়বস্তু পেস্ট করুন",
             "reason": "কারণ",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n রিরাইট রুলে রিরাইট ইঞ্জিন। /index.php [এল]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n রিরাইট রুলে রিরাইট ইঞ্জিন। /index.php [এল]",
+            "pasteSomeHtaccessRulesFirst": "আগে .htaccess নিয়ম পেস্ট করুন"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 বা 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "নিশ্চিত করতে",
             "tryAgain": "আবার চেষ্টা করুন",
             "whereTheDumpLives": "যেখানে ডাম্প বাস করে",
-            "working": "কাজ চলছে…"
+            "working": "কাজ চলছে…",
+            "chooseADumpFileFirst": "আগে একটি ডাম্প ফাইল বেছে নিন",
+            "chooseATargetDatabaseFirst": "আগে একটি লক্ষ্য ডাটাবেস বেছে নিন",
+            "importFinished": "ইম্পোর্ট সম্পন্ন হয়েছে",
+            "onlyAdminsCanImport": "শুধু অ্যাডমিনরা ইম্পোর্ট করতে পারেন",
+            "typeTheDatabaseNameToConfirm": "নিশ্চিত করতে ডাটাবেসের নাম লিখুন"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "cPanel এর সম্পূর্ণ অ্যাকাউন্ট ব্যাকআপ থেকে একটি cpmove/backup-*.tar.gz আর্কাইভ।",
@@ -3344,7 +3326,9 @@
             "unknownAge": "অজানা বয়স",
             "viewChanges": "পরিবর্তন দেখুন",
             "watchingADocrootHashesEveryFile": "একটি ডকরুট দেখা আপলোড/ক্যাশে ডিরেক্টরির বাইরে প্রতিটি ফাইল হ্যাশ করে, তাই এটি প্রতি পরিষেবা অপ্ট-ইন হয়।",
-            "whatChanged": "কি পরিবর্তন"
+            "whatChanged": "কি পরিবর্তন",
+            "createABaselineFirst": "আগে একটি বেসলাইন তৈরি করুন",
+            "notAvailableOnThisServer": "এই সার্ভারে উপলব্ধ নয়"
         },
         "invitationsTab": {
             "copyInviteLink": "আমন্ত্রণ লিঙ্ক কপি করুন",
@@ -3394,7 +3378,8 @@
             "exitCode": "(exit {{code}})",
             "streamingProgress": "স্ট্রিমিং অগ্রগতি...",
             "waitingForTheAgentToBegin": "এজেন্ট শুরু হওয়ার জন্য অপেক্ষা করা হচ্ছে...",
-            "working": "কাজ চলছে…"
+            "working": "কাজ চলছে…",
+            "waitForTheJobToFinish": "কাজ শেষ হওয়া পর্যন্ত অপেক্ষা করুন"
         },
         "jobs": {
             "activity": "কার্যকলাপ",
@@ -3501,7 +3486,9 @@
             "logFiles": "লগ ফাইল",
             "noLogFilesFound": "কোন লগ ফাইল পাওয়া যায়নি",
             "searchPattern": "সার্চ প্যাটার্ন...",
-            "selectALogFile": "এর বিষয়বস্তু দেখতে একটি লগ ফাইল নির্বাচন করুন।"
+            "selectALogFile": "এর বিষয়বস্তু দেখতে একটি লগ ফাইল নির্বাচন করুন।",
+            "selectALogFileFirst": "আগে একটি লগ ফাইল নির্বাচন করুন",
+            "nothingToDownloadYet": "ডাউনলোড করার মতো কিছু এখনও নেই"
         },
         "loginLinksSection": {
             "allowedIp": "অনুমোদিত আইপি",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "কোন হোস্ট অনুমতি ঘোষণা.",
             "pasteAGithubRepoOwnerRepo": "একটি GitHub রেপো (মালিক/রেপো বা মালিক/repo@tag), একটি রিলিজ URL, বা একটি সরাসরি জিপ লিঙ্ক পেস্ট করুন৷ এটি অবতরণ করার আগে আপনি কি ইনস্টল হবে তার পূর্বরূপ দেখতে পাবেন।",
             "preview": "পূর্বরূপ",
-            "signatureInvalid": "স্বাক্ষর অবৈধ",
             "signatureMismatch": "স্বাক্ষরটি এই আর্কাইভের সাথে মেলে না।",
-            "signed": "স্বাক্ষরিত ·",
-            "signedUnknownPublisher": "স্বাক্ষরিত · অজানা প্রকাশক",
             "theDownloadMayHaveBeenTampered": "ডাউনলোডটি হয়ত বিকৃত করা হয়েছে — এটি ইনস্টল করবেন না।",
             "thisExtensionRequests": "এই এক্সটেনশনটি অনুরোধ করে:",
             "thisReleaseCarriesNoPublisherSignature": "এই প্রকাশে কোন প্রকাশকের স্বাক্ষর নেই। এটি সম্পূর্ণ প্যানেলের বিশেষাধিকারের সাথে চলবে — যদি আপনি উত্সকে বিশ্বাস করেন তবেই ইনস্টল করুন৷",
             "thisReleaseIsSignedButThe": "এই রিলিজটি স্বাক্ষরিত, কিন্তু প্রকাশক কী এই প্যানেল দ্বারা পিন করা হয়নি, তাই স্বাক্ষর যাচাই করা যাবে না। এটিকে স্বাক্ষরবিহীন হিসাবে বিবেচনা করুন।",
-            "unsigned": "স্বাক্ষরবিহীন",
             "uploadAnExtensionZipWith": "এর সাথে একটি এক্সটেনশন জিপ আপলোড করুন",
             "useAnAbsolutePathThatExists": "ব্যাকএন্ড হোস্টে বা ব্যাকএন্ড কন্টেইনারের ভিতরে বিদ্যমান একটি পরম পথ ব্যবহার করুন।",
             "zip": "জিপ"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "এক্সটেনশন ক্যাটালগ লোড করতে ব্যর্থ হয়েছে।",
             "couldntToggle": "এক্সটেনশন চালু বা বন্ধ করতে ব্যর্থ হয়েছে।",
             "couldntUninstall": "এক্সটেনশন আনইনস্টল করতে ব্যর্থ হয়েছে।",
-            "declaredPermissionsWhatThePanelHas": "ঘোষণা করা অনুমতি, প্যানেল কী পর্যবেক্ষণ করেছে এবং Python নির্ভরতা মুলতুবি রয়েছে",
-            "disabling": "নিষ্ক্রিয় করা হচ্ছে…",
-            "enabling": "সক্রিয় করা হচ্ছে…",
             "extensionConfigurationSaved": "এক্সটেনশন কনফিগারেশন সংরক্ষিত",
             "extensionDisabled": "এক্সটেনশন নিষ্ক্রিয়",
             "extensionEnabled": "এক্সটেনশন সক্রিয়",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "একটি অপ্রমাণযোগ্য স্বাক্ষর দিয়ে ইনস্টল করবেন?",
             "installWithoutChecksumVerification": "চেকসাম যাচাই ছাড়াই ইনস্টল করবেন?",
             "installed": "ইনস্টল করা হয়েছে",
-            "installedExtensions": "ইনস্টল করা এক্সটেনশন",
             "installedHotReloadShouldPickIt": "\"{{displayname}}\" ইনস্টল করা হয়েছে। হট-রিলোড এটি বাছাই করা উচিত; ব্লুপ্রিন্ট রুট প্রদর্শিত না হলে ব্যাকএন্ড পুনরায় চালু করুন।",
             "installedRestartBackendIfBlueprintRoutes": "\"{{displayname}}\" ইনস্টল করা হয়েছে। ব্লুপ্রিন্ট রুট প্রদর্শিত না হলে ব্যাকএন্ড পুনরায় চালু করুন।",
             "installing": "ইনস্টল হচ্ছে…",
@@ -3665,33 +3644,21 @@
             "purgeData": "ডেটা পরিষ্কার করুন",
             "registry": "রেজিস্ট্রি",
             "registryInstallFailed": "রেজিস্ট্রি ইনস্টল ব্যর্থ হয়েছে",
-            "releaseZipIsSignedThePanel": "রিলিজ জিপ স্বাক্ষরিত হয়; প্যানেল ইনস্টল করার সময় ed25519 স্বাক্ষর যাচাই করে",
             "removingThisExtensionStopsItsRoutes": "এই এক্সটেনশনটি সরানো হলে এর রুট এবং UI অবদান বন্ধ হয়ে যায়।",
             "resetFilters": "ফিল্টার রিসেট করুন",
             "reviewed": "পর্যালোচনা করা হয়েছে",
             "screenshots": "স্ক্রিনশট",
             "searchExtensions": "সার্চ এক্সটেনশন...",
-            "signed": "স্বাক্ষরিত",
-            "signedWithPublisherKeyWhichThis": "প্রকাশক কী '{{publisherKeyId}}' দিয়ে স্বাক্ষরিত, যা এই প্যানেলটি পিন করে না",
             "sourceRepo": "উৎস রেপো",
             "thisExtensionDeclaresNoConfigurationFields": "এই এক্সটেনশন কোনো কনফিগারেশন ক্ষেত্র ঘোষণা করে না।",
             "thisExtensionRequests": "এই এক্সটেনশনটি অনুরোধ করে:",
-            "thisReleaseCarriesNoPublisherSignature": "এই প্রকাশে কোন প্রকাশকের স্বাক্ষর নেই",
             "uninstall": "{{displayname}} আনইনস্টল করবেন?",
-            "uninstalling": "আনইনস্টল হচ্ছে…",
-            "unknownSigner": "অজানা স্বাক্ষরকারী",
             "unreviewed": "পর্যালোচনা করা হয়নি",
-            "unsigned": "স্বাক্ষরবিহীন",
             "update": "আপডেট",
             "updateAnyway": "তবুও আপডেট করুন",
-            "updateAvailableV": "আপডেট উপলব্ধ → v",
             "updating": "আপডেট হচ্ছে…",
-            "versionByAuthor": "v{{version}} · {{author}} দ্বারা"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "সদস্যদের কিউরেটেড অ্যাকশন চালানোর অনুমতি দিন",
-            "letWorkspaceMembersRunASmall": "ওয়ার্কস্পেস সদস্যদের একটি ছোট সেট কিউরেটেড, প্যারামিটারাইজড অ্যাকশন চালাতে দিন (যেমন একটি পরিষেবার ব্যাকআপ ফ্রিকোয়েন্সি সামঞ্জস্য করা) যাতে তারা পৌঁছাতে পারে। প্রতিটি ক্রিয়া একটি নির্দিষ্ট স্কিমার বিরুদ্ধে যাচাই করা হয় এবং অডিট-লগ করা হয় — কোনও বিনামূল্যের পাঠ্য কখনও সার্ভার শেল পর্যন্ত পৌঁছায় না। পুরো সদস্য-অ্যাকশন পৃষ্ঠটি নিষ্ক্রিয় করতে এটি বন্ধ করুন।",
-            "memberActions": "সদস্য কর্ম"
+            "versionByAuthor": "v{{version}} · {{author}} দ্বারা",
+            "installShort": "ইনস্টল"
         },
         "message": {
             "somethingWentWrong": "কিছু একটা ভুল হয়েছে।"
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "প্রতি মিনিটে মেট্রিক্স সংগ্রহ করা হয়",
             "noHistoricalDataYet": "কোন ঐতিহাসিক তথ্য এখনও",
             "realTimePerformance": "রিয়েল-টাইম পারফরম্যান্স",
-            "systemMetrics": "সিস্টেম মেট্রিক্স"
+            "systemMetrics": "সিস্টেম মেট্রিক্স",
+            "loadingMetricsHistory": "মেট্রিক ইতিহাস লোড হচ্ছে…"
         },
         "metricsTab": {
             "activeRunning": "সক্রিয় (চলছে)",
@@ -3732,7 +3700,8 @@
             "processes": "প্রসেস",
             "serviceStatus": "সার্ভিস স্ট্যাটাস",
             "startTheServiceToViewResource": "রিসোর্স মেট্রিক্স দেখতে পরিষেবা শুরু করুন।",
-            "workers": "ওয়ার্কার"
+            "workers": "ওয়ার্কার",
+            "failedToLoadMetrics": "মেট্রিক লোড করা যায়নি।"
         },
         "microCachePanel": {
             "assetCachingSaved": "অ্যাসেট ক্যাশিং সংরক্ষিত",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "একই নাম এবং সম্পূর্ণ অধিকার সহ ব্যবহারকারী তৈরি করুন",
             "creating": "তৈরি হচ্ছে…",
             "databaseCreated": "ডাটাবেস তৈরি করা হয়েছে",
-            "databaseName": "ডাটাবেসের নাম *",
+            "databaseName": "ডাটাবেসের নাম",
             "encoding": "এনকোডিং",
             "engine": "ইঞ্জিন",
             "fromTheTemplateCatalog": "টেমপ্লেট ক্যাটালগ থেকে",
@@ -3836,7 +3805,9 @@
             "running": "চলছে",
             "saveTheseCredentialsThePasswordWon": "এই শংসাপত্রগুলি সংরক্ষণ করুন — পাসওয়ার্ডটি আর দেখানো হবে না৷",
             "userCreated": "ব্যবহারকারী তৈরি করা হয়েছে",
-            "username": "ব্যবহারকারীর নাম *"
+            "username": "ব্যবহারকারীর নাম",
+            "databaseNameInvalid": "শুধু অক্ষর, সংখ্যা ও আন্ডারস্কোর ব্যবহার করুন।",
+            "databaseNameRequired": "ডাটাবেসের নাম লিখুন।"
         },
         "modeToggle": {
             "assistant": "সহকারী",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "উপরে ট্রিগার",
             "webhook": "ওয়েবহুক",
             "whereAnAlertGoesWhenIt": "যেখানে আগুন লাগলে একটি সতর্কতা চলে যায়",
-            "wouldAlertNow": "এখনই সতর্ক করত"
+            "wouldAlertNow": "এখনই সতর্ক করত",
+            "couldntLoadMonitoringData": "মনিটরিং ডেটা লোড করা যায়নি।"
         },
         "monitoringOverview": {
             "activeAlerts": "সক্রিয় সতর্কতা",
@@ -4018,7 +3990,8 @@
             "runTest": "পরীক্ষা চালান",
             "running": "চলছে…",
             "speedTest": "গতি পরীক্ষা",
-            "tested": "পরীক্ষিত"
+            "tested": "পরীক্ষিত",
+            "loadingHosts": "হোস্ট লোড হচ্ছে"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "এই টেক্সট ছাড়া একটি 200 প্রতিক্রিয়া একটি বিভ্রাট হিসাবে গণনা করা হয়.",
@@ -4048,7 +4021,6 @@
             "monitoring": "মনিটরিং {{name}}",
             "nextCheck": "পরবর্তী চেক",
             "noMonitorsMatch": "কোনো মনিটর মেলে না",
-            "nothingIsBeingWatchedYet": "এখনও কিছুই দেখা হচ্ছে না",
             "offForSelfSignedCertificatesOn": "অভ্যন্তরীণ হোস্টে স্ব-স্বাক্ষরিত শংসাপত্রের জন্য বন্ধ।",
             "pause": "বিরতি",
             "paused": "বিরাম দেওয়া হয়েছে {{name}}৷",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "মনিটর ডাউন",
             "mostRecentResults": "সাম্প্রতিক ফলাফল",
             "noChecksRecordedYetTheScheduler": "এখনও কোন চেক রেকর্ড করা হয়নি — প্রতিটি মনিটরের ব্যবধানে শিডিউলারের পোল।",
-            "nothingIsBeingWatchedYet": "এখনও কিছুই দেখা হচ্ছে না"
+            "nothingIsBeingWatchedYet": "এখনও কিছুই দেখা হচ্ছে না",
+            "couldntLoadMonitors": "মনিটরগুলো লোড করা যায়নি।"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "পাত্রে সংযোগ করার জন্য একটি নেটওয়ার্ক তৈরি করুন।",
@@ -4111,7 +4084,10 @@
             "registering": "নিবন্ধন করা হচ্ছে…",
             "review": "পর্যালোচনা",
             "uploadAndDeploy": "আপলোড ও স্থাপন করুন",
-            "uploading": "আপলোড হচ্ছে…"
+            "uploading": "আপলোড হচ্ছে…",
+            "completeTheSourceDetailsFirst": "আগে সোর্সের বিবরণ পূরণ করুন",
+            "fillInTheRequiredDetailsFirst": "আগে প্রয়োজনীয় তথ্য পূরণ করুন",
+            "finishThePreviousStepFirst": "আগে আগের ধাপটি শেষ করুন"
         },
         "notFound": {
             "browseExtensions": "এক্সটেনশন ব্রাউজ করুন",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "কোনো অপঠিত বিজ্ঞপ্তি নেই।",
             "notifications": "বিজ্ঞপ্তি",
             "success": "সফলতা",
-            "unread": "অপঠিত"
+            "unread": "অপঠিত",
+            "noFiltersToReset": "রিসেট করার মতো কোনো ফিল্টার নেই"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "অপারেশন ডক টগল করুন",
             "title": "অপারেশন",
             "unreadCount": "{{count}}টি অপঠিত",
-            "waitingForLogs": "রান লগের জন্য অপেক্ষা করা হচ্ছে…"
+            "waitingForLogs": "রান লগের জন্য অপেক্ষা করা হচ্ছে…",
+            "enterTheRequiredValueFirst": "আগে প্রয়োজনীয় মান লিখুন"
         },
         "organizationTabs": {
             "projects": "প্রকল্প",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "প্যাকেজ লোড হচ্ছে...",
             "package": "প্যাকেজ",
             "packageNameEGRequestsFlask": "প্যাকেজের নাম (যেমন, অনুরোধ, ফ্লাস্ক==2.0.0)",
-            "requirementsTxtUpdated": "requirements.txt আপডেট করা হয়েছে"
+            "requirementsTxtUpdated": "requirements.txt আপডেট করা হয়েছে",
+            "failedToLoadPackages": "প্যাকেজগুলো লোড করা যায়নি।"
         },
         "pageContextMap": {
             "application": "পরিষেবা",
@@ -4484,7 +4463,6 @@
             "emailAddress": "ইমেইল ঠিকানা",
             "memberSince": "থেকে সদস্য",
             "profileSettings": "প্রোফাইল সেটিংস",
-            "role": "ভূমিকা",
             "saveChanges": "পরিবর্তন সংরক্ষণ করুন"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "হোস্টের Nginx বিপরীত প্রক্সি পরিচালনা করছে। পরিবর্তে একটি পরিচালিত Docker প্রক্সি স্ট্যাক চালানোর জন্য উপরে Traefik বা Caddy এ স্যুইচ করুন।",
             "thisServerSActiveProxyIs": "এই সার্ভারের সক্রিয় প্রক্সি",
             "traefik": "Traefik",
-            "whichExpects": ", যা প্রত্যাশা করে"
+            "whichExpects": ", যা প্রত্যাশা করে",
+            "noChangesToSave": "সংরক্ষণ করার মতো কোনো পরিবর্তন নেই",
+            "selectADifferentProxyFirst": "আগে একটি ভিন্ন প্রক্সি নির্বাচন করুন"
         },
         "pruneButton": {
             "cleaning": "পরিষ্কার করা হচ্ছে…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "পেলোড অবশ্যই বৈধ JSON হতে হবে",
             "permanentlyDeleteThisMessage": "এই বার্তাটি স্থায়ীভাবে মুছবেন?",
             "priority": "অগ্রাধিকার",
-            "queue": "সারি",
             "queueBus": "সারিবদ্ধ বাস",
             "readOnly": "শুধুমাত্র পঠনযোগ্য",
             "requeue": "Requeue",
@@ -4702,7 +4681,6 @@
             "total": "মোট"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "আপনার সারি দেখতে ফিল্টার বা অনুসন্ধান ক্যোয়ারী সামঞ্জস্য করুন.",
             "allGroups": "সব গ্রুপ",
             "anyStatus": "যেকোনো স্ট্যাটাস",
             "areYouSureYouWantTo": "আপনি কি \"{{value}}\" এবং এর সমস্ত বার্তা মুছতে চান?",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}}টি ধাপ",
             "unavailable": "রেসিপি ক্যাটালগ অনুপলব্ধ",
             "unavailableHint": "রেজিস্ট্রি পৌঁছানো যায়নি এবং কোনো বান্ডল কপি উপস্থিত নেই।",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "আগে উপরের বাধাগুলো সমাধান করুন",
+            "selectATargetServerFirst": "আগে একটি লক্ষ্য সার্ভার নির্বাচন করুন"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "রিসাইকেল বিন লোড করতে ব্যর্থ হয়েছে।",
@@ -4840,16 +4820,21 @@
             "basicAuth": "মৌলিক প্রমাণীকরণ",
             "betweenServers": "{{privateServer}} এবং {{edgeServer}}-এর মধ্যে",
             "edgeServerPublicIpFrontsThe": "এজ সার্ভার (পাবলিক আইপি - টানেলের সামনে)",
+            "edgeServerRequired": "এজ সার্ভার বেছে নিন।",
             "exposeALocalService": "একটি স্থানীয় পরিষেবা প্রকাশ করুন",
+            "exposeAPrivateServicePublicly": "একটি ব্যক্তিগত পরিষেবা সর্বজনীনভাবে প্রকাশ করুন।",
             "exposeAServiceRunningOnA": "আপনার দুটি এজেন্টের মধ্যে একটি ওয়্যারগার্ড টানেলের উপর একটি পাবলিক হোস্টনামের কাছে একটি ব্যক্তিগত মেশিনে চলমান একটি পরিষেবা (NAT এর পিছনে, পোর্ট-ফরওয়ার্ডিং নেই) প্রকাশ করুন৷",
             "exposeService": "পরিষেবা প্রকাশ করুন",
+            "exposeServicesOn": "পরিষেবা প্রকাশ করুন:",
             "exposeServicesRunningOn": "চলমান পরিষেবা প্রকাশ করুন",
+            "exposeShort": "এক্সপোজ",
             "exposed": "উন্মুক্ত {{hostname}}",
             "failedToExposeService": "পরিষেবা প্রকাশ করতে ব্যর্থ হয়েছে৷",
             "failedToLoadTunnels": "টানেল লোড করতে ব্যর্থ হয়েছে৷",
             "failedToRemoveService": "পরিষেবা সরাতে ব্যর্থ হয়েছে৷",
             "failedToTearDownTunnel": "টানেল ভেঙে ফেলতে ব্যর্থ হয়েছে",
             "handshakeAt": "হ্যান্ডশেক {{time}}",
+            "hostnameRequired": "একটি বৈধ পাবলিক হোস্টনেম লিখুন।",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "টানেল লোড হচ্ছে",
             "noHandshakeYetIfThisPersists": "এখনও কোন হ্যান্ডশেক নেই — যদি এটি অব্যাহত থাকে, তবে প্রাইভেট হোস্টের আউটবাউন্ড UDP প্রান্তে ব্লক করা হতে পারে (একটি রিলে প্রয়োজন)।",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "এই সার্ভারের জন্য কোন টানেল নেই",
             "noTunnelsYet": "এখনো কোনো টানেল নেই",
             "obtainACertificateOnTheEdge": "প্রান্তে একটি শংসাপত্র পান।",
+            "passwordRequired": "একটি পাসওয়ার্ড লিখুন।",
             "pickAPublicIpEdgeServer": "একটি পাবলিক-আইপি এজ সার্ভার বেছে নিন এবং ServerKit এটিকে {{value}} ওয়্যারগার্ডের সাথে যুক্ত করবে।",
             "pickAPublicIpEdgeServer2": "একটি পাবলিক-আইপি প্রান্ত সার্ভার এবং একটি ব্যক্তিগত হোস্ট চয়ন করুন, এবং ServerKit তাদের ওয়্যারগার্ডের সাথে যুক্ত করবে এবং আপনার পরিষেবা প্রকাশ করবে — কোনও রাউটার পরিবর্তনের প্রয়োজন নেই৷",
+            "pickAPublicIpEdgeServerShort": "একটি পাবলিক-আইপি এজ সার্ভার বেছে নিন।",
+            "pickAnEdgeAndAPrivateHost": "একটি এজ ও একটি ব্যক্তিগত হোস্ট বেছে নিন।",
             "pickTwoDifferentServers": "দুটি ভিন্ন সার্ভার বেছে নিন: এজ সার্ভারটি ব্যক্তিগত হোস্টের সামনে থাকে।",
-            "pointAtEdge": "{{name}}-কে এজ সার্ভারের দিকে নির্দেশ করুন; সেখান থেকে টানেল এটি বহন করে।",
+            "pointAtEdgeGeneric": "হোস্টনামটি এজ সার্ভারের দিকে নির্দেশ করুন; টানেল সেখান থেকে বাকি পথ বহন করবে।",
+            "portRequired": "সার্ভিসের পোর্ট লিখুন।",
+            "privateHostRequired": "প্রাইভেট হোস্ট বেছে নিন।",
             "privateHostWhereTheServiceRuns": "ব্যক্তিগত হোস্ট (যেখানে পরিষেবা চলে)",
             "publicHostname": "সর্বজনীন হোস্টনাম",
             "publishing": "প্রকাশ করা হচ্ছে…",
@@ -4869,13 +4859,24 @@
             "removed": "{{hostname}} সরানো হয়েছে৷",
             "requireLoginBasicAuth": "লগইন প্রয়োজন (মৌলিক প্রমাণীকরণ)",
             "servicePort": "সার্ভিস পোর্ট",
+            "status": {
+                "pending": "মুলতুবি",
+                "up": "চালু",
+                "degraded": "অবনমিত",
+                "down": "বন্ধ",
+                "error": "ত্রুটি",
+                "published": "প্রকাশিত",
+                "unknown": "অজানা"
+            },
             "tearDown": "ছিঁড়ে ফেলুন",
             "tearDownTunnel": "টানেল ছিঁড়ে ফেলুন",
             "tearDownTunnel2": "টানেল ছিঁড়ে ফেলবেন?",
+            "thisHost": "এই হোস্ট",
             "thisRemovesTheWireguardTunnel": "এটি ওয়্যারগার্ড টানেলটি সরিয়ে দেয়",
             "thisServer": "এই সার্ভার",
             "toAPublicHostnameOverA": "একটি ওয়্যারগার্ড টানেলের উপরে একটি সর্বজনীন হোস্টনামে। ServerKit এই হোস্টটিকে একটি প্রান্ত সার্ভারের সাথে যুক্ত করে যার একটি পাবলিক আইপি রয়েছে।",
-            "tunnelTornDown": "টানেল ভেঙে গেছে"
+            "tunnelTornDown": "টানেল ভেঙে গেছে",
+            "usernameRequired": "একটি ইউজারনেম লিখুন।"
         },
         "remoteTerminal": {
             "closeTerminal": "টার্মিনাল বন্ধ করুন",
@@ -4938,15 +4939,13 @@
             "title": "ট্রাফিক"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "curl -fsSL https://get.docker.com | শ",
             "dockerIsnTAvailable": "Docker উপলব্ধ নেই৷",
             "forThisInstallSProfile": "এই ইনস্টলের প্রোফাইলের জন্য।",
             "installItOnTheServerThen": "এটি সার্ভারে ইনস্টল করুন, তারপর ServerKit পুনরায় চালু করুন:",
             "needsDockerToRunContainersAnd": "কনটেইনার চালানোর জন্য Docker প্রয়োজন, এবং এই সার্ভারটি এর সাথে ইনস্টল করা হয়েছিল",
             "profileWhichLeavesItOutNothing": "প্রোফাইল, যা এটি ছেড়ে যায়। কিছুই লক করা নেই — Docker যোগ করা এই পৃষ্ঠাটি চালু করে।",
             "serverkitReChecksForDockerAutomatically": "ServerKit Docker স্বয়ংক্রিয়ভাবে পুনরায় পরীক্ষা করে। মনিটরিং, ডোমেইন, সার্টিফিকেট, cron এবং DNS এটি ছাড়াই কাজ করতে থাকুন — দেখুন",
-            "settingsSystem": "সেটিংস → সিস্টেম",
-            "sudoSystemctlRestartServerkit": "sudo systemctl restart serverkit"
+            "settingsSystem": "সেটিংস → সিস্টেম"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "এমবি এবং এই সার্ভার আছে",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "কী যোগ করতে ব্যর্থ হয়েছে: {{message}}",
             "failedToRemoveKey": "কী সরাতে ব্যর্থ হয়েছে: {{message}}",
             "fingerprint": "আঙুলের ছাপ",
-            "noSshKeysConfiguredForRoot": "রুট ব্যবহারকারীর জন্য কোন SSH কী কনফিগার করা নেই।",
             "pasteYourSshPublicKeyTypically": "আপনার SSH পাবলিক কী পেস্ট করুন (সাধারণত ~/.ssh/id_rsa.pub বা ~/.ssh/id_ed25519.pub থেকে)",
             "publicKey": "সর্বজনীন কী",
             "removeSshKey": "SSH কী সরান",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "আপনার DNS প্রদানকারীর মাধ্যমে।",
             "webrootPath": "ওয়েবরুট পথ",
             "wildcardCertificateDns01Validation": "ওয়াইল্ডকার্ড শংসাপত্র (DNS-01 বৈধতা)",
-            "wildcardCertificateIssued": "ওয়াইল্ডকার্ড সার্টিফিকেট জারি করা হয়েছে"
+            "wildcardCertificateIssued": "ওয়াইল্ডকার্ড সার্টিফিকেট জারি করা হয়েছে",
+            "domainsRequired": "কমপক্ষে একটি ডোমেইন লিখুন।"
         },
         "sSOCallback": {
             "authenticationFailed": "প্রমাণীকরণ ব্যর্থ হয়েছে৷",
@@ -5352,14 +5351,12 @@
             "alerts": "সতর্কতা",
             "areYouSureYouWantTo": "আপনি কি নিশ্চিত আপনি এই সার্ভার সরাতে চান? এই ক্রিয়াটি পূর্বাবস্থায় ফেরানো যাবে না৷",
             "backToServers": "সার্ভারে ফিরে যান",
-            "copyServerId": "সার্ভার আইডি কপি করুন",
             "cron": "ক্রোন",
             "errorLoadingServer": "সার্ভার লোড করার সময় ত্রুটি৷",
             "failedToAcknowledgeAlert": "সতর্কতা স্বীকার করতে ব্যর্থ",
             "failedToPingServer": "সার্ভার পিং করতে ব্যর্থ হয়েছে৷",
             "failedToRemoveServer": "সার্ভার সরাতে ব্যর্থ হয়েছে৷",
             "failedToResolveAlert": "সতর্কতা সমাধান করতে ব্যর্থ হয়েছে৷",
-            "lastSeen": "শেষ দেখা",
             "limitedMode": "সীমিত মোড",
             "loadingServerDetails": "সার্ভারের বিবরণ লোড হচ্ছে",
             "metrics": "মেট্রিক্স",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "সব আপগ্রেড",
             "upgradeAllPackages": "সমস্ত প্যাকেজ আপগ্রেড করুন",
             "upgradeFailedToStart": "আপগ্রেড শুরু করতে ব্যর্থ হয়েছে৷",
-            "upgradingAllPackages": "সমস্ত প্যাকেজ আপগ্রেড করা হচ্ছে"
+            "upgradingAllPackages": "সমস্ত প্যাকেজ আপগ্রেড করা হচ্ছে",
+            "enterAPackageNameFirst": "আগে প্যাকেজের নাম লিখুন"
         },
         "serverPicker": {
             "deployToServer": "সার্ভারে স্থাপন করুন",
@@ -5602,6 +5600,7 @@
             "library": "লাইব্রেরি",
             "nPackages": "{{n}}টি প্যাকেজ",
             "nServices": "{{n}}টি পরিষেবা",
+            "nameRequired": "টেমপ্লেটের নাম লিখুন।",
             "nginxPhpFpmCertbot": "nginx \n php-fpm \n সার্টবট",
             "noReadyMadeTemplatesAreAvailable": "কোনো তৈরি টেমপ্লেট উপলব্ধ নেই। আপনি এখনও শুরু থেকে একটি তৈরি করতে পারেন।",
             "noTemplatesYet": "এখনো কোনো টেমপ্লেট নেই",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "টোকেনের মেয়াদ শেষ",
             "ungrouped": "গোষ্ঠীভুক্ত নয়",
             "whatHappensNext": "এরপর কি হবে?",
-            "windowsPowershell": "উইন্ডোজ (পাওয়ারশেল)"
+            "windowsPowershell": "উইন্ডোজ (পাওয়ারশেল)",
+            "syncShort": "সিঙ্ক"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "আপনি কি নিশ্চিত? এটি স্থায়ীভাবে পরিষেবা এবং এর সমস্ত ডেটা মুছে ফেলবে৷",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "লিঙ্কযুক্ত পরিষেবা থেকে {{name}} লিঙ্কমুক্ত করবেন?",
             "unlinking": "আনলিঙ্ক করা হচ্ছে…",
             "unlinkingWillResetBothAppsTo": "লিঙ্কমুক্ত করা উভয় পরিষেবাকে স্বতন্ত্র মোডে রিসেট করবে।",
-            "usedForCertificateExpiryRemindersFrom": "Let's Encrypt থেকে শংসাপত্রের মেয়াদ শেষ হওয়ার অনুস্মারকগুলির জন্য ব্যবহৃত হয়৷"
+            "usedForCertificateExpiryRemindersFrom": "Let's Encrypt থেকে শংসাপত্রের মেয়াদ শেষ হওয়ার অনুস্মারকগুলির জন্য ব্যবহৃত হয়৷",
+            "enterADomainNameFirst": "আগে ডোমেইনের নাম লিখুন"
         },
         "setupHealthWidget": {
             "allSet": "সব প্রস্তুত -",
@@ -6322,7 +6323,10 @@
             "targetService": "লক্ষ্য পরিষেবা",
             "variables": "ভেরিয়েবল",
             "variablesInThisGroupApplyTo": "এই গোষ্ঠীর ভেরিয়েবলগুলি আপনি এটি সংযুক্ত প্রতিটি সংস্থানের জন্য প্রযোজ্য৷",
-            "whatThisGroupIsFor": "এই গ্রুপটি কিসের জন্য..."
+            "whatThisGroupIsFor": "এই গ্রুপটি কিসের জন্য...",
+            "enterAGroupNameFirst": "আগে গ্রুপের নাম লিখুন",
+            "enterAResourceIdFirst": "আগে রিসোর্স আইডি লিখুন",
+            "enterAVariableNameFirst": "আগে ভেরিয়েবলের নাম লিখুন"
         },
         "shellTab": {
             "containerShell": "কন্টেইনার শেল",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "চলমান পাত্রে নেই",
             "running": "চলছে...",
             "startTheServiceToAccessThe": "শেল অ্যাক্সেস করতে পরিষেবা শুরু করুন।",
-            "typeACommandBelowToExecute": "কন্টেইনারে এটি চালানোর জন্য নীচের একটি কমান্ড টাইপ করুন।"
+            "typeACommandBelowToExecute": "কন্টেইনারে এটি চালানোর জন্য নীচের একটি কমান্ড টাইপ করুন।",
+            "failedToLoadContainers": "কন্টেইনারগুলো লোড করা যায়নি।"
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "একটি প্রিসেট চয়ন করুন বা একটি কাস্টম ভিউ তৈরি করুন৷ শুধুমাত্র দৃশ্যমান আইটেম আপনার সাইডবারে প্রদর্শিত হবে.",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "ওয়েব সার্ভার কনফিগার লেখা দুটি প্যানেল মালিকানা নিয়ে লড়াই করবে। এই সার্ভার স্যুইচ করুন",
             "upstream": "আপস্ট্রিম",
             "whatWeCheck": "আমরা যা পরীক্ষা করি",
-            "whileObserving": "পর্যবেক্ষণ করার সময়"
+            "whileObserving": "পর্যবেক্ষণ করার সময়",
+            "failedToLoadSurvey": "সার্ভে লোড করা যায়নি।"
         },
         "systemNotices": {
             "dismiss": "{{title}} খারিজ করুন",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "এই ডোমেইন ব্যবহার করুন",
             "used": "ব্যবহৃত",
             "utcOffset": "UTC অফসেট",
-            "version": "{{brand}} সংস্করণ"
+            "version": "{{brand}} সংস্করণ",
+            "enterADomainFirst": "আগে একটি ডোমেইন লিখুন",
+            "selectADifferentTimezoneFirst": "আগে একটি ভিন্ন টাইম জোন নির্বাচন করুন"
         },
         "tableDataTab": {
             "column": "কলাম",
@@ -7148,7 +7156,8 @@
             "query": "প্রশ্ন",
             "structure": "গঠন",
             "tableView": "টেবিল ভিউ",
-            "zeroRows": "0টি সারি"
+            "zeroRows": "0টি সারি",
+            "noMoreRows": "আর কোনো সারি নেই"
         },
         "tabs": {
             "moreTabs": "আরও ট্যাব"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "লগ ফাইল ছেঁটে দিন",
             "typeUnitName": "ইউনিটের নাম টাইপ করুন...",
             "unit": "ইউনিট",
-            "useThe": "ব্যবহার করুন"
+            "useThe": "ব্যবহার করুন",
+            "failedToLoadProcesses": "প্রসেসগুলো লোড করা যায়নি।",
+            "selectALogFileFirst": "আগে একটি লগ ফাইল নির্বাচন করুন",
+            "remoteJournalIsNotAvailableYet": "রিমোট জার্নাল এখনও উপলব্ধ নয়"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "একটি দৌড় ইতিমধ্যেই চলছে।",
@@ -7551,7 +7563,8 @@
             "viewSaved": "\"{{trimmed}}\" সংরক্ষিত দেখুন৷",
             "viewUpdated": "দেখুন \"{{name}}\" আপডেট করা হয়েছে৷",
             "views": "ভিউ",
-            "withChanges": "\"পরিবর্তন সহ"
+            "withChanges": "\"পরিবর্তন সহ",
+            "enterAViewNameFirst": "আগে ভিউয়ের নাম লিখুন"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "ডেটাও মুছে ফেলুন। এটি পূর্বাবস্থায় ফেরানো যাবে না।",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "পেলোড URL",
             "retryCount": "গণনা পুনরায় চেষ্টা করুন",
             "timeoutSeconds": "সময়সীমা (সেকেন্ড)",
-            "update": "আপডেট করুন"
+            "update": "আপডেট করুন",
+            "eventsRequired": "কমপক্ষে একটি ইভেন্ট নির্বাচন করুন।"
         },
         "webhooksTab": {
             "active": "সক্রিয়",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "ওয়ার্কস্পেস আর্কাইভ করা হয়েছে",
             "workspaceDeleted": "ওয়ার্কস্পেস মুছে ফেলা হয়েছে",
             "workspaceNotFound": "ওয়ার্কস্পেস পাওয়া যায়নি",
-            "workspaceRestored": "ওয়ার্কস্পেস পুনরুদ্ধার করা হয়েছে",
-            "workspaces": "কর্মক্ষেত্র"
+            "workspaceRestored": "ওয়ার্কস্পেস পুনরুদ্ধার করা হয়েছে"
         },
         "workspaceMembersTab": {
             "addAMember": "একজন সদস্য যোগ করুন",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "সর্বাধিক ব্যবহারকারী (0 = সীমাহীন)",
             "members": "সদস্যরা",
             "myTeam": "আমার দল",
+            "nameRequired": "ওয়ার্কস্পেসের নাম লিখুন।",
             "newWorkspace": "নতুন কর্মক্ষেত্র",
             "recolorsThePanelForAnyoneViewing": "যে কেউ এই ওয়ার্কস্পেসটি দেখছেন তার জন্য প্যানেলটিকে পুনরায় রঙ করে৷ কোনো কাস্টম ব্র্যান্ডিংয়ের জন্য ডিফল্ট ছেড়ে দিন।",
             "searchWorkspaces": "কর্মক্ষেত্র অনুসন্ধান করুন...",
@@ -7981,6 +7995,14 @@
             "users": "ব্যবহারকারীদের",
             "workspaceBrandColor": "কর্মক্ষেত্র ব্র্যান্ডের রঙ",
             "workspaceCreated": "ওয়ার্কস্পেস তৈরি করা হয়েছে"
+        },
+        "mobileSearch": {
+            "label": "অনুসন্ধান",
+            "title": "সবকিছু অনুসন্ধান করুন (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "পুনরায় করার কিছু নেই",
+            "nothingToUndo": "পূর্বাবস্থায় ফেরানোর কিছু নেই"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "আমন্ত্রণ যাচাই করা হচ্ছে..."
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "যোগ করুন",
             "back": "ব্যাক",
@@ -8063,7 +8086,8 @@
             "stop": "থামো",
             "test": "পরীক্ষা",
             "tryAgain": "আবার চেষ্টা করুন",
-            "uninstall": "আনইনস্টল করুন"
+            "uninstall": "আনইনস্টল করুন",
+            "new": "নতুন"
         },
         "checking": "পরীক্ষা করা হচ্ছে...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "লোড হচ্ছে...",
         "more": "আরও",
+        "moreActions": "আরও অ্যাকশন",
+        "moreInfoAbout": "{{subject}} সম্পর্কে আরও তথ্য",
         "moreSections": "আরো বিভাগ",
         "page": "পাতা",
         "retry": "আবার চেষ্টা করুন",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}h",
             "justNow": "এইমাত্র",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "একটি ডোমেইন লিখুন।",
+            "domainInvalid": "একটি বৈধ ডোমেইন লিখুন।",
+            "emailInvalid": "একটি বৈধ ইমেইল ঠিকানা লিখুন।",
+            "required": "এই ঘরটি পূরণ করা আবশ্যক।",
+            "urlInvalid": "একটি বৈধ URL লিখুন, যেমন https://example.com/webhook।"
         }
     },
     "errors": {

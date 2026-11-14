@@ -93,6 +93,7 @@ const Composer = () => {
                         className="sk-ai-composer__btn"
                         onClick={submit}
                         disabled={!providerConfigured || !value.trim()}
+                        disabledReason={!providerConfigured ? t('app.composer.setUpTheAssistantFirst', 'Set up the assistant first') : t('app.composer.typeAMessageFirst', 'Type a message first')}
                         aria-label={t('app.composer.send', 'Send')}
                     >
                         <Send size={16} />

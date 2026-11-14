@@ -1,14 +1,16 @@
-import { serverStatusKind } from '../components/serverdetail/serverDetailData';
+import { isPlaceholderServerName } from '../components/serverdetail/serverDetailData';
+import ServerHeaderMeta from '../components/serverdetail/ServerHeaderMeta';
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
-import FavoriteStar from '@/components/FavoriteStar';
 import { Button } from '@/components/ui/button';
-import { Pill } from '../components/ds';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { Tip } from '@/components/ui/tooltip';
+import { Server, ArrowLeft } from 'lucide-react';
+import PageLayout from '../layouts/PageLayout';
 import PackagesTab from '../components/serverdetail/PackagesTab';
 import ServicesTab from '../components/serverdetail/ServicesTab';
 import ServerOverviewTab from '../components/serverdetail/ServerOverviewTab';
@@ -20,8 +22,6 @@ import ServerMetricsTab from '../components/serverdetail/ServerMetricsTab';
 import SurveyTab from '../components/serverdetail/SurveyTab';
 import ServerSettingsTab, { TokenModal } from '../components/serverdetail/ServerSettingsTab';
 import {
-    CopyChip,
-    FolderTinyIcon,
     RefreshIcon,
 } from '../components/serverdetail/serverDetailShared';
 import ProxyStackPanel from '../components/proxy/ProxyStackPanel';
@@ -32,7 +32,6 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/useAuth.js';
 import ServerRestorePointsTab from '../components/serverdetail/ServerRestorePointsTab';
 import { toastError } from '@/utils/errorMessage';
-import { formatDateTime } from '@/utils/intl';
 
 // Live host metrics cadence while the server is online.
 const METRICS_POLL_MS = 10000;
@@ -273,90 +272,38 @@ const ServerDetail = () => {
     ];
 
     return (
-        <div className="page-container server-detail-page">
-            <div className="page-breadcrumb">
-                <Link to="/servers">{t('common.labels.servers', 'Servers')}</Link>
-                <span className="breadcrumb-separator">/</span>
-                <span>{server.name}</span>
-            </div>
+        <PageLayout
+            className="server-detail-page"
+            icon={<Server size={18} />}
+            title={isPlaceholderServerName(server.name) ? t('app.serverDetail.pendingPairing', 'Pending pairing') : server.name}
+            navLabel={t('app.serverDetail.sections', 'Server sections')}
+            meta={<ServerHeaderMeta server={server} />}
+            tabs={tabs.map((item) => ({
+                id: item.id,
+                label: item.badge ? <>{item.label}<span className="tab-badge">{item.badge}</span></> : item.label,
+                active: item.id === activeTab,
+                onSelect: () => navigate(item.id === 'overview' ? `/servers/${id}` : `/servers/${id}/${item.id}`, { replace: true }),
+            }))}
+            actions={(
+                <>
+                    <Tip content={t('app.serverDetail.backToServers', 'Back to servers')}>
+                        <Button asChild variant="ghost" size="icon" aria-label={t('app.serverDetail.backToServers', 'Back to servers')}>
+                            <Link to="/servers"><ArrowLeft size={16} /></Link>
+                        </Button>
+                    </Tip>
+                    <Tip content={t('app.serverDetail.ping', 'Ping')}>
+                        <Button variant="ghost" size="icon" aria-label={t('app.serverDetail.ping', 'Ping')} onClick={handlePingServer}>
+                            <RefreshIcon />
+                        </Button>
+                    </Tip>
+                </>
+            )}
+        >
+            {server.description && (
+                <p className="server-detail-header__description">{server.description}</p>
+            )}
 
-            <header className="server-detail-header">
-                <div className="server-detail-header__main">
-                    <div className={`server-detail-header__avatar server-detail-header__avatar--${server.status || 'pending'}`}>
-                        {(server.name || '?').charAt(0).toUpperCase()}
-                    </div>
-                    <div className="server-detail-header__identity">
-                        <div className="server-detail-header__title-row">
-                            <h1>{server.name}</h1>
-                            <FavoriteStar type="server" id={server.id} path={`/servers/${server.id}`} label={server.name} />
-                            <Pill kind={serverStatusKind(server.status)}>
-                                {server.status || 'pending'}
-                            </Pill>
-                            <CopyChip
-                                label="id"
-                                value={server.id}
-                                title={t('app.serverDetail.copyServerId', 'Copy server ID')}
-                                mono
-                            />
-                        </div>
-                        <div className="server-detail-header__meta">
-                            <span className="server-detail-header__meta-item">
-                                {server.hostname || server.ip_address || t('app.serverDetail.noEndpointConfigured', 'No endpoint configured')}
-                            </span>
-                            {server.group_name && (
-                                <>
-                                    <span className="dotsep">·</span>
-                                    <span className="server-detail-header__meta-item"><FolderTinyIcon /> {server.group_name}</span>
-                                </>
-                            )}
-                            {server.os_type && (
-                                <>
-                                    <span className="dotsep">·</span>
-                                    <span className="server-detail-header__meta-item">{server.os_type}</span>
-                                </>
-                            )}
-                            {server.agent_version && (
-                                <>
-                                    <span className="dotsep">·</span>
-                                    <span className="server-detail-header__meta-item">agent {server.agent_version}</span>
-                                </>
-                            )}
-                            {server.last_seen && (
-                                <>
-                                    <span className="dotsep">·</span>
-                                    <span className="server-detail-header__meta-item">
-                                        {t('app.serverDetail.lastSeen', 'last seen')} {formatDateTime(server.last_seen)}
-                                    </span>
-                                </>
-                            )}
-                        </div>
-                        {server.description && (
-                            <p className="server-detail-header__description">{server.description}</p>
-                        )}
-                    </div>
-                </div>
-                <div className="server-detail-header__actions">
-                    <Button variant="outline" size="sm" onClick={handlePingServer}>
-                        <RefreshIcon /> {t('app.serverDetail.ping', 'Ping')}
-                    </Button>
-                </div>
-            </header>
-
-            <Tabs
-                value={activeTab}
-                onValueChange={(value) =>
-                    navigate(value === 'overview' ? `/servers/${id}` : `/servers/${id}/${value}`, { replace: true })
-                }
-            >
-                <TabsList>
-                    {tabs.map((item) => (
-                        <TabsTrigger key={item.id} value={item.id}>
-                            {item.label}
-                            {item.badge ? <span className="tab-badge">{item.badge}</span> : null}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-
+            <Tabs value={activeTab}>
                 <div className="server-detail-content">
                     <TabsContent value="overview">
                         <ServerOverviewTab
@@ -434,7 +381,7 @@ const ServerDetail = () => {
                     onGenerated={handleTokenGenerated}
                 />
             )}
-        </div>
+        </PageLayout>
     );
 };
 

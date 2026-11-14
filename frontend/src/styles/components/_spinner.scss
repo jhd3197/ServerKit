@@ -124,20 +124,13 @@
 
 .loading {
     // Card roots also set padding; retain the shared loading inset.
-    &.uptime-card,
-    &.metrics-graph-card { padding: $space-12; }
+    &.uptime-card { padding: $space-12; }
 
     @include flex-center();
     min-height: 60vh;
     padding: $space-12;
     color: $text-secondary;
     font-size: $text-xs;
-}
-
-.loading-sm {
-    color: $text-tertiary;
-    font-size: $text-xs;
-    padding: $space-4;
 }
 
 .spinner-inline {

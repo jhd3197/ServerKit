@@ -4,13 +4,16 @@ import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
 import Modal from '@/components/Modal';
 import ResourceListPage from '../components/layouts/ResourceListPage';
-import { LayoutGrid, Plus, ChevronRight } from 'lucide-react';
+import { LayoutGrid, ChevronRight } from 'lucide-react';
 import { Pill, ServiceTile, SearchField } from '@/components/ds';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import useFocusParam from '@/hooks/useFocusParam';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { FormField, FormRow } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { useWorkspace } from '../contexts/useWorkspace.js';
 import { useAuth } from '../contexts/useAuth.js';
 import { useServerMutation, useServerQuery } from '../hooks/useServerQuery';
@@ -99,6 +102,10 @@ const Workspaces = () => {
     // Quick-create deep link: /workspaces?focus=create:workspace opens the modal.
     useFocusParam('create', () => { if (isAdmin) setShowCreateModal(true); });
     const [form, setForm] = useState({ name: '', description: '', max_servers: 0, max_users: 0, primary_color: '#6d7cff' });
+    const fe = useFieldErrors({
+        name: form.name.trim() ? null : t('app.workspaces.nameRequired', 'Enter a workspace name.'),
+    }, fieldId);
+    const closeCreate = () => { setShowCreateModal(false); fe.reset(); };
 
     const loadWorkspaces = useCallback(
         ({ signal }) => api.getWorkspaces({}, { signal }).then((data) => data.workspaces || []),
@@ -120,10 +127,12 @@ const Workspaces = () => {
     useTopbarActions(() => (
         <>
             {isAdmin && (
-                <Button size="sm" onClick={() => setShowCreateModal(true)}>
-                    <Plus size={16} />
-                    {t('app.workspaces.newWorkspace', 'New workspace')}
-                </Button>
+                <PagePrimaryButton
+                    id="workspaces-new"
+                    label={t('app.workspaces.newWorkspace', 'New workspace')}
+                    shortLabel={t('common.actions.new', 'New')}
+                    onClick={() => setShowCreateModal(true)}
+                />
             )}
             <SearchField
                 value={search}
@@ -134,12 +143,14 @@ const Workspaces = () => {
     ), [search, isAdmin]);
 
     const handleCreate = async () => {
+        if (!fe.attempt()) return;
         try {
-            await createWorkspace.mutate(form);
+            await createWorkspace.mutate({ ...form, name: form.name.trim() });
             toast.success(t('app.workspaces.workspaceCreated', 'Workspace created'));
-            setShowCreateModal(false);
+            closeCreate();
             setForm({ name: '', description: '', max_servers: 0, max_users: 0, primary_color: '#6d7cff' });
         } catch (err) {
+            if (fe.fromServer(err)) return;
             toastError(toast, t('app.workspaces.couldntCreate', "Couldn't create the workspace."), err);
         }
     };
@@ -269,38 +280,32 @@ const Workspaces = () => {
 
             <Modal
                 open={showCreateModal}
-                onClose={() => setShowCreateModal(false)}
+                onClose={closeCreate}
+                onSubmit={handleCreate}
                 title={t('app.workspaces.createWorkspace', 'New workspace')}
                 footer={(
                     <>
-                        <Button variant="outline" onClick={() => setShowCreateModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button
-                            onClick={handleCreate}
-                            disabled={!form.name || createWorkspace.isPending}
-                        >
+                        <Button type="button" variant="outline" onClick={closeCreate}>{t('common.actions.cancel', 'Cancel')}</Button>
+                        <Button type="submit" disabled={createWorkspace.isPending}>
                             {createWorkspace.isPending ? t('app.workspaces.creating', 'Creating…') : t('common.actions.create', 'Create')}
                         </Button>
                     </>
                 )}
             >
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-name`}>{t('common.labels.name', 'Name')}</label>
-                    <Input id={`${fieldId}-name`} value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder={t('app.workspaces.myTeam', 'My team')} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-description`}>{t('common.labels.description', 'Description')}</label>
+                <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-name`} required error={fe.error('name')}>
+                    <Input id={`${fieldId}-name`} value={form.name} onChange={e => { fe.clear('name'); setForm({...form, name: e.target.value}); }} onBlur={() => fe.touch('name')} placeholder={t('app.workspaces.myTeam', 'My team')} autoFocus />
+                </FormField>
+                <FormField label={t('common.labels.description', 'Description')} htmlFor={`${fieldId}-description`}>
                     <Textarea id={`${fieldId}-description`} value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={2} />
-                </div>
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor={`${fieldId}-max-servers`}>{t('app.workspaces.maxServers0Unlimited', 'Max servers (0 = unlimited)')}</label>
+                </FormField>
+                <FormRow>
+                    <FormField label={t('app.workspaces.maxServers0Unlimited', 'Max servers (0 = unlimited)')} htmlFor={`${fieldId}-max-servers`}>
                         <Input id={`${fieldId}-max-servers`} type="number" value={form.max_servers} onChange={e => setForm({...form, max_servers: parseInt(e.target.value) || 0})} />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor={`${fieldId}-max-users`}>{t('app.workspaces.maxUsers0Unlimited', 'Max users (0 = unlimited)')}</label>
+                    </FormField>
+                    <FormField label={t('app.workspaces.maxUsers0Unlimited', 'Max users (0 = unlimited)')} htmlFor={`${fieldId}-max-users`}>
                         <Input id={`${fieldId}-max-users`} type="number" value={form.max_users} onChange={e => setForm({...form, max_users: parseInt(e.target.value) || 0})} />
-                    </div>
-                </div>
+                    </FormField>
+                </FormRow>
                 <div className="form-group">
                     <label htmlFor={`${fieldId}-color`}>{t('app.workspaces.brandColor', 'Brand color')}</label>
                     <input

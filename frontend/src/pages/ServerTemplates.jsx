@@ -10,16 +10,19 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import Modal from '@/components/Modal';
+import { FormField } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { LayoutTemplate } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { DataTable, Pill, CatalogCard, CatalogGrid } from '@/components/ds';
+import { Tabs, TabsContent } from '@/components/ui/tabs';
+import { DataTable, Pill, SegControl, CatalogCard, CatalogGrid } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -254,6 +257,11 @@ const ServerTemplates = () => {
         auto_remediate: false, remediation_approval_required: true
     });
 
+    const fe = useFieldErrors({
+        name: form.name.trim() ? null : t('app.serverTemplates.nameRequired', 'Enter a template name.'),
+    }, fieldId);
+    const closeCreate = () => { setShowCreateModal(false); fe.reset(); };
+
     const loadData = useCallback(async () => {
         try {
             const [tRes, lRes] = await Promise.allSettled([
@@ -285,16 +293,19 @@ const ServerTemplates = () => {
     }, [loadData]);
 
     const handleCreate = async () => {
+        if (!fe.attempt()) return;
         try {
             const data = {
                 ...form,
+                name: form.name.trim(),
                 packages: form.packages.split('\n').map(p => p.trim()).filter(Boolean),
             };
             await api.createServerTemplate(data);
             toast.success(t('app.serverTemplates.templateCreated', 'Template created'));
-            setShowCreateModal(false);
+            closeCreate();
             loadData();
         } catch (err) {
+            if (fe.fromServer(err)) return;
             toastError(toast, t('app.serverTemplates.couldntCreate', "Couldn't create the template."), err);
         }
     };
@@ -336,12 +347,20 @@ const ServerTemplates = () => {
 
 
     // Publish the admin "Create Template" action to the shared tab-group top bar.
-    useTopbarActions(() =>
-        user?.is_admin ? (
-            <Button size="sm" onClick={() => setShowCreateModal(true)}>{t('app.serverTemplates.createTemplate', 'Create template')}</Button>
-        ) : null,
-        [user?.is_admin]
-    );
+    // Library/Templates switcher rides the bar beside it. Library leads, because
+    // on a fresh panel Templates is empty; the default follows the data.
+    useTopbarActions(() => (
+        <>
+            {user?.is_admin && (
+                <PagePrimaryButton
+                    id="server-templates-create"
+                    label={t('app.serverTemplates.createTemplate', 'Create template')}
+                    shortLabel={t('common.actions.new', 'New')}
+                    onClick={() => setShowCreateModal(true)}
+                />
+            )}
+        </>
+    ), [user?.is_admin, activeTab, templates.length]);
 
     // Two accessors per column where they differ: `value` is what the column
     // menu, the filter rules, the grouping and the export read, `sortValue` is
@@ -554,19 +573,19 @@ const ServerTemplates = () => {
 
     return (
         <div className="sk-tabgroup__inner server-templates-page">
+            <div className="sk-viewswitch">
+                <SegControl
+                    aria-label={t('app.serverTemplates.views', 'Template views')}
+                    value={activeTab || 'library'}
+                    onChange={setActiveTab}
+                    options={[
+                        { value: 'library', label: t('app.serverTemplates.library', 'Library') },
+                        { value: 'templates', label: t('app.serverTemplates.templates', 'Templates'), count: templates.length || undefined },
+                    ]}
+                />
+            </div>
             {topbarChrome}
-            {/* Library leads, because on a fresh panel Templates has nothing in
-                it — landing there showed an empty page as the first impression.
-                The default follows the data rather than being fixed: once you
-                have templates of your own, those are what you came for. */}
             <Tabs value={activeTab || 'library'} onValueChange={setActiveTab}>
-                <TabsList>
-                    <TabsTrigger value="library">{t('app.serverTemplates.library', 'Library')}</TabsTrigger>
-                    <TabsTrigger value="templates">
-                        {t('app.serverTemplates.templates', 'Templates')}{templates.length > 0 ? ` (${templates.length})` : ''}
-                    </TabsTrigger>
-                </TabsList>
-
                 <TabsContent value="templates">
                     {loadErrors.templates && templates.length > 0 && (
                         <ErrorState compact error={loadErrors.templates} onRetry={loadData} />
@@ -667,36 +686,33 @@ const ServerTemplates = () => {
             {/* Create Modal */}
             <Modal
                 open={showCreateModal}
-                onClose={() => setShowCreateModal(false)}
+                onClose={closeCreate}
+                onSubmit={handleCreate}
                 title={t('app.serverTemplates.createTemplate', 'Create template')}
                 footer={(
                     <>
-                        <Button variant="outline" onClick={() => setShowCreateModal(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button onClick={handleCreate} disabled={!form.name}>{t('common.actions.create', 'Create')}</Button>
+                        <Button type="button" variant="outline" onClick={closeCreate}>{t('common.actions.cancel', 'Cancel')}</Button>
+                        <Button type="submit">{t('common.actions.create', 'Create')}</Button>
                     </>
                 )}
             >
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-name`}>{t('common.labels.name', 'Name')}</label>
-                    <Input id={`${fieldId}-name`} value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-description`}>{t('common.labels.description', 'Description')}</label>
+                <FormField label={t('common.labels.name', 'Name')} htmlFor={`${fieldId}-name`} required error={fe.error('name')}>
+                    <Input id={`${fieldId}-name`} value={form.name} onChange={e => { fe.clear('name'); setForm({...form, name: e.target.value}); }} onBlur={() => fe.touch('name')} autoFocus />
+                </FormField>
+                <FormField label={t('common.labels.description', 'Description')} htmlFor={`${fieldId}-description`}>
                     <Textarea id={`${fieldId}-description`} value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={2} />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="server-template-category">{t('app.serverTemplates.category', 'Category')}</label>
+                </FormField>
+                <FormField label={t('app.serverTemplates.category', 'Category')} htmlFor="server-template-category">
                     <Select value={form.category} onValueChange={v => setForm({...form, category: v})}>
                         <SelectTrigger id="server-template-category"><SelectValue /></SelectTrigger>
                         <SelectContent>
                             {Object.entries(CATEGORY_LABELS).map(([k, v]) => <SelectItem key={k} value={k}>{v}</SelectItem>)}
                         </SelectContent>
                     </Select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-packages`}>{t('app.serverTemplates.packagesOnePerLine', 'Packages (one per line)')}</label>
+                </FormField>
+                <FormField label={t('app.serverTemplates.packagesOnePerLine', 'Packages (one per line)')} htmlFor={`${fieldId}-packages`}>
                     <Textarea id={`${fieldId}-packages`} className="form-input--mono" value={form.packages} onChange={e => setForm({...form, packages: e.target.value})} rows={4} placeholder={t('app.serverTemplates.nginxPhpFpmCertbot', 'nginx\nphp-fpm\ncertbot')} />
-                </div>
+                </FormField>
                 <div className="form-group">
                     <label className="checkbox-label">
                         <input type="checkbox" checked={form.auto_remediate} onChange={e => setForm({...form, auto_remediate: e.target.checked})} />

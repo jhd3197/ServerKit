@@ -115,6 +115,7 @@ export default function FileManagerSidebar({
                                     onClick={loadDiskMounts}
                                     disabled={diskLoading}
                                     title={t('common.actions.refresh', 'Refresh')}
+                                    aria-label={t('common.actions.refresh', 'Refresh')}
                                 >
                                     <RefreshCw size={12} className={diskLoading ? 'spinning' : ''} />
                                 </Button>

@@ -227,10 +227,6 @@
             "viewRelease": "ดูรุ่นที่เผยแพร่",
             "youReUpToDate": "คุณทันสมัยแล้ว!"
         },
-        "accountSecurityNudge": {
-            "addAPasskeyOr2fa": "เพิ่มรหัสผ่านหรือ 2FA",
-            "secureYourAccount": "รักษาความปลอดภัยบัญชีของคุณ"
-        },
         "activityTab": {
             "actionType": "ประเภทการดำเนินการ",
             "actionsThisWeek": "การดำเนินการในสัปดาห์นี้",
@@ -350,7 +346,8 @@
             "upgradeTriggeredForAllOnlineAgents": "อัปเกรดสำหรับตัวแทนออนไลน์ทั้งหมด",
             "versionDistribution": "การจำหน่ายเวอร์ชัน",
             "versions": "รุ่นต่างๆ",
-            "viewDetails": "ดูรายละเอียด"
+            "viewDetails": "ดูรายละเอียด",
+            "selectAVersionFirst": "เลือกเวอร์ชันก่อน"
         },
         "ai": {
             "assistant": "ผู้ช่วย"
@@ -612,7 +609,8 @@
             "remote": "ระยะไกล",
             "restoreDrills": "คืนค่าการฝึกซ้อม",
             "turnOnProtectionOrClickBack": "เปิดการป้องกันหรือคลิกสำรองข้อมูลทันที",
-            "verifyRemoteCopy": "ตรวจสอบสำเนาระยะไกล"
+            "verifyRemoteCopy": "ตรวจสอบสำเนาระยะไกล",
+            "onlySuccessfulBackupsCanBeRestored": "กู้คืนได้เฉพาะข้อมูลสำรองที่สำเร็จเท่านั้น"
         },
         "backupTabs": {
             "schedules": "กำหนดการ",
@@ -635,6 +633,7 @@
             "autoUploadNewBackupsToRemote": "อัปโหลดข้อมูลสำรองใหม่ไปยังที่จัดเก็บข้อมูลระยะไกลโดยอัตโนมัติ",
             "b2GbMonth": "B2 ($/GB/เดือน)",
             "backUpNow": "สำรองข้อมูลตอนนี้",
+            "backUpShort": "สำรอง",
             "backblazeB2": "แบ็คเบลซ B2",
             "backupDeleted": "ลบข้อมูลสำรองแล้ว",
             "backupName": "ชื่อสำรอง",
@@ -667,6 +666,7 @@
             "database": "ฐานข้อมูล",
             "databaseBackupCreated": "สร้างการสำรองฐานข้อมูลแล้ว",
             "databaseName": "ชื่อฐานข้อมูล",
+            "databaseNameRequired": "ใส่ชื่อฐานข้อมูล",
             "databaseOnly": "ฐานข้อมูลเท่านั้น",
             "databaseType": "ประเภทฐานข้อมูล",
             "delete": "ลบ {{name}}",
@@ -721,6 +721,7 @@
             "secretKey": "รหัสลับ",
             "selectApplication": "เลือกบริการ",
             "serverkitIsFreeTheseAreYour": "ServerKit ฟรี — นี่เป็นค่าใช้จ่ายในการจัดเก็บของคุณเอง Local คือดิสก์เซิร์ฟเวอร์ของคุณ (ปล่อยให้เป็น 0 หากคุณไม่ติดตาม) S3/B2 คือ $/GB/เดือนของผู้ให้บริการคลาวด์ของคุณ",
+            "serviceRequired": "เลือกบริการ",
             "settingsSaved": "บันทึกการตั้งค่าแล้ว",
             "siteService": "เว็บไซต์/บริการ",
             "storageConfigurationSaved": "บันทึกการกำหนดค่าพื้นที่เก็บข้อมูลแล้ว",
@@ -883,7 +884,8 @@
             "selectSize": "เลือกขนาด",
             "serverDestroyed": "เซิร์ฟเวอร์ถูกทำลาย",
             "serverName": "ชื่อเซิร์ฟเวอร์",
-            "serverProvisioningInitiated": "เริ่มต้นการจัดเตรียมเซิร์ฟเวอร์แล้ว"
+            "serverProvisioningInitiated": "เริ่มต้นการจัดเตรียมเซิร์ฟเวอร์แล้ว",
+            "enterANameAndChooseAProvider": "ใส่ชื่อและเลือกผู้ให้บริการก่อน"
         },
         "cloudflaredTab": {
             "aCnameForThisHostnameWill": "CNAME สำหรับชื่อโฮสต์นี้จะถูกสร้างขึ้นใน Cloudflare DNS โดยชี้ไปที่อุโมงค์",
@@ -969,7 +971,10 @@
             "sortAToZ": "เรียง A ถึง Z",
             "sortHighToLow": "เรียงจากมากไปน้อย",
             "sortLowToHigh": "เรียงจากน้อยไปมาก",
-            "sortZToA": "เรียง Z ถึง A"
+            "sortZToA": "เรียง Z ถึง A",
+            "alreadyTheFirstColumn": "เป็นคอลัมน์แรกอยู่แล้ว",
+            "alreadyTheLastColumn": "เป็นคอลัมน์สุดท้ายอยู่แล้ว",
+            "noFilterOnThisColumn": "คอลัมน์นี้ไม่มีตัวกรอง"
         },
         "columnsMenu": {
             "columns": "คอลัมน์",
@@ -1041,7 +1046,9 @@
             "messageTheAssistant": "ส่งข้อความถึงผู้ช่วย",
             "noResources": "ไม่พบทรัพยากรที่เข้าถึงได้",
             "searchResources": "ค้นหาทรัพยากร…",
-            "send": "ส่ง"
+            "send": "ส่ง",
+            "setUpTheAssistantFirst": "ตั้งค่าผู้ช่วยก่อน",
+            "typeAMessageFirst": "พิมพ์ข้อความก่อน"
         },
         "configDiffModal": {
             "applyRestorePoint": "ใช้จุดคืนค่า",
@@ -1220,7 +1227,8 @@
             "thisServerSPublicIp": "IP สาธารณะของเซิร์ฟเวอร์นี้",
             "useStarttlsRecommended": "ใช้ STARTTLS (แนะนำ)",
             "whereDoIGetThis": "ฉันจะได้รับสิ่งนี้ที่ไหน?",
-            "yourAccountEmailGlobalKeySimplest": "อีเมลบัญชีของคุณ + รหัสสากล ตั้งค่าง่ายที่สุด แต่ให้สิทธิ์การเข้าถึงบัญชีเต็มรูปแบบ"
+            "yourAccountEmailGlobalKeySimplest": "อีเมลบัญชีของคุณ + รหัสสากล ตั้งค่าง่ายที่สุด แต่ให้สิทธิ์การเข้าถึงบัญชีเต็มรูปแบบ",
+            "setUpTheOauthAppFirst": "ตั้งค่าแอป OAuth ก่อน"
         },
         "connectStep": {
             "addOauthCredentialsFirst": "เพิ่มข้อมูลรับรองแอป GitHub OAuth ในการตั้งค่าก่อนเชื่อมต่อ",
@@ -1246,7 +1254,8 @@
             "searchRepositories": "ค้นหาที่เก็บข้อมูล",
             "serviceName": "ชื่อบริการ",
             "systemdUnitOptional": "หน่วย systemd (อุปกรณ์เสริม)",
-            "uploadTheArchive": "อัปโหลดไฟล์เก็บถาวร"
+            "uploadTheArchive": "อัปโหลดไฟล์เก็บถาวร",
+            "setUpGithubInSettingsFirst": "ตั้งค่า GitHub ในการตั้งค่าก่อน"
         },
         "connectionsHub": {
             "authorizedViaOauth": "อนุญาตผ่าน OAuth แล้ว",
@@ -1337,7 +1346,8 @@
             "toRun": "เพื่อรัน",
             "writeSqlAboveAndPress": "เขียน SQL ด้านบนแล้วกด",
             "writesEnabledBeCareful": "เปิดใช้งานการเขียน — ระวัง",
-            "writesOn": "เปิดการเขียนแล้ว"
+            "writesOn": "เปิดการเขียนแล้ว",
+            "runAQueryWithResultsFirst": "รันคิวรีที่มีผลลัพธ์ก่อน"
         },
         "consoleToolbar": {
             "allLevels": "ทุกระดับ",
@@ -1353,7 +1363,8 @@
             "searchLogs": "ค้นหาบันทึก...",
             "showTheDeploymentDetailsAgain": "แสดงรายละเอียดการปรับใช้อีกครั้ง",
             "timestamps": "การประทับเวลา",
-            "wrap": "ห่อ"
+            "wrap": "ห่อ",
+            "noMatchesToJumpTo": "ไม่มีรายการที่ตรงกันให้ข้ามไป"
         },
         "containerOpsPanel": {
             "actionFailed": "การดำเนินการล้มเหลว",
@@ -1589,7 +1600,6 @@
             "noOutputProduced": "ไม่มีผลผลิตออกมา",
             "noRunsRecordedYet": "ยังไม่มีการบันทึกการรัน",
             "noRunsYet": "ยังไม่มีการรัน",
-            "noScheduledJobsFoundCreateYour": "ไม่พบงานที่กำหนดเวลาไว้ สร้างงาน cron งานแรกของคุณเพื่อทำให้งานเป็นแบบอัตโนมัติ",
             "paused": "หยุดชั่วคราว",
             "runHistory": "ประวัติการรัน",
             "runHistoryIsAnAdminOnly": "ประวัติการเรียกใช้เป็นพื้นที่สำหรับผู้ดูแลระบบเท่านั้น",
@@ -1607,7 +1617,8 @@
             "undo": "เลิกทำ",
             "unnamedJob": "งานที่ไม่มีชื่อ",
             "untracked": "ไม่ได้ติดตาม",
-            "whatDoesThisJobDo": "งานนี้ทำอะไรบ้าง?"
+            "whatDoesThisJobDo": "งานนี้ทำอะไรบ้าง?",
+            "enterANameCommandAndScheduleFirst": "กรอกชื่อ คำสั่ง และกำหนดเวลาก่อน"
         },
         "cronTab": {
             "5FieldsMinuteHourDayMonth": "5 ช่อง: นาที ชั่วโมง วัน เดือน วันธรรมดา",
@@ -1638,57 +1649,8 @@
             "removeCronJob": "ลบงาน Cron",
             "scheduleACommandOnTheHost": "กำหนดเวลาคำสั่งบนแท็บโฮสต์ cron รันในฐานะผู้ใช้ตัวแทน",
             "scheduleIsRequired": "จำเป็นต้องมีกำหนดการ",
-            "serverOffline": "เซิร์ฟเวอร์ออฟไลน์"
-        },
-        "cutoverDrawer": {
-            "answer": "คำตอบ",
-            "applyCutover": "ใช้คัตโอเวอร์",
-            "applyDnsCutover": "ใช้คัตโอเวอร์ DNS หรือไม่",
-            "applying": "กำลังสมัคร...",
-            "atTheBoxWhereTheImported": "ในช่องที่ไซต์ที่นำเข้าอยู่ในขณะนี้ บันทึกปัจจุบันจะถูกบันทึกสแน็ปช็อตก่อน ดังนั้นสวิตช์จึงสามารถเปลี่ยนกลับได้ตลอดเวลา",
-            "capturing": "กำลังจับภาพ...",
-            "checkPropagation": "ตรวจสอบการขยายพันธุ์",
-            "cutoverApplied": "ใช้คัตโอเวอร์แล้ว:",
-            "cutoverAppliedNowPointsAt": "ใช้การตัดส่วน — {{domain}} ตอนนี้ชี้ไปที่ {{value}}",
-            "cutoverFinishedWithErrorsReviewBelow": "การตัดเสร็จสิ้นโดยมีข้อผิดพลาด ตรวจสอบด้านล่างและเปลี่ยนกลับหากจำเป็น",
-            "cutoverFinishedWithErrorsReviewThe": "การตัดเสร็จสิ้นโดยมีข้อผิดพลาด — ตรวจสอบผลลัพธ์และพิจารณาเปลี่ยนกลับ",
-            "deletedCreatedRecords_one": "ลบเรคคอร์ด 1 รายการที่การสลับระบบสร้างขึ้นแล้ว",
-            "deletedCreatedRecords_other": "ลบเรคคอร์ด {{count}} รายการที่การสลับระบบสร้างขึ้นแล้ว",
-            "dnsCutover": "คัตโอเวอร์ DNS",
-            "matchesNewTarget": "ตรงกับเป้าหมายใหม่",
-            "new": "ใหม่",
-            "newAddressTarget": "ที่อยู่ใหม่ (เป้าหมาย)",
-            "newTarget": "เป้าหมายใหม่",
-            "noChangesToApplyForThe": "ไม่มีการเปลี่ยนแปลงที่จะนำไปใช้กับประเภทบันทึกที่เลือก",
-            "notFullyPropagated": "ยังเผยแพร่ไม่ครบ",
-            "nowPointsAt": "ตอนนี้ชี้ไปที่",
-            "oneClickRestoresTheSnapshotCaptured": "คลิกเพียงครั้งเดียวจะคืนค่าสแน็ปช็อตที่บันทึกไว้ก่อนการตัดส่วนนี้ - รวมถึงการลบบันทึกใด ๆ ที่การตัดส่วนสร้างขึ้น",
-            "plannedChanges": "การเปลี่ยนแปลงที่วางแผนไว้",
-            "propagated": "เผยแพร่แล้ว",
-            "propagating": "กำลังเผยแพร่",
-            "propagation": "การขยายพันธุ์",
-            "providerZoneId": "รหัสโซนผู้ให้บริการ",
-            "publicResolversCacheTheOldAddress": "รีโซลเวอร์สาธารณะจะแคชที่อยู่เก่าจนกว่า TTL จะหมดอายุ ตรวจสอบว่าที่อยู่ใหม่มีผลใช้ที่ไหน",
-            "recordTypes": "ประเภทเรกคอร์ด",
-            "recordTypes2": "ประเภทเรคคอร์ด",
-            "recordsCaptured": "เรคคอร์ดที่เก็บไว้",
-            "repoint": "ชี้อีกครั้ง",
-            "repointsRecords_one": "การดำเนินการนี้จะชี้เรคคอร์ด {{types}} ของ {{domain}} ไปที่ {{target}} สแนปชอตช่วยให้คุณย้อนกลับได้",
-            "repointsRecords_other": "การดำเนินการนี้จะชี้เรคคอร์ด {{types}} ของ {{domain}} ไปที่ {{target}} สแนปชอตช่วยให้คุณย้อนกลับได้",
-            "resolver": "รีโซลเวอร์",
-            "restoredRecords_one": "กู้คืนเรคคอร์ด 1 รายการแล้ว",
-            "restoredRecords_other": "กู้คืนเรคคอร์ด {{count}} รายการแล้ว",
-            "revertCutover": "ย้อนคัตโอเวอร์",
-            "revertFinishedWithErrorsCheckThe": "เปลี่ยนกลับเสร็จสิ้นโดยมีข้อผิดพลาด — ตรวจสอบผลลัพธ์",
-            "revertedRestoredSPreCutoverRecords": "เปลี่ยนกลับ — กู้คืนบันทึกก่อนการตัดของ {{domain}}",
-            "reverting": "กำลังเปลี่ยนกลับ...",
-            "review": "ทบทวน",
-            "rollBack": "ย้อนกลับ",
-            "snapshotPreview": "สแนปชอตและดูตัวอย่าง",
-            "theDnsProviderSZoneIdentifier": "ตัวระบุโซนของผู้ให้บริการ DNS",
-            "theIpOrHostnameForCname": "IP (หรือชื่อโฮสต์สำหรับ CNAME) ที่ระเบียนควรชี้ไป",
-            "thisDomainHasNoConnectedProvider": "โดเมนนี้ไม่มีโซนผู้ให้บริการที่เชื่อมต่อ — ต้องมีตัวตัดการเชื่อมต่อเพื่ออ่านและเขียนบันทึก",
-            "verify": "ตรวจสอบ"
+            "serverOffline": "เซิร์ฟเวอร์ออฟไลน์",
+            "failedToLoadCronJobs": "ไม่สามารถโหลดงาน cron ได้"
         },
         "dashGrid": {
             "noWidgetsOnThisDashboardYet": "ยังไม่มีวิดเจ็ตบนแดชบอร์ดนี้"
@@ -1731,8 +1693,10 @@
             "clickToSortShiftClickTo": "คลิกเพื่อจัดเรียง · Shift+คลิกเพื่อเพิ่มระดับการจัดเรียง",
             "loading": "กำลังโหลด",
             "noRowsMatchTheActiveColumn": "ไม่มีแถวที่ตรงกับตัวกรองคอลัมน์ที่ใช้งานอยู่",
+            "scrollableTable": "ตารางที่เลื่อนได้",
             "selectAllRows": "เลือกแถวทั้งหมด",
-            "selectRow": "เลือกแถว"
+            "selectRow": "เลือกแถว",
+            "sortAColumnFirst": "จัดเรียงตามคอลัมน์ก่อน"
         },
         "dataTableFooter": {
             "nextPage": "หน้าถัดไป",
@@ -1776,7 +1740,8 @@
             "updateOverview": "ภาพรวมการอัปเดต",
             "updatingDatabaseSchema": "กำลังอัปเดตสคีมาฐานข้อมูล...",
             "weRecommendBackingUpYourDatabase": "เราขอแนะนำให้สำรองฐานข้อมูลของคุณก่อนที่จะใช้การอัปเดต",
-            "whichDoesNotExistInThis": "ซึ่งไม่มีอยู่ในบิลด์นี้ โดยปกติแล้วจะเป็นสาขาที่เพิ่มการโยกย้ายและถูกเปลี่ยนกลับ ไม่สามารถอัปเกรดสคีมาได้จนกว่าจะประทับตรากลับไปเป็นการแก้ไขที่ทราบ:"
+            "whichDoesNotExistInThis": "ซึ่งไม่มีอยู่ในบิลด์นี้ โดยปกติแล้วจะเป็นสาขาที่เพิ่มการโยกย้ายและถูกเปลี่ยนกลับ ไม่สามารถอัปเกรดสคีมาได้จนกว่าจะประทับตรากลับไปเป็นการแก้ไขที่ทราบ:",
+            "createABackupFirst": "สร้างข้อมูลสำรองก่อน"
         },
         "databases": {
             "backUpDatabase": "สำรองฐานข้อมูล",
@@ -2096,7 +2061,6 @@
             "onLinuxMakeSureTheDocker": "บน Linux ตรวจสอบให้แน่ใจว่า Docker daemon เริ่มทำงานแล้ว",
             "retryConnection": "ลองเชื่อมต่ออีกครั้ง",
             "targets": "เป้าหมาย",
-            "toUseDockerManagement": "หากต้องการใช้การจัดการ Docker:",
             "verifyTheUserHasPermissionsTo": "ตรวจสอบว่าผู้ใช้มีสิทธิ์ในการเข้าถึง Docker",
             "volumes": "โวลุ่ม"
         },
@@ -2223,7 +2187,8 @@
             "refreshRecords": "รีเฟรชเรคคอร์ด",
             "regenerateToken": "สร้างโทเค็นใหม่",
             "thisDomainIsnTSetUp": "โดเมนนี้ยังไม่ได้ตั้งค่าสำหรับ DNS ใน ServerKit",
-            "tokenRegenerated": "โทเค็นถูกสร้างขึ้นใหม่"
+            "tokenRegenerated": "โทเค็นถูกสร้างขึ้นใหม่",
+            "enterTheRecordContentFirst": "กรอกเนื้อหาเรกคอร์ดก่อน"
         },
         "domainField": {
             "alreadyAttached": "{{name}} เชื่อมกับบริการอยู่แล้ว",
@@ -2260,6 +2225,7 @@
             "disableSslFor": "ปิดการใช้งาน SSL สำหรับ {{name}} หรือไม่",
             "dismissError": "ปิดข้อผิดพลาด",
             "dnsProvider": "ผู้ให้บริการ DNS",
+            "domainRequired": "ใส่โดเมนที่ถูกต้อง",
             "domainVerificationFailed": "การตรวจสอบโดเมนล้มเหลว: {{error}}",
             "domainVerifiedIp": "ยืนยันโดเมนแล้ว! IP: {{ipaddress}}",
             "emailAddress": "ที่อยู่อีเมล",
@@ -2292,6 +2258,7 @@
             "rowsFields": "แถว {{n}} · ช่อง {{fields}} · {{value}}",
             "searchDomains": "ค้นหาโดเมน...",
             "selectAnApplication": "เลือกบริการ",
+            "serviceRequired": "เลือกบริการ",
             "setAsPrimaryDomain": "ตั้งเป็นโดเมนหลัก",
             "sslCertificate": "ใบรับรอง SSL",
             "sslExpires": "หมดอายุ {{days}}d",
@@ -2348,7 +2315,8 @@
             "verifyYourDownloadUsingTheSha256": "ตรวจสอบการดาวน์โหลดของคุณโดยใช้เช็คซัม SHA256:",
             "windows": "หน้าต่าง:",
             "windowsPowershell": "วินโดวส์ (PowerShell)",
-            "withTheServerRegistrationToken": "ด้วยโทเค็นการลงทะเบียนเซิร์ฟเวอร์"
+            "withTheServerRegistrationToken": "ด้วยโทเค็นการลงทะเบียนเซิร์ฟเวอร์",
+            "noBuildPublishedForThisPlatform": "ยังไม่มีบิลด์ที่เผยแพร่สำหรับแพลตฟอร์มนี้"
         },
         "drawerHeader": {
             "aiSettings": "การตั้งค่าเอไอ",
@@ -2796,6 +2764,7 @@
             "tryADifferentSearchTermOr": "ลองใช้คำค้นหาอื่นหรือเรียกดูโฟลเดอร์อื่น",
             "typeZA": "ประเภท Z-A",
             "types": "ประเภท",
+            "up": "ขึ้น",
             "upDelDeleteF2RenameA": "⌫ ขึ้น · ลบ ลบ · F2 เปลี่ยนชื่อ · ⌘A ทั้งหมด",
             "updatedAt": "อัปเดต {{time}}",
             "upload": "อัปโหลด",
@@ -2809,10 +2778,12 @@
             "videos": "วิดีโอ",
             "volumes": "โวลุ่ม",
             "webConfig": "การกำหนดค่าเว็บ",
-            "willBeCreatedIn": "จะถูกสร้างขึ้นใน:"
+            "willBeCreatedIn": "จะถูกสร้างขึ้นใน:",
+            "nothingToGoBackTo": "ไม่มีหน้าให้ย้อนกลับ",
+            "nothingToGoForwardTo": "ไม่มีหน้าให้ไปข้างหน้า",
+            "alreadyAtTheTopFolder": "อยู่ที่โฟลเดอร์บนสุดแล้ว"
         },
         "fileRow": {
-            "deselect": "ยกเลิกการเลือก",
             "rename": "เปลี่ยนชื่อ",
             "select": "เลือก"
         },
@@ -2824,7 +2795,8 @@
             "clearAll": "เคลียร์ทั้งหมด",
             "noFilters": "ไม่มีตัวกรอง",
             "showResults_one": "แสดง {{count}} {{noun}}",
-            "showResults_other": "แสดง {{count}} {{noun}}"
+            "showResults_other": "แสดง {{count}} {{noun}}",
+            "noFiltersApplied": "ไม่ได้ใช้ตัวกรองใดๆ"
         },
         "firewallTab": {
             "1921681100Or10": "192.168.1.100 หรือ 10.0.0.0/24",
@@ -2927,7 +2899,8 @@
             "trend": "แนวโน้ม",
             "unusuallyHigh": "สูงผิดปกติ",
             "unusuallyLow": "ต่ำผิดปกติ",
-            "zScore": "คะแนน Z"
+            "zScore": "คะแนน Z",
+            "selectAServerFirst": "เลือกเซิร์ฟเวอร์ก่อน"
         },
         "fleetProxy": {
             "apps": "บริการ",
@@ -3041,7 +3014,8 @@
             "resetViewChanges": "รีเซ็ตการเปลี่ยนแปลงมุมมอง",
             "rowDensity": "ความหนาแน่นของแถว",
             "rowsInThisView": "แถวในมุมมองนี้",
-            "selectedRows": "แถวที่เลือก"
+            "selectedRows": "แถวที่เลือก",
+            "selectSomeRowsFirst": "เลือกบางแถวก่อน"
         },
         "gridViewPicker": {
             "builtIn": "สร้างขึ้นใน",
@@ -3057,7 +3031,8 @@
             "startFromCurrentFiltersColumns": "เริ่มจากตัวกรองและคอลัมน์ปัจจุบัน",
             "unsaved": "ไม่ได้บันทึก",
             "unsetAsDefault": "ยกเลิกการเป็นค่าเริ่มต้น",
-            "viewOptions": "ตัวเลือกของ {{name}}"
+            "viewOptions": "ตัวเลือกของ {{name}}",
+            "enterAViewNameFirst": "กรอกชื่อมุมมองก่อน"
         },
         "groupMenu": {
             "group": "กลุ่ม",
@@ -3068,7 +3043,8 @@
             "configurationSavedRestartTheAppTo": "บันทึกการกำหนดค่าแล้ว รีสตาร์ทบริการเพื่อใช้การเปลี่ยนแปลง",
             "failedToSaveConfiguration": "บันทึกการกำหนดค่าไม่สำเร็จ",
             "gunicornConfiguration": "การกำหนดค่า Gunicorn",
-            "loadingGunicornConfiguration": "กำลังโหลดการกำหนดค่า Gunicorn..."
+            "loadingGunicornConfiguration": "กำลังโหลดการกำหนดค่า Gunicorn...",
+            "failedToLoadConfiguration": "ไม่สามารถโหลดการกำหนดค่า Gunicorn ได้"
         },
         "hints": {
             "appBound": "ตัวบริการเองคือคอขวด แคชทั้งหน้าไว้ด้านหน้า หรือย้ายไปยังเซิร์ฟเวอร์ที่ใหญ่กว่า",
@@ -3113,7 +3089,8 @@
             "nothingToConvertNoDirectivesFound": "ไม่มีสิ่งใดที่จะแปลง — ไม่พบคำสั่ง",
             "pasteTheContentsOfAnApache": "วางเนื้อหาของ Apache",
             "reason": "เหตุผล",
-            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine บน \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule /index.php [L]"
+            "rewriteengineOnRewritecondRequestFilenameF": "RewriteEngine บน \n RewriteCond %{REQUEST_FILENAME} !-f \n RewriteCond %{REQUEST_FILENAME} !-d \n RewriteRule /index.php [L]",
+            "pasteSomeHtaccessRulesFirst": "วางกฎ .htaccess ก่อน"
         },
         "iPListsTab": {
             "1921681100Or10": "192.168.1.100 หรือ 10.0.0.0/24",
@@ -3209,7 +3186,12 @@
             "toConfirm": "เพื่อยืนยัน",
             "tryAgain": "ลองอีกครั้ง",
             "whereTheDumpLives": "ที่ทิ้งขยะอาศัยอยู่",
-            "working": "กำลังดำเนินการ…"
+            "working": "กำลังดำเนินการ…",
+            "chooseADumpFileFirst": "เลือกไฟล์ดัมพ์ก่อน",
+            "chooseATargetDatabaseFirst": "เลือกฐานข้อมูลปลายทางก่อน",
+            "importFinished": "นำเข้าเสร็จแล้ว",
+            "onlyAdminsCanImport": "เฉพาะผู้ดูแลระบบเท่านั้นที่นำเข้าได้",
+            "typeTheDatabaseNameToConfirm": "พิมพ์ชื่อฐานข้อมูลเพื่อยืนยัน"
         },
         "importWizard": {
             "aCpmoveBackupTarGzArchive": "ไฟล์เก็บถาวร cpmove / backup-*.tar.gz จากการสำรองข้อมูลบัญชีแบบเต็มของ cPanel",
@@ -3344,7 +3326,9 @@
             "unknownAge": "ไม่ทราบอายุ",
             "viewChanges": "ดูการเปลี่ยนแปลง",
             "watchingADocrootHashesEveryFile": "การดู docroot จะแฮชทุกไฟล์ที่อยู่นอกไดเร็กทอรีการอัปโหลด/แคช ดังนั้นจึงสามารถเลือกใช้งานได้ตามแต่ละบริการ",
-            "whatChanged": "สิ่งที่เปลี่ยนแปลงไป"
+            "whatChanged": "สิ่งที่เปลี่ยนแปลงไป",
+            "createABaselineFirst": "สร้างเบสไลน์ก่อน",
+            "notAvailableOnThisServer": "ไม่พร้อมใช้งานบนเซิร์ฟเวอร์นี้"
         },
         "invitationsTab": {
             "copyInviteLink": "คัดลอกลิงก์คำเชิญ",
@@ -3394,7 +3378,8 @@
             "exitCode": "(exit {{code}})",
             "streamingProgress": "ความคืบหน้าการสตรีม...",
             "waitingForTheAgentToBegin": "กำลังรอให้ตัวแทนเริ่มต้น...",
-            "working": "กำลังดำเนินการ…"
+            "working": "กำลังดำเนินการ…",
+            "waitForTheJobToFinish": "รอให้งานเสร็จสิ้นก่อน"
         },
         "jobs": {
             "activity": "กิจกรรม",
@@ -3501,7 +3486,9 @@
             "logFiles": "ไฟล์บันทึก",
             "noLogFilesFound": "ไม่พบไฟล์บันทึก",
             "searchPattern": "รูปแบบการค้นหา...",
-            "selectALogFile": "เลือกไฟล์บันทึกเพื่อดูเนื้อหา"
+            "selectALogFile": "เลือกไฟล์บันทึกเพื่อดูเนื้อหา",
+            "selectALogFileFirst": "เลือกไฟล์บันทึกก่อน",
+            "nothingToDownloadYet": "ยังไม่มีอะไรให้ดาวน์โหลด"
         },
         "loginLinksSection": {
             "allowedIp": "IP ที่อนุญาต",
@@ -3588,15 +3575,11 @@
             "noHostPermissionsDeclared": "ไม่มีการประกาศสิทธิ์ของโฮสต์",
             "pasteAGithubRepoOwnerRepo": "วาง repo GitHub (เจ้าของ/repo หรือ เจ้าของ/repo@tag) รุ่น URL หรือลิงก์ zip โดยตรง คุณจะดูตัวอย่างสิ่งที่ติดตั้งก่อนที่จะลงจอด",
             "preview": "ดูตัวอย่าง",
-            "signatureInvalid": "ลายเซ็นไม่ถูกต้อง",
             "signatureMismatch": "ลายเซ็นไม่ตรงกับไฟล์เก็บถาวรนี้",
-            "signed": "ลงนามแล้ว ·",
-            "signedUnknownPublisher": "ลงนาม · ไม่ทราบสำนักพิมพ์",
             "theDownloadMayHaveBeenTampered": "การดาวน์โหลดอาจถูกแก้ไข — อย่าติดตั้ง",
             "thisExtensionRequests": "ส่วนขยายนี้ร้องขอ:",
             "thisReleaseCarriesNoPublisherSignature": "ข่าวประชาสัมพันธ์ฉบับนี้ไม่มีลายเซ็นของผู้จัดพิมพ์ มันจะทำงานด้วยสิทธิ์แบบเต็มแผง — ติดตั้งเฉพาะเมื่อคุณเชื่อถือแหล่งที่มาเท่านั้น",
             "thisReleaseIsSignedButThe": "รุ่นนี้มีลายเซ็นแล้ว แต่แผงนี้ไม่ได้ปักหมุดรหัสผู้เผยแพร่ ดังนั้นจึงไม่สามารถยืนยันลายเซ็นได้ ถือว่าไม่ได้ลงนาม",
-            "unsigned": "ไม่ได้ลงนาม",
             "uploadAnExtensionZipWith": "อัปโหลดส่วนขยาย zip ด้วย",
             "useAnAbsolutePathThatExists": "ใช้เส้นทางสัมบูรณ์ที่มีอยู่ในโฮสต์แบ็กเอนด์หรือภายในคอนเทนเนอร์แบ็กเอนด์",
             "zip": "ซิป"
@@ -3623,9 +3606,6 @@
             "couldntLoadTheCatalog": "ไม่สามารถโหลดแค็ตตาล็อกส่วนขยายได้",
             "couldntToggle": "ไม่สามารถเปิดหรือปิดส่วนขยายได้",
             "couldntUninstall": "ไม่สามารถถอนการติดตั้งส่วนขยายได้",
-            "declaredPermissionsWhatThePanelHas": "สิทธิ์ที่ประกาศ สิ่งที่แผงควบคุมสังเกต และรอการขึ้นต่อกันของ Python",
-            "disabling": "กำลังปิดใช้งาน…",
-            "enabling": "กำลังเปิดใช้งาน…",
             "extensionConfigurationSaved": "บันทึกการกำหนดค่าส่วนขยายแล้ว",
             "extensionDisabled": "ส่วนขยายถูกปิดใช้งาน",
             "extensionEnabled": "เปิดใช้งานส่วนขยายแล้ว",
@@ -3644,7 +3624,6 @@
             "installWithAnUnverifiableSignature": "ติดตั้งด้วยลายเซ็นที่ไม่สามารถตรวจสอบได้?",
             "installWithoutChecksumVerification": "ติดตั้งโดยไม่มีการตรวจสอบความถูกต้องใช่ไหม",
             "installed": "ติดตั้งแล้ว",
-            "installedExtensions": "ส่วนขยายที่ติดตั้ง",
             "installedHotReloadShouldPickIt": "ติดตั้ง \"{{displayname}}\" แล้ว การรีโหลดแบบร้อนควรหยิบมันขึ้นมา รีสตาร์ทแบ็กเอนด์หากเส้นทางพิมพ์เขียวไม่ปรากฏขึ้น",
             "installedRestartBackendIfBlueprintRoutes": "ติดตั้ง \"{{displayname}}\" แล้ว รีสตาร์ทแบ็กเอนด์หากเส้นทางพิมพ์เขียวไม่ปรากฏขึ้น",
             "installing": "กำลังติดตั้ง…",
@@ -3665,33 +3644,21 @@
             "purgeData": "ล้างข้อมูล",
             "registry": "ทะเบียน",
             "registryInstallFailed": "การติดตั้งรีจิสทรีล้มเหลว",
-            "releaseZipIsSignedThePanel": "มีการลงนามรหัสไปรษณีย์ที่วางจำหน่าย แผงจะตรวจสอบลายเซ็น ed25519 เมื่อทำการติดตั้ง",
             "removingThisExtensionStopsItsRoutes": "การนำส่วนขยายนี้ออกจะหยุดเส้นทางและการสนับสนุน UI",
             "resetFilters": "รีเซ็ตตัวกรอง",
             "reviewed": "ตรวจสอบแล้ว",
             "screenshots": "ภาพหน้าจอ",
             "searchExtensions": "ส่วนขยายการค้นหา...",
-            "signed": "ลงนาม",
-            "signedWithPublisherKeyWhichThis": "ลงนามด้วยรหัสผู้เผยแพร่ '{{publisherKeyId}}' ซึ่งแผงนี้ไม่ปักหมุด",
             "sourceRepo": "แหล่งซื้อคืน",
             "thisExtensionDeclaresNoConfigurationFields": "ส่วนขยายนี้ประกาศว่าไม่มีช่องการกำหนดค่า",
             "thisExtensionRequests": "ส่วนขยายนี้ร้องขอ:",
-            "thisReleaseCarriesNoPublisherSignature": "ข่าวประชาสัมพันธ์ฉบับนี้ไม่มีลายเซ็นของผู้จัดพิมพ์",
             "uninstall": "ถอนการติดตั้ง {{displayname}} หรือไม่",
-            "uninstalling": "กำลังถอนการติดตั้ง…",
-            "unknownSigner": "ผู้ลงนามที่ไม่รู้จัก",
             "unreviewed": "ยังไม่ได้ตรวจทาน",
-            "unsigned": "ไม่ได้ลงนาม",
             "update": "อัปเดต",
             "updateAnyway": "อัปเดตต่อไป",
-            "updateAvailableV": "มีการอัปเดต → v",
             "updating": "กำลังอัปเดต…",
-            "versionByAuthor": "v{{version}} · โดย {{author}}"
-        },
-        "memberActionsCard": {
-            "allowMembersToRunCuratedActions": "อนุญาตให้สมาชิกดำเนินการตามการดูแลจัดการ",
-            "letWorkspaceMembersRunASmall": "ให้สมาชิกพื้นที่ทำงานเรียกใช้ชุดการดำเนินการที่มีการกำหนดพารามิเตอร์และดูแลจัดการชุดเล็กๆ (เช่น การปรับความถี่ในการสำรองข้อมูลของบริการ) สำหรับบริการที่พวกเขาสามารถเข้าถึงได้ ทุกการกระทำได้รับการตรวจสอบความถูกต้องตามสคีมาคงที่และบันทึกการตรวจสอบ — ไม่มีข้อความอิสระส่งถึงเชลล์เซิร์ฟเวอร์ ปิดตัวเลือกนี้เพื่อปิดใช้งานพื้นผิวการดำเนินการของสมาชิกทั้งหมด",
-            "memberActions": "การกระทำของสมาชิก"
+            "versionByAuthor": "v{{version}} · โดย {{author}}",
+            "installShort": "ติดตั้ง"
         },
         "message": {
             "somethingWentWrong": "เกิดข้อผิดพลาดบางอย่าง"
@@ -3717,7 +3684,8 @@
             "metricsAreCollectedEveryMinute": "ตัวชี้วัดจะถูกรวบรวมทุกนาที",
             "noHistoricalDataYet": "ยังไม่มีข้อมูลในอดีต",
             "realTimePerformance": "ประสิทธิภาพแบบเรียลไทม์",
-            "systemMetrics": "ตัวชี้วัดของระบบ"
+            "systemMetrics": "ตัวชี้วัดของระบบ",
+            "loadingMetricsHistory": "กำลังโหลดประวัติเมตริก…"
         },
         "metricsTab": {
             "activeRunning": "ใช้งานอยู่ (กำลังทำงาน)",
@@ -3732,7 +3700,8 @@
             "processes": "กระบวนการ",
             "serviceStatus": "สถานะการบริการ",
             "startTheServiceToViewResource": "เริ่มบริการเพื่อดูตัวชี้วัดทรัพยากร",
-            "workers": "เวิร์กเกอร์"
+            "workers": "เวิร์กเกอร์",
+            "failedToLoadMetrics": "ไม่สามารถโหลดเมตริกได้"
         },
         "microCachePanel": {
             "assetCachingSaved": "บันทึกการแคชแอสเซ็ตแล้ว",
@@ -3819,7 +3788,7 @@
             "createUserWithSameNameAnd": "สร้างผู้ใช้ที่มีชื่อเดียวกันและสิทธิ์เต็ม",
             "creating": "กำลังสร้าง…",
             "databaseCreated": "สร้างฐานข้อมูลแล้ว",
-            "databaseName": "ชื่อฐานข้อมูล *",
+            "databaseName": "ชื่อฐานข้อมูล",
             "encoding": "การเข้ารหัส",
             "engine": "เครื่องยนต์",
             "fromTheTemplateCatalog": "จากแค็ตตาล็อกเทมเพลต",
@@ -3836,7 +3805,9 @@
             "running": "กำลังทำงาน",
             "saveTheseCredentialsThePasswordWon": "บันทึกข้อมูลประจำตัวเหล่านี้ - รหัสผ่านจะไม่แสดงอีก",
             "userCreated": "ผู้ใช้สร้างขึ้น",
-            "username": "ชื่อผู้ใช้ *"
+            "username": "ชื่อผู้ใช้",
+            "databaseNameInvalid": "ใช้ได้เฉพาะตัวอักษร ตัวเลข และขีดล่าง",
+            "databaseNameRequired": "กรอกชื่อฐานข้อมูล"
         },
         "modeToggle": {
             "assistant": "ผู้ช่วย",
@@ -3991,7 +3962,8 @@
             "triggerAbove": "ทริกเกอร์ด้านบน",
             "webhook": "เว็บฮุค",
             "whereAnAlertGoesWhenIt": "การแจ้งเตือนจะไปที่ไหนเมื่อมีการยิง",
-            "wouldAlertNow": "จะแจ้งเตือนตอนนี้"
+            "wouldAlertNow": "จะแจ้งเตือนตอนนี้",
+            "couldntLoadMonitoringData": "ไม่สามารถโหลดข้อมูลการตรวจสอบได้"
         },
         "monitoringOverview": {
             "activeAlerts": "การแจ้งเตือนที่ใช้งานอยู่",
@@ -4018,7 +3990,8 @@
             "runTest": "เรียกใช้การทดสอบ",
             "running": "กำลังทำงาน…",
             "speedTest": "ทดสอบความเร็ว",
-            "tested": "ผ่านการทดสอบแล้ว"
+            "tested": "ผ่านการทดสอบแล้ว",
+            "loadingHosts": "กำลังโหลดโฮสต์"
         },
         "monitors": {
             "a200ResponseWithoutThisText": "การตอบกลับ 200 ครั้งโดยไม่มีข้อความนี้ถือเป็นการหยุดทำงาน",
@@ -4048,7 +4021,6 @@
             "monitoring": "การตรวจสอบ {{name}}",
             "nextCheck": "ตรวจสอบครั้งต่อไป",
             "noMonitorsMatch": "ไม่มีตัวเฝ้าสังเกตที่ตรงกัน",
-            "nothingIsBeingWatchedYet": "ยังไม่ได้ดูอะไรเลย",
             "offForSelfSignedCertificatesOn": "ปิดสำหรับใบรับรองที่ลงนามด้วยตนเองบนโฮสต์ภายใน",
             "pause": "หยุดชั่วคราว",
             "paused": "หยุด {{name}} ชั่วคราว",
@@ -4078,7 +4050,8 @@
             "monitorsDown": "ตัวเฝ้าสังเกตที่ล่ม",
             "mostRecentResults": "ผลลัพธ์ล่าสุด",
             "noChecksRecordedYetTheScheduler": "ยังไม่มีการบันทึกการตรวจสอบ — ตัวกำหนดตารางเวลาจะโพลตามช่วงเวลาของจอภาพแต่ละจอ",
-            "nothingIsBeingWatchedYet": "ยังไม่ได้ดูอะไรเลย"
+            "nothingIsBeingWatchedYet": "ยังไม่ได้ดูอะไรเลย",
+            "couldntLoadMonitors": "ไม่สามารถโหลดมอนิเตอร์ได้"
         },
         "networksTab": {
             "createANetworkToConnectContainers": "สร้างเครือข่ายเพื่อเชื่อมต่อคอนเทนเนอร์",
@@ -4111,7 +4084,10 @@
             "registering": "กำลังลงทะเบียน…",
             "review": "ทบทวน",
             "uploadAndDeploy": "อัปโหลดและปรับใช้",
-            "uploading": "กำลังอัปโหลด…"
+            "uploading": "กำลังอัปโหลด…",
+            "completeTheSourceDetailsFirst": "กรอกรายละเอียดต้นทางให้ครบก่อน",
+            "fillInTheRequiredDetailsFirst": "กรอกข้อมูลที่จำเป็นก่อน",
+            "finishThePreviousStepFirst": "ทำขั้นตอนก่อนหน้าให้เสร็จก่อน"
         },
         "notFound": {
             "browseExtensions": "เรียกดูส่วนขยาย",
@@ -4137,7 +4113,8 @@
             "noUnreadNotifications": "ไม่มีการแจ้งเตือนที่ยังไม่ได้อ่าน",
             "notifications": "การแจ้งเตือน",
             "success": "ความสำเร็จ",
-            "unread": "ยังไม่ได้อ่าน"
+            "unread": "ยังไม่ได้อ่าน",
+            "noFiltersToReset": "ไม่มีตัวกรองให้รีเซ็ต"
         },
         "notificationsTab": {
             "adminExampleComTeamExampleCom": "admin@example.com, team@example.com",
@@ -4260,7 +4237,8 @@
             "shortcutLabel": "สลับแผงการดำเนินการ",
             "title": "การดำเนินการ",
             "unreadCount": "ยังไม่ได้อ่าน {{count}} รายการ",
-            "waitingForLogs": "กำลังรอบันทึกการทำงาน…"
+            "waitingForLogs": "กำลังรอบันทึกการทำงาน…",
+            "enterTheRequiredValueFirst": "กรอกค่าที่จำเป็นก่อน"
         },
         "organizationTabs": {
             "projects": "โครงการ",
@@ -4327,7 +4305,8 @@
             "loadingPackages": "กำลังโหลดแพ็กเกจ...",
             "package": "บรรจุุภัณฑ์",
             "packageNameEGRequestsFlask": "ชื่อบรรจุภัณฑ์ (เช่น คำขอ ขวด==2.0.0)",
-            "requirementsTxtUpdated": "อัปเดตข้อกำหนด.txt แล้ว"
+            "requirementsTxtUpdated": "อัปเดตข้อกำหนด.txt แล้ว",
+            "failedToLoadPackages": "ไม่สามารถโหลดแพ็กเกจได้"
         },
         "pageContextMap": {
             "application": "บริการ",
@@ -4484,7 +4463,6 @@
             "emailAddress": "ที่อยู่อีเมล",
             "memberSince": "สมาชิกตั้งแต่",
             "profileSettings": "การตั้งค่าโปรไฟล์",
-            "role": "บทบาท",
             "saveChanges": "บันทึกการเปลี่ยนแปลง"
         },
         "projectDetail": {
@@ -4633,7 +4611,9 @@
             "theHostSNginxIsHandling": "Nginx ของโฮสต์กำลังจัดการ Reverse proxying เปลี่ยนไปใช้ Traefik หรือ Caddy ด้านบนเพื่อเรียกใช้พร็อกซีสแต็ก Docker ที่มีการจัดการแทน",
             "thisServerSActiveProxyIs": "พร็อกซีที่ใช้งานอยู่ของเซิร์ฟเวอร์นี้คือ",
             "traefik": "Traefik",
-            "whichExpects": "ซึ่งคาดว่า"
+            "whichExpects": "ซึ่งคาดว่า",
+            "noChangesToSave": "ไม่มีการเปลี่ยนแปลงให้บันทึก",
+            "selectADifferentProxyFirst": "เลือกพร็อกซีอื่นก่อน"
         },
         "pruneButton": {
             "cleaning": "กำลังล้าง…",
@@ -4689,7 +4669,6 @@
             "payloadMustBeValidJson": "เพย์โหลดต้องเป็น JSON ที่ถูกต้อง",
             "permanentlyDeleteThisMessage": "ลบข้อความนี้อย่างถาวรใช่ไหม",
             "priority": "ลำดับความสำคัญ",
-            "queue": "คิว",
             "queueBus": "คิวรถบัส",
             "readOnly": "อ่านอย่างเดียว",
             "requeue": "รอคิว",
@@ -4702,7 +4681,6 @@
             "total": "ทั้งหมด"
         },
         "queueOperations": {
-            "adjustTheFiltersOrSearchQuery": "ปรับตัวกรองหรือคำค้นหาเพื่อดูคิวของคุณ",
             "allGroups": "ทุกกลุ่ม",
             "anyStatus": "สถานะอะไรก็ได้",
             "areYouSureYouWantTo": "คุณแน่ใจหรือไม่ว่าต้องการลบ \"{{value}}\" และข้อความทั้งหมดในนั้น",
@@ -4791,7 +4769,9 @@
             "stepsCount_other": "{{count}} ขั้นตอน",
             "unavailable": "แคตตาล็อกสูตรไม่พร้อมใช้งาน",
             "unavailableHint": "ไม่สามารถเข้าถึงรีจิสทรีได้และไม่มีสำเนาที่แนบมา",
-            "vcpuCount": "{{count}} vCPU"
+            "vcpuCount": "{{count}} vCPU",
+            "resolveTheBlockersFirst": "แก้ไขสิ่งที่ขัดขวางด้านบนก่อน",
+            "selectATargetServerFirst": "เลือกเซิร์ฟเวอร์ปลายทางก่อน"
         },
         "recycleBinTab": {
             "couldntLoadRecycleBin": "ไม่สามารถโหลดถังขยะรีไซเคิลได้",
@@ -4840,16 +4820,21 @@
             "basicAuth": "การรับรองความถูกต้องขั้นพื้นฐาน",
             "betweenServers": "ระหว่าง {{privateServer}} และ {{edgeServer}}",
             "edgeServerPublicIpFrontsThe": "เซิร์ฟเวอร์ Edge (IP สาธารณะ — ด้านหน้าอุโมงค์)",
+            "edgeServerRequired": "เลือกเซิร์ฟเวอร์ Edge",
             "exposeALocalService": "เปิดเผยบริการในท้องถิ่น",
+            "exposeAPrivateServicePublicly": "เปิดเผยบริการส่วนตัวสู่สาธารณะ",
             "exposeAServiceRunningOnA": "เปิดเผยบริการที่ทำงานบนเครื่องส่วนตัว (หลัง NAT ไม่มีการส่งต่อพอร์ต) ไปยังชื่อโฮสต์สาธารณะผ่านอุโมงค์ WireGuard ระหว่างตัวแทนสองคนของคุณ",
             "exposeService": "เปิดเผยบริการ",
+            "exposeServicesOn": "เปิดเผยบริการบน",
             "exposeServicesRunningOn": "เปิดเผยบริการที่ทำงานอยู่",
+            "exposeShort": "เปิดเผย",
             "exposed": "เปิดเผย {{hostname}}",
             "failedToExposeService": "ไม่สามารถเปิดเผยบริการได้",
             "failedToLoadTunnels": "โหลดทันเนลไม่สำเร็จ",
             "failedToRemoveService": "ไม่สามารถลบบริการได้",
             "failedToTearDownTunnel": "ล้มเหลวในการรื้ออุโมงค์",
             "handshakeAt": "แฮนด์เชค {{time}}",
+            "hostnameRequired": "ใส่ชื่อโฮสต์สาธารณะที่ถูกต้อง",
             "httpsLetSEncrypt": "HTTPS (Let's Encrypt)",
             "loadingTunnels": "กำลังโหลดอุโมงค์",
             "noHandshakeYetIfThisPersists": "ยังไม่มีการจับมือกัน หากยังคงมีอยู่ UDP ขาออกของโฮสต์ส่วนตัวไปยัง Edge อาจถูกบล็อก (จำเป็นต้องมีรีเลย์)",
@@ -4858,10 +4843,15 @@
             "noTunnelsForThisServer": "ไม่มีทันเนลสำหรับเซิร์ฟเวอร์นี้",
             "noTunnelsYet": "ยังไม่มีอุโมงค์",
             "obtainACertificateOnTheEdge": "รับใบรับรองที่ขอบ",
+            "passwordRequired": "ใส่รหัสผ่าน",
             "pickAPublicIpEdgeServer": "เลือกเซิร์ฟเวอร์ Edge-IP สาธารณะ จากนั้น ServerKit จะจับคู่กับ {{value}} ผ่าน WireGuard",
             "pickAPublicIpEdgeServer2": "เลือกเซิร์ฟเวอร์ Edge สาธารณะ IP และโฮสต์ส่วนตัว แล้ว ServerKit จะจับคู่เซิร์ฟเวอร์เหล่านั้นผ่าน WireGuard และเผยแพร่บริการของคุณ โดยไม่จำเป็นต้องเปลี่ยนแปลงเราเตอร์",
+            "pickAPublicIpEdgeServerShort": "เลือกเซิร์ฟเวอร์ edge ที่มี IP สาธารณะ",
+            "pickAnEdgeAndAPrivateHost": "เลือกเซิร์ฟเวอร์ edge และโฮสต์ส่วนตัว",
             "pickTwoDifferentServers": "เลือกเซิร์ฟเวอร์สองเครื่องที่ต่างกัน: เซิร์ฟเวอร์ edge อยู่ด้านหน้าโฮสต์ส่วนตัว",
-            "pointAtEdge": "ชี้ {{name}} ไปที่เซิร์ฟเวอร์ edge แล้วอุโมงค์จะส่งต่อจากที่นั่น",
+            "pointAtEdgeGeneric": "ชี้ชื่อโฮสต์ไปที่เซิร์ฟเวอร์ edge แล้วอุโมงค์จะส่งต่อจากตรงนั้น",
+            "portRequired": "ใส่พอร์ตของบริการ",
+            "privateHostRequired": "เลือกโฮสต์ส่วนตัว",
             "privateHostWhereTheServiceRuns": "โฮสต์ส่วนตัว (ที่บริการทำงาน)",
             "publicHostname": "ชื่อโฮสต์สาธารณะ",
             "publishing": "กำลังเผยแพร่…",
@@ -4869,13 +4859,24 @@
             "removed": "ลบ {{hostname}} แล้ว",
             "requireLoginBasicAuth": "จำเป็นต้องเข้าสู่ระบบ (การตรวจสอบสิทธิ์ขั้นพื้นฐาน)",
             "servicePort": "พอร์ตบริการ",
+            "status": {
+                "pending": "รอดำเนินการ",
+                "up": "ออนไลน์",
+                "degraded": "ประสิทธิภาพลดลง",
+                "down": "ออฟไลน์",
+                "error": "ข้อผิดพลาด",
+                "published": "เผยแพร่แล้ว",
+                "unknown": "ไม่ทราบ"
+            },
             "tearDown": "รื้อลง",
             "tearDownTunnel": "รื้ออุโมงค์",
             "tearDownTunnel2": "ทลายอุโมงค์?",
+            "thisHost": "โฮสต์นี้",
             "thisRemovesTheWireguardTunnel": "การดำเนินการนี้จะลบอุโมงค์ WireGuard",
             "thisServer": "เซิร์ฟเวอร์นี้",
             "toAPublicHostnameOverA": "ไปยังชื่อโฮสต์สาธารณะผ่านอุโมงค์ WireGuard ServerKit จับคู่โฮสต์นี้กับเซิร์ฟเวอร์ Edge ที่มี IP สาธารณะ",
-            "tunnelTornDown": "อุโมงค์ถูกรื้อลง"
+            "tunnelTornDown": "อุโมงค์ถูกรื้อลง",
+            "usernameRequired": "ใส่ชื่อผู้ใช้"
         },
         "remoteTerminal": {
             "closeTerminal": "ปิดเทอร์มินัล",
@@ -4938,15 +4939,13 @@
             "title": "ทราฟฟิก"
         },
         "requiresDocker": {
-            "curlFsslHttpsGetDockerCom": "ขด -fsSL https://get.docker.com | ซ",
             "dockerIsnTAvailable": "Docker ไม่พร้อมใช้งาน",
             "forThisInstallSProfile": "สำหรับโปรไฟล์การติดตั้งนี้",
             "installItOnTheServerThen": "ติดตั้งบนเซิร์ฟเวอร์ จากนั้นรีสตาร์ท ServerKit:",
             "needsDockerToRunContainersAnd": "ต้องการ Docker เพื่อเรียกใช้คอนเทนเนอร์ และเซิร์ฟเวอร์นี้ได้รับการติดตั้งพร้อมกับ",
             "profileWhichLeavesItOutNothing": "โปรไฟล์ซึ่งทำให้มันออกมา ไม่มีอะไรถูกล็อค — การเพิ่ม Docker จะเปิดหน้านี้",
             "serverkitReChecksForDockerAutomatically": "ServerKit ตรวจสอบ Docker อีกครั้งโดยอัตโนมัติ การตรวจสอบ โดเมน ใบรับรอง cron และ DNS ยังคงทำงานต่อไปได้โดยไม่ต้องใช้ — ดู",
-            "settingsSystem": "การตั้งค่า → ระบบ",
-            "sudoSystemctlRestartServerkit": "sudo systemctl รีสตาร์ทเซิร์ฟเวอร์ kit"
+            "settingsSystem": "การตั้งค่า → ระบบ"
         },
         "resourceAdvisory": {
             "mbAndThisServerHas": "MB และเซิร์ฟเวอร์นี้มี",
@@ -5080,7 +5079,6 @@
             "failedToAddKey": "ไม่สามารถเพิ่มคีย์: {{message}}",
             "failedToRemoveKey": "ไม่สามารถลบคีย์: {{message}}",
             "fingerprint": "ลายนิ้วมือ",
-            "noSshKeysConfiguredForRoot": "ไม่มีคีย์ SSH ที่กำหนดค่าสำหรับผู้ใช้รูท",
             "pasteYourSshPublicKeyTypically": "วางคีย์สาธารณะ SSH ของคุณ (โดยทั่วไปจะมาจาก ~/.ssh/id_rsa.pub หรือ ~/.ssh/id_ed25519.pub)",
             "publicKey": "กุญแจสาธารณะ",
             "removeSshKey": "ลบคีย์ SSH",
@@ -5157,7 +5155,8 @@
             "viaYourDnsProvider": "ผ่านผู้ให้บริการ DNS ของคุณ",
             "webrootPath": "เส้นทางเว็บรูท",
             "wildcardCertificateDns01Validation": "ใบรับรองตัวแทน (การตรวจสอบ DNS-01)",
-            "wildcardCertificateIssued": "ออกใบรับรองตัวแทนแล้ว"
+            "wildcardCertificateIssued": "ออกใบรับรองตัวแทนแล้ว",
+            "domainsRequired": "ป้อนโดเมนอย่างน้อยหนึ่งโดเมน"
         },
         "sSOCallback": {
             "authenticationFailed": "การรับรองความถูกต้องล้มเหลว",
@@ -5352,14 +5351,12 @@
             "alerts": "การแจ้งเตือน",
             "areYouSureYouWantTo": "คุณแน่ใจหรือไม่ว่าต้องการลบเซิร์ฟเวอร์นี้ การดำเนินการนี้ไม่สามารถยกเลิกได้",
             "backToServers": "กลับไปที่เซิร์ฟเวอร์",
-            "copyServerId": "คัดลอกรหัสเซิร์ฟเวอร์",
             "cron": "ครอน",
             "errorLoadingServer": "เกิดข้อผิดพลาดในการโหลดเซิร์ฟเวอร์",
             "failedToAcknowledgeAlert": "ไม่สามารถรับทราบการแจ้งเตือนได้",
             "failedToPingServer": "ล้มเหลวในการปิงเซิร์ฟเวอร์",
             "failedToRemoveServer": "ไม่สามารถลบเซิร์ฟเวอร์",
             "failedToResolveAlert": "ไม่สามารถแก้ไขการแจ้งเตือน",
-            "lastSeen": "เห็นครั้งสุดท้าย",
             "limitedMode": "โหมดจำกัด",
             "loadingServerDetails": "กำลังโหลดรายละเอียดเซิร์ฟเวอร์",
             "metrics": "เมตริก",
@@ -5484,7 +5481,8 @@
             "upgradeAll": "อัพเกรดทั้งหมด",
             "upgradeAllPackages": "อัพเกรดแพ็คเกจทั้งหมด",
             "upgradeFailedToStart": "การอัพเกรดล้มเหลวในการเริ่มต้น",
-            "upgradingAllPackages": "การอัพเกรดแพ็คเกจทั้งหมด"
+            "upgradingAllPackages": "การอัพเกรดแพ็คเกจทั้งหมด",
+            "enterAPackageNameFirst": "กรอกชื่อแพ็กเกจก่อน"
         },
         "serverPicker": {
             "deployToServer": "ปรับใช้กับเซิร์ฟเวอร์",
@@ -5602,6 +5600,7 @@
             "library": "ห้องสมุด",
             "nPackages": "{{n}} แพ็กเกจ",
             "nServices": "{{n}} บริการ",
+            "nameRequired": "ใส่ชื่อเทมเพลต",
             "nginxPhpFpmCertbot": "nginx \n php-fpm ใบรับรอง",
             "noReadyMadeTemplatesAreAvailable": "ไม่มีเทมเพลตสำเร็จรูป คุณยังสามารถสร้างเทมเพลตใหม่ตั้งแต่ต้นได้",
             "noTemplatesYet": "ยังไม่มีเทมเพลต",
@@ -5701,7 +5700,8 @@
             "tokenExpires": "โทเค็นหมดอายุ",
             "ungrouped": "ไม่ได้จัดกลุ่ม",
             "whatHappensNext": "จะเกิดอะไรขึ้นต่อไป?",
-            "windowsPowershell": "วินโดวส์ (PowerShell)"
+            "windowsPowershell": "วินโดวส์ (PowerShell)",
+            "syncShort": "ซิงค์"
         },
         "serviceDetail": {
             "areYouSureThisWillPermanently": "คุณแน่ใจเหรอ? การดำเนินการนี้จะลบบริการและข้อมูลทั้งหมดออกอย่างถาวร",
@@ -6159,7 +6159,8 @@
             "unlinkFromItsLinkedApplication": "ยกเลิกการเชื่อมโยง {{name}} จากบริการที่เชื่อมโยงหรือไม่",
             "unlinking": "กำลังยกเลิกการเชื่อมโยง…",
             "unlinkingWillResetBothAppsTo": "การยกเลิกการเชื่อมโยงจะรีเซ็ตทั้งสองบริการเป็นโหมดสแตนด์อโลน",
-            "usedForCertificateExpiryRemindersFrom": "ใช้สำหรับการแจ้งเตือนการหมดอายุของใบรับรองจาก Let's Encrypt"
+            "usedForCertificateExpiryRemindersFrom": "ใช้สำหรับการแจ้งเตือนการหมดอายุของใบรับรองจาก Let's Encrypt",
+            "enterADomainNameFirst": "กรอกชื่อโดเมนก่อน"
         },
         "setupHealthWidget": {
             "allSet": "เรียบร้อยแล้ว —",
@@ -6322,7 +6323,10 @@
             "targetService": "บริการเป้าหมาย",
             "variables": "ตัวแปร",
             "variablesInThisGroupApplyTo": "ตัวแปรในกลุ่มนี้ใช้กับทุกทรัพยากรที่คุณแนบไว้",
-            "whatThisGroupIsFor": "กลุ่มนี้มีไว้เพื่ออะไร..."
+            "whatThisGroupIsFor": "กลุ่มนี้มีไว้เพื่ออะไร...",
+            "enterAGroupNameFirst": "กรอกชื่อกลุ่มก่อน",
+            "enterAResourceIdFirst": "กรอกรหัสทรัพยากรก่อน",
+            "enterAVariableNameFirst": "กรอกชื่อตัวแปรก่อน"
         },
         "shellTab": {
             "containerShell": "เชลล์คอนเทนเนอร์",
@@ -6331,7 +6335,8 @@
             "noRunningContainers": "ไม่มีคอนเทนเนอร์ที่ทำงานอยู่",
             "running": "วิ่ง...",
             "startTheServiceToAccessThe": "เริ่มบริการเพื่อเข้าถึงเชลล์",
-            "typeACommandBelowToExecute": "พิมพ์คำสั่งด้านล่างเพื่อดำเนินการในคอนเทนเนอร์"
+            "typeACommandBelowToExecute": "พิมพ์คำสั่งด้านล่างเพื่อดำเนินการในคอนเทนเนอร์",
+            "failedToLoadContainers": "ไม่สามารถโหลดคอนเทนเนอร์ได้"
         },
         "sidebarSettings": {
             "chooseAPresetOrBuildA": "เลือกค่าที่ตั้งล่วงหน้าหรือสร้างมุมมองที่กำหนดเอง เฉพาะรายการที่มองเห็นได้เท่านั้นที่จะปรากฏในแถบด้านข้างของคุณ",
@@ -7058,7 +7063,8 @@
             "twoPanelsWritingWebServerConfig": "แผงสองแผงที่เขียนการกำหนดค่าเว็บเซิร์ฟเวอร์จะแย่งชิงความเป็นเจ้าของ สลับเซิร์ฟเวอร์นี้เป็น",
             "upstream": "ต้นน้ำ",
             "whatWeCheck": "สิ่งที่เราตรวจสอบ",
-            "whileObserving": "ในขณะที่สังเกต"
+            "whileObserving": "ในขณะที่สังเกต",
+            "failedToLoadSurvey": "ไม่สามารถโหลดผลสำรวจได้"
         },
         "systemNotices": {
             "dismiss": "ยกเลิก {{title}}",
@@ -7131,7 +7137,9 @@
             "useThisDomain": "ใช้โดเมนนี้",
             "used": "ใช้แล้ว",
             "utcOffset": "ออฟเซ็ต UTC",
-            "version": "เวอร์ชัน {{brand}}"
+            "version": "เวอร์ชัน {{brand}}",
+            "enterADomainFirst": "ใส่โดเมนก่อน",
+            "selectADifferentTimezoneFirst": "เลือกเขตเวลาอื่นก่อน"
         },
         "tableDataTab": {
             "column": "คอลัมน์",
@@ -7148,7 +7156,8 @@
             "query": "แบบสอบถาม",
             "structure": "โครงสร้าง",
             "tableView": "มุมมองตาราง",
-            "zeroRows": "0 แถว"
+            "zeroRows": "0 แถว",
+            "noMoreRows": "ไม่มีแถวเพิ่มเติม"
         },
         "tabs": {
             "moreTabs": "แท็บเพิ่มเติม"
@@ -7302,7 +7311,10 @@
             "truncateLogFile": "ตัดทอนไฟล์บันทึก",
             "typeUnitName": "พิมพ์ชื่อยูนิต...",
             "unit": "หน่วย",
-            "useThe": "ใช้"
+            "useThe": "ใช้",
+            "failedToLoadProcesses": "ไม่สามารถโหลดโพรเซสได้",
+            "selectALogFileFirst": "เลือกไฟล์บันทึกก่อน",
+            "remoteJournalIsNotAvailableYet": "ยังไม่รองรับเจอร์นัลระยะไกล"
         },
         "testSandbox": {
             "aRunIsAlreadyInProgress": "การวิ่งกำลังดำเนินอยู่",
@@ -7551,7 +7563,8 @@
             "viewSaved": "ดู \"{{trimmed}}\" ที่บันทึกไว้",
             "viewUpdated": "ดู \"{{name}}\" อัปเดตแล้ว",
             "views": "มุมมอง",
-            "withChanges": "”กับการเปลี่ยนแปลง"
+            "withChanges": "”กับการเปลี่ยนแปลง",
+            "enterAViewNameFirst": "กรอกชื่อมุมมองก่อน"
         },
         "volumesPanel": {
             "alsoDeleteDataPermanent": "ลบข้อมูลด้วย การดำเนินการนี้ไม่สามารถยกเลิกได้",
@@ -7718,7 +7731,8 @@
             "payloadUrl": "เพย์โหลด URL",
             "retryCount": "ลองนับอีกครั้ง",
             "timeoutSeconds": "หมดเวลา (วินาที)",
-            "update": "อัปเดต"
+            "update": "อัปเดต",
+            "eventsRequired": "เลือกอย่างน้อยหนึ่งเหตุการณ์"
         },
         "webhooksTab": {
             "active": "ใช้งานอยู่",
@@ -7901,8 +7915,7 @@
             "workspaceArchived": "เก็บพื้นที่ทำงานแล้ว",
             "workspaceDeleted": "ลบพื้นที่ทำงานแล้ว",
             "workspaceNotFound": "ไม่พบพื้นที่ทำงาน",
-            "workspaceRestored": "กู้คืนพื้นที่ทำงานแล้ว",
-            "workspaces": "พื้นที่ทำงาน"
+            "workspaceRestored": "กู้คืนพื้นที่ทำงานแล้ว"
         },
         "workspaceMembersTab": {
             "addAMember": "เพิ่มสมาชิก",
@@ -7974,6 +7987,7 @@
             "maxUsers0Unlimited": "ผู้ใช้สูงสุด (0 = ไม่จำกัด)",
             "members": "สมาชิก",
             "myTeam": "ทีมของฉัน",
+            "nameRequired": "ใส่ชื่อพื้นที่ทำงาน",
             "newWorkspace": "พื้นที่ทำงานใหม่",
             "recolorsThePanelForAnyoneViewing": "เปลี่ยนสีแผงสำหรับทุกคนที่ดูพื้นที่ทำงานนี้ ปล่อยให้เป็นค่าเริ่มต้นหากไม่มีการสร้างแบรนด์ที่กำหนดเอง",
             "searchWorkspaces": "ค้นหาพื้นที่ทำงาน...",
@@ -7981,6 +7995,14 @@
             "users": "ผู้ใช้",
             "workspaceBrandColor": "สีของแบรนด์พื้นที่ทำงาน",
             "workspaceCreated": "สร้างพื้นที่ทำงานแล้ว"
+        },
+        "mobileSearch": {
+            "label": "ค้นหา",
+            "title": "ค้นหาทุกอย่าง (Ctrl K)"
+        },
+        "changeBar": {
+            "nothingToRedo": "ไม่มีอะไรให้ทำซ้ำ",
+            "nothingToUndo": "ไม่มีอะไรให้ยกเลิก"
         }
     },
     "auth": {
@@ -8027,6 +8049,7 @@
         "validatingInvitation": "กำลังตรวจสอบคำเชิญ..."
     },
     "common": {
+        "actionTarget": "{{action}}: {{subject}}",
         "actions": {
             "add": "เพิ่ม",
             "back": "กลับ",
@@ -8063,7 +8086,8 @@
             "stop": "หยุด",
             "test": "ทดสอบ",
             "tryAgain": "ลองอีกครั้ง",
-            "uninstall": "ถอนการติดตั้ง"
+            "uninstall": "ถอนการติดตั้ง",
+            "new": "ใหม่"
         },
         "checking": "กำลังตรวจสอบ...",
         "confirm": {
@@ -8160,6 +8184,8 @@
         },
         "loading": "กำลังโหลด...",
         "more": "มากกว่า",
+        "moreActions": "การดำเนินการเพิ่มเติม",
+        "moreInfoAbout": "ข้อมูลเพิ่มเติมเกี่ยวกับ {{subject}}",
         "moreSections": "ส่วนเพิ่มเติม",
         "page": "หน้าหนังสือ",
         "retry": "ลองอีกครั้ง",
@@ -8175,6 +8201,13 @@
             "hoursShort": "{{count}}h",
             "justNow": "แค่ตอนนี้",
             "minutesShort": "{{count}}m"
+        },
+        "validation": {
+            "domainEmpty": "ป้อนโดเมน",
+            "domainInvalid": "ป้อนโดเมนที่ถูกต้อง",
+            "emailInvalid": "ป้อนที่อยู่อีเมลที่ถูกต้อง",
+            "required": "จำเป็นต้องกรอกช่องนี้",
+            "urlInvalid": "กรอก URL ที่ถูกต้อง เช่น https://example.com/webhook"
         }
     },
     "errors": {

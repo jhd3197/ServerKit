@@ -5,18 +5,15 @@
 // machines ServerKit runs on, and nothing described the things it is supposed to
 // be watching. Host health stays below; this sits above it because "is the site
 // up" is the question the page is actually for.
-import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Activity, Plus, Radar, ShieldAlert, Timer, Zap } from 'lucide-react';
-import api from '../../services/api';
 import { AreaChart, KpiBand, MetricCard, Pill } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import { monitorStateOf } from './monitorShared';
-import { usePolling } from '../../hooks/usePolling';
 import { useTranslation } from 'react-i18next';
+import InfoTip from '@/components/InfoTip';
+import ErrorState from '../ErrorState';
 
-const POLL_MS = 15000;
-const FEED_LIMIT = 9;
 
 function relativeTime(iso) {
     if (!iso) return 'never';
@@ -28,49 +25,24 @@ function relativeTime(iso) {
     return `${Math.floor(seconds / 3600)}h ago`;
 }
 
-export default function MonitorsSummary({ refreshKey = 0 }) {
+export default function MonitorsSummary({ summary }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [monitors, setMonitors] = useState([]);
-    const [stats, setStats] = useState(null);
-    const [feed, setFeed] = useState([]);
-    const [loaded, setLoaded] = useState(false);
+    const { monitors, stats, feed, loadError, load } = summary;
 
-    const load = useCallback(async () => {
-        try {
-            const [listRes, statsRes] = await Promise.all([
-                api.getMonitors(),
-                api.getMonitorStats().catch(() => null),
-            ]);
-            const list = listRes?.monitors || [];
-            setMonitors(list);
-            setStats(statsRes?.stats || null);
-
-            // The live feed is the most recently checked monitors, newest first —
-            // derived from what we already fetched rather than a second request
-            // per monitor.
-            setFeed(
-                [...list]
-                    .filter((m) => m.last_check_at && !m.is_paused)
-                    .sort((a, b) => new Date(b.last_check_at) - new Date(a.last_check_at))
-                    .slice(0, FEED_LIMIT),
-            );
-        } catch {
-            // Overview must survive a monitors outage; the rest of the page is fine.
-        } finally {
-            setLoaded(true);
-        }
-    }, []);
-
-    const refresh = usePolling(load, POLL_MS);
-
-    // The parent bumps refreshKey to force a reload (e.g. after creating a
-    // monitor); it is not part of the polling schedule.
-    useEffect(() => {
-        if (refreshKey) refresh();
-    }, [refreshKey, refresh]);
-
-    if (!loaded) return null;
+    // A failed fetch with nothing loaded is not "nothing is being watched".
+    if (loadError && !monitors.length) {
+        return (
+            <section className="monitoring-panel mon-nomonitors">
+                <ErrorState
+                    compact
+                    title={t('app.monitorsSummary.couldntLoadMonitors', "Couldn't load monitors.")}
+                    error={loadError}
+                    onRetry={load}
+                />
+            </section>
+        );
+    }
 
     if (!monitors.length) {
         return (
@@ -85,7 +57,7 @@ export default function MonitorsSummary({ refreshKey = 0 }) {
                     </Button>
                 </div>
                 <p className="mon-panel-hint">
-                    {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}
+                    {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkitShort', 'Below: the servers ServerKit runs on.')} <InfoTip>{t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}</InfoTip>
                 </p>
             </section>
         );

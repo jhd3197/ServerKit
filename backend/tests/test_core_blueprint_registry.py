@@ -7,9 +7,9 @@ from pathlib import Path
 from app.core_blueprints import CORE_BLUEPRINTS
 
 
-EXPECTED_CORE_BLUEPRINT_COUNT = 116
+EXPECTED_CORE_BLUEPRINT_COUNT = 117
 EXPECTED_MANIFEST_SHA256 = (
-    '25d28d92ccddddc246d5b2081d84b11f1df10cb662f33c256ebcbe390d2813d5'
+    '52abbc7429d079c7cf6ea61a638f5dc4dbd991e4f02ec31c81563e01442aa7fb'
 )
 
 

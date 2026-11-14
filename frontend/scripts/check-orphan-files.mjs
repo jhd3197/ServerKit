@@ -22,10 +22,6 @@ const KEEP = {
     'main.jsx': 'entry point',
     'styles/main.scss': 'entry stylesheet',
     'plugins/runtime/vendorManifest.js': 'read by the vendor-shim generator and extension bundle checks',
-    'components/domains/CutoverDrawer.jsx': 'built, never mounted: wire into Domains or delete (product call)',
-    'components/settings/MemberActionsCard.jsx': 'built, never mounted: wire in or delete (product call)',
-    'components/dashboard/AccountSecurityNudge.jsx': 'built, never mounted: wire in or delete (product call)',
-    'styles/pages/_cutover.scss': 'styles CutoverDrawer above; goes or gets imported with it',
     'utils/snapshotBones.js': 'imported by scripts/capture-skeletons.mjs',
 };
 // Trees loaded by import.meta.glob, tests, and bundled extension copies.

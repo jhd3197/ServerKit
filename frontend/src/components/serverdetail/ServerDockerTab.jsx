@@ -1,4 +1,5 @@
 import { useCallback, useState, useEffect  } from 'react';
+import InfoTip from '@/components/InfoTip';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
@@ -148,7 +149,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
                 <EmptyState
                     icon={Container}
                     title={t('app.serverDockerTab.dockerNotReachableFromThisAgent', 'Docker not reachable from this agent')}
-                    description={t('app.serverDockerTab.theAgentConnectedButCouldNot', 'The agent connected but could not talk to a Docker daemon. Make sure Docker is running on the host (and the agent user is in the docker group on Linux), then click Refresh on the Overview tab to re-probe capabilities.')}
+                    description={<>{t('app.serverDockerTab.agentCannotReachDocker', 'Agent cannot reach a Docker daemon.')} <InfoTip>{t('app.serverDockerTab.theAgentConnectedButCouldNot', 'The agent connected but could not talk to a Docker daemon. Make sure Docker is running on the host (and the agent user is in the docker group on Linux), then click Refresh on the Overview tab to re-probe capabilities.')}</InfoTip></>}
                 />
                 <ul className="docker-empty-state__causes">
                     <li>{t('app.serverDockerTab.dockerDesktopDockerdIsNotRunning', 'Docker Desktop / dockerd is not running on the host')}</li>
@@ -199,7 +200,7 @@ const ServerDockerTab = ({ serverId, serverStatus, server }) => {
     }
 
     if (loading) {
-        return <EmptyState loading title={t('app.serverDockerTab.loadingDockerData', 'Loading Docker data')} />;
+        return <EmptyState loading loadingVariant="table" loadingRows={5} title={t('app.serverDockerTab.loadingDockerData', 'Loading Docker data')} />;
     }
 
     // Containers table columns. Cell markup and classNames are identical to

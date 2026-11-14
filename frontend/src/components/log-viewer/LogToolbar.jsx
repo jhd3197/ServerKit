@@ -12,7 +12,7 @@ export default function LogToolbar({
     wrapLines, onToggleWrap,
     isFullscreen, onToggleFullscreen,
     onRefresh, onDownload, onClear, onScrollToBottom,
-    canAct,
+    canAct, actDisabledReason,
 }) {
     const { t } = useTranslation();
     return (
@@ -25,6 +25,7 @@ export default function LogToolbar({
                         placeholder={t('app.logToolbar.searchInLog', 'Search in log…')}
                         value={searchPattern}
                         onChange={(e) => onSearchChange(e.target.value)}
+                        aria-label={t('app.logToolbar.searchInLog', 'Search in log…')}
                         onKeyDown={(e) => e.key === 'Enter' && onSearchSubmit()}
                     />
                     {searchPattern && (
@@ -56,6 +57,7 @@ export default function LogToolbar({
                     className={`lv-chip ${autoRefresh ? 'active' : ''}`}
                     onClick={onAutoRefreshToggle}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('app.logToolbar.autoRefreshEvery3sAndFollow', 'Auto-refresh every 3s and follow tail')}
                 >
                     <span className={`lv-pulse ${autoRefresh ? 'on' : ''}`} />
@@ -64,6 +66,7 @@ export default function LogToolbar({
                 <SharedButton variant="unstyled" type="button"
                     className={`lv-icon-btn ${showLineNumbers ? 'active' : ''}`}
                     onClick={onToggleLineNumbers}
+                    aria-pressed={showLineNumbers}
                     title={t('app.logToolbar.toggleLineNumbers', 'Toggle line numbers')}
                 >
                     <Hash size={13} />
@@ -71,6 +74,7 @@ export default function LogToolbar({
                 <SharedButton variant="unstyled" type="button"
                     className={`lv-icon-btn ${wrapLines ? 'active' : ''}`}
                     onClick={onToggleWrap}
+                    aria-pressed={wrapLines}
                     title={t('app.logToolbar.toggleWordWrap', 'Toggle word wrap')}
                 >
                     <WrapText size={13} />
@@ -79,6 +83,7 @@ export default function LogToolbar({
                     className="lv-icon-btn"
                     onClick={onScrollToBottom}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('app.logToolbar.jumpToEnd', 'Jump to end')}
                 >
                     <ArrowDownToLine size={13} />
@@ -87,6 +92,7 @@ export default function LogToolbar({
                     className="lv-icon-btn"
                     onClick={onRefresh}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('common.actions.refresh', 'Refresh')}
                 >
                     <RefreshCw size={13} />
@@ -95,6 +101,7 @@ export default function LogToolbar({
                     className="lv-icon-btn"
                     onClick={onDownload}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('common.actions.download', 'Download')}
                 >
                     <Download size={13} />
@@ -103,6 +110,7 @@ export default function LogToolbar({
                     className="lv-icon-btn danger"
                     onClick={onClear}
                     disabled={!canAct}
+                    disabledReason={actDisabledReason}
                     title={t('app.logToolbar.truncateLogFile', 'Truncate log file')}
                 >
                     <Trash2 size={13} />

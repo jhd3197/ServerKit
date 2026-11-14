@@ -5,6 +5,7 @@ import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '@/hooks/useConfirm';
 import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
+import InfoTip from '@/components/InfoTip';
 import Modal from '../Modal';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -236,10 +237,8 @@ const SSHKeysTab = () => {
                 <ErrorState compact error={loadError} onRetry={loadKeys} />
             )}
 
-            {loading ? (
-                <SharedCard variant="legacy" className="card">
-                    <div className="loading-sm">{t('common.loading', 'Loading…')}</div>
-                </SharedCard>
+            {loading && keys.length === 0 ? (
+                <EmptyState loading loadingVariant="table" loadingRows={3} title={t('common.loading', 'Loading…')} />
             ) : loadError && keys.length === 0 ? (
                 <ErrorState
                     title={t('app.sSHKeysTab.couldntLoadSshKeys', "Couldn't load SSH keys.")}
@@ -250,7 +249,13 @@ const SSHKeysTab = () => {
                 <SharedCard variant="legacy" className="card">
                     <EmptyState
                         icon={KeyRound}
-                        title={t('app.sSHKeysTab.noSshKeysConfiguredForRoot', 'No SSH keys configured for root user.')}
+                        title={t('app.sSHKeysTab.noSshKeys', 'No SSH keys')}
+                        description={(
+                            <>
+                                {t('app.sSHKeysTab.addAKeyForRootLogin', 'Add a key for root login.')}
+                                <InfoTip>{t('app.sSHKeysTab.keysApplyToTheRootUser', 'Keys are for the root user on this server. Password login stays available until you harden SSH.')}</InfoTip>
+                            </>
+                        )}
                         action={(
                             <Button variant="default" onClick={() => setShowAddModal(true)}>
                                 {t('app.sSHKeysTab.addSshKey', 'Add SSH key')}

@@ -7,6 +7,7 @@ import { Pill } from '@/components/ds';
 import { formatRelativeTime } from '../../utils/time';
 import { useTranslation } from 'react-i18next';
 import { formatDateTime } from '@/utils/intl';
+import InfoTip from '@/components/InfoTip';
 
 // The backend stamps observations with datetime.utcnow().isoformat(), which
 // carries no timezone suffix — JS would read that as local time and skew every
@@ -51,7 +52,7 @@ const PermissionRow = ({ row }) => {
                     </Pill>
                 </div>
                 <p className="extension-permissions__note">
-                    {t('app.extensionPermissionsDialog.thePanelExposesNoGatedHelper', 'The panel exposes no gated helper for this capability. An extension that wants it imports the host module directly, and nothing in the panel sees the call. Whether this extension has used it cannot be answered here.')}
+                    {t('app.extensionPermissionsDialog.noGatedHelperShort', 'Panel cannot see this capability.')} <InfoTip>{t('app.extensionPermissionsDialog.thePanelExposesNoGatedHelper', 'The panel exposes no gated helper for this capability. An extension that wants it imports the host module directly, and nothing in the panel sees the call. Whether this extension has used it cannot be answered here.')}</InfoTip>
                 </p>
                 {row.uses > 0 && (
                     <p className="extension-permissions__note">
@@ -93,7 +94,7 @@ const PermissionRow = ({ row }) => {
                 </Pill>
             </div>
             <p className="extension-permissions__note">
-                {t('app.extensionPermissionsDialog.everyUseOfThisCapabilityHas', 'Every use of this capability has to pass through the panel\'s SDK gate, and the gate has recorded none since the panel process started. Either the extension has not needed it yet, or it declares more than it uses.')}
+                {t('app.extensionPermissionsDialog.noGatedUseShort', 'No gated use since panel start.')} <InfoTip>{t('app.extensionPermissionsDialog.everyUseOfThisCapabilityHas', 'Every use of this capability has to pass through the panel\'s SDK gate, and the gate has recorded none since the panel process started. Either the extension has not needed it yet, or it declares more than it uses.')}</InfoTip>
             </p>
         </li>
     );
@@ -167,7 +168,7 @@ const PermissionsSection = ({ report }) => {
             )}
 
             <p className="extension-permissions__footnote">
-                {t('app.extensionPermissionsDialog.declaredPermissionsAreAConsentSignal', 'Declared permissions are a consent signal, not a sandbox. Extension code runs inside the panel process with the panel\'s privileges; the panel can record what passes through its own SDK and cannot confine what does not.')}
+                {t('app.extensionPermissionsDialog.consentSignalShort', 'Permissions are consent, not a sandbox.')} <InfoTip>{t('app.extensionPermissionsDialog.declaredPermissionsAreAConsentSignal', 'Declared permissions are a consent signal, not a sandbox. Extension code runs inside the panel process with the panel\'s privileges; the panel can record what passes through its own SDK and cannot confine what does not.')}</InfoTip>
             </p>
         </section>
     );
@@ -194,7 +195,7 @@ const RequirementsSection = ({ requirements }) => {
                 <p className="extension-permissions__note">
                     {pipEnabled
                         ? <>{t('app.extensionPermissionsDialog.dependencyInstallationIsCurrentlyEnabledOn', 'Dependency installation is currently enabled on this panel (')}<code>{envVar}</code>).</>
-                        : <>{t('app.extensionPermissionsDialog.dependencyInstallationIsOffOnThis', 'Dependency installation is off on this panel. When an extension ships Python packages, the panel writes the file next to the extension instead of installing it, and lists it here.')}</>}
+                        : <>{t('app.extensionPermissionsDialog.dependencyInstallOffShort', 'Dependency installation is off.')} <InfoTip>{t('app.extensionPermissionsDialog.dependencyInstallationIsOffOnThis', 'Dependency installation is off on this panel. When an extension ships Python packages, the panel writes the file next to the extension instead of installing it, and lists it here.')}</InfoTip></>}
                 </p>
             </section>
         );
@@ -214,7 +215,7 @@ const RequirementsSection = ({ requirements }) => {
             </p>
             <p className="extension-permissions__note">
                 {pipEnabled
-                    ? <>{t('app.extensionPermissionsDialog.dependencyInstallationIsEnabledOnThis', 'Dependency installation is enabled on this panel now (')}<code>{envVar}</code>{t('app.extensionPermissionsDialog.butThisFilePredatesThatThe', '), but this file predates that: the panel only installs requirements while installing or updating an extension. Reinstall or update this extension to apply it.')}</>
+                    ? <>{t('app.extensionPermissionsDialog.installEnabledNotAppliedShort', 'Enabled now; reinstall to apply.')} <InfoTip>{t('app.extensionPermissionsDialog.dependencyInstallationIsEnabledOnThis', 'Dependency installation is enabled on this panel now (')}<code>{envVar}</code>{t('app.extensionPermissionsDialog.butThisFilePredatesThatThe', '), but this file predates that: the panel only installs requirements while installing or updating an extension. Reinstall or update this extension to apply it.')}</InfoTip></>
                     : <>{t('app.extensionPermissionsDialog.installingTheseRunsPipWithThe', "Installing these runs pip with the backend's privileges (a setup.py hook is arbitrary code), so it is opt-in and off by default. Set")} <code>{envVar}=1</code> {t('app.extensionPermissionsDialog.onTheBackendThenReinstallOr', 'on the backend, then reinstall or update this extension.')}</>}
             </p>
             {requirements.path && (

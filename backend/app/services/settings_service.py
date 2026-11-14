@@ -171,8 +171,10 @@ class SettingsService:
         'sso_saml_idp_metadata_url': {'value': '', 'type': 'string', 'description': 'SAML IdP metadata URL'},
         'sso_saml_idp_sso_url': {'value': '', 'type': 'string', 'description': 'SAML IdP SSO URL'},
         'sso_saml_idp_cert': {'value': '', 'type': 'string', 'description': 'SAML IdP certificate (PEM)'},
-        'sso_auto_provision': {'value': True, 'type': 'boolean', 'description': 'Auto-create users on first SSO login'},
-        'sso_default_role': {'value': 'developer', 'type': 'string', 'description': 'Default role for SSO-provisioned users'},
+        # Off by default: enabling a provider for yourself must not let every
+        # account at that provider sign up. Registration is closed by default too.
+        'sso_auto_provision': {'value': False, 'type': 'boolean', 'description': 'Auto-create users on first SSO login'},
+        'sso_default_role': {'value': 'viewer', 'type': 'string', 'description': 'Default role for SSO-provisioned users'},
         'sso_force_sso': {'value': False, 'type': 'boolean', 'description': 'Disable password login (SSO only)'},
         'sso_allowed_domains': {'value': [], 'type': 'json', 'description': 'Restrict SSO to these email domains'},
         # Source provider connections

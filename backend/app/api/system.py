@@ -84,7 +84,7 @@ def check_update():
             def parse_version(v):
                 try:
                     return tuple(int(x) for x in v.split('.'))
-                except:
+                except ValueError:
                     return (0, 0, 0)
 
             if parse_version(latest_version) > parse_version(current_version):
@@ -96,7 +96,8 @@ def check_update():
         else:
             result['error'] = f'GitHub API error: {e.code}'
     except Exception as e:
-        result['error'] = f'Failed to check for updates: {str(e)}'
+        current_app.logger.warning('Update check failed: %s', e)
+        result['error'] = 'Failed to check for updates'
 
     # Cache the result
     _update_cache['last_check'] = time.time()

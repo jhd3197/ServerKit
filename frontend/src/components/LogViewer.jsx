@@ -34,7 +34,7 @@ export function LogViewer({
                 <div className="sidebar-header">
                     <h3>{t('app.logViewer.logFiles', 'Log files')}</h3>
                     {onRefreshFiles && (
-                        <Button variant="outline" size="sm" onClick={onRefreshFiles}>
+                        <Button variant="outline" size="sm" onClick={onRefreshFiles} aria-label={t('common.actions.refresh', 'Refresh')}>
                             <RefreshCw size={14} />
                         </Button>
                     )}
@@ -111,17 +111,18 @@ export function LogViewer({
                                 size="sm"
                                 onClick={onRefreshContent}
                                 disabled={!selectedPath || contentLoading}
+                                disabledReason={!selectedPath ? t('app.logViewer.selectALogFileFirst', 'Select a log file first') : undefined}
                             >
                                 {t('common.actions.refresh', 'Refresh')}
                             </Button>
                         )}
                         {onDownload && (
-                            <Button variant="outline" size="sm" onClick={onDownload} disabled={!content}>
+                            <Button variant="outline" size="sm" onClick={onDownload} disabled={!content} disabledReason={t('app.logViewer.nothingToDownloadYet', 'Nothing to download yet')}>
                                 {t('common.actions.download', 'Download')}
                             </Button>
                         )}
                         {onClear && (
-                            <Button variant="destructive" size="sm" onClick={onClear} disabled={!selectedPath}>
+                            <Button variant="destructive" size="sm" onClick={onClear} disabled={!selectedPath} disabledReason={t('app.logViewer.selectALogFileFirst', 'Select a log file first')}>
                                 {t('common.actions.clear', 'Clear')}
                             </Button>
                         )}

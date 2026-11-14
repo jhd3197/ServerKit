@@ -6,9 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/components/ui/select';
 import CopyField from '@/components/CopyField';
+import { FormField, FormRow } from '@/components/FormField';
+import useFieldErrors from '@/hooks/useFieldErrors';
 import { EngineIcon } from '../icons/DatabaseBrands';
 import { ENGINE_META } from './dbAdapter';
 import { useTranslation } from 'react-i18next';
+import { useToast } from '../../contexts/useToast.js';
 
 // Create / credentials modals for the explorer. Logic is unchanged from the
 // original Databases page; the explorer wires them to its toolbar and tree.
@@ -108,6 +111,7 @@ function EnginePicker({ value, onChange, status, onInstallEngine }) {
 
 export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, onClose, onCreated, onInstallEngine }) {
     const { t } = useTranslation();
+    const toast = useToast();
     const fieldId = useId();
     const [engine, setEngine] = useState(initialEngine);
     const [formData, setFormData] = useState({
@@ -119,6 +123,11 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [createdInfo, setCreatedInfo] = useState(null);
+    const fe = useFieldErrors({
+        name: !formData.name.trim()
+            ? t('app.modals.databaseNameRequired', 'Enter the database name.')
+            : (/^[a-zA-Z0-9_]+$/.test(formData.name) ? null : t('app.modals.databaseNameInvalid', 'Use only letters, numbers and underscores.')),
+    }, fieldId);
 
     // Attaching is optional, so a failed app lookup must not block the create —
     // the selector just stays empty.
@@ -135,6 +144,7 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
 
     async function handleSubmit(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         setError('');
         setLoading(true);
         try {
@@ -149,9 +159,16 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
 
             if (result.success) {
                 if (result.password) setCreatedInfo({ database: formData.name, user: result.user, password: result.password });
-                else { onCreated(); onClose(); }
+                else {
+                    if (result.user_error) {
+                        toast.error(t('app.modals.databaseUserNotCreated', 'Database created, but its user was not: {{error}}', { error: result.user_error }));
+                    }
+                    onCreated();
+                    onClose();
+                }
             }
         } catch (err) {
+            if (fe.fromServer(err)) return;
             setError(err.message || 'Failed to create database');
         } finally {
             setLoading(false);
@@ -177,26 +194,23 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
     return (
         <Modal open onClose={onClose} title={t('app.modals.newDatabase', 'New database')}>
             {error && <div className="error-message">{error}</div>}
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label>{t('app.modals.engine', 'Engine')}</label>
+            <form onSubmit={handleSubmit} noValidate>
+                <FormField label={t('app.modals.engine', 'Engine')}>
                     <EnginePicker
                         value={engine}
                         onChange={setEngine}
                         status={status}
                         onInstallEngine={onInstallEngine ? () => { onClose(); onInstallEngine(); } : null}
                     />
-                </div>
+                </FormField>
 
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-name`}>{t('app.modals.databaseName', 'Database name *')}</label>
-                    <Input id={`${fieldId}-name`} type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="my_database" required pattern="[a-zA-Z0-9_]+" autoFocus />
-                </div>
+                <FormField label={t('app.modals.databaseName', 'Database name')} htmlFor={`${fieldId}-name`} required error={fe.error('name')}>
+                    <Input id={`${fieldId}-name`} type="text" value={formData.name} onChange={(e) => { fe.clear('name'); setFormData({ ...formData, name: e.target.value }); }} onBlur={() => fe.touch('name')} placeholder="my_database" autoFocus />
+                </FormField>
 
                 {isMySQL ? (
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label htmlFor="dbx-new-charset">{t('app.modals.characterSet', 'Character set')}</label>
+                    <FormRow>
+                        <FormField label={t('app.modals.characterSet', 'Character set')} htmlFor="dbx-new-charset">
                             <Select value={formData.charset} onValueChange={(value) => setFormData({ ...formData, charset: value })}>
                                 <SelectTrigger id="dbx-new-charset"><SelectValue /></SelectTrigger>
                                 <SelectContent>
@@ -205,9 +219,8 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                                     <SelectItem value="latin1">latin1</SelectItem>
                                 </SelectContent>
                             </Select>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="dbx-new-collation">{t('app.modals.collation', 'Collation')}</label>
+                        </FormField>
+                        <FormField label={t('app.modals.collation', 'Collation')} htmlFor="dbx-new-collation">
                             <Select value={formData.collation} onValueChange={(value) => setFormData({ ...formData, collation: value })}>
                                 <SelectTrigger id="dbx-new-collation"><SelectValue /></SelectTrigger>
                                 <SelectContent>
@@ -216,11 +229,10 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                                     <SelectItem value="utf8_general_ci">utf8_general_ci</SelectItem>
                                 </SelectContent>
                             </Select>
-                        </div>
-                    </div>
+                        </FormField>
+                    </FormRow>
                 ) : (
-                    <div className="form-group">
-                        <label htmlFor="dbx-new-encoding">{t('app.modals.encoding', 'Encoding')}</label>
+                    <FormField label={t('app.modals.encoding', 'Encoding')} htmlFor="dbx-new-encoding">
                         <Select value={formData.encoding} onValueChange={(value) => setFormData({ ...formData, encoding: value })}>
                             <SelectTrigger id="dbx-new-encoding"><SelectValue /></SelectTrigger>
                             <SelectContent>
@@ -229,11 +241,16 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                                 <SelectItem value="SQL_ASCII">SQL_ASCII</SelectItem>
                             </SelectContent>
                         </Select>
-                    </div>
+                    </FormField>
                 )}
 
-                <div className="form-group">
-                    <label htmlFor="dbx-attach-app">{t('app.modals.attachToApplication', 'Attach to service')}</label>
+                <FormField
+                    label={t('app.modals.attachToApplication', 'Attach to service')}
+                    htmlFor="dbx-attach-app"
+                    hint={appsLoading
+                        ? t('app.modals.loadingServices', 'Loading services…')
+                        : t('app.modals.attachServiceHint', 'Optional. An attached database is listed on the service and is cleaned up with it.')}
+                >
                     <Select
                         value={applicationId === '' ? NONE : String(applicationId)}
                         onValueChange={(value) => setApplicationId(value === NONE ? '' : value)}
@@ -245,12 +262,7 @@ export function CreateDatabaseModal({ engine: initialEngine = 'mysql', status, o
                             {apps.map((app) => <SelectItem key={app.id} value={String(app.id)}>{app.name}</SelectItem>)}
                         </SelectContent>
                     </Select>
-                    <span className="form-help">
-                        {appsLoading
-                            ? t('app.modals.loadingServices', 'Loading services…')
-                            : t('app.modals.attachServiceHint', 'Optional. An attached database is listed on the service and is cleaned up with it.')}
-                    </span>
-                </div>
+                </FormField>
 
                 <div className="form-group">
                     <label className="checkbox-label">
@@ -274,6 +286,9 @@ export function CreateMySQLUserModal({ databases, onClose, onCreated }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [createdInfo, setCreatedInfo] = useState(null);
+    const fe = useFieldErrors({
+        username: formData.username.trim() ? null : t('app.remoteAccess.usernameRequired', 'Enter a username.'),
+    }, fieldId);
 
     async function generatePassword() {
         try {
@@ -286,12 +301,14 @@ export function CreateMySQLUserModal({ databases, onClose, onCreated }) {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         setError('');
         setLoading(true);
         try {
             const result = await api.createMySQLUser(formData);
             if (result.success) setCreatedInfo({ username: formData.username, password: result.password, host: formData.host });
         } catch (err) {
+            if (fe.fromServer(err)) return;
             setError(err.message || 'Failed to create user');
         } finally {
             setLoading(false);
@@ -311,20 +328,17 @@ export function CreateMySQLUserModal({ databases, onClose, onCreated }) {
     return (
         <Modal open onClose={onClose} title={t('app.modals.createMysqlUser', 'New MySQL user')}>
             {error && <div className="error-message">{error}</div>}
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-username`}>{t('app.modals.username', 'Username *')}</label>
-                    <Input id={`${fieldId}-username`} type="text" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} placeholder="db_user" required autoFocus />
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-password`}>{t('common.labels.password', 'Password')}</label>
+            <form onSubmit={handleSubmit} noValidate>
+                <FormField label={t('app.modals.username', 'Username')} htmlFor={`${fieldId}-username`} required error={fe.error('username')}>
+                    <Input id={`${fieldId}-username`} type="text" value={formData.username} onChange={(e) => { fe.clear('username'); setFormData({ ...formData, username: e.target.value }); }} onBlur={() => fe.touch('username')} placeholder="db_user" autoFocus />
+                </FormField>
+                <FormField label={t('common.labels.password', 'Password')} htmlFor={`${fieldId}-password`}>
                     <div className="input-with-button">
                         <Input id={`${fieldId}-password`} type="text" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder={t('app.modals.leaveEmptyToAutoGenerate', 'Leave empty to auto-generate')} />
                         <Button type="button" variant="outline" size="sm" onClick={generatePassword}>{t('app.modals.generate', 'Generate')}</Button>
                     </div>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="dbx-mysql-user-host">{t('app.modals.host', 'Host')}</label>
+                </FormField>
+                <FormField label={t('app.modals.host', 'Host')} htmlFor="dbx-mysql-user-host">
                     <Select value={formData.host} onValueChange={(value) => setFormData({ ...formData, host: value })}>
                         <SelectTrigger id="dbx-mysql-user-host"><SelectValue /></SelectTrigger>
                         <SelectContent>
@@ -333,16 +347,15 @@ export function CreateMySQLUserModal({ databases, onClose, onCreated }) {
                             <SelectItem value="127.0.0.1">127.0.0.1</SelectItem>
                         </SelectContent>
                     </Select>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="dbx-mysql-user-db">{t('app.modals.grantPrivilegesOnDatabase', 'Grant privileges on database')}</label>
+                </FormField>
+                <FormField label={t('app.modals.grantPrivilegesOnDatabase', 'Grant privileges on database')} htmlFor="dbx-mysql-user-db">
                     <DatabaseSelect
                         id="dbx-mysql-user-db"
                         databases={databases}
                         value={formData.database}
                         onChange={(value) => setFormData({ ...formData, database: value })}
                     />
-                </div>
+                </FormField>
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button type="submit" disabled={loading}>{loading ? t('app.modals.creating', 'Creating…') : t('app.modals.createUser', 'Create user')}</Button>
@@ -359,6 +372,9 @@ export function CreatePostgreSQLUserModal({ databases, onClose, onCreated }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [createdInfo, setCreatedInfo] = useState(null);
+    const fe = useFieldErrors({
+        username: formData.username.trim() ? null : t('app.remoteAccess.usernameRequired', 'Enter a username.'),
+    }, fieldId);
 
     async function generatePassword() {
         try {
@@ -371,12 +387,14 @@ export function CreatePostgreSQLUserModal({ databases, onClose, onCreated }) {
 
     async function handleSubmit(e) {
         e.preventDefault();
+        if (!fe.attempt()) return;
         setError('');
         setLoading(true);
         try {
             const result = await api.createPostgreSQLUser(formData);
             if (result.success) setCreatedInfo({ username: formData.username, password: result.password });
         } catch (err) {
+            if (fe.fromServer(err)) return;
             setError(err.message || 'Failed to create user');
         } finally {
             setLoading(false);
@@ -396,27 +414,24 @@ export function CreatePostgreSQLUserModal({ databases, onClose, onCreated }) {
     return (
         <Modal open onClose={onClose} title={t('app.modals.createPostgresqlUser', 'New PostgreSQL user')}>
             {error && <div className="error-message">{error}</div>}
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-username`}>{t('app.modals.username', 'Username *')}</label>
-                    <Input id={`${fieldId}-username`} type="text" value={formData.username} onChange={(e) => setFormData({ ...formData, username: e.target.value })} placeholder="db_user" required autoFocus />
-                </div>
-                <div className="form-group">
-                    <label htmlFor={`${fieldId}-password`}>{t('common.labels.password', 'Password')}</label>
+            <form onSubmit={handleSubmit} noValidate>
+                <FormField label={t('app.modals.username', 'Username')} htmlFor={`${fieldId}-username`} required error={fe.error('username')}>
+                    <Input id={`${fieldId}-username`} type="text" value={formData.username} onChange={(e) => { fe.clear('username'); setFormData({ ...formData, username: e.target.value }); }} onBlur={() => fe.touch('username')} placeholder="db_user" autoFocus />
+                </FormField>
+                <FormField label={t('common.labels.password', 'Password')} htmlFor={`${fieldId}-password`}>
                     <div className="input-with-button">
                         <Input id={`${fieldId}-password`} type="text" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} placeholder={t('app.modals.leaveEmptyToAutoGenerate', 'Leave empty to auto-generate')} />
                         <Button type="button" variant="outline" size="sm" onClick={generatePassword}>{t('app.modals.generate', 'Generate')}</Button>
                     </div>
-                </div>
-                <div className="form-group">
-                    <label htmlFor="dbx-pg-user-db">{t('app.modals.grantPrivilegesOnDatabase', 'Grant privileges on database')}</label>
+                </FormField>
+                <FormField label={t('app.modals.grantPrivilegesOnDatabase', 'Grant privileges on database')} htmlFor="dbx-pg-user-db">
                     <DatabaseSelect
                         id="dbx-pg-user-db"
                         databases={databases}
                         value={formData.database}
                         onChange={(value) => setFormData({ ...formData, database: value })}
                     />
-                </div>
+                </FormField>
                 <div className="modal-actions">
                     <Button type="button" variant="outline" onClick={onClose}>{t('common.actions.cancel', 'Cancel')}</Button>
                     <Button type="submit" disabled={loading}>{loading ? t('app.modals.creating', 'Creating…') : t('app.modals.createUser', 'Create user')}</Button>

@@ -418,7 +418,7 @@ export default function DomainDnsPanel({ domain, isAdmin }) {
                     )}
                     <div className="ddp__form-actions">
                         <Button variant="outline" size="sm" onClick={() => setShowAdd(false)}>{t('common.actions.cancel', 'Cancel')}</Button>
-                        <Button size="sm" disabled={!form.content || saving} onClick={handleAdd}>
+                        <Button size="sm" disabled={!form.content || saving} disabledReason={!saving ? t('app.domainDnsPanel.enterTheRecordContentFirst', 'Enter the record content first') : undefined} onClick={handleAdd}>
                             {saving ? t('app.domainDnsPanel.adding', 'Adding…') : t('app.domainDnsPanel.addRecord', 'Add record')}
                         </Button>
                     </div>

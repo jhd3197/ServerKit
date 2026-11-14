@@ -253,6 +253,7 @@ export function ColumnMenu({
                             type="button"
                             className="sk-gridmenu__opt"
                             disabled={!canMoveLeft}
+                            disabledReason={t('app.columnMenu.alreadyTheFirstColumn', 'Already the first column')}
                             onClick={() => { onMove(column.key, -1); onOpenChange(false); }}
                         >
                             <ChevronLeft size={13} />{t('app.columnMenu.moveLeft', 'Move left')}
@@ -261,6 +262,7 @@ export function ColumnMenu({
                             type="button"
                             className="sk-gridmenu__opt"
                             disabled={!canMoveRight}
+                            disabledReason={t('app.columnMenu.alreadyTheLastColumn', 'Already the last column')}
                             onClick={() => { onMove(column.key, 1); onOpenChange(false); }}
                         >
                             <ChevronRight size={13} />{t('app.columnMenu.moveRight', 'Move right')}
@@ -283,6 +285,7 @@ export function ColumnMenu({
                             type="button"
                             onClick={() => { writeRule(null); setDraft(''); }}
                             disabled={!rule}
+                            disabledReason={t('app.columnMenu.noFilterOnThisColumn', 'No filter on this column')}
                         >
                             {t('app.columnMenu.clearFilter', 'Clear filter')}
                         </SharedButton>

@@ -156,7 +156,7 @@ function RecipeHandoffCard({ operation, onSubmitted, t }) {
                         </a>
                     </Button>
                 )}
-                <Button type="submit" size="sm" disabled={!value.trim() || submitting}>
+                <Button type="submit" size="sm" disabled={!value.trim() || submitting} disabledReason={!submitting ? t('app.operationsDock.enterTheRequiredValueFirst', 'Enter the required value first') : undefined}>
                     {submitting
                         ? t('app.operationsDock.resumingRecipe', 'Resuming…')
                         : t('app.operationsDock.continueRecipe', 'Continue recipe')}

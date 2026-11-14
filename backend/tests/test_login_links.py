@@ -193,3 +193,16 @@ def test_register_jobs_registers_reap_kind(app):
         from app.jobs import registry
         login_link_service.register_jobs()
         assert login_link_service.REAP_JOB_KIND in registry.registered_kinds()
+
+
+def test_concurrent_redeems_only_one_wins(client, auth_headers, monkeypatch):
+    """Two requests that both read the link before either commits used to
+    both get a session. The claim is a conditional UPDATE, so the loser sees
+    zero rows even though its earlier is_used check passed."""
+    token = _mint(client, auth_headers).get_json()['token']
+    user, reason = login_link_service.redeem(token)
+    assert user is not None and reason is None
+    # Replay the race: the second request's check saw an unused link.
+    monkeypatch.setattr(LoginLink, 'is_used', property(lambda self: False))
+    user, reason = login_link_service.redeem(token)
+    assert user is None and reason == 'used'

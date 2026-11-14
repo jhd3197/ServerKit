@@ -6,6 +6,7 @@ Routes are mounted at ``/api/v1/waf``. Reads require access to the target app;
 mutations and install require an admin user (mirrors ``app/api/dns_zones.py``).
 Service ``ValueError``s map to HTTP 400.
 """
+import logging
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 
@@ -13,6 +14,8 @@ from app.services.waf_service import WafService
 from app.middleware.rbac import require_admin_user
 from app.api._access import require_app
 from app.api._request import json_object
+
+logger = logging.getLogger(__name__)
 
 waf_bp = Blueprint('waf', __name__)
 
@@ -47,8 +50,9 @@ def update_policy(app_id):
     # ModSecurity isn't present on the host.
     try:
         apply_result = WafService.apply(app_id)
-    except Exception as e:  # pragma: no cover - defensive
-        apply_result = {'success': False, 'error': str(e)}
+    except Exception:  # pragma: no cover - defensive
+        logger.exception('WAF apply failed for app %s', app_id)
+        apply_result = {'success': False, 'error': 'Failed to apply WAF policy'}
 
     response = policy.to_dict()
     response['apply'] = apply_result

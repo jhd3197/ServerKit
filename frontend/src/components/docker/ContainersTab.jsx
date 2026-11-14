@@ -8,6 +8,7 @@ import LogContent from '../log-viewer/LogContent';
 import EmptyState from '../EmptyState';
 import { ErrorState } from '../ErrorState';
 import Modal from '@/components/Modal';
+import { SheetPanel } from '@/components/ui/sheet';
 import { Drawer, DataTable, DataTableFooter, Pill, SearchField } from '@/components/ds';
 import {
     useTableChrome, GridViewPicker, GridChips, GridFilterButton,
@@ -229,6 +230,9 @@ const ContainersTab = ({ onStatsChange }) => {
     // flight; only the newest may write, or the old server's list wins.
     const loadSeq = useRef(0);
     const [loadError, setLoadError] = useState(null);
+
+    // A different server's rows must not linger as the "already loaded" list.
+    useEffect(() => { setContainers([]); }, [serverId]);
 
     useEffect(() => {
         loadContainers();
@@ -766,10 +770,10 @@ const ContainersTab = ({ onStatsChange }) => {
         applyPage: applyViewPageState,
     });
 
-    if (loading) {
+    if (loading && containers.length === 0) {
         return (
             <div className="dx-tab-pane">
-                <div className="docker-loading">{t('app.containersTab.loadingContainers', 'Loading containers…')}</div>
+                <EmptyState loading loadingVariant="table" loadingRows={8} title={t('app.containersTab.loadingContainers', 'Loading containers…')} />
             </div>
         );
     }
@@ -986,9 +990,12 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
 
 
     return (
-        <>
-        <div className="dx-drawer-backdrop" onClick={onClose} />
-        <aside className="dx-inspector dx-inspector-drawer">
+        <SheetPanel
+            className="dx-inspector dx-inspector-drawer"
+            overlayClassName="dx-drawer-backdrop"
+            label={getContainerName(container)}
+            onClose={onClose}
+        >
             <div className="dx-inspector-header">
                 <div className="dx-inspector-icon">
                     <Box size={18} />
@@ -1151,8 +1158,7 @@ const ContainerInspector = ({ container, stats, onAction, onOpenLogs, onOpenExec
                     </>
                 )}
             </div>
-        </aside>
-        </>
+        </SheetPanel>
     );
 };
 

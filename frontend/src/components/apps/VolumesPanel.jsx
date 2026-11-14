@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import InfoTip from '@/components/InfoTip';
 
 // A single volume row with an inline detach confirm (the "also delete data"
 // checkbox is off by default and disabled while the app is running, so a detach
@@ -138,7 +139,7 @@ const VolumesPanel = ({ app, onChanged }) => {
                 </div>
                 <div className="app-panel-body">
                     <p className="app-panel-hint">
-                        {t('app.volumesPanel.firstClassPersistentStorageThatSurvives', 'First-class persistent storage that survives redeploys. Each volume is a named Docker volume mounted into the container at the path you choose, which is safer than a relative bind mount. Changes apply on the next deploy.')}
+                        {t('app.volumesPanel.firstClassPersistentStorageThatSurvivesShort', 'Persistent storage that survives redeploys.')} <InfoTip>{t('app.volumesPanel.firstClassPersistentStorageThatSurvives', 'First-class persistent storage that survives redeploys. Each volume is a named Docker volume mounted into the container at the path you choose, which is safer than a relative bind mount. Changes apply on the next deploy.')}</InfoTip>
                     </p>
 
                     {loading ? (
