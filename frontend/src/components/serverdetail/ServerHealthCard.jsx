@@ -15,19 +15,22 @@ const checkKind = (status) => {
     return 'gray';
 };
 
+// Two overview cards that read the same agent report; `part` picks one:
+// 'permission' (the agent's permission level) or 'health' (status + checks).
 // Read-only by design: the permission level is enforced by the agent and can
 // only be changed on the server itself, so there is deliberately no control.
-const ServerHealthCard = ({ server }) => {
+const ServerHealthCard = ({ server, part }) => {
     const { t } = useTranslation();
     const [alerts, setAlerts] = useState([]);
 
     useEffect(() => {
+        if (part !== 'health') return undefined;
         let alive = true;
         api.getFleetAlerts({ server_id: server.id, status: 'active', limit: 20 })
             .then((res) => { if (alive) setAlerts((Array.isArray(res) ? res : []).filter((a) => a.detail)); })
             .catch(() => { if (alive) setAlerts([]); });
         return () => { alive = false; };
-    }, [server.id, server.status, server.last_report_at]);
+    }, [part, server.id, server.status, server.last_report_at]);
 
     const level = server.permission_level_effective || 'full';
     const health = serverHealth(server);
@@ -48,10 +51,10 @@ const ServerHealthCard = ({ server }) => {
         { key: 'checked', headerKey: 'app.serverHealthCard.lastChecked', header: 'Last checked', sortable: false, cellClassName: 'sk-cell-dim', render: (c) => (c.checked_at ? formatDateTime(c.checked_at) : '—') },
     ];
 
-    return (
-        <>
-            <div className="info-card">
-                <h3>{t('app.serverHealthCard.permissionLevel', 'Permission level')}</h3>
+    if (part === 'permission') {
+        return (
+            <div className="overview-tab__card">
+                <h3 className="overview-tab__card-title">{t('app.serverHealthCard.permissionLevel', 'Permission level')}</h3>
                 <InfoList className="server-info-list">
                     <InfoItem label={t('app.serverHealthCard.level', 'Level')}>
                         <Pill kind={levelKind(level)} dot={false}>{levelName}</Pill>
@@ -74,28 +77,36 @@ const ServerHealthCard = ({ server }) => {
                 </p>
                 <code>{SET_HINT}</code>
             </div>
+        );
+    }
 
-            <div className="info-card">
-                <h3>{t('app.serverHealthCard.health', 'Health')} <Pill kind={health.kind}>{health.code}</Pill></h3>
+    return (
+        <div className="overview-tab__card">
+            <h3 className="overview-tab__card-title">{t('app.serverHealthCard.health', 'Health')}</h3>
+            <InfoList className="server-info-list">
+                <InfoItem label={t('common.labels.status', 'Status')}>
+                    <Pill kind={health.kind}>{health.code}</Pill>
+                </InfoItem>
                 {server.last_report_at && (
-                    <p className="text-muted">
-                        {t('app.serverHealthCard.lastReport', 'Last report')}: {formatDateTime(server.last_report_at)}
-                    </p>
+                    <InfoItem
+                        label={t('app.serverHealthCard.lastReport', 'Last report')}
+                        value={formatDateTime(server.last_report_at)}
+                    />
                 )}
-                {alerts.length > 0 && (
-                    <ul className="notifications-list">
-                        {alerts.map((a) => <li key={a.id}>{a.detail}</li>)}
-                    </ul>
-                )}
-                <DataTable
-                    columns={columns}
-                    data={server.service_checks || []}
-                    keyField="name"
-                    emptyTitle={t('app.serverHealthCard.noChecks', 'No service checks reported yet.')}
-                    emptyMessage=""
-                />
-            </div>
-        </>
+            </InfoList>
+            {alerts.length > 0 && (
+                <ul className="notifications-list">
+                    {alerts.map((a) => <li key={a.id}>{a.detail}</li>)}
+                </ul>
+            )}
+            <DataTable
+                columns={columns}
+                data={server.service_checks || []}
+                keyField="name"
+                emptyTitle={t('app.serverHealthCard.noChecks', 'No service checks reported yet.')}
+                emptyMessage=""
+            />
+        </div>
     );
 };
 

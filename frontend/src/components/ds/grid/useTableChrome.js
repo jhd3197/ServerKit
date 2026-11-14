@@ -31,6 +31,8 @@ const NO_FILTERS = { match: 'all', rules: [] };
  * every page, which is what makes a saved view, a shareable link and a guard
  * one concept instead of eleven.
  */
+const NO_KEYS = [];
+
 export function useTableChrome({
     columns,
     rows = [],
@@ -41,6 +43,10 @@ export function useTableChrome({
     setSorts,
     hiddenKeys = [],
     setHiddenKeys,
+    // Columns a fresh table keeps out of sight. "Reset" goes back to THIS set,
+    // not to "show everything": a table that offers twenty fields does not want
+    // all twenty on screen the moment someone clears a filter.
+    defaultHiddenKeys = NO_KEYS,
     groupBy = null,
     setGroupBy,
     pageState,
@@ -112,8 +118,8 @@ export function useTableChrome({
         ),
         setSub: () => {},
         setDensity: () => {},
-        resetToView: () => { clearRules(); setHiddenKeys?.([]); setColumnOrder(null); },
-    }), [setMatch, removeRule, clearRules, hiddenKeys, setHiddenKeys]);
+        resetToView: () => { clearRules(); setHiddenKeys?.([...defaultHiddenKeys]); setColumnOrder(null); },
+    }), [setMatch, removeRule, clearRules, hiddenKeys, setHiddenKeys, defaultHiddenKeys]);
 
     // The envelope. The column rules are `columnFilters`, never `filters`:
     // three pages persist a `filters` key of their own meaning a SERVER-side

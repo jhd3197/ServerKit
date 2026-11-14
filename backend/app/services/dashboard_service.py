@@ -49,6 +49,18 @@ GRID_COLS = 12
 # JSON per board.
 MAX_WIDGETS_PER_BOARD = 100
 
+# A board can also hold the Overview layout a user saved for a page: one kind
+# of detail page (every server page shares the user's server layout, the
+# page's own server being the board's variable) or a single overview page
+# (Monitoring, Backups). It is an ordinary board row whose slug names the
+# page, so it reuses the same storage, validation and ownership rules; it is
+# just never listed among the dashboard tabs.
+ENTITY_SCOPE_PREFIX = 'entity:'
+ENTITY_SCOPES = (
+    'entity:server', 'entity:service',
+    'entity:monitoring', 'entity:backups',
+)
+
 
 DEFAULT_BOARDS = [
     {
@@ -257,14 +269,21 @@ def _repair_board(board):
     return True
 
 
+def _dashboard_tabs(user_id):
+    """This user's dashboard tabs: every board except saved overview layouts."""
+    return (DashboardBoard.query
+            .filter_by(user_id=user_id)
+            .filter(db.or_(DashboardBoard.slug.is_(None),
+                           ~DashboardBoard.slug.like(f'{ENTITY_SCOPE_PREFIX}%')))
+            .order_by(DashboardBoard.position, DashboardBoard.id)
+            .all())
+
+
 def get_boards_for_user(user_id):
-    """Every board owned by this user, seeding the shipped defaults on the
-    first read for a user who has none, and repairing configs that predate the
-    current renderer contract."""
-    boards = (DashboardBoard.query
-              .filter_by(user_id=user_id)
-              .order_by(DashboardBoard.position, DashboardBoard.id)
-              .all())
+    """Every dashboard tab owned by this user, seeding the shipped defaults on
+    the first read for a user who has none, and repairing configs that predate
+    the current renderer contract."""
+    boards = _dashboard_tabs(user_id)
     if boards:
         # Not `any(...)`: it short-circuits, so only the first repairable board
         # would ever be fixed.
@@ -272,10 +291,28 @@ def get_boards_for_user(user_id):
             db.session.commit()
         return boards
     seed_defaults(user_id)
-    return (DashboardBoard.query
-            .filter_by(user_id=user_id)
-            .order_by(DashboardBoard.position, DashboardBoard.id)
-            .all())
+    return _dashboard_tabs(user_id)
+
+
+def get_entity_board(user_id, scope):
+    """The overview layout this user saved for one kind of detail page, or
+    None when they are still on the shipped layout."""
+    return DashboardBoard.query.filter_by(user_id=user_id, slug=scope).first()
+
+
+def save_entity_board(user_id, scope, name, widgets):
+    """Store a user's overview layout for one kind of detail page. There is at
+    most one per user and kind, so a second save replaces the first. Returns
+    ``(board, created)``."""
+    board = get_entity_board(user_id, scope)
+    created = board is None
+    if created:
+        board = DashboardBoard(user_id=user_id, slug=scope, icon='grid', position=0)
+        db.session.add(board)
+    board.name = name
+    board.widgets = list(widgets or [])
+    db.session.commit()
+    return board, created
 
 
 def get_board_for_user(user_id, board_id):

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -96,6 +97,9 @@ const TerminalShellTab = () => {
     const [servers, setServers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedId, setSelectedId] = useState(null);
+    // A server detail page links here with ?server=<id> to open that server's shell.
+    const [searchParams] = useSearchParams();
+    const requestedId = searchParams.get('server');
 
     useEffect(() => {
         (async () => {
@@ -105,15 +109,16 @@ const TerminalShellTab = () => {
                     ? list.filter(s => s.capabilities && s.capabilities.terminal)
                     : [];
                 setServers(eligible);
-                const firstOnline = eligible.find(s => s.status === 'online');
-                if (firstOnline) setSelectedId(firstOnline.id);
+                const online = eligible.filter(s => s.status === 'online');
+                const target = online.find(s => String(s.id) === requestedId) || online[0];
+                if (target) setSelectedId(target.id);
             } catch (err) {
                 console.error('Failed to load servers:', err);
             } finally {
                 setLoading(false);
             }
         })();
-    }, []);
+    }, [requestedId]);
 
     const selected = servers.find(s => s.id === selectedId) || null;
     const anyOnline = servers.some(s => s.status === 'online');

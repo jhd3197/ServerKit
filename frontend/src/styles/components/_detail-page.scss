@@ -1,0 +1,396 @@
+// ============================================
+// ENTITY DETAIL PAGE
+// The frame the service and server detail pages share, so the two read as
+// one layout (components/detail/DetailPage.jsx, DetailSettings.jsx):
+//
+//   top bar    Parent / Name  [star]                         [actions]
+//   identity   [tile] Name [status] [badges] + meta line
+//   tabs       [Overview] [Logs] ...                        [Settings]
+//   content
+//
+// Feature stylesheets (_service-detail, _servers) own only what is inside
+// the tabs.
+// ============================================
+
+// Top bar: breadcrumb in the title slot, the star beside it.
+.sk-detail-page .sk-topbar {
+    &__titles { align-items: center; }
+    &__meta { display: inline-flex; align-items: center; gap: $space-2; }
+
+    .fav-star {
+        width: 24px; // geometry: icon-button footprint
+        height: 24px; // geometry: icon-button footprint
+        svg { width: 14px; height: 14px; } // geometry: inline icon
+        opacity: 0.6;
+        &:hover, &.is-on { opacity: 1; }
+    }
+}
+
+.sk-detail-crumbs {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: $space-2;
+    overflow-wrap: anywhere;
+
+    a {
+        color: var(--text-dim);
+        font-weight: $font-weight-medium;
+        text-decoration: none;
+        &:hover { color: var(--text); }
+    }
+
+    > [aria-hidden] { color: var(--text-ghost); }
+}
+
+// Identity: tile + name + status, a meta line and an optional description.
+.sk-detail-identity {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-4;
+
+    > :first-child { flex-shrink: 0; }
+
+    &__body { min-inline-size: 0; flex: 1; }
+
+    &__title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: $space-3;
+    }
+
+    h2 {
+        margin: 0;
+        font-size: $text-lg;
+        font-weight: $font-weight-semibold;
+        letter-spacing: -0.02em;
+        color: var(--text);
+        overflow-wrap: anywhere;
+    }
+
+    &__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: $space-2;
+        margin-block-start: $space-1;
+        font-size: $text-xs;
+        color: var(--text-dim);
+        overflow-wrap: anywhere;
+
+        > span { display: inline-flex; align-items: center; gap: $space-1; }
+        a { color: var(--accent-bright); text-decoration: none; &:hover { text-decoration: underline; } }
+    }
+
+    &__sep { color: var(--text-ghost); }
+
+    &__description {
+        margin-block: $space-2 0;
+        font-size: $text-sm;
+        color: var(--text-dim);
+    }
+
+    .copy-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-2;
+        padding: $space-1 $space-2;
+        border: 1px solid var(--border-soft);
+        border-radius: $radius-control;
+        background: var(--surface);
+        color: var(--text-dim);
+        font-size: $text-xs;
+        cursor: pointer;
+
+        &:hover { border-color: var(--border-strong); color: var(--text); }
+    }
+
+    .copy-chip__value {
+        max-inline-size: 22ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+// Tab strip under the identity: one quiet bar, Settings pinned to the end.
+.sk-detail-page .sk-detail-tabs {
+    min-inline-size: 0;
+
+    > .tabs {
+        gap: $space-1;
+        margin: 0;
+        padding: $space-1;
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: $radius-card;
+    }
+
+    > .tabs .tab {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-2;
+        padding: $space-2 $space-3;
+        border: 0;
+        border-radius: $radius-control;
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+        color: var(--text-dim);
+        white-space: nowrap;
+
+        &:hover { color: var(--text); }
+        &[data-state='active'] { background: var(--surface-hover); color: var(--text); }
+    }
+
+    > .tabs .sk-detail-tabs__end { margin-inline-start: auto; order: 2; }
+    > .tabs .tabs-overflow-trigger { order: 1; }
+
+    &__content { padding-block-start: $space-5; }
+    .tab-content-pane { margin: 0; padding: 0; }
+}
+
+// Body below the top bar: one column, one gap between its blocks.
+.sk-detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+}
+
+// Overview board: the Overview tab laid out on the dashboard's widget grid
+// (components/detail/OverviewBoard.jsx). The frames, library and editor are
+// the dashboard's own (.skw-*); only the page blocks inside them live here.
+.sk-overview-board {
+    min-inline-size: 0;
+
+    // Edit-mode controls above the grid.
+    &__bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: $space-2;
+        margin-block-end: $space-3;
+
+        .skw-barbtn { height: $control-md; }
+    }
+
+    // "Edit overview layout", under the blocks.
+    &__foot {
+        display: flex;
+        justify-content: flex-end;
+        margin-block-start: $space-3;
+    }
+
+    &__edit {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-tight;
+        height: $control-sm;
+        padding: 0 $space-2;
+        border: 0;
+        border-radius: $radius-control;
+        background: transparent;
+        color: var(--text-ghost);
+        font-size: $text-xs;
+        font-family: inherit;
+        cursor: pointer;
+
+        &:hover { color: var(--text); background: var(--surface-2); }
+    }
+}
+
+// A page block inside a widget frame: it fills the frame and scrolls when the
+// frame is shorter than its content.
+.sk-overview-section {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: $space-3 $space-4 $space-4;
+
+    // A block with nothing to render. Only seen while editing: outside edit
+    // mode an empty block is left out of the layout altogether.
+    &:has(> .sk-overview-section__host:empty)::before {
+        content: attr(data-empty);
+        color: var(--text-faint);
+        font-size: $text-sm;
+    }
+
+    // The frame already draws the card and its title, so a card placed in one
+    // drops its own.
+    &__host {
+        > .overview-tab__card,
+        > .scheduled-tasks-card,
+        > .monitoring-panel,
+        > .bk-panel {
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: none;
+        }
+
+        .overview-tab__card > .overview-tab__card-title,
+        .overview-tab__card-header-row > .overview-tab__card-title,
+        .system-status-card__title > h3,
+        .scheduled-tasks-card__header,
+        > .monitoring-panel > .monitoring-panel__header h3,
+        > .bk-panel > .bk-panel__head h3 { display: none; }
+
+        // With the title gone, what is left of a panel's head (a count, a
+        // link, a button) sits on the right, where it sat beside the title.
+        > .monitoring-panel > .monitoring-panel__header > h3 + *,
+        > .bk-panel > .bk-panel__head > h3 + * { margin-inline-start: auto; }
+        // A head that held nothing but its title goes with it.
+        > .bk-panel > .bk-panel__head:not(:has(> :not(h3))),
+        > .monitoring-panel > .monitoring-panel__header:not(:has(> :not(h3))) { display: none; }
+
+        // A header row keeps its action (Attach, a state pill) on the right.
+        .overview-tab__card-header-row { justify-content: flex-end; }
+        .overview-tab__card-header-row:not(:has(> :not(.overview-tab__card-title))) { display: none; }
+
+        .sk-kpiband-wrap { margin: 0; }
+        .offline-message { padding: $space-2; }
+    }
+}
+
+// Monitoring styles its panels under its own page class, which outranks the
+// plain reset above; scoping to the board puts the reset back on top.
+.sk-overview-board .sk-overview-section__host > .monitoring-panel {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+}
+
+// Settings shell: grouped left nav + content column.
+.sk-detail-settings {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: $space-4;
+    align-items: start;
+
+    @media (max-width: $breakpoint-md) {
+        grid-template-columns: 1fr;
+    }
+
+    &__nav {
+        display: flex;
+        flex-direction: column;
+        gap: $space-hair;
+        position: sticky;
+        top: $space-4;
+
+        // Phones: one horizontally scrollable chip row. Groups are flattened
+        // (display: contents) so every item is a direct flex child; the group
+        // labels are hidden and the +$space-4 stagger margin disappears with
+        // the group boxes. The old wrap layout squeezed four group columns
+        // side by side, staggered them 16px apart and clipped the pills.
+        @media (max-width: $breakpoint-md) {
+            position: static;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            gap: $space-tight;
+            overflow-x: auto;
+            padding-bottom: $space-hair; // keep the active pill's ring/shadow unclipped
+            scrollbar-width: none;
+            &::-webkit-scrollbar { display: none; }
+        }
+    }
+
+    // Grouped left nav — an uppercase mono label per group.
+    &__group + &__group {
+        margin-top: $space-4;
+    }
+
+    @media (max-width: $breakpoint-md) {
+        &__group { display: contents; }
+        &__grouplabel { display: none; }
+    }
+
+    &__grouplabel {
+        padding: 0 $space-3;
+        margin-bottom: $space-tight;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        color: var(--text-faint);
+    }
+
+    &__navitem {
+        display: flex;
+        width: 100%; // fill the nav column — a flex <button> otherwise shrinks
+                     // to its label, so each item's box was a different width
+        align-items: center;
+        gap: $space-2;
+        min-height: $control-md;
+        padding: 0 $space-3;
+        border: none;
+        border-radius: $radius-control;
+        background: none;
+        color: var(--text-dim);
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.14s, color 0.14s;
+
+        svg { color: var(--text-faint); flex-shrink: 0; }
+
+        &:hover { background: var(--surface-hover); color: var(--text); }
+        &.is-active {
+            @include status-variant(var(--accent-bright), var(--accent-bg));
+            svg { color: var(--accent-bright); }
+        }
+
+        // Chip row on phones: shrink to the label, never wrap or stretch.
+        @media (max-width: $breakpoint-md) {
+            width: auto;
+            flex: 0 0 auto;
+            white-space: nowrap;
+        }
+    }
+
+    &__content {
+        min-width: 0;
+
+        // A form inside a section panel inherits the panel's surface instead
+        // of drawing a second card inside it.
+        .card .settings-form {
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+
+            > button[type='submit'] { margin-top: $space-4; }
+        }
+    }
+
+    &__section {
+        margin-bottom: $space-6;
+
+        &:last-child { margin-bottom: 0; }
+    }
+
+    &__section-title {
+        display: flex;
+        align-items: center;
+        gap: $space-tight;
+        margin: 0 0 $space-3;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        color: var(--text-faint);
+    }
+
+    // A divided sub-block within a section — e.g. the Deployment pipeline under
+    // the Git connect form in "Git & Deploy". Mirrors the .svc-give-subdomain
+    // divider so stacked panels read as distinct steps rather than one slab.
+    &__subsection {
+        margin-top: $space-5;
+        padding-top: $space-5;
+        border-top: 1px solid var(--border-soft);
+    }
+
+    &__subsection-title {
+        margin: 0 0 $space-3;
+        font-size: $text-xs;
+        font-weight: $font-weight-semibold;
+        color: var(--text-faint);
+    }
+}

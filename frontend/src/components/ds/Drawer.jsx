@@ -23,6 +23,10 @@ import { cn } from '@/lib/utils';
 //           <footer>…</footer>
 //       </form>
 //   </Drawer>
+//
+// Pass `headless` when the body opens with its own header (a tab switch, a
+// toolbar) that already says what the drawer is: the title is then kept for
+// assistive tech only, instead of stacking a heading above the real one.
 export function Drawer({
     open,
     onOpenChange,
@@ -36,24 +40,29 @@ export function Drawer({
     className,
     bodyClassName,
     flush = false,
+    headless = false,
     children,
 }) {
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>
             <SheetContent side={side} className={cn('sk-drawer', className)} style={{ width }}>
-                <div className="sk-drawer__head">
-                    {icon && (
-                        <span className="sk-drawer__ico" style={iconColor ? { color: iconColor } : undefined}>
-                            {icon}
-                        </span>
-                    )}
-                    <div>
-                        {/* SheetTitle is required by Radix for a11y; keep it as the visible title. */}
-                        <SheetTitle className="sk-drawer__title">{title}</SheetTitle>
-                        {subtitle && <div className="sk-drawer__sub">{subtitle}</div>}
+                {headless ? (
+                    <SheetTitle className="sr-only">{title}</SheetTitle>
+                ) : (
+                    <div className="sk-drawer__head">
+                        {icon && (
+                            <span className="sk-drawer__ico" style={iconColor ? { color: iconColor } : undefined}>
+                                {icon}
+                            </span>
+                        )}
+                        <div>
+                            {/* SheetTitle is required by Radix for a11y; keep it as the visible title. */}
+                            <SheetTitle className="sk-drawer__title">{title}</SheetTitle>
+                            {subtitle && <div className="sk-drawer__sub">{subtitle}</div>}
+                        </div>
+                        {headerExtra}
                     </div>
-                    {headerExtra}
-                </div>
+                )}
                 <div className={cn('sk-drawer__body', flush && 'sk-drawer__body--flush', bodyClassName)}>
                     {children}
                 </div>

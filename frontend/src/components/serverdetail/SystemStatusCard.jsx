@@ -48,7 +48,7 @@ export default function SystemStatusCard({ server, onRefresh }) {
     const runtimeKeys = Object.keys(runtimes).filter((k) => runtimes[k]).sort();
 
     return (
-        <div className="info-card system-status-card">
+        <div className="overview-tab__card overview-tab__card--full system-status-card">
             <div className="system-status-card__header">
                 <div className="system-status-card__title">
                     <h3>{t('app.systemStatusCard.systemStatus', 'System status')}</h3>

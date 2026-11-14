@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Gauge } from '../ds';
 import { useClipboard } from '@/hooks/useClipboard';
 import { useTranslation } from 'react-i18next';
 import { formatDateTime } from '@/utils/intl';
@@ -46,37 +45,6 @@ export const SecurityAlertItem = ({ alert, onAcknowledge, onResolve }) => {
     );
 };
 
-
-export const KpiTile = ({ icon, label, value, sub, tone }) => (
-    <div className={`kpi-tile${tone ? ` kpi-tile--${tone}` : ''}`}>
-        <div className="kpi-tile__head">
-            <span className="kpi-tile__icon">{icon}</span>
-            <span className="kpi-tile__label">{label}</span>
-        </div>
-        <div className="kpi-tile__value">{value}</div>
-        {sub && <div className="kpi-tile__sub">{sub}</div>}
-    </div>
-);
-
-export const KpiGauge = ({ icon, label, percent, color, sub }) => {
-    const has = percent !== null && percent !== undefined && Number.isFinite(percent);
-    const safe = has ? Math.min(Math.max(percent, 0), 100) : 0;
-    const danger = safe > 85;
-    const warn = safe > 70 && !danger;
-    const fillColor = danger ? 'var(--red)' : warn ? 'var(--amber)' : color;
-
-    return (
-        <div className={`kpi-tile kpi-tile--gauge${danger ? ' kpi-tile--danger' : warn ? ' kpi-tile--warn' : ''}`}>
-            <div className="kpi-tile__head">
-                <span className="kpi-tile__icon">{icon}</span>
-                <span className="kpi-tile__label">{label}</span>
-            </div>
-            <div className="kpi-tile__value">{has ? `${safe.toFixed(1)}%` : '—'}</div>
-            <Gauge className="kpi-tile__meter" value={safe} color={fillColor} />
-            {sub && <div className="kpi-tile__sub">{sub}</div>}
-        </div>
-    );
-};
 
 export const CopyChip = ({ label, value, title, mono }) => {
     const { t } = useTranslation();

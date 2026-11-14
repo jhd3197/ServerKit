@@ -9,6 +9,7 @@ import { AreaChart, KpiBand, MetricCard, Pill, Sparkline } from '@/components/ds
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '../Skeleton';
 import MonitorsSummary from './MonitorsSummary';
+import { OverviewBoard, OverviewSection } from '@/components/detail/OverviewBoard';
 import DiskReclaimModal from './DiskReclaimModal';
 import { HOST_SCOPE, useScopeMetrics, trendOf } from './useMonitorScope';
 import { useTranslation } from 'react-i18next';
@@ -45,6 +46,9 @@ function last(series) {
 // the Host health grid below is how you switch between them. That grid is what
 // the standalone Fleet Monitor page used to be — a heatmap you had to leave
 // this page to read, for numbers that belong next to these ones.
+// Dashboard widget types the Monitoring overview can carry besides its blocks.
+const MONITORING_WIDGET_TYPES = ['stat', 'gauge', 'timeseries', 'specs', 'note'];
+
 export default function MonitoringOverview({
     scope, isHost, scopeLabel, status, activeAlerts = [],
     speedTest, speedTestRunning, onRunSpeedTest,
@@ -195,16 +199,21 @@ export default function MonitoringOverview({
 
     return (
         <div className="mon-overview">
+            <OverviewBoard
+                kind="monitoring"
+                // Dashboard widgets added here follow the host this page is scoped to.
+                serverVar={isHost ? 'local' : scope}
+                entityLabel={scopeLabel}
+                widgetTypes={MONITORING_WIDGET_TYPES}
+            >
             {/* Monitors first: "is the site up" is the question this page is
                 for, and everything below describes the machines ServerKit runs
                 on rather than the things it is watching. */}
-            <MonitorsSummary summary={monitorsSummary} />
+            <OverviewSection id="monitors" title={t('app.monitoringOverview.monitors', 'Monitors')} w={12} h={9}>
+                <MonitorsSummary summary={monitorsSummary} />
+            </OverviewSection>
 
-            <div className="mon-section-head">
-                <h3>{t('app.monitoringOverview.hostHealth', 'Host health')}</h3>
-                <span className="mon-section-head__meta">{scopeLabel}</span>
-            </div>
-
+            <OverviewSection id="health" title={t('app.monitoringOverview.hostHealth', 'Host health')} w={12} h={5}>
             {/* The shared DS tile, not a monitoring-only copy of it — same
                 geometry as every other KPI strip in the panel, plus the
                 sparkline slot this page needed. */}
@@ -258,8 +267,9 @@ export default function MonitoringOverview({
                     );
                 })}
             </KpiBand>
+            </OverviewSection>
 
-            <div className="mon-grid2">
+            <OverviewSection id="processor" title={t('app.monitoringOverview.processor', 'Processor')} w={6} h={7}>
                 <section className="monitoring-panel">
                     <div className="monitoring-panel__header">
                         <div>
@@ -283,7 +293,9 @@ export default function MonitoringOverview({
                         <AreaChart series={[series?.cpu || []]} colors={[TONE.cpu]} height={CHART_HEIGHT} />
                     </ChartBody>
                 </section>
+            </OverviewSection>
 
+            <OverviewSection id="memory" title={t('app.monitoringOverview.memoryDisk', 'Memory and disk')} w={6} h={7}>
                 <section className="monitoring-panel">
                     <div className="monitoring-panel__header">
                         <div>
@@ -303,16 +315,13 @@ export default function MonitoringOverview({
                         />
                     </ChartBody>
                 </section>
-            </div>
+            </OverviewSection>
 
             {/* The fleet, inline. Clicking a card re-scopes everything above it,
                 which is the whole reason this replaced a separate page. */}
+            <OverviewSection id="hosts" title={t('app.monitoringOverview.allHosts', 'All hosts')} w={12} h={7}>
             {!fleetLoaded && (
                 <div role="status" aria-busy="true" aria-label={t('app.monitoringOverview.loadingHosts', 'Loading hosts')}>
-                    <div className="mon-section-head">
-                        <h3>{t('app.monitoringOverview.allHosts', 'All hosts')}</h3>
-                        <Skeleton variant="line" width={160} height={18} />
-                    </div>
                     <div className="mon-fleet-grid">
                         <Skeleton variant="block" height={FLEET_CARD_HEIGHT} />
                     </div>
@@ -320,12 +329,9 @@ export default function MonitoringOverview({
             )}
             {fleet.length > 0 && (
                 <>
-                    <div className="mon-section-head">
-                        <h3>{t('app.monitoringOverview.allHosts', 'All hosts')}</h3>
-                        <span className="mon-section-head__meta">
-                            {online}/{fleet.length} {t('app.monitoringOverview.onlineClickACardToRe', 'online · click a card to re-scope')}
-                        </span>
-                    </div>
+                    <p className="mon-panel-sub">
+                        {online}/{fleet.length} {t('app.monitoringOverview.onlineClickACardToRe', 'online · click a card to re-scope')}
+                    </p>
                     <div className="mon-fleet-grid">
                         {/* Always the panel host's own numbers, never the
                             scoped ones — a card in this strip has to keep
@@ -359,8 +365,9 @@ export default function MonitoringOverview({
                     </div>
                 </>
             )}
+            </OverviewSection>
 
-            <div className="mon-grid2">
+            <OverviewSection id="alerts" title={t('app.monitoringOverview.activeAlerts', 'Active alerts')} w={6} h={5}>
                 <section className={`monitoring-panel${activeAlerts.length ? ' monitoring-panel--warning' : ''}`}>
                     <div className="monitoring-panel__header">
                         <h3>{t('app.monitoringOverview.activeAlerts', 'Active alerts')}</h3>
@@ -385,7 +392,9 @@ export default function MonitoringOverview({
                         </div>
                     )}
                 </section>
+            </OverviewSection>
 
+            <OverviewSection id="speed" title={t('app.monitoringOverview.speedTest', 'Speed test')} w={6} h={5}>
                 <section className="monitoring-panel">
                     <div className="monitoring-panel__header">
                         <h3>{t('app.monitoringOverview.speedTest', 'Speed test')}</h3>
@@ -429,7 +438,8 @@ export default function MonitoringOverview({
                         </p>
                     )}
                 </section>
-            </div>
+            </OverviewSection>
+            </OverviewBoard>
 
             <DiskReclaimModal open={reclaimOpen} onClose={() => setReclaimOpen(false)} />
         </div>

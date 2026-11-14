@@ -825,55 +825,31 @@
         padding: 0;
     }
 
-    &__tabs {
+    // The pane switch is the drawer's header. The right padding keeps it clear
+    // of the sheet's close button, which sits in the same corner.
+    &__head {
         display: flex;
-        gap: $space-hair;
-        padding: 0 $space-4;
+        align-items: center;
+        padding: $space-4 calc(#{$space-4} + #{$control-sm} + #{$space-3}) $space-4 $space-4;
         border-bottom: 1px solid var(--border);
-        background: var(--surface-0);
         flex-shrink: 0;
+    }
 
-        button {
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: $space-2;
-            height: $control-lg; // underline tabs: 40
-            padding: 0 $space-3;
-            border: none;
-            background: transparent;
-            font-size: $text-sm;
-            font-weight: $font-weight-medium;
-            font-family: inherit;
-            color: var(--text-faint);
-            cursor: pointer;
-            transition: color 0.13s;
+    &__switch button {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-2;
+        font-size: $text-sm;
+    }
 
-            &:hover { color: var(--text-dim); }
-            &.is-on { color: var(--text); }
-
-            &.is-on::after {
-                content: '';
-                position: absolute;
-                left: 8px;
-                right: 8px;
-                bottom: -1px;
-                height: 2px;
-                border-radius: $radius-badge $radius-badge 0 0;
-                background: var(--accent);
-            }
-
-            .n {
-                font-size: $text-xs;
-                color: var(--text-ghost);
-                background: var(--surface-2);
-                border: 1px solid var(--border-soft);
-                border-radius: $radius-control;
-                padding: 1px $space-tight;
-            }
-
-            &.is-on .n { color: var(--text-dim); background: var(--surface-3); border-color: var(--border); }
-        }
+    // Count beside a pane's name: active conditions, or shown/total fields.
+    &__n {
+        padding: 0 $space-tight;
+        border-radius: $radius-control;
+        background: var(--surface-2);
+        color: var(--text-dim);
+        font-size: $text-xs;
+        font-variant-numeric: tabular-nums;
     }
 
     &__body { flex: 1; overflow-y: auto; }
@@ -882,13 +858,75 @@
         display: flex;
         align-items: center;
         gap: $space-2;
-        padding: $space-4 $space-5;
+        padding: $space-3 $space-5;
         border-top: 1px solid var(--border);
         background: var(--surface-0);
         flex-shrink: 0;
     }
 
+    // How many rows the current conditions leave.
+    &__count {
+        font-size: $text-sm;
+        color: var(--text-dim);
+        font-variant-numeric: tabular-nums;
+    }
+
     &__sp { flex: 1; }
+}
+
+// Field search at the top of the Fields pane.
+.sk-gridfind {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin: $space-4 $space-5 0;
+    padding: 0 $space-3;
+    height: $control-md;
+    border: 1px solid var(--border);
+    border-radius: $radius-control;
+    background: var(--surface-2);
+    color: var(--text-ghost);
+
+    &:focus-within { border-color: var(--accent-dim); box-shadow: $focus-ring; }
+
+    input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        outline: none;
+        background: transparent;
+        color: var(--text);
+        font-size: $text-sm;
+        font-family: inherit;
+
+        &::placeholder { color: var(--text-ghost); }
+    }
+}
+
+// Empty filters pane: what is showing, and one tap to start narrowing it.
+.sk-gridstart {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+
+    &__lead {
+        margin: 0;
+        font-size: $text-sm;
+        color: var(--text-dim);
+    }
+
+    // A field chip that adds a condition on that field. Doubled class: it is
+    // also a .sk-gridrule__tag, whose capitalize would turn "Last seen" into
+    // "Last Seen".
+    &__field.sk-gridrule__tag {
+        display: inline-flex;
+        align-items: center;
+        gap: $space-tight;
+        text-transform: none;
+
+        svg { color: var(--text-ghost); }
+        &:hover svg { color: var(--accent-bright); }
+    }
 }
 
 .sk-gridsec {
@@ -910,30 +948,35 @@
         flex: 1;
     }
 
+    // Right-hand figure on a section head ("9 of 12 shown").
+    &__meta {
+        font-size: $text-xs;
+        color: var(--text-ghost);
+        font-variant-numeric: tabular-nums;
+    }
+
+    // "Add condition": sits where the next condition will appear.
     &__add {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: $space-tight;
-        font-size: $text-xs;
-        font-family: inherit;
-        color: var(--accent-bright);
-        height: $control-sm;
-        padding: 0 $space-2;
-        border: none;
-        border-radius: $radius-control;
-        background: transparent;
-        cursor: pointer;
-
-        &:hover { background: var(--accent-bg); }
-    }
-
-    &__none {
-        padding: $space-4;
+        width: 100%;
+        height: $control-md;
+        margin-top: $space-3;
         border: 1px dashed var(--border);
         border-radius: $radius-card;
-        text-align: center;
+        background: transparent;
+        color: var(--text-dim);
         font-size: $text-sm;
-        color: var(--text-ghost);
+        font-family: inherit;
+        cursor: pointer;
+        transition: 0.12s;
+
+        &:hover {
+            border-color: var(--accent-dim);
+            @include status-variant(var(--accent-bright), var(--accent-bg));
+        }
     }
 
     &__hint {
@@ -943,15 +986,6 @@
     }
 
     &__tags { display: flex; flex-wrap: wrap; gap: 6px; }
-}
-
-.sk-gridmatch {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    font-size: $text-sm;
-    color: var(--text-faint);
-    margin-bottom: $space-3;
 }
 
 .sk-gridseg {
@@ -980,12 +1014,16 @@
     &--wide { width: fit-content; }
 }
 
+// One condition: field, operator and remove on a row, its value underneath.
 .sk-gridrule {
     display: grid;
-    grid-template-columns: 1fr 116px $control-md;
-    gap: $space-tight;
+    grid-template-columns: 1fr 132px $control-md;
+    gap: $space-2 $space-tight;
     align-items: center;
-    margin-bottom: $space-2;
+    padding: $space-3;
+    border: 1px solid var(--border-soft);
+    border-radius: $radius-card;
+    background: var(--surface-0);
 
     &__value { grid-column: 1 / -1; }
 
@@ -1027,10 +1065,20 @@
         &:hover { @include status-variant(var(--red), var(--red-bg)); }
     }
 
+    // Between two conditions: the and/or switch, on a hairline that ties the
+    // two cards together.
     &__join {
-        font-size: $text-xs;
-        color: var(--text-ghost);
-        padding: 1px 0 $space-tight $space-hair;
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        margin-block: $space-2;
+
+        &::before,
+        &::after {
+            content: '';
+            flex: 1;
+            border-top: 1px solid var(--border-soft);
+        }
     }
 
     &__enum { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -1071,6 +1119,8 @@
     &:hover { background: var(--surface-2); border-color: var(--border); }
     &.is-drag { opacity: 0.35; }
     &.is-off .sk-gridcol__nm { color: var(--text-ghost); }
+    // A pinned column cannot be moved, so it offers no handle.
+    &.is-locked .sk-gridcol__grip { visibility: hidden; }
 
     &__grip { color: var(--text-ghost); display: grid; place-items: center; cursor: grab; }
     &__nm { flex: 1; min-width: 0; }

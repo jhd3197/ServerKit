@@ -10,6 +10,7 @@ import { formatBytes } from '@/utils/formatBytes';
 import { KpiBand, MetricCard, Pill, DataTable, DataTableFooter } from '@/components/ds';
 import EmptyState from '../EmptyState';
 import InfoTip from '../InfoTip';
+import { OverviewBoard, OverviewSection } from '@/components/detail/OverviewBoard';
 import { useTranslation } from 'react-i18next';
 import { formatDuration, formatNumber } from '@/utils/intl';
 
@@ -100,6 +101,9 @@ const LATEST_COLUMNS = [
 // reliably it has been running, where the bytes live, and what happened lately.
 // The archive table lives on its own Snapshots section — this page answers
 // "is my data safe?", not "show me every file".
+// Dashboard widget types the Backups overview can carry besides its blocks.
+const BACKUPS_WIDGET_TYPES = ['note'];
+
 export default function BackupsOverview({
     stats, storageConfig, costSummary, schedules = [], backups = [], onGo, storageWarning = false,
 }) {
@@ -254,6 +258,8 @@ export default function BackupsOverview({
 
     return (
         <div className="bk-overview">
+            <OverviewBoard kind="backups" widgetTypes={BACKUPS_WIDGET_TYPES}>
+            <OverviewSection id="glance" title={t('app.backupsOverview.atAGlance', 'At a glance')} w={12} h={4}>
             <KpiBand max={4}>
                 <MetricCard
                     tone="green"
@@ -301,8 +307,9 @@ export default function BackupsOverview({
                     </div>
                 </MetricCard>
             </KpiBand>
+            </OverviewSection>
 
-            <div className="bk-grid2">
+            <OverviewSection id="activity" title={t('app.backupsOverview.backupActivity', 'Backup activity')} w={6} h={8}>
                 <section className="bk-panel">
                     <div className="bk-panel__head">
                         <div>
@@ -342,7 +349,9 @@ export default function BackupsOverview({
                         ))}
                     </div>
                 </section>
+            </OverviewSection>
 
+            <OverviewSection id="recent" title={t('app.backupsOverview.recentActivity', 'Recent activity')} w={6} h={8}>
                 <section className="bk-panel">
                     <div className="bk-panel__head">
                         <h3>{t('app.backupsOverview.recentActivity', 'Recent activity')}</h3>
@@ -378,9 +387,9 @@ export default function BackupsOverview({
                         </div>
                     )}
                 </section>
-            </div>
+            </OverviewSection>
 
-            <div className="bk-grid2">
+            <OverviewSection id="destinations" title={t('app.backupsOverview.storageDestinations', 'Storage destinations')} w={6} h={7}>
                 <section className="bk-panel">
                     <div className="bk-panel__head">
                         <h3>{t('app.backupsOverview.storageDestinations', 'Storage destinations')}</h3>
@@ -420,7 +429,9 @@ export default function BackupsOverview({
                         </p>
                     )}
                 </section>
+            </OverviewSection>
 
+            <OverviewSection id="latest" title={t('app.backupsOverview.latestSnapshots', 'Latest backups')} w={6} h={7}>
                 <section className="bk-panel bk-panel--flush">
                     <div className="bk-panel__head">
                         <h3>{t('app.backupsOverview.latestSnapshots', 'Latest backups')}</h3>
@@ -447,7 +458,8 @@ export default function BackupsOverview({
                         />
                     )}
                 </section>
-            </div>
+            </OverviewSection>
+            </OverviewBoard>
         </div>
     );
 }

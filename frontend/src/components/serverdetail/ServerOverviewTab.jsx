@@ -1,33 +1,72 @@
 import { serverStatusKind } from './serverDetailData';
-import { Pill, KpiBand } from '../ds';
+import { Pill, KpiBand, MetricCard, Gauge } from '../ds';
 import OnboardingWizard from '../server/OnboardingWizard';
 import SystemStatusCard from './SystemStatusCard';
+import { OverviewBoard, OverviewSection } from '@/components/detail/OverviewBoard';
 import ServerHealthCard from './ServerHealthCard';
 import { formatBytes } from '@/utils/formatBytes';
 import { InfoList, InfoItem } from '../InfoList';
 import { useTranslation } from 'react-i18next';
+import { Bot, Cpu, HeartPulse, ListChecks, Server as ServerGlyph, ShieldCheck } from 'lucide-react';
 import { formatDateTime } from '@/utils/intl';
 import {
-    KpiTile,
-    KpiGauge,
     PulseIcon,
     ClockIcon,
     CpuIcon,
     MemoryIcon,
     DiskIcon,
     OfflineIcon,
-    ServerIcon,
     HostIcon,
     NetworkIcon,
     FolderTinyIcon,
-    ChipIcon,
     OsIcon,
     ArchIcon,
-    AgentIcon,
     TagIcon,
     HashIcon,
     DockerMiniIcon,
 } from './serverDetailShared';
+
+// Dashboard widget types a server overview can carry besides its own blocks.
+const SERVER_WIDGET_TYPES = ['stat', 'gauge', 'timeseries', 'specs', 'note'];
+
+// Dashboard widgets that open the default layout. `$server` is the board's
+// variable: on this page it is always the server being viewed. Titles come
+// from the metric, so nothing here needs translating.
+const SERVER_LEADING_WIDGETS = [
+    { type: 'stat', w: 3, h: 4, cfg: { metric: 'cpu', agg: 'last', resource: '$server', spark: true, thresholds: [70, 90] } },
+    { type: 'stat', w: 3, h: 4, cfg: { metric: 'ram', agg: 'last', resource: '$server', spark: true, thresholds: [80, 92] } },
+    { type: 'stat', w: 3, h: 4, cfg: { metric: 'disk', agg: 'last', resource: '$server', spark: true, thresholds: [75, 90] } },
+    { type: 'stat', w: 3, h: 4, cfg: { metric: 'net_in', agg: 'last', resource: '$server', spark: true, thresholds: null } },
+    {
+        type: 'timeseries', w: 8, h: 6,
+        cfg: { series: [{ resource: '$server', metric: 'cpu' }, { resource: '$server', metric: 'ram' }], legend: true, fill: true },
+    },
+];
+
+// Usage thresholds for the CPU / memory / disk tiles.
+const USAGE_DANGER_PERCENT = 85;
+const USAGE_WARN_PERCENT = 70;
+
+// A percent tile on the shared MetricCard: the value, a thin meter and the
+// capacity line underneath. Same tile the service overview's KPI band uses.
+const UsageTile = ({ icon, label, percent, color, sub }) => {
+    const has = Number.isFinite(percent);
+    const safe = has ? Math.min(Math.max(percent, 0), 100) : 0;
+    const danger = safe > USAGE_DANGER_PERCENT;
+    const warn = safe > USAGE_WARN_PERCENT && !danger;
+    return (
+        <MetricCard
+            icon={icon}
+            tone={danger ? 'red' : warn ? 'amber' : 'accent'}
+            value={has ? safe.toFixed(1) : '—'}
+            unit={has ? '%' : undefined}
+            label={label}
+        >
+            <Gauge className="sk-kpi__meter" value={safe} color={danger ? 'var(--red)' : warn ? 'var(--amber)' : color} />
+            {sub && <div className="sk-kpi__sub">{sub}</div>}
+        </MetricCard>
+    );
+};
 
 const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => {
     const { t } = useTranslation();
@@ -41,6 +80,7 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
     };
 
     const isOnline = server.status === 'online';
+    const statusLabel = server.status || 'pending';
     const cpuCores = systemInfo?.cpu_cores || server.cpu_cores;
     const cpuModel = systemInfo?.cpu_model || server.cpu_model;
     const totalMemory = systemInfo?.total_memory || server.total_memory;
@@ -71,59 +111,75 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                     />
                 </div>
             )}
-            <KpiBand max={5}>
-                <KpiTile
-                    icon={<PulseIcon />}
-                    label={t('common.labels.status', 'Status')}
-                    value={server.status || 'pending'}
-                    tone={isOnline ? 'success' : server.status === 'connecting' ? 'warning' : 'danger'}
-                />
-                <KpiTile
-                    icon={<ClockIcon />}
-                    label={t('common.labels.uptime', 'Uptime')}
-                    value={isOnline ? formatUptime(metrics?.uptime) : '—'}
-                    sub={isOnline && metrics?.uptime ? 'since last boot' : null}
-                />
-                <KpiGauge
-                    icon={<CpuIcon />}
-                    label="CPU"
-                    percent={isOnline ? metrics?.cpu_percent : null}
-                    color="var(--accent-bright)"
-                    sub={cpuCores ? `${cpuCores} cores` : null}
-                />
-                <KpiGauge
-                    icon={<MemoryIcon />}
-                    label={t('common.labels.memory', 'Memory')}
-                    percent={isOnline ? metrics?.memory_percent : null}
-                    color="var(--cyan)"
-                    sub={totalMemory ? formatBytes(totalMemory) : null}
-                />
-                <KpiGauge
-                    icon={<DiskIcon />}
-                    label={t('common.labels.disk', 'Disk')}
-                    percent={isOnline ? metrics?.disk_percent : null}
-                    color="var(--green)"
-                    sub={totalDisk ? formatBytes(totalDisk) : null}
-                />
-            </KpiBand>
+            <OverviewBoard
+                kind="server"
+                shared
+                entityId={server.id}
+                entityLabel={server.name}
+                serverVar={server.id}
+                widgetTypes={SERVER_WIDGET_TYPES}
+                leading={SERVER_LEADING_WIDGETS}
+            >
+                {/* Only renders while the agent is unreachable, so it leaves
+                    the layout on its own once the server is back. */}
+                <OverviewSection id="offline" title={t('app.serverOverviewTab.connection', 'Connection')} w={12} h={4} lead>
+                    {!isOnline && (
+                        <div className="offline-message">
+                            <OfflineIcon />
+                            <h4>{t('app.serverOverviewTab.serverOffline', 'Server offline')}</h4>
+                            <p>
+                                {server.status === 'pending'
+                                    ? t('app.serverOverviewTab.waitingForAgentInstall', 'Waiting for the agent to be installed…')
+                                    : t('app.serverOverviewTab.cantReachAgent', "Couldn't connect to the server agent.")}
+                            </p>
+                        </div>
+                    )}
+                </OverviewSection>
 
-            {!isOnline && (
-                <div className="info-card offline-card">
-                    <div className="offline-message">
-                        <OfflineIcon />
-                        <h4>{t('app.serverOverviewTab.serverOffline', 'Server offline')}</h4>
-                        <p>
-                            {server.status === 'pending'
-                                ? t('app.serverOverviewTab.waitingForAgentInstall', 'Waiting for the agent to be installed…')
-                                : t('app.serverOverviewTab.cantReachAgent', "Couldn't connect to the server agent.")}
-                        </p>
-                    </div>
-                </div>
-            )}
+                {/* The agent's live readings (no history needed). Offered in
+                    the block library; the default layout opens with the
+                    dashboard's metric widgets instead. */}
+                <OverviewSection id="live" title={t('app.serverOverviewTab.liveStatus', 'Live status')} w={12} h={4} placed={false}>
+                    <KpiBand max={5}>
+                        <MetricCard
+                            icon={<PulseIcon />}
+                            tone={isOnline ? 'green' : server.status === 'connecting' ? 'amber' : 'red'}
+                            value={statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}
+                            label={t('common.labels.status', 'Status')}
+                        />
+                        <MetricCard
+                            icon={<ClockIcon />}
+                            tone="accent"
+                            value={isOnline ? formatUptime(metrics?.uptime) : '—'}
+                            label={t('common.labels.uptime', 'Uptime')}
+                        >
+                            {isOnline && metrics?.uptime ? <div className="sk-kpi__sub">{t('app.serverOverviewTab.sinceLastBoot', 'since last boot')}</div> : null}
+                        </MetricCard>
+                        <UsageTile
+                            icon={<CpuIcon />}
+                            label="CPU"
+                            percent={isOnline ? metrics?.cpu_percent : null}
+                            color="var(--accent-bright)"
+                            sub={cpuCores ? `${cpuCores} cores` : null}
+                        />
+                        <UsageTile
+                            icon={<MemoryIcon />}
+                            label={t('common.labels.memory', 'Memory')}
+                            percent={isOnline ? metrics?.memory_percent : null}
+                            color="var(--cyan)"
+                            sub={totalMemory ? formatBytes(totalMemory) : null}
+                        />
+                        <UsageTile
+                            icon={<DiskIcon />}
+                            label={t('common.labels.disk', 'Disk')}
+                            percent={isOnline ? metrics?.disk_percent : null}
+                            color="var(--green)"
+                            sub={totalDisk ? formatBytes(totalDisk) : null}
+                        />
+                    </KpiBand>
+                </OverviewSection>
 
-            <div className="overview-grid">
-                <div className="info-card">
-                    <h3><ServerIcon /> {t('app.serverOverviewTab.serverInformation', 'Server information')}</h3>
+                <OverviewSection id="info" title={t('app.serverOverviewTab.serverInformation', 'Server information')} icon={ServerGlyph} w={4} h={6}>
                     <InfoList className="server-info-list">
                         <InfoItem label={<><PulseIcon /> {t('common.labels.status', 'Status')}</>}>
                             <Pill kind={serverStatusKind(server.status)}>{server.status}</Pill>
@@ -136,10 +192,9 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                             value={server.last_seen ? formatDateTime(server.last_seen) : 'Never'}
                         />
                     </InfoList>
-                </div>
+                </OverviewSection>
 
-                <div className="info-card">
-                    <h3><ChipIcon /> {t('app.serverOverviewTab.systemInformation', 'System information')}</h3>
+                <OverviewSection id="system" title={t('app.serverOverviewTab.systemInformation', 'System information')} icon={Cpu} w={6} h={6}>
                     <InfoList className="server-info-list">
                         <InfoItem label={<><OsIcon /> {t('app.serverOverviewTab.operatingSystem', 'Operating system')}</>} value={osLabel} />
                         <InfoItem label={<><ArchIcon /> {t('app.serverOverviewTab.architecture', 'Architecture')}</>} value={systemInfo?.architecture || server.architecture || 'N/A'} />
@@ -152,24 +207,29 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                         <InfoItem label={<><MemoryIcon /> {t('app.serverOverviewTab.totalMemory', 'Total memory')}</>} value={formatBytes(totalMemory, { defaultValue: 'N/A' })} />
                         <InfoItem label={<><DiskIcon /> {t('app.serverOverviewTab.totalDisk', 'Total disk')}</>} value={formatBytes(totalDisk, { defaultValue: 'N/A' })} />
                     </InfoList>
-                </div>
+                </OverviewSection>
 
-                <div className="info-card overview-grid__full">
-                    <h3><AgentIcon /> {t('app.serverOverviewTab.agentInformation', 'Agent information')}</h3>
+                <OverviewSection id="agent" title={t('app.serverOverviewTab.agentInformation', 'Agent information')} icon={Bot} w={6} h={6}>
                     <InfoList className="server-info-list server-info-list--columns">
                         <InfoItem label={<><TagIcon /> {t('app.serverOverviewTab.agentVersion', 'Agent version')}</>} value={server.agent_version || 'Not installed'} mono />
                         <InfoItem label={<><HashIcon /> {t('app.serverOverviewTab.agentId', 'Agent ID')}</>} value={server.agent_id || 'N/A'} mono />
                         <InfoItem label={<><DockerMiniIcon /> {t('app.serverOverviewTab.dockerVersion', 'Docker version')}</>} value={server.docker_version || systemInfo?.docker_version || 'N/A'} mono />
                         <InfoItem label={<><ClockIcon /> {t('common.labels.uptime', 'Uptime')}</>} value={formatUptime(metrics?.uptime)} />
                     </InfoList>
-                </div>
+                </OverviewSection>
 
-                <ServerHealthCard server={server} />
+                <OverviewSection id="permission" title={t('app.serverHealthCard.permissionLevel', 'Permission level')} icon={ShieldCheck} w={6} h={6}>
+                    <ServerHealthCard server={server} part="permission" />
+                </OverviewSection>
 
-                <div className="overview-grid__full">
+                <OverviewSection id="health" title={t('app.serverHealthCard.health', 'Health')} icon={HeartPulse} w={6} h={6}>
+                    <ServerHealthCard server={server} part="health" />
+                </OverviewSection>
+
+                <OverviewSection id="status" title={t('app.systemStatusCard.systemStatus', 'System status')} icon={ListChecks} w={12} h={10}>
                     <SystemStatusCard server={server} onRefresh={onRefreshServer} />
-                </div>
-            </div>
+                </OverviewSection>
+            </OverviewBoard>
         </div>
     );
 };

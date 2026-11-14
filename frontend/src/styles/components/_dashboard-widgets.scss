@@ -48,7 +48,7 @@ $skw-z-tv: 200;
     margin-bottom: $space-4;
 
     // Range / refresh / variable pickers + edit toggle. `margin-left:auto`
-    // rather than a spacer element so the tabs keep their natural width.
+    // rather than a spacer element so the selector keeps its natural width.
     &__ctl {
         display: flex;
         align-items: center;
@@ -127,47 +127,31 @@ $skw-z-tv: 200;
     }
 }
 
-.skw-tabs {
+// Dashboard selector: the active board's name on a bar button that opens the
+// list of boards. One control whether there are three boards or thirty.
+.skw-boardpick {
     display: flex;
     align-items: center;
-    gap: $space-1;
-    flex-wrap: wrap;
-}
+    min-width: 0;
 
-.skw-tab {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    height: $control-md;
-    padding: 0 $space-3;
-    border: 1px solid transparent;
-    border-radius: $radius-control;
-    background: none;
-    color: var(--text-faint);
-    font-family: inherit;
-    font-size: $text-sm;
-    cursor: pointer;
-    transition: 0.13s;
-
-    &:hover {
+    &__btn {
+        height: $control-md;
+        max-width: 100%;
         color: var(--text);
-        background: var(--surface-2);
+
+        > svg:first-child { color: var(--accent-bright); }
     }
 
-    // Active board. Set apart by fill + border, never by weight, so switching
-    // boards cannot re-flow the row (same rule as .sk-topbar__tab).
-    &--on,
-    &.is-on,
-    &.is-active {
-        color: var(--text);
-        background: var(--surface-2);
-        border-color: var(--border-strong);
-
-        svg { color: var(--accent-bright); }
+    &__name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
-    // Widget count on the tab.
+    // Widget count beside a board's name.
     &__count {
+        margin-left: auto;
         padding: 1px $space-tight;
         border-radius: $radius-control;
         background: var(--surface-3);
@@ -175,18 +159,17 @@ $skw-z-tv: 200;
         font-size: $text-xs;
     }
 
-    // "+" new-board affordance — icon only, so it drops the label padding.
-    &--add {
-        padding: $space-2;
-        color: var(--text-faint);
-    }
+    &__menu { min-width: 220px; } // geometry: menu width
+
+    &__menu [role='menuitemradio'] { gap: $space-3; }
 }
 
 // Inline board rename. Accent border rather than a focus ring: the input
-// replaces the tab in place and has to read as "editing" without growing.
+// replaces the selector in place and has to read as "editing" without growing.
 .skw-rename {
-    width: 130px;
-    padding: $space-hair $space-tight;
+    width: 180px;
+    height: $control-md;
+    padding: $space-hair $space-3;
     border: 1px solid var(--accent);
     border-radius: $radius-control;
     background: var(--surface-3);
@@ -1244,8 +1227,10 @@ $skw-z-tv: 200;
     // ds/Drawer, whose .sk-drawer__body owns the scroll — so this bar has to
     // stick to the top of THAT scroller or the search box leaves the screen
     // as soon as you scroll to the widget you were searching for. Sticky
-    // demands an opaque background (it scrolls over the cards) and the
-    // negative top/side margins let it span the drawer's padding edge to edge.
+    // demands an opaque background (it scrolls over the cards). It stays
+    // inside the scroller's width: the padding it once cancelled with negative
+    // side margins is on the drawer, outside the scroller, so bleeding past
+    // the edge showed nothing and only gave the panel a horizontal scrollbar.
     &__filters {
         position: sticky;
         top: 0;
@@ -1253,8 +1238,8 @@ $skw-z-tv: 200;
         display: flex;
         flex-direction: column;
         gap: $space-3;
-        margin: -14px -16px $space-4;
-        padding: $space-4 $space-4 $space-3;
+        margin: -14px 0 $space-4;
+        padding: $space-4 0 $space-3;
         background: var(--surface);
         border-bottom: 1px solid var(--border-soft);
     }

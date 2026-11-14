@@ -62,6 +62,7 @@ export const CORE_ROUTES = Object.freeze([
     { id: 'server-templates', path: '/server-templates', placement: 'dashboard', group: 'servers', component: 'ServerTemplates', titleKey: 'app.routeManifest.serverTemplates', title: 'Server templates' },
     { id: 'server-detail', path: '/servers/:id', placement: 'dashboard', component: 'ServerDetail', titleKey: 'common.labels.servers', title: 'Servers' },
     { id: 'server-detail-tab', path: '/servers/:id/:tab', placement: 'dashboard', component: 'ServerDetail', titleKey: 'common.labels.servers', title: 'Servers' },
+    { id: 'server-detail-section', path: '/servers/:id/:tab/:section', placement: 'dashboard', component: 'ServerDetail', titleKey: 'common.labels.servers', title: 'Servers' },
     { id: 'legacy-agent-plugins', path: '/agent-plugins', placement: 'dashboard', redirect: '/extensions', titleKey: 'common.labels.extensions', title: 'Extensions' },
 
     { id: 'projects', path: '/projects', placement: 'dashboard', group: 'organization', component: 'Projects', titleKey: 'app.routeManifest.projects', title: 'Projects' },

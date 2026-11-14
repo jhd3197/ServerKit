@@ -464,3 +464,81 @@ def test_repair_leaves_a_current_board_untouched(app, client, auth_headers):
     boards = client.get('/api/v1/dashboards', headers=auth_headers).get_json()['boards']
     current = next(b for b in boards if b['name'] == 'Current')
     assert current['widgets'][0]['cfg'] == cfg
+
+
+# --- saved overview layouts (entity-scoped boards) ---------------------------
+
+def test_overview_layout_is_stored_but_is_not_a_dashboard_tab(client, auth_headers):
+    saved = client.post('/api/v1/dashboards', headers=auth_headers, json={
+        'name': 'Server overview', 'scope': 'entity:server', 'widgets': [_widget()],
+    })
+    assert saved.status_code == 201
+    assert saved.get_json()['slug'] == 'entity:server'
+
+    tabs = client.get('/api/v1/dashboards', headers=auth_headers).get_json()['boards']
+    assert 'entity:server' not in [board['slug'] for board in tabs]
+    # Saving an overview first must not stop the shipped tabs from seeding.
+    assert [board['slug'] for board in tabs] == ['overview', 'infra', 'apps']
+
+    scoped = client.get('/api/v1/dashboards?scope=entity:server', headers=auth_headers).get_json()['boards']
+    assert [board['id'] for board in scoped] == [saved.get_json()['id']]
+    assert scoped[0]['widgets'] == [_widget()]
+
+
+@pytest.mark.parametrize('scope', [
+    'entity:server', 'entity:service', 'entity:monitoring', 'entity:backups',
+])
+def test_overview_layout_is_empty_until_saved(client, auth_headers, scope):
+    resp = client.get(f'/api/v1/dashboards?scope={scope}', headers=auth_headers)
+    assert resp.status_code == 200
+    assert resp.get_json()['boards'] == []
+
+    saved = client.post('/api/v1/dashboards', headers=auth_headers, json={
+        'name': 'Overview', 'scope': scope, 'widgets': [_widget()],
+    })
+    assert saved.status_code == 201
+    again = client.get(f'/api/v1/dashboards?scope={scope}', headers=auth_headers).get_json()['boards']
+    assert [board['slug'] for board in again] == [scope]
+
+
+def test_saving_an_overview_layout_again_replaces_it(client, auth_headers):
+    first = client.post('/api/v1/dashboards', headers=auth_headers, json={
+        'name': 'Server overview', 'scope': 'entity:server', 'widgets': [_widget()],
+    })
+    second = client.post('/api/v1/dashboards', headers=auth_headers, json={
+        'name': 'Server overview', 'scope': 'entity:server',
+        'widgets': [_widget(i='w1'), _widget(i='w2', x=3)],
+    })
+    assert second.status_code == 200
+    assert second.get_json()['id'] == first.get_json()['id']
+
+    scoped = client.get('/api/v1/dashboards?scope=entity:server', headers=auth_headers).get_json()['boards']
+    assert len(scoped) == 1
+    assert [widget['i'] for widget in scoped[0]['widgets']] == ['w1', 'w2']
+
+
+def test_deleting_an_overview_layout_returns_to_the_shipped_one(client, auth_headers):
+    saved = client.post('/api/v1/dashboards', headers=auth_headers, json={
+        'name': 'Service overview', 'scope': 'entity:service', 'widgets': [_widget()],
+    }).get_json()
+    assert client.delete(f"/api/v1/dashboards/{saved['id']}", headers=auth_headers).status_code == 200
+    scoped = client.get('/api/v1/dashboards?scope=entity:service', headers=auth_headers).get_json()['boards']
+    assert scoped == []
+
+
+def test_overview_layouts_are_scoped_per_user(client, auth_headers, other_headers):
+    client.post('/api/v1/dashboards', headers=auth_headers, json={
+        'name': 'Server overview', 'scope': 'entity:server', 'widgets': [_widget()],
+    })
+    theirs = client.get('/api/v1/dashboards?scope=entity:server', headers=other_headers).get_json()['boards']
+    assert theirs == []
+
+
+@pytest.mark.parametrize('scope', ['entity:database', 'overview', '', 7])
+def test_unknown_board_scope_is_rejected(client, auth_headers, scope):
+    resp = client.post('/api/v1/dashboards', headers=auth_headers, json={
+        'name': 'Nope', 'scope': scope, 'widgets': [],
+    })
+    assert resp.status_code == 400
+    assert client.get('/api/v1/dashboards?scope=entity:database', headers=auth_headers).status_code == 400
+

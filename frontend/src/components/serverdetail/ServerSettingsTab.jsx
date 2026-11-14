@@ -1,5 +1,7 @@
 import { TOKEN_EXPIRY_OPTIONS } from './serverDetailData';
 import { useCallback, useState, useEffect, useId } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Server, Tags, KeyRound, Shield, RefreshCw, Trash2 } from 'lucide-react';
 import api from '../../services/api';
 import { useToast } from '../../contexts/useToast.js';
 import { useConfirm } from '../../hooks/useConfirm';
@@ -8,6 +10,8 @@ import { InfoList, InfoItem } from '../InfoList';
 import InfoTip from '../InfoTip';
 import { DangerZone } from '../DangerZone';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { DetailSettings, DetailSettingsSection } from '@/components/detail/DetailSettings';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Pill } from '../ds';
@@ -22,48 +26,57 @@ import {
 } from '@/components/ui/select';
 import TagsPanel from '../shared/TagsPanel';
 import { useTranslation } from 'react-i18next';
-import {
-    KeyIcon,
-    ServerIcon,
-    NetworkIcon,
-    TrashIcon,
-    TagIcon,
-} from './serverDetailShared';
+import { KeyIcon, TrashIcon } from './serverDetailShared';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
 
 // Radix Select items cannot carry an empty value; this stands for "no group".
 const NO_GROUP = '__none';
 
-const AgentRegistrationSection = ({ server, onRegenerateToken }) => {
-    const { t } = useTranslation();
+// The connection-string InfoTip depends on the server's state, so its copy is
+// assembled here rather than inline in the section title.
+const connectionStringHelp = (server, t) => {
     const expires = server.registration_expires;
     const isExpired = expires && new Date(expires) < new Date();
-    const isOnline = server.status === 'online';
-
-    return (
-        <div className="form-section form-section--accent">
-            <div className="form-section__header">
-                <span className="form-section__icon"><KeyIcon /></span>
-                <div>
-                    <h3>{t('app.serverSettingsTab.connectionString', 'Connection string')}
-                        <InfoTip>
-                        {t('app.serverSettingsTab.generateAFreshConnectionStringTo', 'Generate a fresh connection string to pair (or re-pair) this server. Useful after reinstalling the agent: old credentials are gone, but a new string brings the agent right back to this row.')}
-                        {isOnline && ` ${t('app.serverSettingsTab.onlineRegenerateNote', 'This server is online now; a new string only affects re-pairing.')}`}
-                        {isExpired && ` ${t('app.serverSettingsTab.previousTokenExpired', 'The previous token has expired.')}`}
-                        </InfoTip></h3>
-                    <p className="section-description">{t('app.serverSettingsTab.pairOrRepair', 'Pair or re-pair this server.')}</p>
-                </div>
-            </div>
-            <Button onClick={onRegenerateToken}>
-                <KeyIcon /> {t('app.serverSettingsTab.generateConnectionString', 'Generate connection string')}
-            </Button>
-        </div>
-    );
+    return [
+        t('app.serverSettingsTab.generateAFreshConnectionStringTo', 'Generate a fresh connection string to pair (or re-pair) this server. Useful after reinstalling the agent: old credentials are gone, but a new string brings the agent right back to this row.'),
+        server.status === 'online' && t('app.serverSettingsTab.onlineRegenerateNote', 'This server is online now; a new string only affects re-pairing.'),
+        isExpired && t('app.serverSettingsTab.previousTokenExpired', 'The previous token has expired.'),
+    ].filter(Boolean).join(' ');
 };
 
 const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+    // Section lives in the URL (/servers/:id/settings/:section), same as the
+    // service detail page, so it is shareable and survives a refresh.
+    const { section: sectionParam } = useParams();
+    const settingsGroups = [
+        {
+            label: t('app.settingsTab.general', 'General'),
+            items: [
+                { id: 'general', label: t('app.serverSettingsTab.basicInformation', 'Basic information'), icon: Server },
+                { id: 'tags', label: t('app.serverSettingsTab.tags', 'Tags'), icon: Tags },
+            ],
+        },
+        {
+            label: t('app.serverSettingsTab.connection', 'Connection'),
+            items: [
+                { id: 'connection', label: t('app.serverSettingsTab.connectionString', 'Connection string'), icon: KeyRound },
+                { id: 'allowlist', label: t('app.serverSettingsTab.ipAllowlist', 'IP allowlist'), icon: Shield },
+                { id: 'credentials', label: t('app.serverSettingsTab.apiKeyRotation', 'API key rotation'), icon: RefreshCw },
+            ],
+        },
+        {
+            label: t('app.settingsTab.advanced', 'Advanced'),
+            items: [
+                { id: 'danger', label: t('app.serverSettingsTab.removeServer', 'Remove server'), icon: Trash2 },
+            ],
+        },
+    ];
+    const settingsItems = settingsGroups.flatMap((group) => group.items);
+    const section = settingsItems.some((item) => item.id === sectionParam) ? sectionParam : 'general';
+    const setSection = (next) => navigate(`/servers/${server.id}/settings/${next}`, { replace: true });
     const fieldId = useId();
     const { confirm: confirmSettings } = useConfirm();
     const [formData, setFormData] = useState({
@@ -172,218 +185,233 @@ const ServerSettingsTab = ({ server, onUpdate, onRegenerateToken, onDelete }) =>
     }
 
     return (
-        <div className="settings-tab">
-            <div className="settings-grid">
-                <form onSubmit={handleSubmit} className="settings-form">
-                    <div className="form-section form-section--accent">
-                        <div className="form-section__header">
-                            <span className="form-section__icon"><ServerIcon /></span>
-                            <div>
-                                <h3>{t('app.serverSettingsTab.basicInformation', 'Basic information')}</h3>
-                                <p className="section-description">{t('app.serverSettingsTab.identityAndGroupingForThisServer', 'Identity and grouping for this server.')}</p>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor={`${fieldId}-name`}>{t('app.serverSettingsTab.serverName', 'Server name')}</label>
-                            <Input
-                                id={`${fieldId}-name`}
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor={`${fieldId}-description`}>{t('common.labels.description', 'Description')}</label>
-                            <Textarea
-                                id={`${fieldId}-description`}
-                                name="description"
-                                value={formData.description}
-                                onChange={handleChange}
-                                rows={3}
-                            />
-                        </div>
-
-                        <div className="form-row">
+        <DetailSettings
+            groups={settingsGroups}
+            value={section}
+            onValueChange={setSection}
+            ariaLabel={t('app.serverSettingsTab.settingsSections', 'Server settings sections')}
+        >
+            {section === 'general' && (
+                <DetailSettingsSection title={t('app.serverSettingsTab.basicInformation', 'Basic information')}>
+                    <Card variant="legacy" className="card settings-section">
+                        <form onSubmit={handleSubmit} className="settings-form">
+                            <p className="hint">{t('app.serverSettingsTab.identityAndGroupingForThisServer', 'Identity and grouping for this server.')}</p>
                             <div className="form-group">
-                                <label htmlFor={`${fieldId}-hostname`}>{t('app.serverSettingsTab.hostname', 'Hostname')}</label>
+                                <label htmlFor={`${fieldId}-name`}>{t('app.serverSettingsTab.serverName', 'Server name')}</label>
                                 <Input
-                                    id={`${fieldId}-hostname`}
+                                    id={`${fieldId}-name`}
                                     type="text"
-                                    name="hostname"
-                                    value={formData.hostname}
+                                    name="name"
+                                    value={formData.name}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
+
                             <div className="form-group">
-                                <label htmlFor={`${fieldId}-ip`}>{t('common.labels.ipAddress', 'IP address')}</label>
-                                <Input
-                                    id={`${fieldId}-ip`}
-                                    type="text"
-                                    name="ip_address"
-                                    value={formData.ip_address}
+                                <label htmlFor={`${fieldId}-description`}>{t('common.labels.description', 'Description')}</label>
+                                <Textarea
+                                    id={`${fieldId}-description`}
+                                    name="description"
+                                    value={formData.description}
                                     onChange={handleChange}
+                                    rows={3}
                                 />
                             </div>
-                        </div>
 
-                        <div className="form-group">
-                            <label htmlFor="server-settings-group">{t('app.serverSettingsTab.group', 'Group')}</label>
-                            <Select
-                                name="group_id"
-                                value={formData.group_id === '' || formData.group_id == null ? NO_GROUP : String(formData.group_id)}
-                                onValueChange={(value) => setFormData(prev => ({ ...prev, group_id: value === NO_GROUP ? '' : value }))}
-                            >
-                                <SelectTrigger id="server-settings-group"><SelectValue /></SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value={NO_GROUP}>{t('app.serverSettingsTab.noGroup', 'No group')}</SelectItem>
-                                    {groups.map(group => (
-                                        <SelectItem key={group.id} value={String(group.id)}>{group.name}</SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label htmlFor={`${fieldId}-hostname`}>{t('app.serverSettingsTab.hostname', 'Hostname')}</label>
+                                    <Input
+                                        id={`${fieldId}-hostname`}
+                                        type="text"
+                                        name="hostname"
+                                        value={formData.hostname}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label htmlFor={`${fieldId}-ip`}>{t('common.labels.ipAddress', 'IP address')}</label>
+                                    <Input
+                                        id={`${fieldId}-ip`}
+                                        type="text"
+                                        name="ip_address"
+                                        value={formData.ip_address}
+                                        onChange={handleChange}
+                                    />
+                                </div>
+                            </div>
 
-                        <Button type="submit" disabled={loading}>
-                            {loading ? t('common.saving', 'Saving…') : t('app.serverSettingsTab.saveChanges', 'Save changes')}
-                        </Button>
-                    </div>
-                </form>
+                            <div className="form-group">
+                                <label htmlFor="server-settings-group">{t('app.serverSettingsTab.group', 'Group')}</label>
+                                <Select
+                                    name="group_id"
+                                    value={formData.group_id === '' || formData.group_id == null ? NO_GROUP : String(formData.group_id)}
+                                    onValueChange={(value) => setFormData(prev => ({ ...prev, group_id: value === NO_GROUP ? '' : value }))}
+                                >
+                                    <SelectTrigger id="server-settings-group"><SelectValue /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value={NO_GROUP}>{t('app.serverSettingsTab.noGroup', 'No group')}</SelectItem>
+                                        {groups.map(group => (
+                                            <SelectItem key={group.id} value={String(group.id)}>{group.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
 
-                <AgentRegistrationSection
-                    server={server}
-                    onRegenerateToken={onRegenerateToken}
-                />
-            </div>
-
-            <div className="security-grid">
-                <div className="form-section form-section--accent">
-                    <div className="form-section__header">
-                        <span className="form-section__icon"><NetworkIcon /></span>
-                        <div>
-                            <h3>{t('app.serverSettingsTab.connectionIpAllowlist', 'Connection and IP allowlist')}
-                                <InfoTip>{t('app.serverSettingsTab.restrictWhichIpsCanConnectSupports', 'Restrict which IPs can connect. Supports single IPs, CIDR notation, and wildcards.')}</InfoTip></h3>
-                            <p className="section-description">{t('app.serverSettingsTab.allowedIps', 'Allowed IPs only.')}</p>
-                        </div>
-                    </div>
-
-                    {connectionInfo && (
-                        <InfoList className="security-info-bar">
-                            <InfoItem
-                                label={t('app.serverSettingsTab.connectionIp', 'Connection IP')}
-                                value={connectionInfo.ip_address || 'Not connected'}
-                                mono
-                            />
-                            {connectionInfo.connected_since && (
-                                <InfoItem
-                                    label={t('app.serverSettingsTab.connectedSince', 'Connected since')}
-                                    value={formatDateTime(connectionInfo.connected_since)}
-                                />
-                            )}
-                        </InfoList>
-                    )}
-
-                    <div className="subsection">
-                        <div className="ip-list">
-                            {allowedIPs.length === 0 ? (
-                                <div className="ip-empty">{t('app.serverSettingsTab.noIpRestrictionsAllIpsAllowed', 'No IP restrictions (all IPs allowed)')}</div>
-                            ) : (
-                                allowedIPs.map((ip, idx) => (
-                                    <div key={idx} className="ip-item">
-                                        <code>{ip}</code>
-                                        {connectionInfo?.ip_address === ip && (
-                                            <Pill kind="green" dot={false}>{t('common.labels.current', 'Current')}</Pill>
-                                        )}
-                                        <Button variant="unstyled" type="button"
-                                            className="btn-icon danger"
-                                            onClick={() => handleRemoveIP(ip)}
-                                            title={t('common.actions.remove', 'Remove')}
-                                        >
-                                            <TrashIcon />
-                                        </Button>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-
-                        <div className="ip-add-form">
-                            <Input
-                                type="text"
-                                placeholder={t('app.serverSettingsTab.ipAddressOrCidrEG', 'IP address or CIDR (e.g. 192.168.1.0/24)')}
-                                value={newIP}
-                                onChange={(e) => setNewIP(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddIP())}
-                            />
-                            <Button variant="outline" onClick={handleAddIP}>
-                                {t('common.actions.add', 'Add')}
+                            <Button type="submit" disabled={loading}>
+                                {loading ? t('common.saving', 'Saving…') : t('app.serverSettingsTab.saveChanges', 'Save changes')}
                             </Button>
-                        </div>
+                        </form>
+                    </Card>
+                </DetailSettingsSection>
+            )}
 
-                        {connectionInfo?.ip_address && allowedIPs.length > 0 && !allowedIPs.some(ip => {
-                            return ip === connectionInfo.ip_address || ip.includes('*') || ip.includes('/');
-                        }) && (
-                            <div className="security-warning">
-                                {t('app.serverSettingsTab.currentConnectionIp', 'Current connection IP (')}{connectionInfo.ip_address}{t('app.serverSettingsTab.mayBeBlockedByTheseRules', ') may be blocked by these rules.')}
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                <div className="form-section form-section--accent">
-                    <div className="form-section__header">
-                        <span className="form-section__icon"><KeyIcon /></span>
-                        <div>
-                            <h3>{t('app.serverSettingsTab.apiKeyRotation', 'API key rotation')}
-                                <InfoTip>{t('app.serverSettingsTab.rotateTheApiCredentialsUsedBy', 'Rotate the API credentials used by the agent. The agent must be online to receive new credentials.')}</InfoTip></h3>
-                            <p className="section-description">{t('app.serverSettingsTab.rotateAgentCredentials', 'Rotate agent credentials.')}</p>
-                        </div>
-                    </div>
-                    <div className="key-rotation-actions">
-                        <Button
-                            variant="outline"
-                            onClick={handleRotateKey}
-                            disabled={rotatingKey || server.status !== 'online'}
-                        >
-                            <KeyIcon /> {rotatingKey ? t('app.serverSettingsTab.rotating', 'Rotating…') : t('app.serverSettingsTab.rotateApiKey', 'Rotate API key')}
-                        </Button>
-                        {server.api_key_last_rotated && (
-                            <span className="key-rotation-hint">{t('app.serverSettingsTab.lastRotated', 'Last rotated:')} {formatDateTime(server.api_key_last_rotated)}</span>
-                        )}
-                    </div>
-
-                    {server.status !== 'online' && (
-                        <div className="security-notice">
-                            {t('app.serverSettingsTab.serverMustBeOnlineToRotate', 'Server must be online to rotate credentials.')}
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            <div className="form-section form-section--accent shared-resources-section">
-                <div className="form-section__header">
-                    <span className="form-section__icon"><TagIcon /></span>
-                    <div>
-                        <h3>{t('app.serverSettingsTab.tags', 'Tags')}</h3>
-                        <p className="section-description">
+            {section === 'tags' && (
+                <DetailSettingsSection title={t('app.serverSettingsTab.tags', 'Tags')}>
+                    <Card variant="legacy" className="card settings-section">
+                        <p className="hint">
                             {t('app.serverSettingsTab.freeFormLabelsForGroupingAnd', 'Free-form labels for grouping and filtering this server across the panel.')}
                         </p>
-                    </div>
-                </div>
-                <TagsPanel resourceType="server" resourceId={server.id} />
-            </div>
+                        <TagsPanel resourceType="server" resourceId={server.id} />
+                    </Card>
+                </DetailSettingsSection>
+            )}
 
-            <DangerZone
-                title={t('app.serverSettingsTab.dangerZone', 'Remove server')}
-                description={t('app.serverSettingsTab.removingThisServerWillDisconnectThe', 'Removing this server will disconnect the agent and delete all associated data.')}
-                action={
-                    <Button variant="destructive" onClick={onDelete}>
-                        <TrashIcon /> {t('app.serverSettingsTab.removeServer', 'Remove server')}
-                    </Button>
-                }
-            />
-        </div>
+            {section === 'connection' && (
+                <DetailSettingsSection
+                    title={<>
+                        {t('app.serverSettingsTab.connectionString', 'Connection string')}
+                        <InfoTip>{connectionStringHelp(server, t)}</InfoTip>
+                    </>}
+                >
+                    <Card variant="legacy" className="card settings-section">
+                        <p className="hint">{t('app.serverSettingsTab.pairOrRepair', 'Pair or re-pair this server.')}</p>
+                        <Button onClick={onRegenerateToken}>
+                            <KeyIcon /> {t('app.serverSettingsTab.generateConnectionString', 'Generate connection string')}
+                        </Button>
+                    </Card>
+                </DetailSettingsSection>
+            )}
+
+            {section === 'allowlist' && (
+                <DetailSettingsSection
+                    title={<>
+                        {t('app.serverSettingsTab.connectionIpAllowlist', 'Connection and IP allowlist')}
+                        <InfoTip>{t('app.serverSettingsTab.restrictWhichIpsCanConnectSupports', 'Restrict which IPs can connect. Supports single IPs, CIDR notation, and wildcards.')}</InfoTip>
+                    </>}
+                >
+                    <Card variant="legacy" className="card settings-section">
+                        <p className="hint">{t('app.serverSettingsTab.allowedIps', 'Allowed IPs only.')}</p>
+
+                        {connectionInfo && (
+                            <InfoList className="security-info-bar">
+                                <InfoItem
+                                    label={t('app.serverSettingsTab.connectionIp', 'Connection IP')}
+                                    value={connectionInfo.ip_address || 'Not connected'}
+                                    mono
+                                />
+                                {connectionInfo.connected_since && (
+                                    <InfoItem
+                                        label={t('app.serverSettingsTab.connectedSince', 'Connected since')}
+                                        value={formatDateTime(connectionInfo.connected_since)}
+                                    />
+                                )}
+                            </InfoList>
+                        )}
+
+                        <div className="subsection">
+                            <div className="ip-list">
+                                {allowedIPs.length === 0 ? (
+                                    <div className="ip-empty">{t('app.serverSettingsTab.noIpRestrictionsAllIpsAllowed', 'No IP restrictions (all IPs allowed)')}</div>
+                                ) : (
+                                    allowedIPs.map((ip, idx) => (
+                                        <div key={idx} className="ip-item">
+                                            <code>{ip}</code>
+                                            {connectionInfo?.ip_address === ip && (
+                                                <Pill kind="green" dot={false}>{t('common.labels.current', 'Current')}</Pill>
+                                            )}
+                                            <Button variant="unstyled" type="button"
+                                                className="btn-icon danger"
+                                                onClick={() => handleRemoveIP(ip)}
+                                                title={t('common.actions.remove', 'Remove')}
+                                            >
+                                                <TrashIcon />
+                                            </Button>
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+
+                            <div className="ip-add-form">
+                                <Input
+                                    type="text"
+                                    placeholder={t('app.serverSettingsTab.ipAddressOrCidrEG', 'IP address or CIDR (e.g. 192.168.1.0/24)')}
+                                    value={newIP}
+                                    onChange={(e) => setNewIP(e.target.value)}
+                                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddIP())}
+                                />
+                                <Button variant="outline" onClick={handleAddIP}>
+                                    {t('common.actions.add', 'Add')}
+                                </Button>
+                            </div>
+
+                            {connectionInfo?.ip_address && allowedIPs.length > 0 && !allowedIPs.some(ip => {
+                                return ip === connectionInfo.ip_address || ip.includes('*') || ip.includes('/');
+                            }) && (
+                                <div className="security-warning">
+                                    {t('app.serverSettingsTab.currentConnectionIp', 'Current connection IP (')}{connectionInfo.ip_address}{t('app.serverSettingsTab.mayBeBlockedByTheseRules', ') may be blocked by these rules.')}
+                                </div>
+                            )}
+                        </div>
+                    </Card>
+                </DetailSettingsSection>
+            )}
+
+            {section === 'credentials' && (
+                <DetailSettingsSection
+                    title={<>
+                        {t('app.serverSettingsTab.apiKeyRotation', 'API key rotation')}
+                        <InfoTip>{t('app.serverSettingsTab.rotateTheApiCredentialsUsedBy', 'Rotate the API credentials used by the agent. The agent must be online to receive new credentials.')}</InfoTip>
+                    </>}
+                >
+                    <Card variant="legacy" className="card settings-section">
+                        <p className="hint">{t('app.serverSettingsTab.rotateAgentCredentials', 'Rotate agent credentials.')}</p>
+                        <div className="key-rotation-actions">
+                            <Button
+                                variant="outline"
+                                onClick={handleRotateKey}
+                                disabled={rotatingKey || server.status !== 'online'}
+                            >
+                                <KeyIcon /> {rotatingKey ? t('app.serverSettingsTab.rotating', 'Rotating…') : t('app.serverSettingsTab.rotateApiKey', 'Rotate API key')}
+                            </Button>
+                            {server.api_key_last_rotated && (
+                                <span className="key-rotation-hint">{t('app.serverSettingsTab.lastRotated', 'Last rotated:')} {formatDateTime(server.api_key_last_rotated)}</span>
+                            )}
+                        </div>
+
+                        {server.status !== 'online' && (
+                            <div className="security-notice">
+                                {t('app.serverSettingsTab.serverMustBeOnlineToRotate', 'Server must be online to rotate credentials.')}
+                            </div>
+                        )}
+                    </Card>
+                </DetailSettingsSection>
+            )}
+
+            {section === 'danger' && (
+                <DetailSettingsSection title={t('app.serverSettingsTab.dangerZone', 'Remove server')}>
+                    <DangerZone
+                        description={t('app.serverSettingsTab.removingThisServerWillDisconnectThe', 'Removing this server will disconnect the agent and delete all associated data.')}
+                        action={
+                            <Button variant="destructive" onClick={onDelete}>
+                                <TrashIcon /> {t('app.serverSettingsTab.removeServer', 'Remove server')}
+                            </Button>
+                        }
+                    />
+                </DetailSettingsSection>
+            )}
+        </DetailSettings>
     );
 };
 

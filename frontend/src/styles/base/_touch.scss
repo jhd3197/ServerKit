@@ -10,7 +10,6 @@
     .btn,
     .quick-create,
     .sk-notif__bell,
-    .skw-tab,
     .skw-iconbtn,
     .skw-barbtn,
     .skw-actions__row,
@@ -19,7 +18,6 @@
     .sk-viewpick,
     .ui-select-trigger,
     .settings-nav-item,
-    .setup-health-widget__dismiss,
     .detail-tabs__tab,
     [role='tab'],
     input.ui-input,
@@ -31,9 +29,7 @@
     .quick-create,
     .sk-notif__bell,
     .sk-gridicon,
-    .skw-iconbtn,
-    .setup-health-widget__dismiss,
-    .skw-tab--add {
+    .skw-iconbtn {
         min-width: $control-lg;
     }
 

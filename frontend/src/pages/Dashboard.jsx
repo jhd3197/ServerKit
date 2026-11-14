@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-    Grid2x2, History, Keyboard, Maximize2, Plus,
-    RefreshCw, SlidersHorizontal, X,
+    ChevronDown, Grid2x2, History, Keyboard, Maximize2, Pencil, Plus,
+    RefreshCw, SlidersHorizontal, Trash2, X,
 } from 'lucide-react';
 import api from '../services/api';
 import { useAuth } from '../contexts/useAuth.js';
@@ -12,11 +12,14 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@
 import ServerPicker from '../components/ServerPicker';
 import { SegControl } from '@/components/ds';
 import { Button } from '@/components/ui/button';
+import {
+    DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
+    DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import ChangeBar from '../components/ds/ChangeBar';
 import ShortcutSheet from '../components/ds/ShortcutSheet';
 import EmptyState from '../components/EmptyState';
 import PluginSlot from '../components/PluginSlot';
-import SetupHealthWidget from '../components/dashboard/SetupHealthWidget';
 import { DashGrid } from '../components/dashboard/grid/DashGrid';
 import { WidgetLibrary } from '../components/dashboard/grid/WidgetLibrary';
 import { WidgetEditor } from '../components/dashboard/grid/WidgetEditor';
@@ -485,68 +488,79 @@ const Dashboard = () => {
             {/* Extension slot: widgets contributed to the top of the dashboard */}
             <PluginSlot name="dashboard.top" />
 
-            {/* Setup health. Deliberately NOT a placeable board widget: an
-                unfirewalled box must be visible without the operator first
-                opting into a widget, and the card collapses to a single "all
-                set" line once everything is done, so it costs nothing when
-                clean. Admin-only — the endpoint is too. */}
-            {isAdmin && <SetupHealthWidget />}
-
             {/* Board tabs + board-wide controls */}
             <div className="skw-bar">
-                <div className="skw-tabs">
-                    {boards.map((board) => (
-                        <div
-                            key={board.id}
-                            className={`skw-tab${board.id === activeBoardId ? ' is-on' : ''}`}
-                            onClick={() => handleBoardSwitch(board.id)}
-                            onDoubleClick={() => edit && setRenamingId(board.id)}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => { if (e.key === 'Enter') handleBoardSwitch(board.id); }}
-                        >
-                            <Grid2x2 size={14} aria-hidden="true" />
-                            {renamingId === board.id ? (
-                                <input
-                                    className="skw-rename"
-                                    autoFocus
-                                    defaultValue={board.name}
-                                    onBlur={(e) => {
-                                        renameBoard(board.id, e.target.value.trim() || board.name);
-                                        setRenamingId(null);
-                                    }}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') e.target.blur();
-                                        if (e.key === 'Escape') setRenamingId(null);
-                                    }}
-                                />
-                            ) : (
-                                <span>{board.name}</span>
-                            )}
-                            <span className="skw-tab__count">
-                                {board.id === activeBoardId && edit ? widgets.length : (board.widgets || []).length}
-                            </span>
-                            {edit && boards.length > 1 && board.id === activeBoardId && (
-                                <Button variant="unstyled"
+                {/* One selector for every dashboard, however many there are: a
+                    row of tabs wrapped the bar onto a second line and only got
+                    longer with each board. */}
+                <div className="skw-boardpick">
+                    {renamingId === activeBoardId && activeBoard ? (
+                        <input
+                            className="skw-rename"
+                            autoFocus
+                            aria-label={t('app.dashboard.dashboardName', 'Dashboard name')}
+                            defaultValue={activeBoard.name}
+                            onBlur={(e) => {
+                                renameBoard(activeBoard.id, e.target.value.trim() || activeBoard.name);
+                                setRenamingId(null);
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') e.target.blur();
+                                if (e.key === 'Escape') setRenamingId(null);
+                            }}
+                        />
+                    ) : (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="unstyled"
                                     type="button"
-                                    className="skw-iconbtn skw-iconbtn--bare"
-                                    aria-label={t('app.dashboard.delete', 'Delete {{name}}', { name: board.name })}
-                                    onClick={(e) => { e.stopPropagation(); handleRemoveBoard(board.id); }}
+                                    className="skw-barbtn skw-boardpick__btn"
+                                    aria-label={t('app.dashboard.switchDashboard', 'Switch dashboard')}
                                 >
-                                    <X size={12} />
+                                    <Grid2x2 size={14} aria-hidden="true" />
+                                    <span className="skw-boardpick__name">{activeBoard?.name}</span>
+                                    <span className="skw-boardpick__count">{widgets.length}</span>
+                                    <ChevronDown size={14} aria-hidden="true" />
                                 </Button>
-                            )}
-                        </div>
-                    ))}
-                    <Button variant="unstyled"
-                        type="button"
-                        className="skw-tab skw-tab--add"
-                        onClick={handleCreateBoard}
-                        aria-label={t('app.dashboard.newDashboard', 'New dashboard')}
-                        title={t('app.dashboard.newDashboard', 'New dashboard')}
-                    >
-                        <Plus size={14} />
-                    </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="start" className="skw-boardpick__menu">
+                                <DropdownMenuLabel>{t('app.dashboard.dashboards', 'Dashboards')}</DropdownMenuLabel>
+                                <DropdownMenuRadioGroup
+                                    value={String(activeBoardId)}
+                                    onValueChange={(value) => {
+                                        const next = boards.find((board) => String(board.id) === value);
+                                        if (next) handleBoardSwitch(next.id);
+                                    }}
+                                >
+                                    {boards.map((board) => (
+                                        <DropdownMenuRadioItem key={board.id} value={String(board.id)}>
+                                            <span className="skw-boardpick__name">{board.name}</span>
+                                            <span className="skw-boardpick__count">
+                                                {board.id === activeBoardId ? widgets.length : (board.widgets || []).length}
+                                            </span>
+                                        </DropdownMenuRadioItem>
+                                    ))}
+                                </DropdownMenuRadioGroup>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={handleCreateBoard}>
+                                    <Plus size={14} /> {t('app.dashboard.newDashboard', 'New dashboard')}
+                                </DropdownMenuItem>
+                                {edit && activeBoard && (
+                                    <>
+                                        <DropdownMenuItem onClick={() => setRenamingId(activeBoard.id)}>
+                                            <Pencil size={14} /> {t('app.dashboard.renameDashboard', 'Rename dashboard')}
+                                        </DropdownMenuItem>
+                                        {boards.length > 1 && (
+                                            <DropdownMenuItem className="text-destructive" onClick={() => handleRemoveBoard(activeBoard.id)}>
+                                                <Trash2 size={14} /> {t('app.dashboard.deleteDashboard', 'Delete dashboard')}
+                                            </DropdownMenuItem>
+                                        )}
+                                    </>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    )}
                 </div>
 
                 <div className="skw-bar__ctl">
