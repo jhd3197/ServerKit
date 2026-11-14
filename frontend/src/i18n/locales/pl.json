@@ -4290,9 +4290,7 @@
             "securityPosture": "Postawa bezpieczeństwa",
             "serviceInfo": "Informacje o usłudze",
             "startToViewMetrics": "Uruchom usługę, aby zobaczyć metryki.",
-            "successful": "Udany",
             "thisMonth": "w tym miesiącu",
-            "totalDeploys": "Łączna liczba wdrożeń",
             "workers": "Procesy robocze"
         },
         "packagesTab": {

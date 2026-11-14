@@ -4290,9 +4290,7 @@
             "securityPosture": "安全态势",
             "serviceInfo": "服务信息",
             "startToViewMetrics": "启动服务以查看指标。",
-            "successful": "成功的",
             "thisMonth": "本月",
-            "totalDeploys": "部署总数",
             "workers": "工作进程"
         },
         "packagesTab": {

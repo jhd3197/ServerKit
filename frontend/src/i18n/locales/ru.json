@@ -4290,9 +4290,7 @@
             "securityPosture": "Положение безопасности",
             "serviceInfo": "Информация о сервисе",
             "startToViewMetrics": "Запустите сервис, чтобы увидеть метрики.",
-            "successful": "Успешный",
             "thisMonth": "в этом месяце",
-            "totalDeploys": "Всего развертываний",
             "workers": "Рабочие процессы"
         },
         "packagesTab": {

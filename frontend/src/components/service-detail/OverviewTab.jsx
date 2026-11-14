@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect  } from 'react';
 import { Link } from 'react-router-dom';
-import { Activity, Rocket, CheckCircle2, XCircle, Globe, Database, ShieldCheck, ExternalLink } from 'lucide-react';
+import { Globe, Database, ShieldCheck, ExternalLink } from 'lucide-react';
 import { servicePortUrl } from '@/utils/serviceUrl';
 import api from '../../services/api';
 import { useDeployments } from '../../hooks/useDeployments';
@@ -14,7 +14,7 @@ import AttachmentsCard from './AttachmentsCard';
 import PoolerCard from './PoolerCard';
 import SlotsCard from './SlotsCard';
 import HintsCard from './HintsCard';
-import { KpiBand, MetricCard, Pill, Gauge, EnvTag, statusKind } from '@/components/ds';
+import { Pill, Gauge, EnvTag, statusKind } from '@/components/ds';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import { normalizeContainerStats, resolveAppContainerId } from '@/utils/containerMetrics';
@@ -114,34 +114,6 @@ const OverviewTab = ({ app, deployConfig }) => {
 
     return (
         <div className="overview-tab">
-            {/* KPI Strip */}
-            <KpiBand>
-                <MetricCard
-                    tone={app.isRunning ? 'green' : 'amber'}
-                    icon={<Activity size={16} />}
-                    value={app.isRunning ? 'Live' : 'Stopped'}
-                    label={t('common.labels.status', 'Status')}
-                />
-                <MetricCard
-                    tone="accent"
-                    icon={<Rocket size={16} />}
-                    value={deployments.length}
-                    label={t('app.overviewTab.totalDeploys', 'Total deploys')}
-                />
-                <MetricCard
-                    tone="green"
-                    icon={<CheckCircle2 size={16} />}
-                    value={successfulDeploys.length}
-                    label={t('app.overviewTab.successful', 'Successful')}
-                />
-                <MetricCard
-                    tone="red"
-                    icon={<XCircle size={16} />}
-                    value={failedDeploys.length}
-                    label={t('common.state.failed', 'Failed')}
-                />
-            </KpiBand>
-
             <div className="overview-tab__grid">
                 {/* Service Info Card */}
                 <div className="overview-tab__card">
@@ -335,22 +307,30 @@ const OverviewTab = ({ app, deployConfig }) => {
             {/* Bottleneck hints from the traffic above */}
             <HintsCard app={app} />
 
-            {/* Cache / storage / queue this app uses */}
-            <AttachmentsCard app={app} />
+            {/* Short operational cards sit two-up instead of one full-width
+                row each; a lone or trailing odd card takes the whole row. */}
+            <div className="overview-tab__grid overview-tab__grid--fill">
+                {/* Cache / storage / queue this app uses */}
+                <AttachmentsCard app={app} />
 
-            {/* PgBouncer beside an installed PostgreSQL */}
-            <PoolerCard app={app} />
+                {/* PgBouncer beside an installed PostgreSQL */}
+                <PoolerCard app={app} />
 
-            {/* A/B slot deploys: live release, warm standby, switch back */}
-            <SlotsCard app={app} />
+                {/* A/B slot deploys: live release, warm standby, switch back */}
+                <SlotsCard app={app} />
+            </div>
 
             {/* Recent Deployments */}
             <div className="overview-tab__card overview-tab__card--full">
                 <div className="overview-tab__card-header-row">
                     <h3 className="overview-tab__card-title">{t('app.overviewTab.recentDeployments', 'Recent deployments')}</h3>
-                    {deployments.length > 3 && (
+                    {deployments.length > 0 && (
                         <span className="overview-tab__see-all">
-                            {deployments.length} total
+                            {t('app.overviewTab.deploySummary', '{{total}} total · {{successful}} successful · {{failed}} failed', {
+                                total: deployments.length,
+                                successful: successfulDeploys.length,
+                                failed: failedDeploys.length,
+                            })}
                         </span>
                     )}
                 </div>

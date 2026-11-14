@@ -746,6 +746,11 @@ h3.svc-eyebrow {
         @media (max-width: $breakpoint-md) {
             grid-template-columns: 1fr;
         }
+
+        // Cards that may or may not render: a lone card, or the odd one at
+        // the end, takes the whole row instead of leaving a hole beside it.
+        &--fill > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+        &--fill:empty { display: none; }
     }
 
     &__card {

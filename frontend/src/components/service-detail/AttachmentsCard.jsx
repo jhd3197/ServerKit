@@ -157,7 +157,7 @@ export default function AttachmentsCard({ app }) {
     const open = kinds.filter((k) => !attachedKinds.has(k));
 
     return (
-        <div className="overview-tab__card overview-tab__card--full attachments">
+        <div className="overview-tab__card attachments">
             <div className="overview-tab__card-header-row">
                 <h3 className="overview-tab__card-title">{t('app.attachments.title', 'Attached services')}</h3>
                 {open.length > 0 && (

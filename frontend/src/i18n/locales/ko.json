@@ -4290,9 +4290,7 @@
             "securityPosture": "보안 태세",
             "serviceInfo": "서비스 정보",
             "startToViewMetrics": "메트릭을 보려면 서비스를 시작하세요.",
-            "successful": "성공",
             "thisMonth": "이번 달",
-            "totalDeploys": "총 배포",
             "workers": "워커"
         },
         "packagesTab": {

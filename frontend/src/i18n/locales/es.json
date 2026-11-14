@@ -4291,9 +4291,7 @@
             "securityPosture": "Postura de seguridad",
             "serviceInfo": "Información del servicio",
             "startToViewMetrics": "Inicia el servicio para ver las métricas.",
-            "successful": "Exitosos",
             "thisMonth": "este mes",
-            "totalDeploys": "Despliegues totales",
             "workers": "Workers"
         },
         "packagesTab": {

@@ -4290,9 +4290,7 @@
             "securityPosture": "Sicherheitslage",
             "serviceInfo": "Service-Info",
             "startToViewMetrics": "Starten Sie den Dienst, um Metriken anzuzeigen.",
-            "successful": "Erfolgreich",
             "thisMonth": "diesen Monat",
-            "totalDeploys": "Gesamtzahl der Bereitstellungen",
             "workers": "Worker"
         },
         "packagesTab": {

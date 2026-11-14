@@ -4290,9 +4290,7 @@
             "securityPosture": "Güvenlik duruşu",
             "serviceInfo": "Servis Bilgisi",
             "startToViewMetrics": "Metrikleri görmek için hizmeti başlatın.",
-            "successful": "Başarılı",
             "thisMonth": "bu ay",
-            "totalDeploys": "Toplam Dağıtımlar",
             "workers": "İşçiler"
         },
         "packagesTab": {

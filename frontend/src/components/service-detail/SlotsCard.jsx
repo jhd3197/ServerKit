@@ -100,7 +100,7 @@ export default function SlotsCard({ app }) {
     }
 
     return (
-        <div className="overview-tab__card overview-tab__card--full slots-card">
+        <div className="overview-tab__card slots-card">
             <div className="overview-tab__card-header-row">
                 <h3 className="overview-tab__card-title">{t('app.slots.title', 'Slot deploys')}</h3>
                 <Pill kind={state.enabled ? 'green' : 'gray'}>

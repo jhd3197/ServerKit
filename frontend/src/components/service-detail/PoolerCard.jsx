@@ -46,7 +46,7 @@ export default function PoolerCard({ app }) {
     }
 
     return (
-        <div className="overview-tab__card overview-tab__card--full pooler">
+        <div className="overview-tab__card pooler">
             <div className="overview-tab__card-header-row">
                 <h3 className="overview-tab__card-title">{t('app.pooler.title', 'Connection pooling')}</h3>
                 <Switch
