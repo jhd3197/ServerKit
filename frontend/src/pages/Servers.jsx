@@ -18,16 +18,16 @@ import {
 import {
     DataTable, DataTableFooter, Drawer, Gauge, Pill, SearchField, statusKind,
 } from '@/components/ds';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useConfirm } from '@/hooks/useConfirm';
 import CopyField from '../components/CopyField';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import useFocusParam from '@/hooks/useFocusParam';
+import { formatBytes } from '@/utils/formatBytes';
 import LinkPanelForm from '../components/servers/LinkPanelForm';
 import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
@@ -51,13 +51,22 @@ const NO_GROUP = '__none';
 // NOTE for anyone adding a metric preset: only ever use `gt` on cpu/memory/disk.
 // Their sortValue is null for a non-live row, and a `lt` rule would match every
 // offline and pending server (see the null guard in ds/grid/fields.js).
+// Fields a server HAS but the table does not open with. Everything here is one
+// switch away in Filters and fields; the default table shows what you scan a
+// fleet for (state, health, load, what it runs, when it last answered).
+const DEFAULT_HIDDEN = [
+    'host', 'ip', 'group', 'level', 'agent', 'os', 'arch', 'cores',
+    'ram', 'diskTotal', 'docker', 'domains', 'tags', 'added',
+];
+const hiding = (...extra) => [...DEFAULT_HIDDEN, ...extra];
+
 const STATUS = (...value) => ({ match: 'all', rules: [{ id: 'st', field: 'status', op: 'any', value }] });
 const NO_RULES = { match: 'all', rules: [] };
 
 const SERVER_BUILTIN_VIEWS = [
-    { name: 'Online', state: { search: '', sorts: [], hiddenKeys: [], columnFilters: STATUS('online') } },
-    { name: 'Offline', state: { search: '', sorts: [], hiddenKeys: [], columnFilters: STATUS('offline') } },
-    { name: 'By CPU', state: { search: '', sorts: [{ key: 'cpu', direction: 'desc' }], hiddenKeys: [], columnFilters: NO_RULES } },
+    { name: 'Online', state: { search: '', sorts: [], hiddenKeys: DEFAULT_HIDDEN, columnFilters: STATUS('online') } },
+    { name: 'Offline', state: { search: '', sorts: [], hiddenKeys: DEFAULT_HIDDEN, columnFilters: STATUS('offline') } },
+    { name: 'By CPU', state: { search: '', sorts: [{ key: 'cpu', direction: 'desc' }], hiddenKeys: DEFAULT_HIDDEN, columnFilters: NO_RULES } },
     {
         // Machines that HAVE an agent but stopped answering, longest silence
         // first. `pending` is excluded — that means nobody ever installed one.
@@ -67,7 +76,7 @@ const SERVER_BUILTIN_VIEWS = [
         state: {
             search: '', groupBy: null,
             sorts: [{ key: 'lastSeen', direction: 'asc' }],
-            hiddenKeys: ['cpu', 'memory', 'disk'],
+            hiddenKeys: hiding('cpu', 'memory', 'disk'),
             columnFilters: {
                 match: 'all',
                 rules: [{ id: 'nr1', field: 'status', op: 'any', value: ['offline', 'connecting'] }],
@@ -85,7 +94,7 @@ const SERVER_BUILTIN_VIEWS = [
         // only ever match a reporting machine.
         name: 'Under load',
         state: {
-            search: '', groupBy: null, hiddenKeys: [],
+            search: '', groupBy: null, hiddenKeys: DEFAULT_HIDDEN,
             sorts: [{ key: 'cpu', direction: 'desc' }],
             columnFilters: {
                 match: 'any',
@@ -102,7 +111,7 @@ const SERVER_BUILTIN_VIEWS = [
         state: {
             search: '', groupBy: null,
             sorts: [{ key: 'disk', direction: 'desc' }],
-            hiddenKeys: ['agent', 'cpu', 'memory'],
+            hiddenKeys: hiding('cpu', 'memory'),
             columnFilters: {
                 match: 'all',
                 rules: [
@@ -119,7 +128,8 @@ const SERVER_BUILTIN_VIEWS = [
         // not a sentinel — see the `value` accessor on that column.
         name: 'Ungrouped',
         state: {
-            search: '', groupBy: null, hiddenKeys: [],
+            // The Group column is the point of this view, so it shows.
+            search: '', groupBy: null, hiddenKeys: DEFAULT_HIDDEN.filter((key) => key !== 'group'),
             sorts: [{ key: 'name', direction: 'asc' }],
             columnFilters: {
                 match: 'all',
@@ -169,6 +179,56 @@ const meterColumn = (key, header, metricKey) => ({
 // Columns for the shared DataTable. Cell markup and classNames are identical
 // to the hand-rolled table they replace, so _servers.scss keeps applying
 // (.sk-cell-name, .sk-cell-mono, .servers-row__*, .servers-table__meter).
+// A count column (services, domains): the number, or a dash for none so a
+// column of zeros does not read as data.
+const countColumn = (key, header, headerKey, field) => ({
+    key,
+    headerKey, header,
+    sortable: true,
+    type: 'num',
+    value: (server) => server[field] ?? 0,
+    sortValue: (server) => server[field] ?? 0,
+    width: '96px',
+    cellClassName: 'sk-cell-dim',
+    render: (server) => (server[field] ? server[field] : <span className="servers-row__nodata">&mdash;</span>),
+});
+
+// A plain text fact about the machine (IP, Docker version): filterable and
+// sortable as text, shown in mono.
+const factColumn = (key, header, headerKey, read) => ({
+    key,
+    headerKey, header,
+    sortable: true,
+    type: 'text',
+    value: (server) => read(server) || '',
+    sortValue: (server) => read(server) || '',
+    cellClassName: 'sk-cell-mono',
+    render: (server) => read(server) || <span className="servers-row__nodata">&mdash;</span>,
+});
+
+// A capacity (total memory, total disk): sorts by bytes, reads as a size. Not
+// filterable: a rule would have to be typed in bytes.
+const capacityColumn = (key, header, headerKey, field) => ({
+    key,
+    headerKey, header,
+    sortable: true,
+    filterable: false,
+    sortValue: (server) => server[field] ?? null,
+    width: '112px',
+    cellClassName: 'sk-cell-dim',
+    render: (server) => (server[field]
+        ? formatBytes(server[field])
+        : <span className="servers-row__nodata">&mdash;</span>),
+});
+
+// Columns for the shared DataTable. Cell markup and classNames are identical
+// to the hand-rolled table they replace, so _servers.scss keeps applying
+// (.sk-cell-name, .sk-cell-mono, .servers-row__*, .servers-table__meter).
+//
+// Order is the table's default order: what you scan a fleet for first, then
+// the facts about each machine. The second half is hidden until asked for
+// (DEFAULT_HIDDEN); every field the list endpoint returns about a server is
+// here, so "can I see / filter by X" is answered in Filters and fields.
 const SERVER_COLUMNS = [
     {
         key: 'name',
@@ -192,36 +252,6 @@ const SERVER_COLUMNS = [
         ),
     },
     {
-        key: 'host',
-        headerKey: 'app.servers.host', header: 'Host',
-        cellClassName: 'sk-cell-mono',
-        render: (server) => server.hostname || server.ip_address || '\u2014',
-    },
-    {
-        key: 'agent',
-        headerKey: 'app.servers.agent', header: 'Agent',
-        cellClassName: 'sk-cell-dim servers-row__agent',
-        // The version is a machine value; the "not installed" fallback is words.
-        render: (server) => (server.agent_version
-            ? <span className="mono">{server.agent_version}</span>
-            : 'not installed'),
-    },
-    {
-        key: 'group',
-        headerKey: 'app.servers.group', header: 'Group',
-        sortable: true,
-        type: 'enum',
-        // An ungrouped server needs a real LABEL, not null: the enum engine
-        // compares String(value), so a null would only ever be matchable as the
-        // literal string 'null'. This label is what the "Ungrouped" preset
-        // filters on, and what the column menu lists.
-        value: (server) => server.group_name || 'Ungrouped',
-        groupable: true,
-        render: (server) => (
-            server.group_name || <span className="servers-row__nodata">{t('app.servers.ungrouped', 'Ungrouped')}</span>
-        ),
-    },
-    {
         key: 'status',
         headerKey: 'common.labels.status', header: 'Status',
         sortable: true,
@@ -237,6 +267,48 @@ const SERVER_COLUMNS = [
             const status = server.status || 'pending';
             return <Pill kind={statusKind(status)}>{status}</Pill>;
         },
+    },
+    {
+        key: 'health',
+        headerKey: 'app.servers.health', header: 'Health',
+        sortable: false,
+        render: (server) => {
+            const health = serverHealth(server);
+            const detail = health.failing.length ? ` (${health.failing.join(', ')})` : '';
+            return (
+                <Pill kind={health.kind} title={detail || undefined}>
+                    {healthLabel(health.code) + detail}
+                </Pill>
+            );
+        },
+    },
+    meterColumn('cpu', 'CPU', 'cpu_percent'),
+    meterColumn('memory', 'Memory', 'memory_percent'),
+    meterColumn('disk', 'Disk', 'disk_percent'),
+    countColumn('services', 'Services', 'common.labels.services', 'services_count'),
+    countColumn('domains', 'Domains', 'common.labels.domains', 'domains_count'),
+    {
+        key: 'lastSeen',
+        headerKey: 'app.servers.lastSeen', header: 'Last seen',
+        sortable: true,
+        sortValue: (server) => (server.last_seen ? new Date(server.last_seen).getTime() : null),
+        cellClassName: 'sk-cell-dim servers-row__seen',
+        render: (server) => formatLastSeen(server.last_seen),
+    },
+    {
+        key: 'group',
+        headerKey: 'app.servers.group', header: 'Group',
+        sortable: true,
+        type: 'enum',
+        // An ungrouped server needs a real LABEL, not null: the enum engine
+        // compares String(value), so a null would only ever be matchable as the
+        // literal string 'null'. This label is what the "Ungrouped" preset
+        // filters on, and what the column menu lists.
+        value: (server) => server.group_name || 'Ungrouped',
+        groupable: true,
+        render: (server) => (
+            server.group_name || <span className="servers-row__nodata">{t('app.servers.ungrouped', 'Ungrouped')}</span>
+        ),
     },
     {
         key: 'level',
@@ -257,29 +329,80 @@ const SERVER_COLUMNS = [
         },
     },
     {
-        key: 'health',
-        headerKey: 'app.servers.health', header: 'Health',
-        sortable: false,
-        render: (server) => {
-            const health = serverHealth(server);
-            const detail = health.failing.length ? ` (${health.failing.join(', ')})` : '';
-            return (
-                <Pill kind={health.kind} title={detail || undefined}>
-                    {healthLabel(health.code) + detail}
-                </Pill>
-            );
-        },
+        key: 'host',
+        headerKey: 'app.servers.host', header: 'Host',
+        cellClassName: 'sk-cell-mono',
+        render: (server) => server.hostname || server.ip_address || '\u2014',
     },
-    meterColumn('cpu', 'CPU', 'cpu_percent'),
-    meterColumn('memory', 'Memory', 'memory_percent'),
-    meterColumn('disk', 'Disk', 'disk_percent'),
+    factColumn('ip', 'IP address', 'common.labels.ipAddress', (server) => server.ip_address),
     {
-        key: 'lastSeen',
-        headerKey: 'app.servers.lastSeen', header: 'Last seen',
+        key: 'agent',
+        headerKey: 'app.servers.agent', header: 'Agent',
         sortable: true,
-        sortValue: (server) => (server.last_seen ? new Date(server.last_seen).getTime() : null),
-        cellClassName: 'sk-cell-dim servers-row__seen',
-        render: (server) => formatLastSeen(server.last_seen),
+        type: 'text',
+        value: (server) => server.agent_version || 'not installed',
+        sortValue: (server) => server.agent_version || '',
+        cellClassName: 'sk-cell-dim servers-row__agent',
+        // The version is a machine value; the "not installed" fallback is words.
+        render: (server) => (server.agent_version
+            ? <span className="mono">{server.agent_version}</span>
+            : 'not installed'),
+    },
+    {
+        key: 'os',
+        headerKey: 'app.servers.os', header: 'OS',
+        sortable: true,
+        type: 'enum',
+        groupable: true,
+        value: (server) => server.os_type || 'unknown',
+        sortValue: (server) => `${server.os_type || ''} ${server.os_version || ''}`.trim(),
+        cellClassName: 'sk-cell-dim',
+        render: (server) => [server.os_type, server.os_version].filter(Boolean).join(' ')
+            || <span className="servers-row__nodata">&mdash;</span>,
+    },
+    {
+        key: 'arch',
+        headerKey: 'app.servers.architecture', header: 'Architecture',
+        sortable: true,
+        type: 'enum',
+        groupable: true,
+        value: (server) => server.architecture || 'unknown',
+        cellClassName: 'sk-cell-mono',
+        render: (server) => server.architecture || <span className="servers-row__nodata">&mdash;</span>,
+    },
+    {
+        key: 'cores',
+        headerKey: 'app.servers.cpuCores', header: 'CPU cores',
+        sortable: true,
+        type: 'num',
+        value: (server) => server.cpu_cores ?? null,
+        sortValue: (server) => server.cpu_cores ?? null,
+        width: '104px',
+        cellClassName: 'sk-cell-dim',
+        render: (server) => server.cpu_cores || <span className="servers-row__nodata">&mdash;</span>,
+    },
+    capacityColumn('ram', 'Total memory', 'app.servers.totalMemory', 'total_memory'),
+    capacityColumn('diskTotal', 'Total disk', 'app.servers.totalDisk', 'total_disk'),
+    factColumn('docker', 'Docker', 'common.labels.docker', (server) => server.docker_version),
+    {
+        key: 'tags',
+        headerKey: 'app.servers.tags', header: 'Tags',
+        sortable: false,
+        type: 'text',
+        value: (server) => (server.tags || []).join(', '),
+        render: (server) => ((server.tags || []).length
+            ? <span className="servers-row__tags">{server.tags.map((tag) => <Pill key={tag} kind="gray" dot={false}>{tag}</Pill>)}</span>
+            : <span className="servers-row__nodata">&mdash;</span>),
+    },
+    {
+        key: 'added',
+        headerKey: 'app.servers.added', header: 'Added',
+        sortable: true,
+        type: 'date',
+        value: (server) => (server.created_at || '').slice(0, 10),
+        sortValue: (server) => (server.created_at ? new Date(server.created_at).getTime() : null),
+        cellClassName: 'sk-cell-dim',
+        render: (server) => (server.created_at ? formatDate(server.created_at) : <span className="servers-row__nodata">&mdash;</span>),
     },
     {
         key: 'open',
@@ -312,7 +435,7 @@ const Servers = () => {
     const { sorts, setSorts } = useTableSort({ storageKey: 'serverkit-table-servers-sort' });
     const {
         hiddenKeys, setHiddenKeys,
-    } = useColumnVisibility({ storageKey: 'serverkit-table-servers-cols' });
+    } = useColumnVisibility({ storageKey: 'serverkit-table-servers-cols-v2', defaultHidden: DEFAULT_HIDDEN });
     const [groupBy, setGroupBy] = useState(() => {
         try {
             return window.localStorage.getItem('serverkit-table-servers-group') || null;
@@ -381,9 +504,6 @@ const Servers = () => {
     // The tab-group top bar owns this page's controls, search included.
     useTopbarActions(() => (
         <>
-            <Button variant="outline" size="sm" onClick={() => setShowGroupModal(true)}>
-                <Folder size={16} /> {t('app.servers.groups', 'Groups')}
-            </Button>
             <Button variant="outline" size="sm" onClick={loadData} disabled={loading} title={t('app.servers.sync', 'Sync')} aria-label={t('app.servers.sync', 'Sync')}>
                 <RefreshCw size={16} className={loading ? 'spin' : ''} /> {t('app.servers.syncShort', 'Sync')}
             </Button>
@@ -411,30 +531,22 @@ const Servers = () => {
         setSorts,
         hiddenKeys,
         setHiddenKeys,
+        defaultHiddenKeys: DEFAULT_HIDDEN,
         groupBy,
         setGroupBy: changeGroupBy,
         pageState: viewPageState,
         applyPage: applyViewPageState,
     });
 
-    // Filter + "⋮" ride in the top bar next to the actions and the search box,
-    // not in a toolbar under the view name. That toolbar was also repeating the
-    // row count the view row already showed, with an "N online" tacked on that
-    // no filter, sort or view ever referred to.
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <>
-            <GridFilterButton
-                count={chrome.filterCount}
-                onClick={() => chrome.setDrawerOpen(true)}
-            />
-            <GridToolsMenu {...chrome.toolsProps} onRefresh={loadData} />
-        </>,
-    );
+    // Filters, the table tools and group management all live in the view
+    // selector's menu. The top bar keeps what creates or reloads (Sync, Add)
+    // and search; three more icons there said nothing a menu under the view's
+    // own name does not say better.
+    const hiddenFieldCount = SERVER_COLUMNS.filter((column) => column.header && hiddenKeys.includes(column.key)).length;
 
     if (loading) {
         return (
             <div className="sk-tabgroup__inner servers-page">
-                {topbarChrome}
                 <EmptyState loading loadingVariant="table" title={t('app.servers.scanningFleet', 'Scanning fleet…')} />
             </div>
         );
@@ -442,13 +554,21 @@ const Servers = () => {
 
     return (
         <div className="sk-tabgroup__inner servers-page" data-walkthrough="server-list">
-            {topbarChrome}
             <GridViewPicker
                 views={chrome.views}
                 label="servers"
                 onCreate={chrome.createView}
-            
-                actions={chromeActions}
+                filters={{
+                    count: chrome.filterCount,
+                    hidden: hiddenFieldCount,
+                    onOpen: () => chrome.setDrawerOpen(true),
+                }}
+                tools={chrome.toolsProps}
+                extra={[{
+                    icon: Folder,
+                    label: t('app.servers.manageGroups', 'Manage groups'),
+                    onSelect: () => setShowGroupModal(true),
+                }]}
             />
 
             <GridChips {...chrome.chipProps} />

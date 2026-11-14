@@ -874,6 +874,35 @@
     &__sp { flex: 1; }
 }
 
+// Field search at the top of the Fields pane.
+.sk-gridfind {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin: $space-4 $space-5 0;
+    padding: 0 $space-3;
+    height: $control-md;
+    border: 1px solid var(--border);
+    border-radius: $radius-control;
+    background: var(--surface-2);
+    color: var(--text-ghost);
+
+    &:focus-within { border-color: var(--accent-dim); box-shadow: $focus-ring; }
+
+    input {
+        flex: 1;
+        min-width: 0;
+        border: 0;
+        outline: none;
+        background: transparent;
+        color: var(--text);
+        font-size: $text-sm;
+        font-family: inherit;
+
+        &::placeholder { color: var(--text-ghost); }
+    }
+}
+
 // Empty filters pane: what is showing, and one tap to start narrowing it.
 .sk-gridstart {
     display: flex;

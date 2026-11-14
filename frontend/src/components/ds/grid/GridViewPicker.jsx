@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import {
-    ChevronDown, Star, Copy, Trash2, Plus, MoreVertical, Check, History, AlertTriangle,
+    ChevronDown, Star, Copy, Trash2, Plus, MoreVertical, Check, History, AlertTriangle, SlidersHorizontal,
 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
+import { GridToolsPanel } from './GridToolsMenu';
 
 // The saved-view selector, rendered as the page's own heading rather than yet
 // another toolbar button — the view IS what you are looking at, so its name is
@@ -21,17 +22,30 @@ import { Button as SharedButton } from '@/components/ui/button';
 // there instead (see useTopbarChrome) and passes nothing here; an inner or sub
 // table, which has no top bar of its own, passes it and keeps it inline.
 //
+// A page can instead fold the table's controls INTO this menu, so the page has
+// one place for "what am I looking at and what can I do with it" and its top
+// bar keeps only the actions that create or reload things:
+//
+//   filters  { count, hidden, onOpen }   opens the filters and fields drawer
+//   tools    the GridToolsMenu props     copy link, export, reset…
+//   extra    [{ icon, label, onSelect }] page-specific entries (Manage groups)
+//
 // There is deliberately no row count. It was rendered twice on every page that
 // also had a toolbar underneath — once next to the view name, once on the right
 // of the second bar — and the footer already says how many rows there are,
 // under the rows it is counting.
-export function GridViewPicker({ views, counts, onCreate, label = 'items', actions }) {
+export function GridViewPicker({ views, counts, onCreate, label = 'items', actions, filters, tools, extra }) {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
     const [menuFor, setMenuFor] = useState(null);
     const [creating, setCreating] = useState(false);
     const [name, setName] = useState('');
     const [fromCurrent, setFromCurrent] = useState(true);
+    // While the tools section shows its export options, the rest of the menu
+    // steps aside so the options are not buried under the list of views.
+    const [toolsPane, setToolsPane] = useState('root');
+    const exporting = toolsPane !== 'root';
+    const closeMenu = () => { setOpen(false); setMenuFor(null); setToolsPane('root'); };
 
     const active = views.activeView;
     const activeName = active?.name || `All ${label}`;
@@ -101,7 +115,7 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
 
     return (
         <div className="sk-viewbar">
-            <Popover open={open} onOpenChange={setOpen}>
+            <Popover open={open} onOpenChange={(o) => { setOpen(o); if (!o) setToolsPane('root'); }}>
                 <PopoverTrigger asChild>
                     <SharedButton variant="unstyled" type="button" className={cn('sk-viewpick', open && 'is-open')}>
                         <span className="sk-viewpick__title">{activeName}</span>
@@ -110,48 +124,102 @@ export function GridViewPicker({ views, counts, onCreate, label = 'items', actio
                     </SharedButton>
                 </PopoverTrigger>
                 <PopoverContent align="start" sideOffset={6} className="ui-popover-panel sk-gridmenu sk-viewpick__menu">
-                    {!!builtins.length && <div className="sk-gridmenu__head">{t('app.gridViewPicker.builtIn', 'Built in')}</div>}
-                    {builtins.map(renderRow)}
-                    <div className="sk-gridmenu__head">{t('app.gridViewPicker.myViews', 'My views')}</div>
-                    {mine.length ? mine.map(renderRow) : (
-                        <div className="sk-gridmenu__note">
-                            {t('app.gridViewPicker.noPersonalViewsYetTuneThe', 'No personal views yet. Tune the grid, then save it here.')}
-                        </div>
-                    )}
-                    <div className="sk-gridmenu__sep" />
-                    {creating ? (
+                    {!exporting && (
                         <>
-                            <div className="sk-gridmenu__mini sk-gridmenu__mini--input">
-                                <input
-                                    autoFocus
-                                    value={name}
-                                    placeholder={t('app.gridViewPicker.eGCloudflareProd', 'e.g. Cloudflare prod')}
-                                    onChange={(e) => setName(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') submitNew();
-                                        if (e.key === 'Escape') setCreating(false);
-                                    }}
-                                />
-                            </div>
+                            {!!builtins.length && <div className="sk-gridmenu__head">{t('app.gridViewPicker.builtIn', 'Built in')}</div>}
+                            {builtins.map(renderRow)}
+                            <div className="sk-gridmenu__head">{t('app.gridViewPicker.myViews', 'My views')}</div>
+                            {mine.length ? mine.map(renderRow) : (
+                                <div className="sk-gridmenu__note">
+                                    {t('app.gridViewPicker.noPersonalViewsYetTuneThe', 'No personal views yet. Tune the grid, then save it here.')}
+                                </div>
+                            )}
+                            <div className="sk-gridmenu__sep" />
+                            {creating ? (
+                                <>
+                                    <div className="sk-gridmenu__mini sk-gridmenu__mini--input">
+                                        <input
+                                            autoFocus
+                                            value={name}
+                                            placeholder={t('app.gridViewPicker.eGCloudflareProd', 'e.g. Cloudflare prod')}
+                                            onChange={(e) => setName(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') submitNew();
+                                                if (e.key === 'Escape') setCreating(false);
+                                            }}
+                                        />
+                                    </div>
+                                    <SharedButton variant="unstyled"
+                                        type="button"
+                                        className={cn('sk-gridmenu__opt', fromCurrent && 'is-on')}
+                                        onClick={() => setFromCurrent((v) => !v)}
+                                    >
+                                        <span className="sk-gridmenu__box"><Check size={11} /></span>
+                                        {t('app.gridViewPicker.startFromCurrentFiltersColumns', 'Start from current filters and columns')}
+                                    </SharedButton>
+                                    <div className="sk-gridmenu__foot">
+                                        <SharedButton variant="unstyled" type="button" onClick={() => setCreating(false)}>{t('common.actions.cancel', 'Cancel')}</SharedButton>
+                                        <SharedButton variant="unstyled" type="button" className="is-primary" disabled={!name.trim()} disabledReason={t('app.gridViewPicker.enterAViewNameFirst', 'Enter a view name first')} onClick={submitNew}>
+                                            {t('common.actions.create', 'Create')}
+                                        </SharedButton>
+                                    </div>
+                                </>
+                            ) : (
+                                <SharedButton variant="unstyled" type="button" className="sk-gridmenu__opt" onClick={() => setCreating(true)}>
+                                    <Plus size={13} />{t('app.gridViewPicker.saveCurrentView', 'Save current view…')}
+                                </SharedButton>
+                            )}
+                        </>
+                    )}
+
+                    {filters && !exporting && (
+                        <>
+                            <div className="sk-gridmenu__sep" />
                             <SharedButton variant="unstyled"
                                 type="button"
-                                className={cn('sk-gridmenu__opt', fromCurrent && 'is-on')}
-                                onClick={() => setFromCurrent((v) => !v)}
+                                className="sk-gridmenu__opt"
+                                onClick={() => { closeMenu(); filters.onOpen(); }}
                             >
-                                <span className="sk-gridmenu__box"><Check size={11} /></span>
-                                {t('app.gridViewPicker.startFromCurrentFiltersColumns', 'Start from current filters and columns')}
+                                <SlidersHorizontal size={13} />{t('app.gridViewPicker.filtersAndFields', 'Filters and fields')}
+                                {(filters.count > 0 || filters.hidden > 0) && (
+                                    <span className="sk-gridmenu__rest">
+                                        {[
+                                            filters.count > 0 && t('app.gridViewPicker.filterCount', { count: filters.count, defaultValue_one: '1 filter', defaultValue_other: '{{count}} filters' }),
+                                            filters.hidden > 0 && t('app.gridViewPicker.moreFields', '{{count}} more fields', { count: filters.hidden }),
+                                        ].filter(Boolean).join(' \u00b7 ')}
+                                    </span>
+                                )}
                             </SharedButton>
-                            <div className="sk-gridmenu__foot">
-                                <SharedButton variant="unstyled" type="button" onClick={() => setCreating(false)}>{t('common.actions.cancel', 'Cancel')}</SharedButton>
-                                <SharedButton variant="unstyled" type="button" className="is-primary" disabled={!name.trim()} disabledReason={t('app.gridViewPicker.enterAViewNameFirst', 'Enter a view name first')} onClick={submitNew}>
-                                    {t('common.actions.create', 'Create')}
-                                </SharedButton>
-                            </div>
                         </>
-                    ) : (
-                        <SharedButton variant="unstyled" type="button" className="sk-gridmenu__opt" onClick={() => setCreating(true)}>
-                            <Plus size={13} />{t('app.gridViewPicker.saveCurrentView', 'Save current view…')}
-                        </SharedButton>
+                    )}
+
+                    {tools && (
+                        <>
+                            {!exporting && <div className="sk-gridmenu__sep" />}
+                            <GridToolsPanel
+                                {...tools}
+                                embedded
+                                pane={toolsPane}
+                                onPaneChange={setToolsPane}
+                                onClose={closeMenu}
+                            />
+                        </>
+                    )}
+
+                    {!!extra?.length && !exporting && (
+                        <>
+                            <div className="sk-gridmenu__sep" />
+                            {extra.map(({ icon: Icon, label: text, onSelect }) => (
+                                <SharedButton variant="unstyled"
+                                    key={text}
+                                    type="button"
+                                    className="sk-gridmenu__opt"
+                                    onClick={() => { closeMenu(); onSelect(); }}
+                                >
+                                    {Icon && <Icon size={13} />}{text}
+                                </SharedButton>
+                            ))}
+                        </>
                     )}
                 </PopoverContent>
             </Popover>

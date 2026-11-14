@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Filter, Layers, X, Plus, History, GripVertical } from 'lucide-react';
+import { Filter, Layers, X, Plus, History, GripVertical, Search } from 'lucide-react';
 import { Drawer } from '../Drawer';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
@@ -10,6 +10,9 @@ import {
     OPS, applyFilters, byKey, columnLabel, coerceValue, emptyValueFor,
     isDecorative, isFilterable, isSortable, optionsFor,
 } from './fields';
+
+// A field search only earns its row once the list is long enough to scan.
+const FIELD_SEARCH_MIN = 9;
 
 // Two panes behind one drawer, because they are the two halves of "what am I
 // looking at": FILTERS decides which rows, FIELDS decides which columns (and in
@@ -30,6 +33,7 @@ export function GridFilterDrawer({
     const { t } = useTranslation();
     const [tab, setTab] = useState('filters');
     const [dragging, setDragging] = useState(null);
+    const [fieldQuery, setFieldQuery] = useState('');
 
     const map = byKey(columns);
     const rules = cfg.filters.rules;
@@ -47,6 +51,8 @@ export function GridFilterDrawer({
     const namedColumns = columns.filter((column) => !isDecorative(column));
     const shownCount = cfg.cols.filter((key) => !isDecorative(map.get(key))).length;
     const hiddenCount = namedColumns.length - shownCount;
+    const fieldNeedle = fieldQuery.trim().toLowerCase();
+    const fieldMatches = (column) => !fieldNeedle || columnLabel(column).toLowerCase().includes(fieldNeedle);
 
     const patchRule = (id, patch) => grid.setRules(
         rules.map((r) => (r.id === id ? { ...r, ...patch } : r)),
@@ -271,23 +277,36 @@ export function GridFilterDrawer({
 
                 {tab === 'fields' && (
                     <>
+                        {namedColumns.length >= FIELD_SEARCH_MIN && (
+                            <div className="sk-gridfind">
+                                <Search size={14} aria-hidden="true" />
+                                <input
+                                    type="search"
+                                    value={fieldQuery}
+                                    onChange={(e) => setFieldQuery(e.target.value)}
+                                    placeholder={t('app.gridFilterDrawer.findField', 'Find a field')}
+                                    aria-label={t('app.gridFilterDrawer.findField', 'Find a field')}
+                                />
+                            </div>
+                        )}
+
+                        {/* In the table, in table order: drag to reorder, switch off to remove. */}
                         <div className="sk-gridsec">
                             <div className="sk-gridsec__head">
-                                <div className="sk-gridsec__t">{t('app.gridFilterDrawer.columns', 'Columns')}</div>
-                                <span className="sk-gridsec__meta">
-                                    {t('app.gridFilterDrawer.shownOf', '{{shown}} of {{total}} shown', { shown: shownCount, total: namedColumns.length })}
-                                </span>
+                                <div className="sk-gridsec__t">{t('app.gridFilterDrawer.shown', 'In the table')}</div>
+                                <span className="sk-gridsec__meta">{shownCount}</span>
                             </div>
                             {ordered.map((key, i) => {
                                 const column = map.get(key);
-                                if (!column || isDecorative(column)) return null;
-                                const on = cfg.cols.includes(key);
+                                if (!column || isDecorative(column) || !cfg.cols.includes(key) || !fieldMatches(column)) return null;
                                 const locked = !!column.locked || column.hideable === false;
                                 return (
                                     <div
                                         key={key}
-                                        draggable={!locked && on}
-                                        className={cn('sk-gridcol', !on && 'is-off', locked && 'is-locked', dragging === i && 'is-drag')}
+                                        // Reordering while a search hides part of the list
+                                        // would drop the field at an index nobody can see.
+                                        draggable={!locked && !fieldNeedle}
+                                        className={cn('sk-gridcol', locked && 'is-locked', dragging === i && 'is-drag')}
                                         onDragStart={() => setDragging(i)}
                                         onDragEnd={() => setDragging(null)}
                                         onDragOver={(e) => {
@@ -301,15 +320,46 @@ export function GridFilterDrawer({
                                             ? <span className="sk-gridcol__lock">{t('app.gridFilterDrawer.pinned', 'pinned')}</span>
                                             : (
                                                 <Switch
-                                                    checked={on}
+                                                    checked
                                                     onCheckedChange={() => grid.toggleColumn(key, allKeys)}
-                                                    aria-label={t('app.gridFilterDrawer.show', 'Show {{value}}', { value: columnLabel(column) })}
+                                                    aria-label={t('app.gridFilterDrawer.hide', 'Hide {{value}}', { value: columnLabel(column) })}
                                                 />
                                             )}
                                     </div>
                                 );
                             })}
                         </div>
+
+                        {/* Everything else the table knows about each row. */}
+                        {hiddenCount > 0 && (
+                            <div className="sk-gridsec">
+                                <div className="sk-gridsec__head">
+                                    <div className="sk-gridsec__t">{t('app.gridFilterDrawer.available', 'More fields')}</div>
+                                    <span className="sk-gridsec__meta">{hiddenCount}</span>
+                                </div>
+                                <div className="sk-gridsec__tags">
+                                    {namedColumns.filter((column) => !cfg.cols.includes(column.key) && fieldMatches(column)).map((column) => (
+                                        <Button variant="unstyled"
+                                            key={column.key}
+                                            type="button"
+                                            className="sk-gridrule__tag sk-gridstart__field"
+                                            onClick={() => grid.toggleColumn(column.key, allKeys)}
+                                            aria-label={t('app.gridFilterDrawer.show', 'Show {{value}}', { value: columnLabel(column) })}
+                                        >
+                                            <Plus size={12} aria-hidden="true" />{columnLabel(column)}
+                                        </Button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {fieldNeedle && !namedColumns.some(fieldMatches) && (
+                            <div className="sk-gridsec">
+                                <p className="sk-gridstart__lead">
+                                    {t('app.gridFilterDrawer.noFieldMatches', 'No field matches "{{query}}".', { query: fieldQuery.trim() })}
+                                </p>
+                            </div>
+                        )}
 
                         {(showRowDetail || showDensity) && (
                         <div className="sk-gridsec">
