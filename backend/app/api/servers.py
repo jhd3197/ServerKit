@@ -15,6 +15,7 @@ from sqlalchemy.orm import joinedload
 from app import db, limiter
 from app.services import permission_levels
 from app.services.server_metrics_service import latest_metrics_by_server
+from app.services.server_workload_service import workload_counts_by_server
 from app.api._query import apply_query, QueryParseError
 from app.api._request import json_object
 from app.models.server import Server, ServerGroup, ServerMetrics, ServerCommand, AgentSession
@@ -357,6 +358,13 @@ def list_servers():
         (server.id for server in servers), order_by='id',
     )
 
+    # What each server carries, when the caller wants it. Two queries for the
+    # whole list, scoped to the services this caller may see.
+    count_keys = [key for key in ('services_count', 'domains_count')
+                  if fields is None or key in fields]
+    workload = (workload_counts_by_server((server.id for server in servers), user, ws_id)
+                if count_keys else {})
+
     result = []
     for server in servers:
         server_dict = server.to_dict(fields=fields)
@@ -364,6 +372,10 @@ def list_servers():
         metrics = metrics_by_server.get(server.id)
         if metrics:
             server_dict['metrics'] = metrics.to_dict()
+        counts = workload.get(server.id)
+        if counts:
+            for key in count_keys:
+                server_dict[key] = counts[key]
         result.append(server_dict)
 
     return jsonify(result)

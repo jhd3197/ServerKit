@@ -476,7 +476,10 @@ class Server(TimestampMixin, JsonColumnMixin, db.Model):
     # Emitted by to_dict but not mapped columns: each costs a relationship load
     # or a JSON walk, so `$select` has to know they exist in order to decline
     # them. Kept next to to_dict so the two cannot drift.
-    DERIVED_FIELDS = ('group_name', 'onboarding_progress', 'latest_metrics')
+    # `services_count` / `domains_count` are added by the list route (they
+    # need the caller's access scope), not by to_dict.
+    DERIVED_FIELDS = ('group_name', 'onboarding_progress', 'latest_metrics',
+                      'services_count', 'domains_count')
 
     def to_dict(self, include_metrics=False, fields=None):
         """Serialize the server.
