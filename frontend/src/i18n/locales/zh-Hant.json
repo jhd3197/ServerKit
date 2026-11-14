@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "請先輸入網域名稱"
         },
         "setupHealthWidget": {
-            "allSet": "一切就緒——",
-            "criticalCount": "{{count}} 個嚴重",
-            "dismissHint": "關閉——設定健康狀態會保留在狀態列中",
-            "moreInDoctor": "前往 [診斷] 檢視更多資訊",
             "progress": "設定健康進度",
-            "recommendedCount": "{{count}} 個建議",
-            "review": "檢視",
-            "setupHealth": "設定健康狀況",
-            "setupHealth2": "% 設定健康狀況",
-            "unavailable": "不可用"
+            "setupHealth": "設定健康狀況"
         },
         "setupStepAccount": {
             "adminEmail": "管理員信箱",

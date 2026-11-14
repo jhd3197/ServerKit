@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "Saisissez d'abord un nom de domaine"
         },
         "setupHealthWidget": {
-            "allSet": "Tout est prêt -",
-            "criticalCount": "{{count}} critiques",
-            "dismissHint": "Ignorer — la santé de la configuration reste dans la barre d'état",
-            "moreInDoctor": "plus dans Docteur",
             "progress": "Progression de la santé de la configuration",
-            "recommendedCount": "{{count}} recommandés",
-            "review": "Examiner",
-            "setupHealth": "État de santé de la configuration",
-            "setupHealth2": "% de santé de la configuration",
-            "unavailable": "Indisponible"
+            "setupHealth": "État de santé de la configuration"
         },
         "setupStepAccount": {
             "adminEmail": "E-mail de l'administrateur",

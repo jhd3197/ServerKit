@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "Hãy nhập tên miền trước"
         },
         "setupHealthWidget": {
-            "allSet": "Mọi thứ đã sẵn sàng —",
-            "criticalCount": "{{count}} nghiêm trọng",
-            "dismissHint": "Bỏ qua — sức khỏe thiết lập vẫn nằm trên thanh trạng thái",
-            "moreInDoctor": "thêm trong Bác sĩ",
             "progress": "Tiến độ tình trạng thiết lập",
-            "recommendedCount": "{{count}} được khuyến nghị",
-            "review": "Xem lại",
-            "setupHealth": "Tình trạng thiết lập",
-            "setupHealth2": "% tình trạng thiết lập",
-            "unavailable": "Không khả dụng"
+            "setupHealth": "Tình trạng thiết lập"
         },
         "setupStepAccount": {
             "adminEmail": "Email quản trị",

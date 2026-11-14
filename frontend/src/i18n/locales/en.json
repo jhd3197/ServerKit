@@ -6437,16 +6437,8 @@
             "usedForCertificateExpiryRemindersFrom": "Used for certificate expiry reminders from Let's Encrypt."
         },
         "setupHealthWidget": {
-            "allSet": "Setup complete:",
-            "criticalCount": "{{count}} critical",
-            "dismissHint": "Dismiss (setup health stays in the status bar)",
-            "moreInDoctor": "more in Doctor",
             "progress": "Setup health progress",
-            "recommendedCount": "{{count}} recommended",
-            "review": "Review",
-            "setupHealth": "Setup health",
-            "setupHealth2": "% setup health",
-            "unavailable": "Unavailable"
+            "setupHealth": "Setup health"
         },
         "setupStepAccount": {
             "adminEmail": "Admin email",

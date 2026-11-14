@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "أدخل اسم النطاق أولاً"
         },
         "setupHealthWidget": {
-            "allSet": "كل شيء جاهز —",
-            "criticalCount": "{{count}} حرجة",
-            "dismissHint": "تجاهل — تبقى صحة الإعداد في شريط الحالة",
-            "moreInDoctor": "المزيد في دكتور",
             "progress": "تقدم صحة الإعداد",
-            "recommendedCount": "{{count}} موصى بها",
-            "review": "مراجعة",
-            "setupHealth": "صحة الإعداد",
-            "setupHealth2": "صحة الإعداد٪",
-            "unavailable": "غير متاح"
+            "setupHealth": "صحة الإعداد"
         },
         "setupStepAccount": {
             "adminEmail": "البريد الإلكتروني المشرف",

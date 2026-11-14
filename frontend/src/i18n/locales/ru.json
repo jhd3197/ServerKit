@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "Сначала введите имя домена"
         },
         "setupHealthWidget": {
-            "allSet": "Все готово —",
-            "criticalCount": "{{count}} критических",
-            "dismissHint": "Скрыть — состояние настройки остаётся в строке состояния",
-            "moreInDoctor": "подробнее в Докторе",
             "progress": "Ход настройки",
-            "recommendedCount": "{{count}} рекомендуемых",
-            "review": "Просмотреть",
-            "setupHealth": "Состояние настройки",
-            "setupHealth2": "% работоспособности настройки",
-            "unavailable": "Недоступно"
+            "setupHealth": "Состояние настройки"
         },
         "setupStepAccount": {
             "adminEmail": "Электронная почта администратора",

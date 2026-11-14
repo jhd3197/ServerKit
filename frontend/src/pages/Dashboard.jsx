@@ -20,7 +20,6 @@ import ChangeBar from '../components/ds/ChangeBar';
 import ShortcutSheet from '../components/ds/ShortcutSheet';
 import EmptyState from '../components/EmptyState';
 import PluginSlot from '../components/PluginSlot';
-import SetupHealthWidget from '../components/dashboard/SetupHealthWidget';
 import { DashGrid } from '../components/dashboard/grid/DashGrid';
 import { WidgetLibrary } from '../components/dashboard/grid/WidgetLibrary';
 import { WidgetEditor } from '../components/dashboard/grid/WidgetEditor';
@@ -488,13 +487,6 @@ const Dashboard = () => {
         <div className="page-container dashboard-page">
             {/* Extension slot: widgets contributed to the top of the dashboard */}
             <PluginSlot name="dashboard.top" />
-
-            {/* Setup health. Deliberately NOT a placeable board widget: an
-                unfirewalled box must be visible without the operator first
-                opting into a widget, and the card collapses to a single "all
-                set" line once everything is done, so it costs nothing when
-                clean. Admin-only — the endpoint is too. */}
-            {isAdmin && <SetupHealthWidget />}
 
             {/* Board tabs + board-wide controls */}
             <div className="skw-bar">

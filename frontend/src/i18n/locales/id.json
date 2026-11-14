@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "Masukkan nama domain terlebih dahulu"
         },
         "setupHealthWidget": {
-            "allSet": "Semua siap —",
-            "criticalCount": "{{count}} kritis",
-            "dismissHint": "Tutup — kesehatan penyiapan tetap ada di bilah status",
-            "moreInDoctor": "lebih lanjut di Dokter",
             "progress": "Progres kesehatan penyiapan",
-            "recommendedCount": "{{count}} direkomendasikan",
-            "review": "Tinjau",
-            "setupHealth": "Kesehatan Penyiapan",
-            "setupHealth2": "% kesehatan penyiapan",
-            "unavailable": "Tidak tersedia"
+            "setupHealth": "Kesehatan Penyiapan"
         },
         "setupStepAccount": {
             "adminEmail": "Email Admin",

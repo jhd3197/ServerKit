@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "กรอกชื่อโดเมนก่อน"
         },
         "setupHealthWidget": {
-            "allSet": "เรียบร้อยแล้ว —",
-            "criticalCount": "วิกฤต {{count}} รายการ",
-            "dismissHint": "ปิดทิ้ง — สถานะสุขภาพการตั้งค่ายังอยู่ในแถบสถานะ",
-            "moreInDoctor": "เพิ่มเติมในคุณหมอ",
             "progress": "ความคืบหน้าสถานะการตั้งค่า",
-            "recommendedCount": "แนะนำ {{count}} รายการ",
-            "review": "ตรวจสอบ",
-            "setupHealth": "สถานะการตั้งค่า",
-            "setupHealth2": "% ความสมบูรณ์ของการตั้งค่า",
-            "unavailable": "ไม่พร้อมใช้งาน"
+            "setupHealth": "สถานะการตั้งค่า"
         },
         "setupStepAccount": {
             "adminEmail": "อีเมล์ผู้ดูแลระบบ",

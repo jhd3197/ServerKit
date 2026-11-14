@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "먼저 도메인 이름을 입력하세요"
         },
         "setupHealthWidget": {
-            "allSet": "모든 설정 —",
-            "criticalCount": "심각 {{count}}개",
-            "dismissHint": "닫기 — 설정 상태는 상태 표시줄에 유지됩니다",
-            "moreInDoctor": "닥터에서 더 보기",
             "progress": "설정 상태 진행률",
-            "recommendedCount": "권장 {{count}}개",
-            "review": "검토",
-            "setupHealth": "설정 상태",
-            "setupHealth2": "% 설정 상태",
-            "unavailable": "사용할 수 없음"
+            "setupHealth": "설정 상태"
         },
         "setupStepAccount": {
             "adminEmail": "관리자 이메일",

@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "请先输入域名"
         },
         "setupHealthWidget": {
-            "allSet": "一切就绪——",
-            "criticalCount": "{{count}} 个严重问题",
-            "dismissHint": "忽略 — 设置健康状况会保留在状态栏中",
-            "moreInDoctor": "在医生中查看更多",
             "progress": "设置健康状况进度",
-            "recommendedCount": "{{count}} 个建议项",
-            "review": "查看",
-            "setupHealth": "设置健康状况",
-            "setupHealth2": "% 设置健康状况",
-            "unavailable": "不可用"
+            "setupHealth": "设置健康状况"
         },
         "setupStepAccount": {
             "adminEmail": "管理员电子邮件",

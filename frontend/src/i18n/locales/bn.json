@@ -6160,16 +6160,8 @@
             "enterADomainNameFirst": "আগে ডোমেইনের নাম লিখুন"
         },
         "setupHealthWidget": {
-            "allSet": "সব প্রস্তুত -",
-            "criticalCount": "{{count}}টি গুরুতর",
-            "dismissHint": "খারিজ করুন — সেটআপ স্বাস্থ্য স্ট্যাটাস বারে থাকে",
-            "moreInDoctor": "ডাক্তারে আরও",
             "progress": "সেটআপ স্বাস্থ্যের অগ্রগতি",
-            "recommendedCount": "{{count}}টি প্রস্তাবিত",
-            "review": "পর্যালোচনা",
-            "setupHealth": "সেটআপ স্বাস্থ্য",
-            "setupHealth2": "% সেটআপ স্বাস্থ্য",
-            "unavailable": "অনুপলব্ধ"
+            "setupHealth": "সেটআপ স্বাস্থ্য"
         },
         "setupStepAccount": {
             "adminEmail": "অ্যাডমিন ইমেইল",
