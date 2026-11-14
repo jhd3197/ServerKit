@@ -4,8 +4,7 @@ import { runQuery, getStructure, buildBrowseQuery } from './dbAdapter';
 import ResultsGrid from './ResultsGrid';
 import { DataTable, DataTableFooter, SearchField } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -337,23 +336,15 @@ export default function TableDataTab({ conn, tabId, table, rowsEstimate, active,
                             inside the explorer's own tab bar, so it stays inline
                             rather than being hoisted. */}
                         <GridViewPicker
-                            views={chrome.views}
+                            {...chrome.pickerProps}
+                            tools={{ ...chrome.toolsProps, onRefresh: () => loadStructure(true) }}
                             label="columns"
-                            onCreate={chrome.createView}
                             actions={(
                                 <>
                                     <SearchField
                                         value={search}
                                         onSearch={setSearch}
                                         placeholder={t('app.tableDataTab.filterColumnOrType', 'Filter column or type…')}
-                                    />
-                                    <GridFilterButton
-                                        count={chrome.filterCount}
-                                        onClick={() => chrome.setDrawerOpen(true)}
-                                    />
-                                    <GridToolsMenu
-                                        {...chrome.toolsProps}
-                                        onRefresh={() => loadStructure(true)}
                                     />
                                 </>
                             )}

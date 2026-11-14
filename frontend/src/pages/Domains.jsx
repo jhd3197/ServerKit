@@ -1,8 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
-    Globe, Plus, ShieldCheck, RefreshCw, Trash2, ExternalLink,
-    AlertTriangle, Lock, Search, ChevronRight,
+    Globe, Plus, ShieldCheck, RefreshCw, Trash2, ExternalLink, AlertTriangle, Lock, Search, ChevronRight,
 } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -23,13 +22,11 @@ import { Checkbox } from '@/components/ui/checkbox';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
-import { SearchField, Pill, Drawer } from '@/components/ds';
+import { Pill, Drawer } from '@/components/ds';
 import {
-    DataGrid, GridViewPicker, GridChips, GridBulkBar, GridFooter,
-    GridToolsMenu, GridFilterDrawer, GridFilterButton,
-    useGridConfig, useGridRows, exportRows,
+    DataGrid, GridViewPicker, GridChips, GridBulkBar, GridFooter, GridFilterDrawer, useGridConfig, useGridRows, exportRows,
 } from '@/components/ds/grid';
-import { useTopbarActions } from '@/hooks/useTopbarActions';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 import { useConfirm } from '@/hooks/useConfirm';
 import useFocusParam from '@/hooks/useFocusParam';
 import RegistrarPortfolio from '../components/domains/RegistrarPortfolio';
@@ -631,38 +628,38 @@ const Domains = () => {
     };
 
     // ── top bar ──────────────────────────────────────────────
-    // Fixed shape on every page: page actions, then search, then the filter
-    // icon, then the overflow "⋮". The search box must not move when a page
-    // adds or removes an action, so it sits AFTER the actions and before the
-    // two fixed-width icon buttons.
-    useTopbarActions(() => (
-        <>
+    // The table's tools, shown in the view selector's menu.
+    const toolsProps = {
+        cfg,
+        columns,
+        rows: view.filtered,
+        selectedRows: pickedRows,
+        viewName: grid.views.activeView?.name || 'domains',
+        noun: 'domains',
+        onRefresh: loadData,
+        onReset: grid.resetToView,
+        onCopyLink: grid.copyLink,
+        onDensity: grid.setDensity,
+        onExported: (n, fields, format) => toast.success(t('app.domains.rowsFields', '{{n}} rows · {{fields}} fields · {{value}}', { n: n, fields: fields, value: format.toUpperCase() })),
+    };
+    const hiddenFieldCount = columns.filter((column) => column.header && !cfg.cols.includes(column.key)).length;
+
+    useListTopbar(() => ({
+        secondary: (
+            <Button variant="outline" size="sm" onClick={loadData}>
+                <RefreshCw size={15} /> {t('app.domains.checkDns', 'Check DNS')}
+            </Button>
+        ),
+        primary: (
             <PagePrimaryButton
                 id="domains-add"
                 label={t('app.domains.addDomain', 'Add domain')}
                 shortLabel={t('common.actions.add', 'Add')}
                 onClick={() => setShowAddModal(true)}
             />
-            <Button variant="outline" size="sm" onClick={loadData}>
-                <RefreshCw size={15} /> {t('app.domains.checkDns', 'Check DNS')}
-            </Button>
-            <SearchField value={search} onSearch={setSearch} placeholder={t('app.domains.searchDomains', 'Search domains…')} />
-            <GridFilterButton count={cfg.filters.rules.length} onClick={() => setFilterOpen(true)} />
-            <GridToolsMenu
-                cfg={cfg}
-                columns={columns}
-                rows={view.filtered}
-                selectedRows={pickedRows}
-                viewName={grid.views.activeView?.name || 'domains'}
-                noun="domains"
-                onRefresh={loadData}
-                onReset={grid.resetToView}
-                onCopyLink={grid.copyLink}
-                onDensity={grid.setDensity}
-                onExported={(n, fields, format) => toast.success(t('app.domains.rowsFields', '{{n}} rows · {{fields}} fields · {{value}}', { n: n, fields: fields, value: format.toUpperCase() }))}
-            />
-        </>
-    ), [search, cfg, columns, view.filtered, pickedRows, grid.views.activeView]);
+        ),
+        search: { value: search, onSearch: setSearch, placeholder: t('app.domains.searchDomains', 'Search domains…') },
+    }), [search]);
 
     return (
         <div className="sk-tabgroup__inner domains-page">
@@ -703,6 +700,12 @@ const Domains = () => {
                         views={grid.views}
                         label="domains"
                         onCreate={createView}
+                        filters={{
+                            count: cfg.filters.rules.length,
+                            hidden: hiddenFieldCount,
+                            onOpen: () => setFilterOpen(true),
+                        }}
+                        tools={toolsProps}
                     />
 
                     <GridChips

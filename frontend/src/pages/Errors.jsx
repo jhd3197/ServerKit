@@ -10,10 +10,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { AlertOctagon, CheckCheck, RefreshCw, Trash2, Undo2 } from 'lucide-react';
 import api from '../services/api';
 import {
-    DataTable, DataTableFooter, Drawer, ListToolbar, Pill, SearchField, SegControl,
+    DataTable, DataTableFooter, Drawer, ListToolbar, Pill, SegControl,
 } from '@/components/ds';
 import { Button } from '@/components/ui/button';
-import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useAuth } from '../contexts/useAuth.js';
 import { useToast } from '../contexts/useToast.js';
@@ -22,6 +21,7 @@ import { timeAgo } from '../utils/time';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 
 const PAGE_SIZE = 50;
 
@@ -131,17 +131,14 @@ export default function Errors() {
 
     // Search + Refresh live in the group's shared top bar, the way every other
     // list page in the panel does it.
-    useTopbarActions(() => {
-        if (!isAdmin) return null;
-        return (
-            <>
-                <SearchField value={q} onSearch={onSearch} placeholder={t('app.errors.searchMessagesOrTypes', 'Search messages or types…')} />
-                <Button variant="outline" size="sm" onClick={refresh} disabled={loading}>
-                    <RefreshCw size={14} className={loading ? 'spin' : ''} /> {t('common.actions.refresh', 'Refresh')}
-                </Button>
-            </>
-        );
-    }, [isAdmin, q, loading, load, loadStats]);
+    useListTopbar(() => (isAdmin ? {
+        secondary: (
+            <Button variant="outline" size="sm" onClick={refresh} disabled={loading}>
+                <RefreshCw size={14} className={loading ? 'spin' : ''} /> {t('common.actions.refresh', 'Refresh')}
+            </Button>
+        ),
+        search: { value: q, onSearch, placeholder: t('app.errors.searchMessagesOrTypes', 'Search messages or types…') },
+    } : {}), [isAdmin, q, loading, load, loadStats]);
 
     // The list rows already carry the full record (traceback, context); the
     // detail call only refreshes count/resolved while the drawer is open.

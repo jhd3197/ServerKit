@@ -16,19 +16,17 @@ import { GridToolsPanel } from './GridToolsMenu';
 // /api/v1/views by useTableViews. A modified view shows an asterisk plus an
 // inline Save / Reset strip, so tweaking a built-in never silently destroys it.
 //
-// `actions` is the table's own chrome — search, the filter button and the "⋮".
-// They belong on the SAME line as the view name, and this is the ONLY row of
-// chrome a table gets. A page that owns a top bar hoists that same node up
-// there instead (see useTopbarChrome) and passes nothing here; an inner or sub
-// table, which has no top bar of its own, passes it and keeps it inline.
-//
-// A page can instead fold the table's controls INTO this menu, so the page has
-// one place for "what am I looking at and what can I do with it" and its top
-// bar keeps only the actions that create or reload things:
+// The table's controls are folded INTO this menu, so a page has one place for
+// "what am I looking at and what can I do with it" and its top bar keeps only
+// the actions that create or reload things, plus search. Spread
+// `chrome.pickerProps` (useTableChrome) to get all of it:
 //
 //   filters  { count, hidden, onOpen }   opens the filters and fields drawer
 //   tools    the GridToolsMenu props     copy link, export, reset…
 //   extra    [{ icon, label, onSelect }] page-specific entries (Manage groups)
+//
+// `actions` is what is left for the view row itself: an inner table's own
+// search box or a scope toggle. Never a filter icon or a "⋮".
 //
 // There is deliberately no row count. It was rendered twice on every page that
 // also had a toolbar underneath — once next to the view name, once on the right

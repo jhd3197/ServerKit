@@ -10,8 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { DataTable, DataTableFooter } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer, applyFilters,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer, applyFilters,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -264,20 +263,11 @@ const IPListsTab = () => {
                     is inside that name, since the pair sits side by side and
                     used to be told apart by this line alone. */}
                 <GridViewPicker
-                    views={chrome.views}
+                    {...chrome.pickerProps}
+                    tools={{ ...chrome.toolsProps, onRefresh: loadLists }}
                     label={listType === 'allowlist'
                         ? t('app.iPListsTab.allowlistEntries', 'Allowlist entries')
                         : t('app.iPListsTab.blocklistEntries', 'Blocklist entries')}
-                    onCreate={chrome.createView}
-                    actions={(
-                        <>
-                            <GridFilterButton
-                                count={chrome.filterCount}
-                                onClick={() => chrome.setDrawerOpen(true)}
-                            />
-                            <GridToolsMenu {...chrome.toolsProps} onRefresh={loadLists} />
-                        </>
-                    )}
                 />
                 <div className="sec-tableactions">
                     <Button variant="default" size="sm" onClick={() => setShowAddModal(listType)}>

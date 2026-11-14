@@ -3,7 +3,6 @@ import useTabParam from '../hooks/useTabParam';
 import api from '../services/api';
 import EmptyState from '../components/EmptyState';
 import { Button } from '@/components/ui/button';
-import { MetricCard, KpiBand } from '@/components/ds';
 import ServerPicker from '../components/ServerPicker';
 import PageLayout from '@/layouts/PageLayout';
 import { Box, Boxes, ChevronDown, Download, Power, RefreshCw, UserCheck, Layers, HardDrive, Network as NetworkIcon, Package } from 'lucide-react';
@@ -11,13 +10,12 @@ import {
     ServerContext,
     VALID_TABS,
     LOCAL_DOCKER_TARGET,
-    normalizeListResponse,
 } from '../components/docker/dockerHelpers';
-import ContainersTab, { RunContainerButton } from '../components/docker/ContainersTab';
+import ContainersTab from '../components/docker/ContainersTab';
 import ComposeTab from '../components/docker/ComposeTab';
-import ImagesTab, { PullImageButton } from '../components/docker/ImagesTab';
-import NetworksTab, { CreateNetworkButton } from '../components/docker/NetworksTab';
-import VolumesTab, { CreateVolumeButton } from '../components/docker/VolumesTab';
+import ImagesTab from '../components/docker/ImagesTab';
+import NetworksTab from '../components/docker/NetworksTab';
+import VolumesTab from '../components/docker/VolumesTab';
 import PruneButton from '../components/docker/PruneButton';
 import RequiresDocker from '../components/RequiresDocker';
 import { useTranslation } from 'react-i18next';
@@ -30,13 +28,6 @@ const Docker = () => {
     const [retrying, setRetrying] = useState(false);
     const [selectedServer, setSelectedServer] = useState(LOCAL_DOCKER_TARGET);
     const [availableServers, setAvailableServers] = useState([LOCAL_DOCKER_TARGET]);
-    const [stats, setStats] = useState({
-        containers: { total: 0, running: 0, stopped: 0 },
-        images: { total: 0, size: '0 B' },
-        volumes: { total: 0 },
-        networks: { total: 0 }
-    });
-
     useEffect(() => {
         checkDockerStatus();
     }, [selectedServer]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -73,7 +64,7 @@ const Docker = () => {
                 const status = await api.getDockerStatus();
                 setDockerStatus(status);
                 if (status.installed) {
-                    loadStats();
+                    setLoading(false);
                 } else {
                     setLoading(false);
                 }
@@ -82,7 +73,7 @@ const Docker = () => {
                 const serverData = await api.getServer(selectedServer.id);
                 if (serverData.status === 'online' || serverData.server?.status === 'online') {
                     setDockerStatus({ installed: true, running: true });
-                    loadStats();
+                    setLoading(false);
                 } else {
                     setDockerStatus({ installed: false, error: 'Server agent is offline' });
                     setLoading(false);
@@ -100,78 +91,6 @@ const Docker = () => {
         setRetrying(false);
     }
 
-    async function loadStats() {
-        try {
-            let containersData, imagesData, volumesData, networksData;
-
-            if (selectedServer.id === 'local') {
-                [containersData, imagesData, volumesData, networksData] = await Promise.all([
-                    api.getContainers(true),
-                    api.getImages(),
-                    api.getVolumes(),
-                    api.getNetworks()
-                ]);
-            } else {
-                [containersData, imagesData, volumesData, networksData] = await Promise.all([
-                    api.getRemoteContainers(selectedServer.id, true),
-                    api.getRemoteImages(selectedServer.id),
-                    api.getRemoteVolumes(selectedServer.id),
-                    api.getRemoteNetworks(selectedServer.id)
-                ]);
-
-            }
-
-            const containers = selectedServer.id === 'local'
-                ? containersData.containers || []
-                : normalizeListResponse(containersData, 'containers');
-            const images = selectedServer.id === 'local'
-                ? imagesData.images || []
-                : normalizeListResponse(imagesData, 'images');
-            const volumes = selectedServer.id === 'local'
-                ? volumesData.volumes || []
-                : normalizeListResponse(volumesData, 'volumes');
-            const networks = selectedServer.id === 'local'
-                ? networksData.networks || []
-                : normalizeListResponse(networksData, 'networks');
-
-            const running = containers.filter(c => c.state === 'running').length;
-
-            setStats({
-                containers: {
-                    total: containers.length,
-                    running,
-                    stopped: containers.length - running
-                },
-                images: {
-                    total: images.length,
-                    size: formatTotalImageSize(images)
-                },
-                volumes: { total: volumes.length },
-                networks: { total: networks.length }
-            });
-        } catch (err) {
-            console.error('Failed to load stats:', err);
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    function formatTotalImageSize(images) {
-        const sizes = images.map(img => {
-            const size = img.size || '0 B';
-            const match = size.match(/^([\d.]+)\s*(B|KB|MB|GB|TB)?$/i);
-            if (!match) return 0;
-            const [, num, unit = 'B'] = match;
-            const multipliers = { B: 1, KB: 1024, MB: 1024**2, GB: 1024**3, TB: 1024**4 };
-            return parseFloat(num) * (multipliers[unit.toUpperCase()] || 1);
-        });
-        const total = sizes.reduce((a, b) => a + b, 0);
-        if (total >= 1024**3) return `${(total / 1024**3).toFixed(1)} GB`;
-        if (total >= 1024**2) return `${(total / 1024**2).toFixed(1)} MB`;
-        if (total >= 1024) return `${(total / 1024).toFixed(1)} KB`;
-        return `${total} B`;
-    }
-
     const tabs = [
         { id: 'containers', label: t('app.docker.containers', 'Containers'), icon: Box },
         { id: 'compose', label: t('app.docker.compose', 'Compose'), icon: Package },
@@ -182,7 +101,7 @@ const Docker = () => {
 
     if (loading) {
         return (
-            <PageLayout className="docker-page" icon={<Box size={18} />} title={t('common.labels.docker', 'Docker')} tabs={tabs}>
+            <PageLayout className="docker-page" navLabel={t('common.labels.docker', 'Docker')} tabs={tabs}>
                 <EmptyState loading loadingVariant="table" title={t('app.docker.checkingDockerStatus', 'Checking Docker status…')} />
             </PageLayout>
         );
@@ -249,8 +168,9 @@ const Docker = () => {
             className="docker-page"
             contentClassName="dx-page"
             fill
-            icon={<Box size={18} />}
-            title={t('common.labels.docker', 'Docker')}
+            // No title: like every tab group, the tab strip is the heading and
+            // the sidebar already names the section.
+            navLabel={t('common.labels.docker', 'Docker')}
             tabs={tabs}
             actions={(
                 <>
@@ -266,31 +186,18 @@ const Docker = () => {
                             )}
                         />
                     )}
-                    <PruneButton onPruned={loadStats} />
-                    {activeTab === 'containers' && <RunContainerButton />}
-                    {activeTab === 'images' && <PullImageButton />}
-                    {activeTab === 'networks' && <CreateNetworkButton />}
-                    {activeTab === 'volumes' && <CreateVolumeButton />}
+                    {/* Page-wide. Each tab publishes its own create button and
+                        search after these (useListTopbar). */}
+                    <PruneButton />
                 </>
             )}
         >
-            <KpiBand>
-                <MetricCard tone="accent" icon={<Box size={16} />} value={stats.containers.total} label={t('app.docker.containers', 'Containers')}>
-                    <div className="sk-kpi__sub"><span>{stats.containers.running} running</span></div>
-                </MetricCard>
-                <MetricCard tone="cyan" icon={<Layers size={16} />} value={stats.images.total} label={t('app.docker.images', 'Images')}>
-                    <div className="sk-kpi__sub"><span>{stats.images.size}</span></div>
-                </MetricCard>
-                <MetricCard tone="violet" icon={<HardDrive size={16} />} value={stats.volumes.total} label={t('app.docker.volumes', 'Volumes')} />
-                <MetricCard tone="green" icon={<NetworkIcon size={16} />} value={stats.networks.total} label={t('app.docker.networks', 'Networks')} />
-            </KpiBand>
-
             <div className="dx-panel">
-                {activeTab === 'containers' && <ContainersTab onStatsChange={loadStats} />}
-                {activeTab === 'compose' && <ComposeTab onStatsChange={loadStats} />}
-                {activeTab === 'images' && <ImagesTab onStatsChange={loadStats} />}
-                {activeTab === 'networks' && <NetworksTab onStatsChange={loadStats} />}
-                {activeTab === 'volumes' && <VolumesTab onStatsChange={loadStats} />}
+                {activeTab === 'containers' && <ContainersTab />}
+                {activeTab === 'compose' && <ComposeTab />}
+                {activeTab === 'images' && <ImagesTab />}
+                {activeTab === 'networks' && <NetworksTab />}
+                {activeTab === 'volumes' && <VolumesTab />}
             </div>
         </PageLayout>
         </ServerContext.Provider>

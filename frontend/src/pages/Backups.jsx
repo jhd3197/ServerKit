@@ -20,8 +20,7 @@ import {
     Pill, SearchField, SegControl, DataTable, DataTableFooter,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import BackupStorageNotice from '../components/backups/BackupStorageNotice';
 import BackupsOverview from '../components/backups/BackupsOverview';
@@ -31,7 +30,7 @@ import { useBackupSchedules } from '../hooks/useBackupSchedules';
 import StorageDestinations from '../components/backups/StorageDestinations';
 import { useManagedProfile } from '../contexts/useManagedProfile';
 import ManagedCard from '../components/ManagedCard';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useTranslation } from 'react-i18next';
@@ -730,20 +729,10 @@ const Backups = () => {
     // The chrome acts on the snapshot table, so it is only published while that
     // section is on screen — the other tabs are forms and a KPI band, with
     // nothing to filter, sort or export.
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <>
-            <GridFilterButton
-                count={chrome.filterCount}
-                onClick={() => chrome.setDrawerOpen(true)}
-            />
-            <GridToolsMenu {...chrome.toolsProps} onRefresh={loadData} />
-        </>, { enabled: activeTab === 'snapshots' },
-    );
 
     if (loading) {
         return (
             <div className="sk-tabgroup__inner backups-page">
-                {topbarChrome}
                 <EmptyState loading loadingVariant="table" size="lg" title={t('app.backups.loadingBackupData', 'Loading backup data…')} />
             </div>
         );
@@ -751,7 +740,6 @@ const Backups = () => {
 
     return (
         <div className="sk-tabgroup__inner backups-page">
-            {topbarChrome}
             {error && (
                 <div className="alert alert-danger">
                     {error}
@@ -785,11 +773,10 @@ const Backups = () => {
                         and the row count belongs to the footer, under the rows
                         it is counting. */}
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: loadData }}
                         label="snapshots"
-                        onCreate={chrome.createView}
                     
-                actions={chromeActions}
             />
 
                     <GridChips {...chrome.chipProps} />

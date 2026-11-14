@@ -1,5 +1,7 @@
+import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { PageTopbar } from '@/components/ds';
+import { PageTopbarContext } from '@/hooks/useTopbarActions';
 
 // Shell for a STANDALONE page — one that owns its whole route rather than
 // living inside a PageTopbar tab group. It is the exact same frame
@@ -17,6 +19,11 @@ import { PageTopbar } from '@/components/ds';
 // sidebar's surface and a bottom border precisely because it is meant to be
 // chrome pinned to the frame, not the first row of the page body.
 //
+// Sections inside the page can publish into its bar with useListTopbar /
+// useTopbarActions, the same way a tab-group page does: what they publish
+// renders after `actions`, so a page-wide button (Prune) stays put while the
+// create button and search follow the active section.
+//
 // `fill` hands the body the whole region to manage its own scrolling (log
 // consoles, file trees, terminals); the default centers and pads it.
 export default function PageLayout({
@@ -32,7 +39,12 @@ export default function PageLayout({
     contentClassName,
     children,
 }) {
+    const [published, setPublished] = useState(null);
+    const host = useMemo(() => ({ setTopbarActions: setPublished }), []);
+    const barActions = actions || published ? <>{actions}{published}</> : null;
+
     return (
+        <PageTopbarContext.Provider value={host}>
         <div className={cn('page-container page-container--full-bleed sk-pageshell', className)}>
             <PageTopbar
                 className={topbarClassName}
@@ -41,7 +53,7 @@ export default function PageLayout({
                 meta={meta}
                 tabs={tabs}
                 navLabel={navLabel}
-                actions={actions}
+                actions={barActions}
             />
             <div className="sk-pageshell__content">
                 {fill ? (
@@ -51,5 +63,6 @@ export default function PageLayout({
                 )}
             </div>
         </div>
+        </PageTopbarContext.Provider>
     );
 }

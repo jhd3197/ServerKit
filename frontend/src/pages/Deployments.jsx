@@ -6,12 +6,11 @@ import Modal from '../components/Modal';
 import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import { Button } from '@/components/ui/button';
-import { DataTable, DataTableFooter, Pill, SearchField, SegControl, statusKind } from '@/components/ds';
+import { DataTable, DataTableFooter, Pill, SegControl, statusKind } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import RequiresDocker from '../components/RequiresDocker';
@@ -26,12 +25,7 @@ const DEPLOY_POLL_MS = 3000;
 // fetched, so this is the reach of a filter until the user asks for more.
 const PAGE = 100;
 import {
-    KIND_CHIP,
-    stepTicks,
-    sourceRef,
-    formatDuration,
-    relativeTime,
-    activityGroup,
+    KIND_CHIP, stepTicks, sourceRef, formatDuration, relativeTime, activityGroup,
 } from '../utils/deployActivity';
 
 // Built-in saved views. These replace the segmented All/Running/Succeeded/Failed
@@ -320,56 +314,43 @@ const Deployments = () => {
         setGroupBy,
     });
 
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <>
-            <SearchField
-                value={search}
-                onSearch={setSearch}
-                placeholder={t('app.deployments.searchDeploys', 'Search deploys…')}
-            />
-            <GridFilterButton
-                count={chrome.filterCount}
-                onClick={() => chrome.setDrawerOpen(true)}
-            />
-            <GridToolsMenu {...chrome.toolsProps} onRefresh={loadJobs} />
-        </>,
-    );
-
-    useTopbarActions(() =>
-        <>
-            {/* No "New service" button here: unlike the design mock, this tab
-                group already carries a New Service tab, and a second entry
-                point crowded the strip into overflow. No Refresh button
-                either — the chrome's "⋮" owns "Refresh data" on every page. */}
-            {simInfo?.enabled && (
-                <Button variant="outline" size="sm" onClick={() => setSimOpen(true)}>
-                    <FlaskConical size={16} />
-                    {t('app.deployments.testDeployment', 'Test deployment')}
+    // No create button: this tab group already carries a New service tab.
+    // Refresh is in the view selector's menu with the other table tools.
+    useListTopbar(() => ({
+        secondary: (
+            <>
+                {simInfo?.enabled && (
+                    <Button variant="outline" size="sm" onClick={() => setSimOpen(true)}>
+                        <FlaskConical size={16} />
+                        {t('app.deployments.testDeployment', 'Test deployment')}
+                    </Button>
+                )}
+                <Button
+                    variant="outline"
+                    size="sm"
+                    aria-pressed={autoRefresh}
+                    onClick={() => setAutoRefresh((v) => !v)}
+                    title={t('app.deployments.autoRefreshEvery3s', 'Auto-refresh every 3s')}
+                >
+                    <RefreshCw size={16} className={autoRefresh ? 'spin' : ''} />
+                    {autoRefresh ? t('app.deployments.live', 'Live') : t('app.deployments.paused', 'Paused')}
                 </Button>
-            )}
-            <Button
-                variant={autoRefresh ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setAutoRefresh((v) => !v)}
-                title={t('app.deployments.autoRefreshEvery3s', 'Auto-refresh every 3s')}
-            >
-                <RefreshCw size={16} className={autoRefresh ? 'spin' : ''} />
-                {autoRefresh ? t('app.deployments.live', 'Live') : t('app.deployments.paused', 'Paused')}
-            </Button>
-        </>,
-        [autoRefresh, simInfo?.enabled]
-    );
+            </>
+        ),
+        search: {
+            value: search,
+            onSearch: setSearch,
+            placeholder: t('app.deployments.searchDeploys', 'Search deploys…'),
+        },
+    }), [autoRefresh, simInfo?.enabled, search]);
 
     return (
         <RequiresDocker what="Deployments">
         <div className="sk-tabgroup__inner deployments-page">
-            {topbarChrome}
-
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadJobs }}
                 label="deploys"
-                onCreate={chrome.createView}
-                actions={chromeActions}
             />
 
             <GridChips {...chrome.chipProps} />

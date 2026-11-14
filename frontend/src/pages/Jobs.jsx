@@ -15,17 +15,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ListChecks, RefreshCw, RotateCcw, XCircle, Play, Clock } from 'lucide-react';
 import api from '../services/api';
 import {
-    Pill, DataTable, DataTableFooter, SegControl,
-    SearchField, FilterDrawer, FilterButton, countActiveFilters,
-    statusKind,
+    Pill, DataTable, DataTableFooter, SegControl, FilterDrawer, countActiveFilters, statusKind,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridToolsMenu,
+    useTableChrome, GridViewPicker, GridChips,
 } from '@/components/ds/grid';
 import { Button } from '@/components/ui/button';
 import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { useAuth } from '../contexts/useAuth.js';
@@ -272,22 +270,18 @@ export default function Jobs() {
     // Activity tab; the Scheduled tab just gets Refresh. The view picker is NOT
     // here any more — it is the Activity table's own heading, because it
     // describes that table and nothing else on the page.
-    useTopbarActions(() => {
-        if (!isAdmin) return null;
-        return (
-            <>
-                {!scheduledView && (
-                    <>
-                        <SearchField value={q} onSearch={onSearch} placeholder={t('app.jobs.searchByKindOrOwner', 'Search by kind or owner…')} />
-                        <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
-                    </>
-                )}
-                <Button variant="outline" size="sm" onClick={load}>
-                    <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}
-                </Button>
-            </>
-        );
-    }, [isAdmin, scheduledView, q, activeFilterCount, load]);
+    useListTopbar(() => (isAdmin ? {
+        secondary: (
+            <Button variant="outline" size="sm" onClick={load}>
+                <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}
+            </Button>
+        ),
+        search: scheduledView ? null : {
+            value: q,
+            onSearch,
+            placeholder: t('app.jobs.searchByKindOrOwner', 'Search by kind or owner…'),
+        },
+    } : {}), [isAdmin, scheduledView, q, load]);
 
     const onRetry = async (id) => {
         try { await api.retryJob(id); toast.success(t('app.jobs.jobReQueued', 'Job re-queued')); load(); }
@@ -396,10 +390,6 @@ export default function Jobs() {
     // SERVER query drawer, which sees rows this client never loaded, and a
     // second one would open a weaker drawer over the loaded page only. Gated on
     // the Activity tab because the chrome describes that table, not Scheduled.
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />, { enabled: isAdmin && !scheduledView },
-    );
-
     if (!isAdmin) {
         return (
             <div className="sk-tabgroup__inner jobs-page">
@@ -456,7 +446,6 @@ export default function Jobs() {
 
     return (
         <div className="sk-tabgroup__inner jobs-page">
-            {topbarChrome}
             <div className="sk-jobs">
                 <div className="sk-jobs__viewswitch">
                     <SegControl
@@ -499,12 +488,11 @@ export default function Jobs() {
                             now. The rest was whole-table arithmetic that only
                             ever restated what the view picker offers. */}
                         <GridViewPicker
-                            views={chrome.views}
+                            {...chrome.pickerProps}
+                            tools={{ ...chrome.toolsProps, onRefresh: load }}
                             label="jobs"
-                            onCreate={chrome.createView}
-                        
-                actions={chromeActions}
-            />
+                            filters={{ count: activeFilterCount, hidden: 0, onOpen: () => setFiltersOpen(true) }}
+                        />
 
                         <GridChips {...chrome.chipProps} />
 

@@ -5,10 +5,9 @@ import { useConfirm } from '../../hooks/useConfirm';
 import EmptyState from '../EmptyState';
 import { ErrorState } from '../ErrorState';
 import Modal from '@/components/Modal';
-import { DataTable, DataTableFooter, Pill, SearchField, SegControl } from '@/components/ds';
+import { DataTable, DataTableFooter, Pill, SegControl } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -17,11 +16,11 @@ import { Input } from '@/components/ui/input';
 import { Network as NetworkIcon, Trash2, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
-    useServer,
-    normalizeListResponse,
-    shortId,
+    useServer, normalizeListResponse, shortId,
 } from './dockerHelpers';
 import { toastError } from '@/utils/errorMessage';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 
 export const CreateNetworkButton = () => {
     const { t } = useTranslation();
@@ -29,13 +28,14 @@ export const CreateNetworkButton = () => {
     const { isRemote } = useServer();
     return (
         <>
-            <Button
+            <PagePrimaryButton
+                id="docker-create-network"
+                label={t('app.networksTab.createNetwork', 'Create network')}
+                shortLabel={t('common.actions.new', 'New')}
                 onClick={() => setShowModal(true)}
                 disabled={isRemote}
-                title={isRemote ? t('app.networksTab.creatingNetworksIsOnlyAvailableOn', 'Creating networks is only available on the panel server right now') : t('app.networksTab.createNetwork', 'Create network')}
-            >
-                <span>+</span> {t('app.networksTab.createNetwork2', 'Create network')}
-            </Button>
+                disabledReason={isRemote ? t('app.networksTab.creatingNetworksIsOnlyAvailableOn', 'Creating networks is only available on the panel server right now') : undefined}
+            />
             {showModal && <CreateNetworkModal onClose={() => setShowModal(false)} onCreated={() => window.location.reload()} />}
         </>
     );
@@ -106,6 +106,13 @@ const NetworksTab = ({ onStatsChange }) => {
     const [networks, setNetworks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+
+    // The Docker page's top bar: this tab's create button and search, after the page-wide
+    // buttons. Filters and the table tools are in the view selector's menu.
+    useListTopbar(() => ({
+        primary: <CreateNetworkButton />,
+        search: { value: searchTerm, onSearch: setSearchTerm, placeholder: t('app.networksTab.searchNetworks', 'Search networks…') },
+    }), [searchTerm]);
     const { sorts, setSorts } = useTableSort({
         defaultSorts: [{ key: 'name', direction: 'asc' }],
         storageKey: 'serverkit-table-docker-networks-sort',
@@ -306,23 +313,9 @@ const NetworksTab = ({ onStatsChange }) => {
     return (
         <div className="dx-tab-pane dx-list-pane">
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadNetworks }}
                 label="networks"
-                onCreate={chrome.createView}
-                actions={(
-                    <>
-                        <SearchField
-                            value={searchTerm}
-                            onSearch={setSearchTerm}
-                            placeholder={t('app.networksTab.filterNameOrId', 'Filter name or ID…')}
-                        />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadNetworks} />
-                    </>
-                )}
             />
 
             <GridChips {...chrome.chipProps} />

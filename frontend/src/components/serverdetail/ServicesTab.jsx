@@ -5,8 +5,7 @@ import { useConfirm } from '@/hooks/useConfirm';
 import { Button } from '@/components/ui/button';
 import { Pill, Drawer, DataTable, DataTableFooter, ListToolbar, SearchField, serviceStatusKind } from '../ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -417,9 +416,9 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
                 keeps only what belongs to systemd rather than to the table —
                 and not Refresh, which is "Refresh data" in the "⋮". */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadUnits }}
                 label="units"
-                onCreate={chrome.createView}
                 actions={(
                     <>
                         <SearchField
@@ -427,11 +426,6 @@ const ServicesTab = ({ serverId = null, serverStatus = 'online' }) => {
                             onSearch={setSearch}
                             placeholder={t('app.servicesTab.filterByUnitName', 'Filter by unit name…')}
                         />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadUnits} />
                     </>
                 )}
             />

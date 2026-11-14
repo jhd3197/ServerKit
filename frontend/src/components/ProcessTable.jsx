@@ -6,8 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable, DataTableFooter, SearchField } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -298,9 +297,9 @@ export function ProcessTable({
             {/* One row of chrome: the view name is the heading, and search, the
                 host's own controls, the filter button and the "⋮" ride it. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh }}
                 label="processes"
-                onCreate={chrome.createView}
                 actions={(
                     <>
                         <SearchField
@@ -309,11 +308,6 @@ export function ProcessTable({
                             placeholder={t('app.processTable.filterPidNameCommand', 'Filter PID, name, command…')}
                         />
                         {actions}
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={onRefresh} />
                     </>
                 )}
             />

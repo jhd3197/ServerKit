@@ -5,8 +5,7 @@ import useSettingFocus from '../../hooks/useSettingFocus';
 import ApiKeyModal from './ApiKeyModal';
 import WebhookSubscriptionModal from './WebhookSubscriptionModal';
 import {
-    Key, Plus, Trash2, RotateCcw, Activity, AlertCircle,
-    Check, Send, ChevronDown, ChevronUp, Zap, BarChart3, RefreshCw
+    Key, Plus, Trash2, RotateCcw, Activity, AlertCircle, Check, Send, ChevronDown, ChevronUp, Zap, BarChart3, RefreshCw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,8 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Pill } from '@/components/ds/Pill';
 import { DataTable, DataTableFooter } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -314,19 +312,14 @@ const ApiKeysSection = () => {
     return (
         <div {...register('api-keys', 'settings-card')}>
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadKeys }}
                 label="keys"
-                onCreate={chrome.createView}
                 actions={(
                     <>
                         <Button variant="default" size="sm" onClick={() => setShowModal(true)}>
                             <Plus size={14} /> {t('app.apiSettingsTab.createKey', 'New key')}
                         </Button>
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadKeys} />
                     </>
                 )}
             />

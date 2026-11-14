@@ -15,8 +15,7 @@ import Modal from './Modal';
 import EmptyState from './EmptyState';
 import { DataTable, DataTableFooter, ListToolbar, SearchField } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -552,9 +551,9 @@ const EnvironmentVariables = ({ appId }) => {
                         useTopbarChrome). No count on it — the footer reports
                         that, under the rows it is counting. */}
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: loadEnvVars }}
                         label="variables"
-                        onCreate={chrome.createView}
                         actions={(
                             <>
                                 <SearchField
@@ -562,11 +561,6 @@ const EnvironmentVariables = ({ appId }) => {
                                     onSearch={setSearch}
                                     placeholder={t('app.environmentVariables.searchKeysOrDescriptions', 'Search keys or descriptions…')}
                                 />
-                                <GridFilterButton
-                                    count={chrome.filterCount}
-                                    onClick={() => chrome.setDrawerOpen(true)}
-                                />
-                                <GridToolsMenu {...chrome.toolsProps} onRefresh={loadEnvVars} />
                             </>
                         )}
                     />

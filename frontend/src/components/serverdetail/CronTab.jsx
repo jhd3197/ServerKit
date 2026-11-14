@@ -8,8 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { DataTable, DataTableFooter, Pill } from '../ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -20,17 +19,10 @@ import Modal from '@/components/Modal';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+    Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import {
-    OfflineIcon,
-    StopIcon,
-    PlayIcon,
-    TrashIcon,
+    OfflineIcon, StopIcon, PlayIcon, TrashIcon,
 } from './serverDetailShared';
 import { toastError } from '@/utils/errorMessage';
 
@@ -353,18 +345,9 @@ const CronTab = ({ serverId, serverStatus }) => {
                         filter button and "⋮" ride it rather than a second bar
                         that would hold nothing else. */}
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: loadJobs }}
                         label="jobs"
-                        onCreate={chrome.createView}
-                        actions={(
-                            <>
-                                <GridFilterButton
-                                    count={chrome.filterCount}
-                                    onClick={() => chrome.setDrawerOpen(true)}
-                                />
-                                <GridToolsMenu {...chrome.toolsProps} onRefresh={loadJobs} />
-                            </>
-                        )}
                     />
 
                     <GridChips {...chrome.chipProps} />

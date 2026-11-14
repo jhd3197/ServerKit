@@ -5,39 +5,38 @@ import { useConfirm } from '../../hooks/useConfirm';
 import EmptyState from '../EmptyState';
 import { ErrorState } from '../ErrorState';
 import Modal from '@/components/Modal';
-import { DataTable, DataTableFooter, SearchField } from '@/components/ds';
+import { DataTable, DataTableFooter } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Layers, Trash2 } from 'lucide-react';
+import { Download, Layers, Trash2 } from 'lucide-react';
 import { formatBytes } from '@/utils/formatBytes';
 import { formatRelativeTime } from '@/utils/time';
 import { useTranslation } from 'react-i18next';
 import {
-    useServer,
-    normalizeListResponse,
-    imageId,
-    imageRef,
-    imageSizeBytes,
-    imageSizeMb,
-    imageCreatedMs,
+    useServer, normalizeListResponse, imageId, imageRef, imageSizeBytes, imageSizeMb, imageCreatedMs,
 } from './dockerHelpers';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 
 export const PullImageButton = () => {
     const { t } = useTranslation();
     const [showModal, setShowModal] = useState(false);
     return (
         <>
-            <Button onClick={() => setShowModal(true)}>
-                <span>+</span> {t('app.imagesTab.pullImage', 'Pull image')}
-            </Button>
+            <PagePrimaryButton
+                id="docker-pull-image"
+                icon={Download}
+                label={t('app.imagesTab.pullImage', 'Pull image')}
+                shortLabel={t('app.imagesTab.pull', 'Pull')}
+                onClick={() => setShowModal(true)}
+            />
             {showModal && <PullImageModal onClose={() => setShowModal(false)} onPulled={() => window.location.reload()} />}
         </>
     );
@@ -113,6 +112,13 @@ const ImagesTab = ({ onStatsChange }) => {
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+
+    // The Docker page's top bar: this tab's create button and search, after the page-wide
+    // buttons. Filters and the table tools are in the view selector's menu.
+    useListTopbar(() => ({
+        primary: <PullImageButton />,
+        search: { value: searchTerm, onSearch: setSearchTerm, placeholder: t('app.imagesTab.searchImages', 'Search images…') },
+    }), [searchTerm]);
     const { sorts, setSorts } = useTableSort({
         defaultSorts: [{ key: 'repository', direction: 'asc' }],
         storageKey: 'serverkit-table-docker-images-sort',
@@ -322,23 +328,9 @@ const ImagesTab = ({ onStatsChange }) => {
     return (
         <div className="dx-tab-pane dx-list-pane">
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadImages }}
                 label="images"
-                onCreate={chrome.createView}
-                actions={(
-                    <>
-                        <SearchField
-                            value={searchTerm}
-                            onSearch={setSearchTerm}
-                            placeholder={t('app.imagesTab.filterRepositoryTagOrId', 'Filter repository, tag, or ID…')}
-                        />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadImages} />
-                    </>
-                )}
             />
 
             <GridChips {...chrome.chipProps} />

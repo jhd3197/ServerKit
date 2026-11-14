@@ -10,8 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -426,9 +425,9 @@ const UsersTab = () => {
                 what the tab strip already said, and stacking it above the
                 picker would have been two titles for one table. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadUsers }}
                 label="users"
-                onCreate={chrome.createView}
                 actions={(
                     <>
                         {/* Add User rides the chrome line rather than a bar of
@@ -442,11 +441,6 @@ const UsersTab = () => {
                             </svg>
                             {t('app.usersTab.addUser', 'New user')}
                         </Button>
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadUsers} />
                     </>
                 )}
             />

@@ -6,8 +6,7 @@ import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
 import { DataTable, DataTableFooter, ListToolbar } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer, applyFilters,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer, applyFilters,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -380,18 +379,9 @@ const IntegrityTab = () => {
                     {isOpen && (
                         <>
                             <GridViewPicker
-                                views={chrome.views}
+                                {...chrome.pickerProps}
+                                tools={{ ...chrome.toolsProps, onRefresh: load }}
                                 label="changes"
-                                onCreate={chrome.createView}
-                                actions={(
-                                    <>
-                                        <GridFilterButton
-                                            count={chrome.filterCount}
-                                            onClick={() => chrome.setDrawerOpen(true)}
-                                        />
-                                        <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />
-                                    </>
-                                )}
                             />
                             <GridChips {...chrome.chipProps} />
                         </>

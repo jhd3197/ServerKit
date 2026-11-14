@@ -1,15 +1,13 @@
 import { useCallback, useState, useEffect, useId } from 'react';
 import {
-    FolderUp, UserPlus, Network, Activity, Server, Users as UsersIcon,
-    Cable, KeyRound, Ban, Check, Trash2, RefreshCw, X,
+    FolderUp, UserPlus, Network, Activity, Server, Users as UsersIcon, Cable, KeyRound, Ban, Check, Trash2, RefreshCw, X,
 } from 'lucide-react';
 import useTabParam from '../hooks/useTabParam';
 import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { api } from '../services/api';
 import { DataTable, DataTableFooter, MetricCard, KpiBand, Pill, ListToolbar, SegControl } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -667,18 +665,9 @@ function FTPServer() {
                                     on what you are looking at; Refresh is in
                                     the "⋮". */}
                                 <GridViewPicker
-                                    views={userChrome.views}
+                                    {...userChrome.pickerProps}
+                                    tools={{ ...userChrome.toolsProps, onRefresh: loadUsers }}
                                     label="users"
-                                    onCreate={userChrome.createView}
-                                    actions={(
-                                        <>
-                                            <GridFilterButton
-                                                count={userChrome.filterCount}
-                                                onClick={() => userChrome.setDrawerOpen(true)}
-                                            />
-                                            <GridToolsMenu {...userChrome.toolsProps} onRefresh={loadUsers} />
-                                        </>
-                                    )}
                                 />
                                 <ListToolbar>
                                     <Button onClick={() => setShowUserModal(true)}>
@@ -726,18 +715,9 @@ function FTPServer() {
                                     reachable even with nothing connected —
                                     the empty state is the table's now. */}
                                 <GridViewPicker
-                                    views={connChrome.views}
+                                    {...connChrome.pickerProps}
+                                    tools={{ ...connChrome.toolsProps, onRefresh: loadConnections }}
                                     label="connections"
-                                    onCreate={connChrome.createView}
-                                    actions={(
-                                        <>
-                                            <GridFilterButton
-                                                count={connChrome.filterCount}
-                                                onClick={() => connChrome.setDrawerOpen(true)}
-                                            />
-                                            <GridToolsMenu {...connChrome.toolsProps} onRefresh={loadConnections} />
-                                        </>
-                                    )}
                                 />
 
                                 <GridChips {...connChrome.chipProps} />

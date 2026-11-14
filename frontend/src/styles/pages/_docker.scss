@@ -400,10 +400,6 @@
 }
 
 // Full-width manager shell
-.dx-page > .sk-kpiband-wrap {
-    flex-shrink: 0;
-}
-
 .dx-panel {
     flex: 1;
     min-height: 0;
@@ -435,10 +431,11 @@
     display: flex;
     flex-direction: column;
 
+    // No margin of its own: the view row above already carries the same
+    // 16px every other list page has between the view name and the table.
     .dx-resource-list {
         flex: 1;
         min-height: 0;
-        margin-top: $space-3;
     }
 }
 
@@ -915,10 +912,6 @@
 
 .dx-tab-pane {
     padding: 0;
-}
-
-.dx-containers-pane {
-    gap: $space-2;
 }
 
 .dx-manager-layout {

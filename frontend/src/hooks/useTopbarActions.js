@@ -1,6 +1,20 @@
-import { useEffect } from 'react';
+import { createContext, createElement, useContext, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useOutletContext } from 'react-router-dom';
+import { ListActions } from '@/components/ds/ListActions';
+
+// The top bar a page's sections publish into when the page owns its own bar
+// (PageLayout) instead of sharing a tab group's. PageLayout provides it, so a
+// tab component inside a standalone page — a Docker tab, say — publishes its
+// create button and search exactly the way a tab-group page does.
+export const PageTopbarContext = createContext(null);
+
+// The nearest bar wins: a PageLayout around the caller, else the tab group.
+function useTopbarHost() {
+    const page = useContext(PageTopbarContext);
+    const group = useOutletContext();
+    return page || group;
+}
 
 // Publish a page's top-bar actions into the enclosing TabGroupLayout header.
 // Pages in a tab group render no PageTopbar of their own, so the shared layout
@@ -14,7 +28,7 @@ import { useOutletContext } from 'react-router-dom';
 // [loading, isAdmin]); the node/thunk itself is intentionally not a dependency.
 // No-op when rendered outside a tab group (e.g. a page reused as a plain route).
 export function useTopbarActions(actions, deps = []) {
-    const ctx = useOutletContext();
+    const ctx = useTopbarHost();
     const setTopbarActions = ctx?.setTopbarActions;
 
     useEffect(() => {
@@ -32,8 +46,28 @@ export function useTopbarActions(actions, deps = []) {
     }, [setTopbarActions]);
 }
 
-// The SECOND top-bar slot: a table's own chrome — search, the filter button and
-// the "⋮". It is separate from useTopbarActions because the two are published
+// A list page's top bar, in the one fixed order: secondary buttons, the create
+// button, then search (see ds/ListActions). Pass a thunk returning
+// `{ secondary, primary, search }` — same reason as above — and the reactive
+// values it reads as `deps`:
+//
+//   useListTopbar(() => ({
+//       secondary: <Button variant="outline" size="sm" onClick={load}>Sync</Button>,
+//       primary: <PagePrimaryButton id="servers-add" label="Add server" onClick={open} />,
+//       search: { value: q, onSearch: setQ, placeholder: 'Search servers…' },
+//   }), [q]);
+export function useListTopbar(spec, deps = []) {
+    useTopbarActions(
+        () => createElement(ListActions, typeof spec === 'function' ? spec() : spec),
+        deps,
+    );
+}
+
+// The SECOND top-bar slot, for a workspace's own controls (the file manager's
+// view switch). List tables do NOT use it: their filter and tools live in the
+// view selector's menu (GridViewPicker `filters` / `tools`), and
+// scripts/check-list-chrome.mjs fails a table that hoists them here.
+// It is separate from useTopbarActions because the two are published
 // by different owners at different times. A page's actions ("Add domain") are
 // the page's; the chrome belongs to whichever table is on it, which may be a
 // shared wrapper like ResourceListPage that has no business overwriting what

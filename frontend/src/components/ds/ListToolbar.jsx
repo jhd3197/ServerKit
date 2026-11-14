@@ -14,9 +14,9 @@ import { cn } from '@/lib/utils';
 //     {/* optional extras between filters and the right group (e.g. a select) */}
 //   </ListToolbar>
 //
-// Placement rule (see AGENTS.md "Page anatomy"): a table gets ONE row of chrome
-// — the GridViewPicker line — carrying search, the filter button and the "⋮",
-// either inline or hoisted into the shared topbar (useTopbarChrome). This
+// Placement rule (scripts/check-list-chrome.mjs): a table gets ONE row of
+// chrome — the GridViewPicker line. Filters, fields and the table tools are
+// entries in that selector's menu; search rides the page's top bar. This
 // toolbar is for what is left: a quick-filter segment, a scope select, a
 // checkbox. A page with none of those renders no toolbar at all.
 //
