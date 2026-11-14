@@ -366,6 +366,11 @@ $skw-z-tv: 200;
         box-shadow: $focus-ring;
     }
 
+    // A bare widget is its own card (a KPI tile): the frame draws the card and
+    // the body says what it is, so there is no header. Edit mode keeps the
+    // header, which is the drag handle.
+    &--bare:not(.skw-frame--edit) > .skw-frame__head { display: none; }
+
     &__head {
         display: flex;
         align-items: center;

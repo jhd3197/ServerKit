@@ -5,14 +5,15 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import { formatBytes } from '@/utils/formatBytes';
-import { AreaChart, KpiBand, MetricCard, Pill, Sparkline } from '@/components/ds';
+import { AreaChart, MetricCard, Pill, Sparkline } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '../Skeleton';
-import MonitorsSummary from './MonitorsSummary';
+import { LiveChecks, MonitorKpi, MonitorsList } from './MonitorsSummary';
 import { OverviewBoard, OverviewSection } from '@/components/detail/OverviewBoard';
 import DiskReclaimModal from './DiskReclaimModal';
 import { HOST_SCOPE, useScopeMetrics, trendOf } from './useMonitorScope';
 import { useTranslation } from 'react-i18next';
+import { translateLabel } from '@/i18n/labels';
 import { formatDateTime } from '@/utils/intl';
 
 const PERIODS = ['1h', '6h', '24h', '7d'];
@@ -48,6 +49,24 @@ function last(series) {
 // this page to read, for numbers that belong next to these ones.
 // Dashboard widget types the Monitoring overview can carry besides its blocks.
 const MONITORING_WIDGET_TYPES = ['stat', 'gauge', 'timeseries', 'specs', 'note'];
+
+// Board rows a KPI tile takes: enough for value, label, a sub line and the
+// sparkline under them.
+const KPI_TILE_ROWS = 3;
+
+const MONITOR_KPI_BLOCKS = [
+    { metric: 'availability', labelKey: 'app.monitorsSummary.availability30d', label: 'Availability (30d)' },
+    { metric: 'response', labelKey: 'app.monitorsSummary.avgResponse', label: 'Avg response' },
+    { metric: 'down', labelKey: 'app.monitorsSummary.monitorsDown', label: 'Monitors down' },
+    { metric: 'degraded', labelKey: 'app.monitorsSummary.degraded', label: 'Degraded' },
+];
+
+// Board rows for the monitor list and the live check feed: five rows of each
+// without scrolling.
+const LIST_BLOCK_ROWS = 9;
+
+// Block ids for the four host readings, in tile order.
+const HOST_TILE_IDS = ['host-cpu', 'host-memory', 'host-disk', 'host-extra'];
 
 export default function MonitoringOverview({
     scope, isHost, scopeLabel, status, activeAlerts = [],
@@ -209,28 +228,44 @@ export default function MonitoringOverview({
             {/* Monitors first: "is the site up" is the question this page is
                 for, and everything below describes the machines ServerKit runs
                 on rather than the things it is watching. */}
-            <OverviewSection id="monitors" title={t('app.monitoringOverview.monitors', 'Monitors')} w={12} h={9}>
-                <MonitorsSummary summary={monitorsSummary} />
+            {MONITOR_KPI_BLOCKS.map((block) => (
+                <OverviewSection key={block.metric} id={`monitor-${block.metric}`} title={translateLabel(t, block)} tile replaces="monitors" w={3} h={KPI_TILE_ROWS}>
+                    <MonitorKpi summary={monitorsSummary} metric={block.metric} />
+                </OverviewSection>
+            ))}
+
+            <OverviewSection id="monitor-list" title={t('app.monitoringOverview.monitors', 'Monitors')} replaces="monitors" w={6} h={LIST_BLOCK_ROWS}>
+                <MonitorsList summary={monitorsSummary} />
             </OverviewSection>
 
-            <OverviewSection id="health" title={t('app.monitoringOverview.hostHealth', 'Host health')} w={12} h={5}>
-            {/* The shared DS tile, not a monitoring-only copy of it — same
-                geometry as every other KPI strip in the panel, plus the
-                sparkline slot this page needed. */}
-            <KpiBand max={4}>
-                {tiles.map((tile) => {
-                    const numeric = Number(tile.value);
-                    const alerting = tile.limit != null && !Number.isNaN(numeric) && numeric > tile.limit;
-                    const trend = trendOf(tile.spark);
-                    return (
+            <OverviewSection id="monitor-checks" title={t('app.monitorsSummary.liveChecks', 'Live checks')} replaces="monitors" w={6} h={LIST_BLOCK_ROWS}>
+                <LiveChecks summary={monitorsSummary} />
+            </OverviewSection>
+
+            {/* One block per reading, each the shared DS tile. The fourth
+                slot is the scope's own question (load on the host, containers
+                on an agent), so it keeps one id whichever it shows. */}
+            {tiles.map((tile, index) => {
+                const numeric = Number(tile.value);
+                const alerting = tile.limit != null && !Number.isNaN(numeric) && numeric > tile.limit;
+                const trend = trendOf(tile.spark);
+                return (
+                    <OverviewSection
+                        key={HOST_TILE_IDS[index]}
+                        id={HOST_TILE_IDS[index]}
+                        title={translateLabel(t, tile)}
+                        tile
+                        replaces="health"
+                        w={3}
+                        h={KPI_TILE_ROWS}
+                    >
                         <MetricCard
-                            key={tile.key}
                             tone={alerting ? 'amber' : TILE_TONE[tile.tone]}
                             className={alerting ? 'is-alerting' : undefined}
                             icon={<tile.icon size={16} />}
                             value={tile.value}
                             unit={tile.unit || undefined}
-                            label={tile.label}
+                            label={translateLabel(t, tile)}
                             trend={trend == null ? undefined : (
                                 <>
                                     {trend > 0 ? <ArrowUp size={11} /> : <ArrowDown size={11} />}
@@ -264,10 +299,9 @@ export default function MonitoringOverview({
                                 </Button>
                             )}
                         </MetricCard>
-                    );
-                })}
-            </KpiBand>
-            </OverviewSection>
+                    </OverviewSection>
+                );
+            })}
 
             <OverviewSection id="processor" title={t('app.monitoringOverview.processor', 'Processor')} w={6} h={7}>
                 <section className="monitoring-panel">

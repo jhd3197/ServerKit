@@ -1,5 +1,5 @@
 import { serverStatusKind } from './serverDetailData';
-import { Pill, KpiBand, MetricCard, Gauge } from '../ds';
+import { Pill, MetricCard, Gauge } from '../ds';
 import OnboardingWizard from '../server/OnboardingWizard';
 import SystemStatusCard from './SystemStatusCard';
 import { OverviewBoard, OverviewSection } from '@/components/detail/OverviewBoard';
@@ -46,6 +46,8 @@ const SERVER_LEADING_WIDGETS = [
 // Usage thresholds for the CPU / memory / disk tiles.
 const USAGE_DANGER_PERCENT = 85;
 const USAGE_WARN_PERCENT = 70;
+// Board rows a KPI tile takes: value, label, a meter and its sub line.
+const KPI_TILE_ROWS = 3;
 
 // A percent tile on the shared MetricCard: the value, a thin meter and the
 // capacity line underneath. Same tile the service overview's KPI band uses.
@@ -136,47 +138,53 @@ const ServerOverviewTab = ({ server, metrics, systemInfo, onRefreshServer }) => 
                     )}
                 </OverviewSection>
 
-                {/* The agent's live readings (no history needed). Offered in
-                    the block library; the default layout opens with the
-                    dashboard's metric widgets instead. */}
-                <OverviewSection id="live" title={t('app.serverOverviewTab.liveStatus', 'Live status')} w={12} h={4} placed={false}>
-                    <KpiBand max={5}>
-                        <MetricCard
-                            icon={<PulseIcon />}
-                            tone={isOnline ? 'green' : server.status === 'connecting' ? 'amber' : 'red'}
-                            value={statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}
-                            label={t('common.labels.status', 'Status')}
-                        />
-                        <MetricCard
-                            icon={<ClockIcon />}
-                            tone="accent"
-                            value={isOnline ? formatUptime(metrics?.uptime) : '—'}
-                            label={t('common.labels.uptime', 'Uptime')}
-                        >
-                            {isOnline && metrics?.uptime ? <div className="sk-kpi__sub">{t('app.serverOverviewTab.sinceLastBoot', 'since last boot')}</div> : null}
-                        </MetricCard>
-                        <UsageTile
-                            icon={<CpuIcon />}
-                            label="CPU"
-                            percent={isOnline ? metrics?.cpu_percent : null}
-                            color="var(--accent-bright)"
-                            sub={cpuCores ? `${cpuCores} cores` : null}
-                        />
-                        <UsageTile
-                            icon={<MemoryIcon />}
-                            label={t('common.labels.memory', 'Memory')}
-                            percent={isOnline ? metrics?.memory_percent : null}
-                            color="var(--cyan)"
-                            sub={totalMemory ? formatBytes(totalMemory) : null}
-                        />
-                        <UsageTile
-                            icon={<DiskIcon />}
-                            label={t('common.labels.disk', 'Disk')}
-                            percent={isOnline ? metrics?.disk_percent : null}
-                            color="var(--green)"
-                            sub={totalDisk ? formatBytes(totalDisk) : null}
-                        />
-                    </KpiBand>
+                {/* The agent's live readings (no history needed), one tile
+                    each. Offered in the block library; the default layout
+                    opens with the dashboard's metric widgets instead. */}
+                <OverviewSection id="live-status" title={t('common.labels.status', 'Status')} tile replaces="live" w={3} h={KPI_TILE_ROWS} placed={false}>
+                    <MetricCard
+                        icon={<PulseIcon />}
+                        tone={isOnline ? 'green' : server.status === 'connecting' ? 'amber' : 'red'}
+                        value={statusLabel.charAt(0).toUpperCase() + statusLabel.slice(1)}
+                        label={t('common.labels.status', 'Status')}
+                    />
+                </OverviewSection>
+                <OverviewSection id="live-uptime" title={t('common.labels.uptime', 'Uptime')} tile replaces="live" w={3} h={KPI_TILE_ROWS} placed={false}>
+                    <MetricCard
+                        icon={<ClockIcon />}
+                        tone="accent"
+                        value={isOnline ? formatUptime(metrics?.uptime) : '—'}
+                        label={t('common.labels.uptime', 'Uptime')}
+                    >
+                        {isOnline && metrics?.uptime ? <div className="sk-kpi__sub">{t('app.serverOverviewTab.sinceLastBoot', 'since last boot')}</div> : null}
+                    </MetricCard>
+                </OverviewSection>
+                <OverviewSection id="live-cpu" title="CPU" tile replaces="live" w={3} h={KPI_TILE_ROWS} placed={false}>
+                    <UsageTile
+                        icon={<CpuIcon />}
+                        label="CPU"
+                        percent={isOnline ? metrics?.cpu_percent : null}
+                        color="var(--accent-bright)"
+                        sub={cpuCores ? `${cpuCores} cores` : null}
+                    />
+                </OverviewSection>
+                <OverviewSection id="live-memory" title={t('common.labels.memory', 'Memory')} tile replaces="live" w={3} h={KPI_TILE_ROWS} placed={false}>
+                    <UsageTile
+                        icon={<MemoryIcon />}
+                        label={t('common.labels.memory', 'Memory')}
+                        percent={isOnline ? metrics?.memory_percent : null}
+                        color="var(--cyan)"
+                        sub={totalMemory ? formatBytes(totalMemory) : null}
+                    />
+                </OverviewSection>
+                <OverviewSection id="live-disk" title={t('common.labels.disk', 'Disk')} tile replaces="live" w={3} h={KPI_TILE_ROWS} placed={false}>
+                    <UsageTile
+                        icon={<DiskIcon />}
+                        label={t('common.labels.disk', 'Disk')}
+                        percent={isOnline ? metrics?.disk_percent : null}
+                        color="var(--green)"
+                        sub={totalDisk ? formatBytes(totalDisk) : null}
+                    />
                 </OverviewSection>
 
                 <OverviewSection id="info" title={t('app.serverOverviewTab.serverInformation', 'Server information')} icon={ServerGlyph} w={4} h={6}>

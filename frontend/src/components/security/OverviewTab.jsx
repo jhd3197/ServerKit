@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import api from '../../services/api';
 import { useContributions } from '@/plugins/contributions';
 import { Button } from '@/components/ui/button';
-import { Pill, ScoreGauge, KpiBand, MetricCard } from '@/components/ds';
+import { Pill, ScoreGauge, MetricCard } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import {
@@ -18,13 +18,19 @@ import {
     Radar,
     Puzzle,
     Bell,
+    ListChecks,
 } from 'lucide-react';
 import InfoTip from '@/components/InfoTip';
-import { Card as SharedCard, CardHeader as SharedCardHeader, CardContent as SharedCardContent } from '@/components/ui/card';
+import { translateLabel } from '@/i18n/labels';
+import { OverviewBoard, OverviewSection } from '@/components/detail/OverviewBoard';
 
 // Status glyph per check state — paired with the label so state never relies on
 // color alone (color-blind operators), per the product a11y bar.
 const STATE_ICON = { pass: CheckCircle2, warn: AlertTriangle, unknown: Circle };
+
+// Board rows: a KPI tile (the score block shares the row), and the checks list.
+const KPI_TILE_ROWS = 3;
+const CHECKS_ROWS = 6;
 
 const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
     const { t } = useTranslation();
@@ -127,14 +133,10 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
         <div className="security-overview">
             {error && <div className="alert alert-danger">{error}</div>}
 
-            <SharedCard variant="legacy" className="card sec-posture-card">
-                <SharedCardHeader variant="legacy" className="card-header">
-                    <h3><ShieldCheck size={13} /> {t('app.overviewTab.securityPosture', 'Security posture')}</h3>
-                    <Button variant="outline" size="sm" onClick={() => runFix('recheck', async () => {})} disabled={busy}>
-                        <RefreshCw size={13} className={busyKey === 'recheck' ? 'sec-spin' : undefined} /> {t('app.overviewTab.reCheck', 'Re-check')}
-                    </Button>
-                </SharedCardHeader>
-                <SharedCardContent variant="legacy" className="card-body">
+            {/* The posture as separate board blocks: the score, one tile per
+                live count, then the checks behind the score. */}
+            <OverviewBoard kind="security">
+                <OverviewSection id="posture" title={t('app.overviewTab.securityPosture', 'Security posture')} icon={ShieldCheck} tile w={6} h={KPI_TILE_ROWS}>
                     <div className="sec-posture__top">
                         {score !== null ? (
                             <ScoreGauge value={score} size={phone ? 72 : 104} stroke={phone ? 7 : 9} color={scoreColor} label="posture" />
@@ -144,7 +146,6 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                                 <span>{t('app.overviewTab.computing', 'Computing…')}</span>
                             </div>
                         )}
-
                         <div className="sec-posture__summary">
                             <p className="sec-posture__verdict">
                                 {score === null
@@ -157,23 +158,24 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                                             defaultValue_other: '{{count}} checks need attention.',
                                         })}
                             </p>
-                            <KpiBand dense className="sec-posture__kpis">
-                                {kpis.map((k) => {
-                                    const Icon = k.icon;
-                                    return (
-                                        <MetricCard
-                                            key={k.key}
-                                            icon={<Icon size={16} />}
-                                            tone={k.tone}
-                                            value={k.value}
-                                            label={k.label}
-                                        />
-                                    );
-                                })}
-                            </KpiBand>
+                            <Button variant="outline" size="sm" onClick={() => runFix('recheck', async () => {})} disabled={busy}>
+                                <RefreshCw size={13} className={busyKey === 'recheck' ? 'sec-spin' : undefined} /> {t('app.overviewTab.reCheck', 'Re-check')}
+                            </Button>
                         </div>
                     </div>
+                </OverviewSection>
 
+                {kpis.map((k) => {
+                    const Icon = k.icon;
+                    const label = translateLabel(t, k);
+                    return (
+                        <OverviewSection key={k.key} id={`kpi-${k.key}`} title={label} tile w={2} h={KPI_TILE_ROWS}>
+                            <MetricCard icon={<Icon size={16} />} tone={k.tone} value={k.value} label={label} />
+                        </OverviewSection>
+                    );
+                })}
+
+                <OverviewSection id="checks" title={t('app.overviewTab.hardeningChecks', 'Hardening checks')} icon={ListChecks} w={12} h={CHECKS_ROWS}>
                     <div className="sec-posture__checks">
                         {checks.map((c) => {
                             const Icon = STATE_ICON[c.state];
@@ -217,8 +219,8 @@ const OverviewTab = ({ status, onRefresh, onNavigateTab }) => {
                         </Link>
                         <InfoTip subject={t('app.overviewTab.notificationsLink', 'Notifications')}>{t('app.overviewTab.addAlertDeliveryChannelsDiscordSlack', 'Add alert delivery channels (Discord, Slack, Telegram) in Settings → Notifications.')}</InfoTip>
                     </div>
-                </SharedCardContent>
-            </SharedCard>
+                </OverviewSection>
+            </OverviewBoard>
         </div>
     );
 };
