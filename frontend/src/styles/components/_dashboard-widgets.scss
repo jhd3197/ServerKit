@@ -1227,8 +1227,10 @@ $skw-z-tv: 200;
     // ds/Drawer, whose .sk-drawer__body owns the scroll — so this bar has to
     // stick to the top of THAT scroller or the search box leaves the screen
     // as soon as you scroll to the widget you were searching for. Sticky
-    // demands an opaque background (it scrolls over the cards) and the
-    // negative top/side margins let it span the drawer's padding edge to edge.
+    // demands an opaque background (it scrolls over the cards). It stays
+    // inside the scroller's width: the padding it once cancelled with negative
+    // side margins is on the drawer, outside the scroller, so bleeding past
+    // the edge showed nothing and only gave the panel a horizontal scrollbar.
     &__filters {
         position: sticky;
         top: 0;
@@ -1236,8 +1238,8 @@ $skw-z-tv: 200;
         display: flex;
         flex-direction: column;
         gap: $space-3;
-        margin: -14px -16px $space-4;
-        padding: $space-4 $space-4 $space-3;
+        margin: -14px 0 $space-4;
+        padding: $space-4 0 $space-3;
         background: var(--surface);
         border-bottom: 1px solid var(--border-soft);
     }
