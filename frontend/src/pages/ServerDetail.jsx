@@ -9,8 +9,9 @@ import { useToast } from '../contexts/useToast.js';
 import { useConfirm } from '../hooks/useConfirm';
 import { useRecordVisit } from '@/hooks/useRecordVisit';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { TabsContent } from '@/components/ui/tabs';
-import { Server, LayoutGrid, History, Container, Globe, Clock, Network, Package, Boxes, ScanSearch, Activity, Bell, Shield, Settings } from 'lucide-react';
+import { Server, Terminal, KeyRound, MoreVertical, Trash2, LayoutGrid, History, Container, Globe, Clock, Network, Package, Boxes, ScanSearch, Activity, Bell, Shield, Settings } from 'lucide-react';
 import PackagesTab from '../components/serverdetail/PackagesTab';
 import ServicesTab from '../components/serverdetail/ServicesTab';
 import ServerOverviewTab from '../components/serverdetail/ServerOverviewTab';
@@ -277,6 +278,8 @@ const ServerDetail = () => {
         { id: 'settings', icon: Settings, label: t('common.labels.settings', 'Settings') }
     ];
 
+    const isOnline = server.status === 'online';
+    const canOpenShell = isOnline && Boolean(server.capabilities?.terminal);
     const displayName = isPlaceholderServerName(server.name) ? t('app.serverDetail.pendingPairing', 'Pending pairing') : server.name;
 
     return (
@@ -288,9 +291,40 @@ const ServerDetail = () => {
             name={displayName}
             favorite={<FavoriteStar type="server" id={server.id} path={`/servers/${server.id}`} label={server.name} />}
             actions={(
-                <Button variant="outline" size="sm" onClick={handlePingServer}>
-                    <RefreshIcon /> {t('app.serverDetail.ping', 'Ping')}
-                </Button>
+                <>
+                    {/* Primary action follows the server's state: open a shell
+                        when it is reachable, pair it when it is not. */}
+                    {canOpenShell ? (
+                        <Button asChild>
+                            <Link to={`/terminal/shell?server=${server.id}`}>
+                                <Terminal size={14} /> {t('app.serverDetail.openTerminal', 'Terminal')}
+                            </Link>
+                        </Button>
+                    ) : !isOnline && (
+                        <Button onClick={handleOpenTokenModal}>
+                            <KeyRound size={14} /> {t('app.serverDetail.connect', 'Connect')}
+                        </Button>
+                    )}
+                    <Button variant="outline" onClick={handlePingServer}>
+                        <RefreshIcon /> {t('app.serverDetail.ping', 'Ping')}
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" aria-label={t('app.serverDetail.moreActions', 'More actions')}>
+                                <MoreVertical size={16} />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={handleOpenTokenModal}>
+                                <KeyRound size={14} /> {t('app.serverDetail.generateConnectionString', 'Generate connection string')}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-destructive" onClick={handleDeleteServer}>
+                                <Trash2 size={14} /> {t('app.serverDetail.removeServer', 'Remove server')}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </>
             )}
         >
             <DetailIdentity
