@@ -15,12 +15,13 @@ would be a broken dashboard the user cannot fix without an API call.
 """
 import logging
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from app.services import dashboard_service
-from app.services.dashboard_service import GRID_COLS, MAX_WIDGETS_PER_BOARD
+from app.services.dashboard_service import ENTITY_SCOPES, GRID_COLS, MAX_WIDGETS_PER_BOARD
 from app.api._request import json_object
+from app.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -126,8 +127,17 @@ def _validate_icon(value):
 @dashboards_bp.route('/', methods=['GET'])
 @jwt_required()
 def list_boards():
-    """This user's boards, seeding the shipped defaults on the first call."""
+    """This user's dashboard tabs, seeding the shipped defaults on the first
+    call. With ``?scope=entity:<kind>`` it returns instead the overview layout
+    the user saved for that kind of detail page: a list of one, or empty while
+    they are still on the shipped layout."""
     user_id = get_jwt_identity()
+    scope = request.args.get('scope')
+    if scope is not None:
+        if scope not in ENTITY_SCOPES:
+            raise ValidationError('Unknown board scope')
+        board = dashboard_service.get_entity_board(user_id, scope)
+        return jsonify({'boards': [board.to_dict()] if board else []})
     boards = dashboard_service.get_boards_for_user(user_id)
     return jsonify({'boards': [b.to_dict() for b in boards]})
 
@@ -137,9 +147,17 @@ def list_boards():
 @jwt_required()
 def create_board():
     """Add a board for this user. ``widgets`` is optional — a new tab usually
-    starts empty and gets filled from the widget library."""
+    starts empty and gets filled from the widget library.
+
+    With ``scope: 'entity:<kind>'`` the board is the user's overview layout for
+    that kind of detail page rather than a dashboard tab. A user has one per
+    kind, so posting again replaces it (200 instead of 201)."""
     user_id = get_jwt_identity()
     body = json_object(optional=True)
+
+    scope = body.get('scope')
+    if scope is not None and scope not in ENTITY_SCOPES:
+        raise ValidationError('Unknown board scope')
 
     name, err = _validate_name(body.get('name'))
     if err:
@@ -156,6 +174,10 @@ def create_board():
         widgets, err = _validate_widgets(body.get('widgets'))
         if err:
             return jsonify({'error': err}), 400
+
+    if scope is not None:
+        board, created = dashboard_service.save_entity_board(user_id, scope, name, widgets)
+        return jsonify(board.to_dict()), 201 if created else 200
 
     board = dashboard_service.create_board(user_id, name, icon=icon, widgets=widgets)
     return jsonify(board.to_dict()), 201
