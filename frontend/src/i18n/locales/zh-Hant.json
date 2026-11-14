@@ -1664,7 +1664,6 @@
             "couldNotReset": "無法重設",
             "couldNotSave": "無法儲存",
             "dashboardSaved": "儀表板已儲存",
-            "delete": "刪除{{name}}",
             "deleteRemovesIt": "刪除即會移除",
             "discard": "丟棄",
             "dragHeadersToMoveDragThe": "拖曳標題進行移動·拖曳角落進行調整大小·點選小工具進行設定",

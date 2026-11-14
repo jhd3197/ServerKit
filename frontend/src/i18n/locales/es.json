@@ -1664,7 +1664,6 @@
             "couldNotReset": "No se pudo restablecer",
             "couldNotSave": "No se pudo guardar",
             "dashboardSaved": "Panel guardado",
-            "delete": "Eliminar {{name}}",
             "deleteRemovesIt": "Eliminar lo quita",
             "discard": "Descartar",
             "dragHeadersToMoveDragThe": "Arrastra los encabezados para mover · arrastra la esquina para redimensionar · haz clic en un widget para configurarlo",

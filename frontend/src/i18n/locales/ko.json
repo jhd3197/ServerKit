@@ -1664,7 +1664,6 @@
             "couldNotReset": "재설정할 수 없습니다.",
             "couldNotSave": "저장할 수 없습니다.",
             "dashboardSaved": "대시보드가 저장되었습니다",
-            "delete": "{{name}} 삭제",
             "deleteRemovesIt": "삭제하면 제거됩니다",
             "discard": "폐기",
             "dragHeadersToMoveDragThe": "이동하려면 헤더를 드래그하세요. 크기를 조정하려면 모서리를 드래그하세요. 위젯을 클릭하여 구성하세요.",

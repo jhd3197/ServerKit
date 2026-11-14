@@ -1664,7 +1664,6 @@
             "couldNotReset": "Sıfırlanamadı",
             "couldNotSave": "Kaydedilemedi",
             "dashboardSaved": "Kontrol paneli kaydedildi",
-            "delete": "{{name}}'yi sil",
             "deleteRemovesIt": "Silmek onu kaldırır",
             "discard": "At",
             "dragHeadersToMoveDragThe": "Taşımak için başlıkları sürükleyin · yeniden boyutlandırmak için köşeyi sürükleyin · yapılandırmak için bir widget'ı tıklayın",

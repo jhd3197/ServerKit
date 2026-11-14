@@ -1664,7 +1664,6 @@
             "couldNotReset": "Nie udało się zresetować",
             "couldNotSave": "Nie udało się zapisać",
             "dashboardSaved": "Panel został zapisany",
-            "delete": "Usuń {{name}}",
             "deleteRemovesIt": "Usunięcie go usuwa",
             "discard": "Wyrzucać",
             "dragHeadersToMoveDragThe": "Przeciągnij nagłówki, aby przenieść · przeciągnij róg, aby zmienić rozmiar · kliknij widżet, aby go skonfigurować",

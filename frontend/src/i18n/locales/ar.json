@@ -1664,7 +1664,6 @@
             "couldNotReset": "لا يمكن إعادة التعيين",
             "couldNotSave": "لا يمكن الحفظ",
             "dashboardSaved": "تم حفظ لوحة المعلومات",
-            "delete": "حذف {{name}}",
             "deleteRemovesIt": "يؤدي الحذف إلى إزالتها",
             "discard": "ينبذ",
             "dragHeadersToMoveDragThe": "اسحب الرؤوس للتحرك · اسحب الزاوية لتغيير حجمها · انقر فوق عنصر واجهة المستخدم لتكوينه",

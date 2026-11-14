@@ -1664,7 +1664,6 @@
             "couldNotReset": "Impossible de réinitialiser",
             "couldNotSave": "Impossible d'enregistrer",
             "dashboardSaved": "Tableau de bord enregistré",
-            "delete": "Supprimer {{name}}",
             "deleteRemovesIt": "Supprimer le retire",
             "discard": "Jeter",
             "dragHeadersToMoveDragThe": "Faites glisser les en-têtes pour déplacer · faites glisser le coin pour redimensionner · cliquez sur un widget pour le configurer",

@@ -1664,7 +1664,6 @@
             "couldNotReset": "Konnte nicht zurückgesetzt werden",
             "couldNotSave": "Konnte nicht gespeichert werden",
             "dashboardSaved": "Dashboard gespeichert",
-            "delete": "{{name}} löschen",
             "deleteRemovesIt": "Löschen entfernt es",
             "discard": "Verwerfen",
             "dragHeadersToMoveDragThe": "Ziehen Sie die Kopfzeilen, um sie zu verschieben. Ziehen Sie die Ecke, um die Größe zu ändern. Klicken Sie auf ein Widget, um es zu konfigurieren",

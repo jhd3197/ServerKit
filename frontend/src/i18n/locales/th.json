@@ -1664,7 +1664,6 @@
             "couldNotReset": "ไม่สามารถรีเซ็ตได้",
             "couldNotSave": "ไม่สามารถบันทึกได้",
             "dashboardSaved": "บันทึกแดชบอร์ดแล้ว",
-            "delete": "ลบ {{name}}",
             "deleteRemovesIt": "การลบจะนำออก",
             "discard": "ทิ้ง",
             "dragHeadersToMoveDragThe": "ลากส่วนหัวเพื่อย้าย · ลากมุมเพื่อปรับขนาด · คลิกวิดเจ็ตเพื่อกำหนดค่า",
