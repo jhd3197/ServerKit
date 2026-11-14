@@ -270,58 +270,6 @@ $ft-default:  #646b7a;
         span { @include truncate(); max-width: 90px; }
     }
 
-    // ─── Search field ───────────────────────────────────
-    .search-field {
-        position: relative;
-        display: flex;
-        align-items: center;
-        background: var(--surface-2);
-        border: 1px solid var(--border);
-        border-radius: $radius-card;
-        width: clamp(160px, 18vw, 220px);
-        @include transition(all);
-
-        &:focus-within {
-            border-color: var(--accent-dim);
-            background: var(--surface);
-        }
-
-        .search-field-icon {
-            position: absolute;
-            left: $space-3;
-            color: $text-tertiary;
-            pointer-events: none;
-        }
-
-        input {
-            background: transparent;
-            border: none;
-            padding: $space-tight $space-3 $space-tight $space-8;
-            font-size: $text-xs;
-            color: $text-primary;
-            width: 100%;
-
-            &::placeholder { color: $text-tertiary; }
-            &:focus-visible { outline-offset: -2px; }
-        }
-
-        .search-field-clear {
-            position: absolute;
-            right: 6px;
-            background: transparent;
-            border: none;
-            padding: $space-1;
-            color: $text-tertiary;
-            cursor: pointer;
-            border-radius: $radius-badge;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            &:hover { background: $bg-hover; color: $text-primary; }
-        }
-    }
-
     // ─── Toolbar chip / icon button ─────────────────────
     .toolbar-chip {
         display: inline-flex;
@@ -366,47 +314,6 @@ $ft-default:  #646b7a;
             @include status-variant(var(--accent-bright), var(--accent-bg));
         }
         &.small { padding: 4px; }
-    }
-
-    // Compact Radix Select trigger: icon · value · chevron.
-    .file-toolbar-select {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: flex-start;
-        width: auto;
-        height: $control-md;
-        min-width: 0;
-        gap: $space-tight;
-        padding-inline: $space-2 $space-tight;
-        border: 1px solid var(--border);
-        border-radius: $radius-card;
-        background: var(--surface-2);
-        color: var(--text-faint);
-        font-size: $text-xs;
-        transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
-
-        &:hover,
-        &:focus-visible {
-            border-color: var(--border-strong);
-            background: var(--surface-3);
-            color: var(--text-dim);
-        }
-
-        > span {
-            width: auto;
-            min-width: 78px;
-            white-space: nowrap;
-            text-align: start;
-        }
-
-        > svg { flex-shrink: 0; }
-
-        .ui-select-icon {
-            width: 12px;
-            height: 12px;
-            opacity: 0.58;
-        }
     }
 
     // ─── View toggles ───────────────────────────────────
@@ -1860,18 +1767,11 @@ $drawer-width: 520px;
 
             .toolbar-right { flex-wrap: wrap; gap: $space-1; }
 
-            .search-field {
+            // Only present when the page has no top bar to host the search.
+            .fm-search {
                 order: -1;
-                width: 100%;
-                min-width: 0;
                 flex: 1 0 100%;
-            }
-
-            .file-toolbar-select {
-                flex: 0 1 auto;
-
-                > span { min-width: 0; }
-                > svg:not(.ui-select-icon) { display: none; }
+                max-width: none;
             }
 
             .file-mount-chip { display: none; }
@@ -1920,4 +1820,27 @@ $drawer-width: 520px;
     font-size: $text-xs;
     border: 1px solid fade($accent-primary-raw, 25%);
     flex-shrink: 0;
+}
+
+// The Files search box. Top-level rather than under .file-manager: it is
+// hosted in the page's top bar, outside the page's own root.
+.fm-search {
+    .sk-searchfield__input { padding-inline-end: $space-8; }
+
+    .search-field-clear {
+        position: absolute;
+        inset-inline-end: $space-2;
+        display: grid;
+        place-items: center;
+        width: $space-5;
+        height: $space-5;
+        padding: 0;
+        border: 0;
+        border-radius: $radius-badge;
+        background: transparent;
+        color: var(--text-faint);
+        cursor: pointer;
+
+        &:hover { color: var(--text); background: var(--surface-3); }
+    }
 }

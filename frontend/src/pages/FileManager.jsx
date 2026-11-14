@@ -29,7 +29,8 @@ import ContextMenu from '../components/file-manager/ContextMenu';
 import { formatBytes } from '../components/file-manager/fileTypes';
 import { useClipboard } from '@/hooks/useClipboard';
 import { useTranslation } from 'react-i18next';
-import { useTopbarActions } from '@/hooks/useTopbarActions';
+import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import FileSearchField from '../components/file-manager/FileSearchField';
 import { useStableHandler } from '@/hooks/useStableHandler';
 
 function FileManager() {
@@ -315,6 +316,19 @@ function FileManager() {
         [isRemote, isS3, currentPath],
     );
 
+    // Search rides in the top bar, right-most, like every other page's search.
+    // Without a top bar (the page mounted on its own) it falls back to the
+    // toolbar underneath.
+    const { portal: searchPortal, actions: inlineSearch } = useTopbarChrome(
+        <FileSearchField
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            handleSearch={handleSearch}
+            searchResults={searchResults}
+            clearSearch={clearSearch}
+        />,
+    );
+
     // ─── render ──────────────────────────────────────────
     return (
         <div
@@ -325,6 +339,7 @@ function FileManager() {
             onDrop={handleDrop}
         >
             <input type="file" ref={fileInputRef} multiple className="hidden" onChange={handleUploadInput} />
+            {searchPortal}
 
             {isRemote && (
                 <div className="file-manager-target-banner">
@@ -375,11 +390,7 @@ function FileManager() {
                 filterCounts={filterCounts}
                 sortValue={sortValue}
                 handleSortChange={handleSortChange}
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                handleSearch={handleSearch}
-                searchResults={searchResults}
-                clearSearch={clearSearch}
+                search={inlineSearch}
                 viewMode={viewMode}
                 setViewMode={setViewMode}
                 showHidden={showHidden}
