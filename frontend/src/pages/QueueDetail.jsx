@@ -1,13 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-    ArrowLeft,
-    Inbox,
-    Send,
-    Trash2,
-    RefreshCw,
-    Lock,
-    X,
+    ArrowLeft, Inbox, Send, Trash2, RefreshCw, Lock, X,
 } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -25,12 +19,10 @@ import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
 import {
-    DataTable, DataTableFooter, MetricCard, KpiBand, Pill, SortChipBar,
-    statusKind, statusLabel,
+    DataTable, DataTableFooter, MetricCard, KpiBand, Pill, SortChipBar, statusKind, statusLabel,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -410,21 +402,9 @@ const QueueDetail = () => {
                         in the detail header above — a view here is about the
                         messages, and is shared by every queue. */}
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: () => { loadMeta(); loadMessages(statusFilter); } }}
                         label="messages"
-                        onCreate={chrome.createView}
-                        actions={(
-                            <>
-                                <GridFilterButton
-                                    count={chrome.filterCount}
-                                    onClick={() => chrome.setDrawerOpen(true)}
-                                />
-                                <GridToolsMenu
-                                    {...chrome.toolsProps}
-                                    onRefresh={() => { loadMeta(); loadMessages(statusFilter); }}
-                                />
-                            </>
-                        )}
                     />
 
                     {/* The status select stays on its own line: it is a SERVER

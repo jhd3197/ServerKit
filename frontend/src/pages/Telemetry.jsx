@@ -24,16 +24,15 @@ import {
 } from 'lucide-react';
 import api from '../services/api';
 import {
-    DataTable, DataTableFooter, Drawer, FilterButton, FilterDrawer,
-    Pill, SearchField, countActiveFilters,
+    DataTable, DataTableFooter, Drawer, FilterDrawer, Pill, countActiveFilters,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridToolsMenu,
+    useTableChrome, GridViewPicker, GridChips,
 } from '@/components/ds/grid';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 import { useConfirm } from '@/hooks/useConfirm';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -237,25 +236,30 @@ export default function Telemetry() {
 
     // Search + advanced filters + Refresh live in the group's shared top bar,
     // the way every other list page in the panel does it.
-    useTopbarActions(() => (
-        <>
-            <SearchField value={q} onSearch={(value) => setQ(value.trim())} placeholder={t('app.telemetry.searchMessages', 'Search messages…')} />
-            <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
-            {isAdmin && (
-                <Button variant="outline" size="sm" onClick={emitTestEvent}>
-                    <Activity size={14} /> {t('app.telemetry.testEvent', 'Test event')}
+    useListTopbar(() => ({
+        secondary: (
+            <>
+                {isAdmin && (
+                    <Button variant="outline" size="sm" onClick={emitTestEvent}>
+                        <Activity size={14} /> {t('app.telemetry.testEvent', 'Test event')}
+                    </Button>
+                )}
+                {isAdmin && (
+                    <Button variant="outline" size="sm" onClick={cleanupOldEvents}>
+                        <Trash2 size={14} /> {t('app.telemetry.cleanup', 'Cleanup')}
+                    </Button>
+                )}
+                <Button variant="outline" size="sm" onClick={() => fetchEvents(1, true)} disabled={loading}>
+                    <RefreshCw size={14} className={loading ? 'spin' : ''} /> {t('common.actions.refresh', 'Refresh')}
                 </Button>
-            )}
-            {isAdmin && (
-                <Button variant="outline" size="sm" onClick={cleanupOldEvents}>
-                    <Trash2 size={14} /> {t('app.telemetry.cleanup', 'Cleanup')}
-                </Button>
-            )}
-            <Button variant="outline" size="sm" onClick={() => fetchEvents(1, true)} disabled={loading}>
-                <RefreshCw size={14} className={loading ? 'spin' : ''} /> {t('common.actions.refresh', 'Refresh')}
-            </Button>
-        </>
-    ), [q, activeFilterCount, isAdmin, loading, fetchEvents]);
+            </>
+        ),
+        search: {
+            value: q,
+            onSearch: (value) => setQ(value.trim()),
+            placeholder: t('app.telemetry.searchMessages', 'Search messages…'),
+        },
+    }), [q, isAdmin, loading, fetchEvents]);
 
     const filterGroups = useMemo(() => ([
         {
@@ -379,23 +383,17 @@ export default function Telemetry() {
     // view row as just the view name. It is NOT joined by a grid filter button:
     // this page's one filter button is the top bar's, which opens the SERVER
     // query drawer (eight keys, applied to the query rather than the loaded 50).
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <GridToolsMenu {...chrome.toolsProps} onRefresh={() => fetchEvents(1, true)} />,
-    );
-
     const hasFilters = Boolean(q || activeFilterCount);
 
     return (
         <div className="sk-tabgroup__inner telemetry-page">
-            {topbarChrome}
             {/* Outside the empty check below on purpose: a view that returns
                 no events must still be swappable for another one. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: () => fetchEvents(1, true) }}
                 label="events"
-                onCreate={chrome.createView}
-            
-                actions={chromeActions}
+                filters={{ count: activeFilterCount, hidden: 0, onOpen: () => setFiltersOpen(true) }}
             />
 
             <GridChips {...chrome.chipProps} />

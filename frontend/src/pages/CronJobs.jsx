@@ -1,3 +1,4 @@
+import PagePrimaryButton from '@/components/PagePrimaryButton';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -13,11 +14,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import {
-    Pill, SearchField, DataTable, Drawer, DataTableFooter,
+    Pill, DataTable, Drawer, DataTableFooter, ListActions,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -432,19 +432,26 @@ const CronJobs = () => {
             icon={<Clock size={18} />}
             title={t('app.cronJobs.cronJobs', 'Cron jobs')}
             actions={(
-                <>
-                    <Button variant="outline" size="sm" onClick={loadData}>
-                        <RefreshCw size={15} /> {t('common.actions.refresh', 'Refresh')}
-                    </Button>
-                    <Button size="sm" onClick={openCreateDrawer}>
-                        <Plus size={15} /> {t('app.cronJobs.newCronJob', 'New cron job')}
-                    </Button>
-                    <SearchField
-                        value={search}
-                        onSearch={setSearch}
-                        placeholder={t('app.cronJobs.searchJobsOrCommands', 'Search jobs or commands…')}
-                    />
-                </>
+                <ListActions
+                    secondary={(
+                        <Button variant="outline" size="sm" onClick={loadData}>
+                            <RefreshCw size={15} /> {t('common.actions.refresh', 'Refresh')}
+                        </Button>
+                    )}
+                    primary={(
+                        <PagePrimaryButton
+                            id="cron-new"
+                            label={t('app.cronJobs.newCronJob', 'New cron job')}
+                            shortLabel={t('common.actions.new', 'New')}
+                            onClick={openCreateDrawer}
+                        />
+                    )}
+                    search={{
+                        value: search,
+                        onSearch: setSearch,
+                        placeholder: t('app.cronJobs.searchJobsOrCommands', 'Search jobs or commands…'),
+                    }}
+                />
             )}
         >
             {error && (
@@ -480,9 +487,9 @@ const CronJobs = () => {
                     {/* No KPI strip: every number it carried is already on the
                         segment you'd click to act on it (mirrors /domains). */}
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: loadData }}
                         label="jobs"
-                        onCreate={chrome.createView}
                         actions={(
                             <>
                                 {/* The daemon's health rides with the chrome
@@ -490,11 +497,6 @@ const CronJobs = () => {
                                     reason a "next run" may never happen, so it
                                     belongs beside the table it invalidates. */}
                                 {serviceNote && <span className="cron-servicenote">{serviceNote}</span>}
-                                <GridFilterButton
-                                    count={chrome.filterCount}
-                                    onClick={() => chrome.setDrawerOpen(true)}
-                                />
-                                <GridToolsMenu {...chrome.toolsProps} onRefresh={loadData} />
                             </>
                         )}
                     />

@@ -2,8 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Globe, Plus } from 'lucide-react';
 import { ServiceTile, Pill, DataTable, DataTableFooter, serviceStatusKind } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -128,18 +127,8 @@ const WorkspaceApplicationsTab = ({ kind, wsId, rows, appsOut, onMoveApp, onShar
             {/* Inline chrome, not hoisted: this is a tab inside a detail page
                 that already owns the top bar, so hoisting would hijack it. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
                 label={kind}
-                onCreate={chrome.createView}
-                actions={(
-                    <>
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} />
-                    </>
-                )}
             />
 
             <GridChips {...chrome.chipProps} />

@@ -8,8 +8,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
-    Activity, ArrowLeft, BarChart3, CheckCircle2, Clock, ExternalLink, Lock,
-    Pause, Play, RefreshCw, Rows3, ShieldAlert, SlidersHorizontal, Trash2, Zap,
+    Activity, ArrowLeft, BarChart3, CheckCircle2, Clock, ExternalLink, Lock, Pause, Play, RefreshCw, Rows3, ShieldAlert, SlidersHorizontal, Trash2, Zap,
 } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -21,12 +20,10 @@ import ErrorState from '../components/ErrorState';
 import UptimeBars from '../components/monitoring/UptimeBars';
 import { monitorStateOf } from '../components/monitoring/monitorShared';
 import {
-    AreaChart, DataTable, DataTableFooter, KpiBand, MetricCard,
-    Pill, SegControl,
+    AreaChart, DataTable, DataTableFooter, KpiBand, MetricCard, Pill, SegControl,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import PageLayout from '../layouts/PageLayout';
 import { Button } from '@/components/ui/button';
@@ -603,9 +600,9 @@ export default function MonitorDetail() {
             {section === 'checks' && (
                 <>
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: load }}
                         label="checks"
-                        onCreate={chrome.createView}
                         actions={(
                             <>
                                 {frozen && newSinceFreeze > 0 && (
@@ -614,11 +611,6 @@ export default function MonitorDetail() {
                                 <Button variant="outline" size="sm" onClick={() => setFrozen(frozen ? null : checks)}>
                                     {frozen ? <><Play size={14} /> {t('app.monitorDetail.resume', 'Resume')}</> : <><Pause size={14} /> {t('app.monitorDetail.hold', 'Hold')}</>}
                                 </Button>
-                                <GridFilterButton
-                                    count={chrome.filterCount}
-                                    onClick={() => chrome.setDrawerOpen(true)}
-                                />
-                                <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />
                             </>
                         )}
                     />

@@ -1,13 +1,12 @@
-// The monitor half of the Monitoring overview: availability KPIs, the live
-// check feed and the monitor table.
+// The monitor half of the Monitoring overview, as separate board blocks: one
+// tile per availability KPI, the monitor list and the live check feed. Each is
+// its own <OverviewSection>, so it can be moved, resized or removed on its own.
 //
-// This is what the page was missing — everything else on Overview describes the
-// machines ServerKit runs on, and nothing described the things it is supposed to
-// be watching. Host health stays below; this sits above it because "is the site
-// up" is the question the page is actually for.
+// Everything else on Overview describes the machines ServerKit runs on; these
+// sit above it because "is the site up" is the question the page is for.
 import { Link, useNavigate } from 'react-router-dom';
 import { Activity, Plus, Radar, ShieldAlert, Timer, Zap } from 'lucide-react';
-import { AreaChart, KpiBand, MetricCard, Pill } from '@/components/ds';
+import { AreaChart, MetricCard, Pill } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import { monitorStateOf } from './monitorShared';
 import { useTranslation } from 'react-i18next';
@@ -25,41 +24,41 @@ function relativeTime(iso) {
     return `${Math.floor(seconds / 3600)}h ago`;
 }
 
-export default function MonitorsSummary({ summary }) {
+// One availability KPI: `metric` is availability | response | down | degraded.
+// Renders nothing while no monitor exists, so its block leaves the layout.
+
+export function MonitorKpi({ summary, metric }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { monitors, stats, feed, loadError, load } = summary;
+    const { monitors, stats } = summary;
+    if (!monitors.length) return null;
+    const open = () => navigate('/monitoring/monitors');
 
-    // A failed fetch with nothing loaded is not "nothing is being watched".
-    if (loadError && !monitors.length) {
+    if (metric === 'availability') {
         return (
-            <section className="monitoring-panel mon-nomonitors">
-                <ErrorState
-                    compact
-                    title={t('app.monitorsSummary.couldntLoadMonitors', "Couldn't load monitors.")}
-                    error={loadError}
-                    onRetry={load}
-                />
-            </section>
+            <MetricCard
+                label={t('app.monitorsSummary.availability30d', 'Availability (30d)')} tone="green" icon={<Activity size={17} />}
+                value={stats?.overall_uptime_30d != null ? `${stats.overall_uptime_30d}%` : '—'}
+                onClick={open}
+            />
         );
     }
-
-    if (!monitors.length) {
+    if (metric === 'down') {
         return (
-            <section className="monitoring-panel mon-nomonitors">
-                <div className="monitoring-panel__header">
-                    <div>
-                        <h3>{t('app.monitorsSummary.monitors', 'Monitors')}</h3>
-                        <span className="mon-panel-sub">{t('app.monitorsSummary.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}</span>
-                    </div>
-                    <Button size="sm" onClick={() => navigate('/monitoring/monitors')}>
-                        <Plus size={14} /> {t('app.monitorsSummary.addMonitor', 'New monitor')}
-                    </Button>
-                </div>
-                <p className="mon-panel-hint">
-                    {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkitShort', 'Below: the servers ServerKit runs on.')} <InfoTip>{t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}</InfoTip>
-                </p>
-            </section>
+            <MetricCard
+                label={t('app.monitorsSummary.monitorsDown', 'Monitors down')} tone={stats?.down ? 'red' : 'green'} icon={<ShieldAlert size={17} />}
+                value={stats?.down ?? 0}
+                onClick={open}
+            />
+        );
+    }
+    if (metric === 'degraded') {
+        return (
+            <MetricCard
+                label={t('app.monitorsSummary.degraded', 'Degraded')} tone="amber" icon={<Timer size={17} />}
+                value={stats?.degraded ?? 0}
+                onClick={open}
+            />
         );
     }
 
@@ -77,109 +76,147 @@ export default function MonitorsSummary({ summary }) {
     );
 
     return (
-        <div className="mon-monitors-summary">
-            <KpiBand max={4}>
-                <MetricCard
-                    label={t('app.monitorsSummary.availability30d', 'Availability (30d)')} tone="green" icon={<Activity size={17} />}
-                    value={stats?.overall_uptime_30d != null ? `${stats.overall_uptime_30d}%` : '—'}
-                    onClick={() => navigate('/monitoring/monitors')}
-                />
-                <MetricCard
-                    label={t('app.monitorsSummary.avgResponse', 'Avg response')} tone="cyan" icon={<Zap size={17} />}
-                    value={avgResponse ?? '—'} unit={avgResponse != null ? 'ms' : undefined}
-                    spark={leadSpark?.spark?.length > 1 ? (
-                        <AreaChart series={[leadSpark.spark]} colors={['var(--cyan)']} height={34} grid={false} />
-                    ) : undefined}
-                />
-                <MetricCard
-                    label={t('app.monitorsSummary.monitorsDown', 'Monitors down')} tone={stats?.down ? 'red' : 'green'} icon={<ShieldAlert size={17} />}
-                    value={stats?.down ?? 0}
-                    onClick={() => navigate('/monitoring/monitors')}
-                />
-                <MetricCard
-                    label={t('app.monitorsSummary.degraded', 'Degraded')} tone="amber" icon={<Timer size={17} />}
-                    value={stats?.degraded ?? 0}
-                    onClick={() => navigate('/monitoring/monitors')}
-                />
-            </KpiBand>
+        <MetricCard
+            label={t('app.monitorsSummary.avgResponse', 'Avg response')} tone="cyan" icon={<Zap size={17} />}
+            value={avgResponse ?? '—'} unit={avgResponse != null ? 'ms' : undefined}
+            spark={leadSpark?.spark?.length > 1 ? (
+                <AreaChart series={[leadSpark.spark]} colors={['var(--cyan)']} height={34} grid={false} />
+            ) : undefined}
+        />
+    );
+}
 
-            <div className="mon-grid2">
-                <section className="monitoring-panel">
-                    <div className="monitoring-panel__header">
-                        <div>
-                            <h3>{t('app.monitorsSummary.monitors', 'Monitors')}</h3>
-                            <span className="mon-panel-sub">{monitors.length} watched</span>
-                        </div>
-                        <Button variant="outline" size="sm" asChild>
-                            <Link to="/monitoring/monitors"><Radar size={14} /> {t('app.monitorsSummary.manage', 'Manage')}</Link>
-                        </Button>
-                    </div>
-                    <div className="mon-monitor-list">
-                        {monitors.slice(0, 8).map((monitor) => {
-                            const state = monitorStateOf(monitor);
-                            return (
-                                <Link
-                                    key={monitor.id}
-                                    className="mon-monitor-row"
-                                    to={`/monitoring/monitors/${monitor.id}`}
-                                >
-                                    <span className="mon-monitor-row__body">
-                                        <span className="mon-monitor-row__name">{monitor.name}</span>
-                                        <span className="mon-monitor-row__sub">
-                                            {monitor.check_type} · {monitor.check_target || t('app.monitorsSummary.boundSite', 'bound site')}
-                                        </span>
-                                    </span>
-                                    <span className="mon-monitor-row__ms">
-                                        {monitor.last_response_time == null ? '—' : `${monitor.last_response_time} ms`}
-                                    </span>
-                                    <Pill kind={state.tone}>{state.label}</Pill>
-                                </Link>
-                            );
-                        })}
-                    </div>
-                </section>
+// What the monitor blocks say when there is nothing to list: no monitor exists
+// yet, or the request failed. Its own short block, so an empty page is one
+// line and a button rather than a tall empty list.
+export function MonitorsNotice({ summary }) {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const { monitors, loadError, load } = summary;
+    if (monitors.length) return null;
 
-                <section className="monitoring-panel">
-                    <div className="monitoring-panel__header">
-                        <div>
-                            <h3>{t('app.monitorsSummary.liveChecks', 'Live checks')}</h3>
-                            <span className="mon-panel-sub">{t('app.monitorsSummary.mostRecentResults', 'Most recent results')}</span>
-                        </div>
-                    </div>
-                    {feed.length === 0 ? (
-                        <p className="mon-panel-hint">
-                            {t('app.monitorsSummary.noChecksRecordedYetTheScheduler', "No checks recorded yet. The scheduler polls on each monitor's interval.")}
-                        </p>
-                    ) : (
-                        <div className="mon-feed">
-                            {feed.map((monitor) => {
-                                const state = monitorStateOf(monitor);
-                                const ok = state.key === 'up';
-                                return (
-                                    <Link
-                                        key={monitor.id}
-                                        className="mon-feed-row"
-                                        to={`/monitoring/monitors/${monitor.id}`}
-                                    >
-                                        <span className={`mon-code mon-code--${ok ? 'ok' : 'bad'}`}>
-                                            {ok ? 'ok' : state.label.toLowerCase()}
-                                        </span>
-                                        <span className="mon-feed-row__body">
-                                            <span className="mon-feed-row__name">{monitor.name}</span>
-                                            <span className="mon-feed-row__sub">
-                                                {relativeTime(monitor.last_check_at)}
-                                            </span>
-                                        </span>
-                                        <span className="mon-feed-row__ms">
-                                            {monitor.last_response_time == null ? 'fail' : `${monitor.last_response_time}ms`}
-                                        </span>
-                                    </Link>
-                                );
-                            })}
-                        </div>
-                    )}
-                </section>
+    // A failed fetch with nothing loaded is not "nothing is being watched".
+    if (loadError) {
+        return (
+            <section className="monitoring-panel mon-nomonitors">
+                <ErrorState
+                    compact
+                    title={t('app.monitorsSummary.couldntLoadMonitors', "Couldn't load monitors.")}
+                    error={loadError}
+                    onRetry={load}
+                />
+            </section>
+        );
+    }
+
+    return (
+        <section className="monitoring-panel mon-nomonitors">
+            <div className="monitoring-panel__header">
+                <div>
+                    <h3>{t('app.monitorsSummary.monitors', 'Monitors')}</h3>
+                    <span className="mon-panel-sub">{t('app.monitorsSummary.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}</span>
+                </div>
+                <Button size="sm" onClick={() => navigate('/monitoring/monitors')}>
+                    <Plus size={14} /> {t('app.monitorsSummary.addMonitor', 'New monitor')}
+                </Button>
             </div>
-        </div>
+            <p className="mon-panel-hint">
+                {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkitShort', 'Below: the servers ServerKit runs on.')} <InfoTip>{t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}</InfoTip>
+            </p>
+        </section>
+    );
+}
+
+// The watched monitors.
+export function MonitorsList({ summary }) {
+    const { t } = useTranslation();
+    const { monitors } = summary;
+    if (!monitors.length) return null;
+
+    return (
+        <section className="monitoring-panel">
+            <div className="monitoring-panel__header">
+                <div>
+                    <h3>{t('app.monitorsSummary.monitors', 'Monitors')}</h3>
+                    <span className="mon-panel-sub">{monitors.length} watched</span>
+                </div>
+                <Button variant="outline" size="sm" asChild>
+                    <Link to="/monitoring/monitors"><Radar size={14} /> {t('app.monitorsSummary.manage', 'Manage')}</Link>
+                </Button>
+            </div>
+            <div className="mon-monitor-list">
+                {monitors.slice(0, 8).map((monitor) => {
+                    const state = monitorStateOf(monitor);
+                    return (
+                        <Link
+                            key={monitor.id}
+                            className="mon-monitor-row"
+                            to={`/monitoring/monitors/${monitor.id}`}
+                        >
+                            <span className="mon-monitor-row__body">
+                                <span className="mon-monitor-row__name">{monitor.name}</span>
+                                <span className="mon-monitor-row__sub">
+                                    {monitor.check_type} · {monitor.check_target || t('app.monitorsSummary.boundSite', 'bound site')}
+                                </span>
+                            </span>
+                            <span className="mon-monitor-row__ms">
+                                {monitor.last_response_time == null ? '—' : `${monitor.last_response_time} ms`}
+                            </span>
+                            <Pill kind={state.tone}>{state.label}</Pill>
+                        </Link>
+                    );
+                })}
+            </div>
+        </section>
+    );
+}
+
+// The most recent check results across every monitor.
+export function LiveChecks({ summary }) {
+    const { t } = useTranslation();
+    const { monitors, feed } = summary;
+    if (!monitors.length) return null;
+
+    return (
+        <section className="monitoring-panel">
+            <div className="monitoring-panel__header">
+                <div>
+                    <h3>{t('app.monitorsSummary.liveChecks', 'Live checks')}</h3>
+                    <span className="mon-panel-sub">{t('app.monitorsSummary.mostRecentResults', 'Most recent results')}</span>
+                </div>
+            </div>
+            {feed.length === 0 ? (
+                <p className="mon-panel-hint">
+                    {t('app.monitorsSummary.noChecksRecordedYetTheScheduler', "No checks recorded yet. The scheduler polls on each monitor's interval.")}
+                </p>
+            ) : (
+                <div className="mon-feed">
+                    {feed.map((monitor) => {
+                        const state = monitorStateOf(monitor);
+                        const ok = state.key === 'up';
+                        return (
+                            <Link
+                                key={monitor.id}
+                                className="mon-feed-row"
+                                to={`/monitoring/monitors/${monitor.id}`}
+                            >
+                                <span className={`mon-code mon-code--${ok ? 'ok' : 'bad'}`}>
+                                    {ok ? 'ok' : state.label.toLowerCase()}
+                                </span>
+                                <span className="mon-feed-row__body">
+                                    <span className="mon-feed-row__name">{monitor.name}</span>
+                                    <span className="mon-feed-row__sub">
+                                        {relativeTime(monitor.last_check_at)}
+                                    </span>
+                                </span>
+                                <span className="mon-feed-row__ms">
+                                    {monitor.last_response_time == null ? 'fail' : `${monitor.last_response_time}ms`}
+                                </span>
+                            </Link>
+                        );
+                    })}
+                </div>
+            )}
+        </section>
     );
 }

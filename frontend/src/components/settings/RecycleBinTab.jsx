@@ -8,8 +8,7 @@ import EmptyState from '@/components/EmptyState';
 import ErrorState from '@/components/ErrorState';
 import { Pill, DataTable, DataTableFooter } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -253,18 +252,9 @@ export default function RecycleBinTab() {
                 <>
                     {loadError && <ErrorState compact error={loadError} onRetry={load} />}
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: load }}
                         label="items"
-                        onCreate={chrome.createView}
-                        actions={(
-                            <>
-                                <GridFilterButton
-                                    count={chrome.filterCount}
-                                    onClick={() => chrome.setDrawerOpen(true)}
-                                />
-                                <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />
-                            </>
-                        )}
                     />
 
                     <GridChips {...chrome.chipProps} />

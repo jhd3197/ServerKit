@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import api from '../services/api';
@@ -25,8 +25,7 @@ import { Tabs, TabsContent } from '@/components/ui/tabs';
 import { DataTable, Pill, SegControl, CatalogCard, CatalogGrid } from '@/components/ds';
 import { useTranslation } from 'react-i18next';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
@@ -553,22 +552,6 @@ const ServerTemplates = () => {
         setGroupBy,
     });
 
-    // Filter + "⋮" ride the group's top bar, so the view row is the view name
-    // alone. Gated on the tab that owns the table: the Library is a card
-    // catalogue these do not act on, and the drawer the filter button opens is
-    // rendered inside the Templates tab, so hoisting it unconditionally would
-    // leave a button whose panel does not exist.
-    const gridIsOnScreen = activeTab === 'templates' && templates.length > 0;
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <>
-            <GridFilterButton
-                count={chrome.filterCount}
-                onClick={() => chrome.setDrawerOpen(true)}
-            />
-            <GridToolsMenu {...chrome.toolsProps} onRefresh={loadData} />
-        </>, { enabled: gridIsOnScreen },
-    );
-
     if (loading) return <PageLoader />;
 
     return (
@@ -584,7 +567,6 @@ const ServerTemplates = () => {
                     ]}
                 />
             </div>
-            {topbarChrome}
             <Tabs value={activeTab || 'library'} onValueChange={setActiveTab}>
                 <TabsContent value="templates">
                     {loadErrors.templates && templates.length > 0 && (
@@ -610,11 +592,10 @@ const ServerTemplates = () => {
                     ) : (
                         <>
                             <GridViewPicker
-                                views={chrome.views}
+                                {...chrome.pickerProps}
+                                tools={{ ...chrome.toolsProps, onRefresh: loadData }}
                                 label="templates"
-                                onCreate={chrome.createView}
 
-                actions={chromeActions}
             />
 
                             <GridChips {...chrome.chipProps} />

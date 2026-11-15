@@ -5,10 +5,9 @@ import { useConfirm } from '../../hooks/useConfirm';
 import EmptyState from '../EmptyState';
 import { ErrorState } from '../ErrorState';
 import Modal from '@/components/Modal';
-import { DataTable, DataTableFooter, SearchField } from '@/components/ds';
+import { DataTable, DataTableFooter } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -17,11 +16,10 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@
 import { Package, Play, Square, RotateCw, FileText, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
-    useServer,
-    unwrapRemoteData,
-    normalizeListResponse,
+    useServer, unwrapRemoteData, normalizeListResponse,
 } from './dockerHelpers';
 import { toastError } from '@/utils/errorMessage';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 
 // `docker compose ls --format json` capitalises its keys; the label-scanning
 // fallback in docker_service builds the same shape by hand. Read through one
@@ -99,6 +97,12 @@ const ComposeTab = ({ onStatsChange }) => {
     const [logsProject, setLogsProject] = useState(null);
     const [actionLoading, setActionLoading] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
+
+    // The Docker page's top bar: this tab's search, after the page-wide
+    // buttons. Filters and the table tools are in the view selector's menu.
+    useListTopbar(() => ({
+        search: { value: searchTerm, onSearch: setSearchTerm, placeholder: t('app.composeTab.searchProjects', 'Search compose projects…') },
+    }), [searchTerm]);
     const { sorts, setSorts } = useTableSort({
         defaultSorts: [{ key: 'name', direction: 'asc' }],
         storageKey: 'serverkit-table-docker-compose-sort',
@@ -384,25 +388,9 @@ const ComposeTab = ({ onStatsChange }) => {
     return (
         <div className="dx-tab-pane dx-list-pane">
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadProjects }}
                 label="projects"
-                onCreate={chrome.createView}
-                actions={(
-                    <>
-                        <SearchField
-                            value={searchTerm}
-                            onSearch={setSearchTerm}
-                            placeholder={t('app.composeTab.filterProjectOrConfigPath', 'Filter compose project or config path…')}
-                        />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        {/* Refresh is not repeated as its own icon: it rides the
-                            "⋮" with the other table-wide actions. */}
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadProjects} />
-                    </>
-                )}
             />
 
             <GridChips {...chrome.chipProps} />

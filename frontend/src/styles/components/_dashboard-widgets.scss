@@ -27,6 +27,8 @@
 // SCSS only needs them for the responsive stack-down below.
 $skw-grid-gap: 12px;
 $skw-stack-row-h: 260px;
+// A bare tile (one KPI) in the stacked layout: two to a row, this tall.
+$skw-stack-tile-h: 96px;
 
 // Inspector panel width + the gutter the page reserves for it while open.
 
@@ -365,6 +367,11 @@ $skw-z-tv: 200;
         border-color: var(--accent-bright);
         box-shadow: $focus-ring;
     }
+
+    // A bare widget is its own card (a KPI tile): the frame draws the card and
+    // the body says what it is, so there is no header. Edit mode keeps the
+    // header, which is the drag handle.
+    &--bare:not(.skw-frame--edit) > .skw-frame__head { display: none; }
 
     &__head {
         display: flex;
@@ -1595,7 +1602,9 @@ $skw-z-tv: 200;
         height: auto !important;
         min-height: 0 !important;
         display: flex;
-        flex-direction: column;
+        // Wrapping rows rather than a column: a full-width widget still takes
+        // a row to itself, and KPI tiles can share one.
+        flex-flow: row wrap;
         gap: $skw-grid-gap;
 
         &__ghost { display: none; }
@@ -1608,6 +1617,14 @@ $skw-z-tv: 200;
             width: 100% !important;
             height: $skw-stack-row-h !important;
             transition: none;
+        }
+
+        // A KPI tile does not need a chart's height or the whole width: two
+        // sit side by side, as tall as a count and its label.
+        > .skw-frame--bare {
+            width: calc(50% - #{$skw-grid-gap} / 2) !important;
+            height: auto !important;
+            min-height: $skw-stack-tile-h;
         }
     }
 

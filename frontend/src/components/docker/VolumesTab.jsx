@@ -5,10 +5,9 @@ import { useConfirm } from '../../hooks/useConfirm';
 import EmptyState from '../EmptyState';
 import { ErrorState } from '../ErrorState';
 import Modal from '@/components/Modal';
-import { DataTable, DataTableFooter, Pill, SearchField } from '@/components/ds';
+import { DataTable, DataTableFooter, Pill } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -17,10 +16,11 @@ import { Input } from '@/components/ui/input';
 import { HardDrive, Trash2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
-    useServer,
-    normalizeListResponse,
+    useServer, normalizeListResponse,
 } from './dockerHelpers';
 import { toastError } from '@/utils/errorMessage';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 
 export const CreateVolumeButton = () => {
     const { t } = useTranslation();
@@ -28,13 +28,14 @@ export const CreateVolumeButton = () => {
     const { isRemote } = useServer();
     return (
         <>
-            <Button
+            <PagePrimaryButton
+                id="docker-create-volume"
+                label={t('app.volumesTab.createVolume', 'Create volume')}
+                shortLabel={t('common.actions.new', 'New')}
                 onClick={() => setShowModal(true)}
                 disabled={isRemote}
-                title={isRemote ? t('app.volumesTab.creatingVolumesIsOnlyAvailableOn', 'Creating volumes is only available on the panel server right now') : t('app.volumesTab.createVolume', 'Create volume')}
-            >
-                <span>+</span> {t('app.volumesTab.createVolume2', 'Create volume')}
-            </Button>
+                disabledReason={isRemote ? t('app.volumesTab.creatingVolumesIsOnlyAvailableOn', 'Creating volumes is only available on the panel server right now') : undefined}
+            />
             {showModal && <CreateVolumeModal onClose={() => setShowModal(false)} onCreated={() => window.location.reload()} />}
         </>
     );
@@ -110,6 +111,13 @@ const VolumesTab = ({ onStatsChange }) => {
     const [volumes, setVolumes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+
+    // The Docker page's top bar: this tab's create button and search, after the page-wide
+    // buttons. Filters and the table tools are in the view selector's menu.
+    useListTopbar(() => ({
+        primary: <CreateVolumeButton />,
+        search: { value: searchTerm, onSearch: setSearchTerm, placeholder: t('app.volumesTab.searchVolumes', 'Search volumes…') },
+    }), [searchTerm]);
     const { sorts, setSorts } = useTableSort({
         defaultSorts: [{ key: 'name', direction: 'asc' }],
         storageKey: 'serverkit-table-docker-volumes-sort',
@@ -302,23 +310,9 @@ const VolumesTab = ({ onStatsChange }) => {
     return (
         <div className="dx-tab-pane dx-list-pane">
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadVolumes }}
                 label="volumes"
-                onCreate={chrome.createView}
-                actions={(
-                    <>
-                        <SearchField
-                            value={searchTerm}
-                            onSearch={setSearchTerm}
-                            placeholder={t('app.volumesTab.filterNameOrMountpoint', 'Filter name or mountpoint…')}
-                        />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadVolumes} />
-                    </>
-                )}
             />
 
             <GridChips {...chrome.chipProps} />

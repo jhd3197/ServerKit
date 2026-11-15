@@ -50,6 +50,9 @@ export function WidgetFrame({
 
     const className = [
         'skw-frame',
+        // A bare widget is its own card (a KPI tile): no header outside edit
+        // mode, where the header is still needed as the drag handle.
+        type?.bare && 'skw-frame--bare',
         edit && 'skw-frame--edit',
         selected && 'skw-frame--selected',
     ].filter(Boolean).join(' ');

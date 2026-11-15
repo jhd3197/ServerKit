@@ -19,14 +19,13 @@ import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
 import { DataTable, DataTableFooter, Drawer, Pill, SearchField } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import { useTopbarActions } from '@/hooks/useTopbarActions';
 import { describeAlert, formatReading, metricLabel } from '../components/monitoring/alertCopy';
 import { impactTone, INCIDENT_STATES } from '../components/monitoring/monitorShared';
 import { useTranslation } from 'react-i18next';
@@ -478,17 +477,6 @@ export default function Incidents() {
         applyPage: applyViewPageState,
     });
 
-    const tableChrome = (
-        <>
-            <GridFilterButton
-                count={chrome.filterCount}
-                onClick={() => chrome.setDrawerOpen(true)}
-            />
-            <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />
-        </>
-    );
-    const { hosted, portal: topbarChrome } = useTopbarChrome(tableChrome);
-
     if (loading) {
         return (
             <div className="sk-tabgroup__inner incidents-page">
@@ -503,12 +491,10 @@ export default function Incidents() {
 
     return (
         <div className="sk-tabgroup__inner incidents-page">
-            {topbarChrome}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: load }}
                 label="incidents"
-                onCreate={chrome.createView}
-                actions={hosted ? null : tableChrome}
             />
 
             <GridChips {...chrome.chipProps} />

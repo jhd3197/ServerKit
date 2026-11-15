@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -298,9 +297,9 @@ const InvitationsTab = () => {
             {/* The view name replaces the old "Invitations" h4: it names the
                 section AND says which slice of it you are looking at. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadInvitations }}
                 label="invitations"
-                onCreate={chrome.createView}
                 actions={(
                     <>
                         {/* Same shape as the users table above it — the two sit
@@ -315,11 +314,6 @@ const InvitationsTab = () => {
                             </svg>
                             {t('app.invitationsTab.inviteUser', 'Invite user')}
                         </Button>
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadInvitations} />
                     </>
                 )}
             />

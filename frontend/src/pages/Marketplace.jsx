@@ -286,16 +286,6 @@ const Marketplace = () => {
     // reconciles the input in place (focus is preserved between keystrokes).
     useTopbarActions(() =>
         <>
-            {showSearch && (
-                <SearchField
-                    value={installedView ? installedSearch : search}
-                    onSearch={installedView ? setInstalledSearch : setSearch}
-                    placeholder={t('app.marketplace.searchExtensions', 'Search extensions…')}
-                />
-            )}
-            {!installedView && !updatesView && (
-                <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
-            )}
             <Button
                 variant="outline"
                 size="sm"
@@ -306,6 +296,16 @@ const Marketplace = () => {
                 <UploadCloud aria-hidden="true" />
                 {t('app.marketplace.installShort', 'Install')}
             </Button>
+            {showSearch && (
+                <SearchField
+                    value={installedView ? installedSearch : search}
+                    onSearch={installedView ? setInstalledSearch : setSearch}
+                    placeholder={t('app.marketplace.searchExtensions', 'Search extensions…')}
+                />
+            )}
+            {!installedView && !updatesView && (
+                <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
+            )}
         </>,
         [installedView, updatesView, search, installedSearch, activeFilterCount],
     );

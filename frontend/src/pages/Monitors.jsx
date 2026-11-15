@@ -20,11 +20,10 @@ import EmptyState from '../components/EmptyState';
 import InfoTip from '@/components/InfoTip';
 import ErrorState from '../components/ErrorState';
 import {
-    DataTable, DataTableFooter, Drawer, FilterButton, FilterDrawer,
-    Pill, SearchField, Sparkline, countActiveFilters,
+    DataTable, DataTableFooter, Drawer, FilterDrawer, Pill, Sparkline, countActiveFilters,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridToolsMenu,
+    useTableChrome, GridViewPicker, GridChips,
 } from '@/components/ds/grid';
 import { Button } from '@/components/ui/button';
 import PagePrimaryButton from '@/components/PagePrimaryButton';
@@ -35,7 +34,7 @@ import { Switch } from '@/components/ui/switch';
 import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import useFocusParam from '@/hooks/useFocusParam';
@@ -268,21 +267,26 @@ export default function Monitors() {
     // Quick-create deep link: /monitoring/monitors?focus=create:monitor opens the form.
     useFocusParam('create', openCreate);
 
-    useTopbarActions(() => (
-        <>
-            <SearchField value={q} onSearch={(value) => setQ(value.trim())} placeholder={t('app.monitors.searchMonitorsOrTargets', 'Search monitors or targets…')} />
-            <FilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
+    useListTopbar(() => ({
+        secondary: (
             <Button variant="outline" size="sm" onClick={load}>
                 <RefreshCw size={14} /> {t('common.actions.refresh', 'Refresh')}
             </Button>
+        ),
+        primary: (
             <PagePrimaryButton
                 id="monitors-new"
                 label={t('app.monitors.addMonitor', 'New monitor')}
                 shortLabel={t('common.actions.new', 'New')}
                 onClick={openCreate}
             />
-        </>
-    ), [q, activeFilterCount, load]);
+        ),
+        search: {
+            value: q,
+            onSearch: (value) => setQ(value.trim()),
+            placeholder: t('app.monitors.searchMonitorsOrTargets', 'Search monitors or targets…'),
+        },
+    }), [q, load]);
 
     const onSave = async (e) => {
         e.preventDefault();
@@ -495,16 +499,11 @@ export default function Monitors() {
     // page has exactly ONE filter button and it is the top bar's, which opens
     // the SERVER query drawer. Column rules come from each column's own header
     // menu and show up in the chips.
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />,
-    );
-
     const hasFilters = Boolean(q || filters.status || filters.type);
     const isHttpish = ['http', 'keyword'].includes(form.check_type);
 
     return (
         <div className="sk-tabgroup__inner monitors-page">
-            {topbarChrome}
             {/* No KPI band: Operational / Degraded / Down are each a saved view
                 you can act from, so the band was three numbers you had to
                 re-filter by hand. The fleet's 30-day mean went with the view
@@ -512,11 +511,10 @@ export default function Monitors() {
                 and now with nowhere to sit — so /monitors/stats is not fetched
                 any more either. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: load }}
                 label="monitors"
-                onCreate={chrome.createView}
-            
-                actions={chromeActions}
+                filters={{ count: activeFilterCount, hidden: 0, onOpen: () => setFiltersOpen(true) }}
             />
 
             <GridChips {...chrome.chipProps} />

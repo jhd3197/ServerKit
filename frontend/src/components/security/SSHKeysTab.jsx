@@ -12,8 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { DataTable, DataTableFooter, ListToolbar } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer, applyFilters,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer, applyFilters,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -212,18 +211,9 @@ const SSHKeysTab = () => {
                 because it acts on the file, not on what you are looking at.
                 Refresh is gone from it — it is in the "⋮". */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadKeys }}
                 label="keys"
-                onCreate={chrome.createView}
-                actions={(
-                    <>
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadKeys} />
-                    </>
-                )}
             />
             <ListToolbar>
                 <Button variant="default" size="sm" onClick={() => setShowAddModal(true)}>

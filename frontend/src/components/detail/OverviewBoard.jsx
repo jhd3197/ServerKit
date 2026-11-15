@@ -60,6 +60,11 @@ const isSectionWidget = (widget) => String(widget?.type || '').startsWith(SECTIO
 //   id, title, icon, w (of 12 columns), h (board rows, see BOARD_ROW)
 //   placed  in the default layout unless false
 //   lead    placed ahead of the board's leading dashboard widgets (a notice)
+//   tile    the block is one KPI tile: its frame is the tile's card, with no
+//           header of its own outside edit mode. A row of KPIs is a row of
+//           these, each movable on its own — never one section holding a strip.
+//   replaces  id of a retired section this one was split out of, so a saved
+//           layout that still names the old block gets the new ones in its place
 export function OverviewSection() {
     return null;
 }
@@ -71,6 +76,7 @@ function SectionWidget({ widget, ctx }) {
     const slotRef = useRef(null);
     const host = ctx.sectionHosts.get(widget.cfg?.section);
     const { adoptVersion, releaseSection } = ctx;
+    const tile = !!getWidgetType(ctx.types, widget.type)?.bare;
 
     // Take the section's element whenever it is free to take (first mount, or
     // after another frame showing the same section let go of it).
@@ -85,7 +91,13 @@ function SectionWidget({ widget, ctx }) {
         return () => releaseSection(host);
     }, [host, releaseSection]);
 
-    return <div className="sk-overview-section" ref={slotRef} data-empty={ctx.emptyLabel} />;
+    return (
+        <div
+            className={tile ? 'sk-overview-section sk-overview-section--tile' : 'sk-overview-section'}
+            ref={slotRef}
+            data-empty={ctx.emptyLabel}
+        />
+    );
 }
 
 const NO_WIDGET_TYPES = [];
@@ -144,7 +156,9 @@ function OverviewBoardInner({ kind, entityId, entityLabel, shared, serverVar, wi
     // Everything about the sections that shapes the board (not their content,
     // which re-renders through the portals below on every pass).
     const sectionSignature = sections
-        .map((section) => [section.id, section.title, section.w, section.h, section.placed, section.lead].join(':'))
+        .map((section) => [
+            section.id, section.title, section.w, section.h, section.placed, section.lead, section.tile, section.replaces,
+        ].join(':'))
         .join('|');
     // The same descriptors object for as long as the signature holds, so the
     // memos below depend on a real value instead of re-running every render.
@@ -152,7 +166,9 @@ function OverviewBoardInner({ kind, entityId, entityLabel, shared, serverVar, wi
     if (metaRef.current.signature !== sectionSignature) {
         metaRef.current = {
             signature: sectionSignature,
-            meta: sections.map(({ id, title, icon, w, h, placed, lead }) => ({ id, title, icon, w, h, placed, lead })),
+            meta: sections.map(({ id, title, icon, w, h, placed, lead, tile, replaces }) => (
+                { id, title, icon, w, h, placed, lead, tile, replaces }
+            )),
         };
     }
     const sectionMeta = metaRef.current.meta;
@@ -199,10 +215,12 @@ function OverviewBoardInner({ kind, entityId, entityLabel, shared, serverVar, wi
             desc: section.title,
             w: section.w || 6,
             h: section.h || 3,
-            min: [3, 2],
+            min: section.tile ? [2, 2] : [3, 2],
             defaultCfg: { section: section.id },
             component: SectionWidget,
             section: section.id,
+            // A tile is its own card: WidgetFrame drops the header outside edit mode.
+            bare: !!section.tile,
         }));
         // Dashboard widgets keep their size on the finer rows.
         const shared = registered.filter((type) => widgetTypeIds.includes(type.id)).map((type) => ({
@@ -229,10 +247,32 @@ function OverviewBoardInner({ kind, entityId, entityLabel, shared, serverVar, wi
     }, [kind, sectionMeta, leading]);
 
     // Drop anything a saved layout references that this page no longer offers.
-    const sanitize = useCallback(
-        (widgets) => widgets.filter((widget) => getWidgetType(types, widget.type)),
-        [types],
-    );
+    // A page block that was split into smaller ones (`replaces`) is swapped for
+    // them, so a saved layout keeps what the old block showed.
+    const sanitize = useCallback((widgets) => {
+        const kept = widgets.filter((widget) => getWidgetType(types, widget.type));
+        const retired = widgets.filter((widget) => isSectionWidget(widget) && !getWidgetType(types, widget.type));
+        if (!retired.length) return kept;
+        const onBoard = new Set(kept.filter(isSectionWidget).map((widget) => widget.cfg?.section));
+        retired.forEach((old) => {
+            sectionMeta
+                .filter((section) => section.replaces === old.cfg?.section && !onBoard.has(section.id))
+                .forEach((section) => {
+                    const w = section.w || 6;
+                    const h = section.h || 3;
+                    kept.push({
+                        i: nextWidgetId(kept),
+                        type: sectionTypeId(kind, section.id),
+                        ...findFreeSpot(kept, w, h),
+                        w,
+                        h,
+                        cfg: { section: section.id },
+                    });
+                    onBoard.add(section.id);
+                });
+        });
+        return compact(kept);
+    }, [types, sectionMeta, kind]);
 
     // ---- persistence --------------------------------------------------------
     // `board` is the saved row, null while the user is on the shipped layout,

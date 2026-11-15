@@ -1,12 +1,7 @@
-import { useCallback, useState, useEffect, useMemo, useRef, useId  } from 'react';
+import { useCallback, useState, useEffect, useMemo, useRef, useId } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
-    Search, BookOpen, Container, Globe, BarChart3,
-    Database, Shield, Cloud, MessageSquare, Video, Music, Image, Home,
-    Code, Server, GitBranch, Workflow, HardDrive, Lock, Users, FileText,
-    Layers, LayoutTemplate, Check, Cpu,
-    Newspaper, TrendingUp, Rocket, Box, Download, ChevronRight,
-    CheckCircle2, AlertTriangle, XCircle, HelpCircle
+    Search, BookOpen, Container, Globe, BarChart3, Database, Shield, Cloud, MessageSquare, Video, Music, Image, Home, Code, Server, GitBranch, Workflow, HardDrive, Lock, Users, FileText, Layers, LayoutTemplate, Check, Cpu, Newspaper, TrendingUp, Rocket, Box, Download, ChevronRight, CheckCircle2, AlertTriangle, XCircle, HelpCircle,
 } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -16,16 +11,14 @@ import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
 import {
-    SearchField, FilterDrawer, countActiveFilters, Drawer,
-    DataTableFooter, CatalogCard, CatalogGrid,
+    FilterDrawer, countActiveFilters, Drawer, DataTableFooter, CatalogCard, CatalogGrid,
 } from '@/components/ds';
-import { useTableChrome, GridViewPicker, GridToolsMenu, GridFilterButton } from '@/components/ds/grid';
+import { useTableChrome, GridViewPicker } from '@/components/ds/grid';
 import ServerPicker from '@/components/ServerPicker';
 import PortField from '@/components/PortField';
 import { FormField } from '@/components/FormField';
 import useFieldErrors from '@/hooks/useFieldErrors';
 import { LOCAL_SERVER_ID } from '@/utils/serverTarget';
-import { useTopbarChrome } from '@/hooks/useTopbarActions';
 import { applyTableSorts, useTableSort } from '@/hooks/useTableSort';
 import EmptyState from '../components/EmptyState';
 import ErrorState from '../components/ErrorState';
@@ -33,6 +26,7 @@ import { useManagedProfile } from '../contexts/useManagedProfile';
 import ManagedCard from '../components/ManagedCard';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 
 // Featured templates (curated list)
 const FEATURED_TEMPLATES = [
@@ -506,23 +500,18 @@ const Templates = () => {
         [chrome.shownRows, sorts, chrome.columns],
     );
 
-    // Search, the filter button and the "⋮" ride the tab group's top bar, so the
-    // view row below is the view name alone.
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <>
-            <SearchField
-                value={searchQuery}
-                onSearch={setSearchQueryFilter}
-                placeholder={t('app.templates.searchTemplates', 'Search templates…')}
-            />
-            <GridFilterButton count={activeFilterCount} onClick={() => setFiltersOpen(true)} />
-            <GridToolsMenu {...chrome.toolsProps} onRefresh={() => Promise.all([loadCategories(), loadTemplates()])} />
-        </>,
-    );
+    // Search rides the tab group's top bar; filters and the table tools are in
+    // the view selector's menu.
+    useListTopbar(() => ({
+        search: {
+            value: searchQuery,
+            onSearch: setSearchQueryFilter,
+            placeholder: t('app.templates.searchTemplates', 'Search templates…'),
+        },
+    }), [searchQuery]);
 
     return (
         <div className="sk-tabgroup__inner templates-page">
-            {topbarChrome}
             {/* The catalog is not the only way in: a repo or an archive skips
                 templates entirely, so both routes lead the page rather than
                 hiding behind the New Service tab. */}
@@ -549,10 +538,10 @@ const Templates = () => {
                 at, and its actions ride the top bar. The count that used to sit
                 here is under the cards now, next to what it is counting. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: () => Promise.all([loadCategories(), loadTemplates()]) }}
                 label="templates"
-                onCreate={chrome.createView}
-                actions={chromeActions}
+                filters={{ count: activeFilterCount, hidden: 0, onOpen: () => setFiltersOpen(true) }}
             />
 
             {deployManaged && (

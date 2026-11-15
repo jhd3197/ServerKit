@@ -3,14 +3,12 @@ import { Link } from 'react-router-dom';
 import { AlertTriangle, Network, RefreshCw, Server as ServerIcon } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
-import { useTopbarActions, useTopbarChrome } from '@/hooks/useTopbarActions';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
 import { Button } from '@/components/ui/button';
 import { DataTable, Pill, serviceStatusKind, statusLabel as dsStatusLabel } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import EmptyState from '../components/EmptyState';
 import InfoTip from '../components/InfoTip';
@@ -19,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { t } from '../i18n/t';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 
 // Fleet-wide reverse-proxy dashboard (Phase 4 of C6). Aggregates every
 // server's managed-proxy posture into one table: which proxy each server runs
@@ -338,12 +337,14 @@ const FleetProxy = () => {
     }, [load]);
 
     // Publish a Refresh button into the shared Servers tab-group top bar.
-    useTopbarActions(() => (
-        <Button size="sm" onClick={load} disabled={loading}>
-            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
-            {t('common.actions.refresh', 'Refresh')}
-        </Button>
-    ), [loading]);
+    useListTopbar(() => ({
+        secondary: (
+            <Button variant="outline" size="sm" onClick={load} disabled={loading}>
+                <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+                {t('common.actions.refresh', 'Refresh')}
+            </Button>
+        ),
+    }), [loading]);
 
     // No KPI band and no page title: every tile it held was a re-count of a
     // column already on the table below, and the tab strip names the page.
@@ -368,19 +369,9 @@ const FleetProxy = () => {
 
     // Filter + "⋮" ride in the shared Servers top bar. The toolbar they used to
     // sit in held nothing else but a re-count of the table underneath it.
-    const { portal: topbarChrome, actions: chromeActions } = useTopbarChrome(
-        <>
-            <GridFilterButton
-                count={chrome.filterCount}
-                onClick={() => chrome.setDrawerOpen(true)}
-            />
-            <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />
-        </>,
-    );
 
     return (
         <div className="sk-tabgroup__inner fleet-proxy">
-            {topbarChrome}
             {error ? (
                 <div className="fleet-proxy__error">
                     <p>{error}</p>
@@ -389,11 +380,10 @@ const FleetProxy = () => {
             ) : (
                 <>
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: load }}
                         label="servers"
-                        onCreate={chrome.createView}
                     
-                actions={chromeActions}
             />
 
                     <GridChips {...chrome.chipProps} />

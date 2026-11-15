@@ -21,7 +21,7 @@ const NO_FILTERS = { match: 'all', rules: [] };
  *       applyPage: (p) => { setFilter(p.filter); setSearch(p.search); },
  *   });
  *
- *   <GridViewPicker views={chrome.views} … />
+ *   <GridViewPicker {...chrome.pickerProps} />
  *   <GridChips {...chrome.chipProps} />
  *   <DataTable {…chrome.tableProps} columns={chrome.columns} … />
  *   <GridFilterDrawer {...chrome.drawerProps} />
@@ -165,6 +165,26 @@ export function useTableChrome({
         [rows, filters, orderedColumns],
     );
 
+    const openDrawer = useCallback(() => setDrawerOpen(true), []);
+
+    // Optional fields the table is not showing: what "Filters and fields" in
+    // the view selector offers to bring back.
+    const hiddenFieldCount = useMemo(
+        () => orderedColumns.filter((c) => c.header && hiddenKeys.includes(c.key)).length,
+        [orderedColumns, hiddenKeys],
+    );
+
+    const toolsProps = {
+        cfg,
+        columns: orderedColumns,
+        rows,
+        viewName: views.activeView?.name || noun,
+        noun,
+        onReset: api.resetToView,
+        onCopyLink: copyLink,
+        showDensity: false,
+    };
+
     return {
         cfg,
         api,
@@ -206,15 +226,19 @@ export function useTableChrome({
             showRowDetail: false,
             showDensity: false,
         },
-        toolsProps: {
-            cfg,
-            columns: orderedColumns,
-            rows,
-            viewName: views.activeView?.name || noun,
-            noun,
-            onReset: api.resetToView,
-            onCopyLink: copyLink,
-            showDensity: false,
+        toolsProps,
+        // The view selector with the table's controls folded into its menu:
+        //   <GridViewPicker {...chrome.pickerProps} />
+        // A list table has no filter icon and no "⋮" of its own; see
+        // scripts/check-list-chrome.mjs. Extend `tools` for a table that can
+        // refresh or export a selection:
+        //   tools={{ ...chrome.toolsProps, onRefresh: load }}
+        pickerProps: {
+            views,
+            label: noun,
+            onCreate: createView,
+            filters: { count: filters.rules.length, hidden: hiddenFieldCount, onOpen: openDrawer },
+            tools: toolsProps,
         },
     };
 }

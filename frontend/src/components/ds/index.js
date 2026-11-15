@@ -28,6 +28,7 @@ export { CatalogCard, CatalogGrid } from './CatalogCard';
 export { SortChipBar } from './SortChipBar';
 export { DataTableFooter } from './DataTableFooter';
 export { ListToolbar } from './ListToolbar';
+export { ListActions } from './ListActions';
 
 // DEPRECATED toolbar menus — ZERO render sites left in the app.
 //

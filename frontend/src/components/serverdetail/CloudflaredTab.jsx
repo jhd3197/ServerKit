@@ -7,8 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTable, DataTableFooter, Pill } from '../ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -21,8 +20,7 @@ import DomainField from '@/components/DomainField';
 import { rooms } from '@/constants/events';
 import { useTranslation } from 'react-i18next';
 import {
-    OfflineIcon,
-    TrashIcon,
+    OfflineIcon, TrashIcon,
 } from './serverDetailShared';
 import { toastError } from '@/utils/errorMessage';
 import { formatDateTime } from '@/utils/intl';
@@ -463,18 +461,9 @@ const CloudflaredTab = ({ serverId, serverStatus }) => {
                             the filter button and "⋮" ride it rather than a
                             second bar that would hold nothing else. */}
                         <GridViewPicker
-                            views={chrome.views}
+                            {...chrome.pickerProps}
+                            tools={{ ...chrome.toolsProps, onRefresh: loadTunnels }}
                             label="tunnels"
-                            onCreate={chrome.createView}
-                            actions={(
-                                <>
-                                    <GridFilterButton
-                                        count={chrome.filterCount}
-                                        onClick={() => chrome.setDrawerOpen(true)}
-                                    />
-                                    <GridToolsMenu {...chrome.toolsProps} onRefresh={loadTunnels} />
-                                </>
-                            )}
                         />
 
                         <GridChips {...chrome.chipProps} />

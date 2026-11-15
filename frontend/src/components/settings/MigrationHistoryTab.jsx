@@ -4,8 +4,7 @@ import { Database, Loader, CheckCircle, ArrowUpCircle, ShieldCheck } from 'lucid
 import { Badge } from '@/components/ui/badge';
 import { DataTable } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -314,18 +313,9 @@ const MigrationHistoryTab = () => {
                         banner as well as the table, so the picker sits with
                         the table it actually belongs to. */}
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: load }}
                         label="migrations"
-                        onCreate={chrome.createView}
-                        actions={(
-                            <>
-                                <GridFilterButton
-                                    count={chrome.filterCount}
-                                    onClick={() => chrome.setDrawerOpen(true)}
-                                />
-                                <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />
-                            </>
-                        )}
                     />
 
                     <GridChips {...chrome.chipProps} />

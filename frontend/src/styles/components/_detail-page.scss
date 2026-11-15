@@ -251,6 +251,32 @@
     }
 }
 
+// A KPI tile block: the frame is the tile's card, so the tile inside fills it
+// edge to edge and drops its own border and surface.
+.sk-overview-section--tile {
+    display: flex;
+    padding: 0;
+    overflow: hidden;
+
+    > .sk-overview-section__host {
+        display: flex;
+        flex: 1;
+        min-inline-size: 0;
+    }
+
+    .sk-kpi {
+        flex: 1;
+        min-inline-size: 0;
+        border: 0;
+        border-radius: 0;
+        background: none;
+
+        // A tile with no sparkline sits in the middle of its block instead of
+        // leaving the lower half empty.
+        &:not(:has(> .sk-kpi__spark)) { align-content: center; }
+    }
+}
+
 // Monitoring styles its panels under its own page class, which outranks the
 // plain reset above; scoping to the board puts the reset back on top.
 .sk-overview-board .sk-overview-section__host > .monitoring-panel {

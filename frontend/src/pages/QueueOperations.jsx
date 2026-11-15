@@ -1,16 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useId } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    Layers,
-    Inbox,
-    Send,
-    Trash2,
-    RefreshCw,
-    Plus,
-    Activity,
-    Folder,
-    Server,
-    AlertCircle,
+    Layers, Inbox, Send, Trash2, RefreshCw, Plus, Activity, Folder, Server, AlertCircle,
 } from 'lucide-react';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -31,12 +22,10 @@ import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
 import {
-    DataTable, DataTableFooter, MetricCard, Pill, SearchField, SortChipBar,
-    statusKind, statusLabel,
+    DataTable, DataTableFooter, MetricCard, Pill, SearchField, SortChipBar, statusKind, statusLabel, ListActions,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -476,24 +465,30 @@ const QueueOperations = () => {
             title={t('app.queueOperations.queueBus', 'Queue bus')}
             meta={`${activeGroupLabel} · ${activeStatusLabel} · ${filteredQueues.length} visible`}
             actions={(
-                <>
-                    <Tip content={t('app.queueOperations.group', 'Group')}>
-                        <Button variant="ghost" size="icon" aria-label={t('app.queueOperations.group', 'Group')} onClick={() => setShowGroupModal(true)}>
-                            <Folder size={16} />
-                        </Button>
-                    </Tip>
-                    <PagePrimaryButton
-                        id="queue-new"
-                        iconOnly
-                        label={t('app.queueOperations.newQueue', 'New queue')}
-                        onClick={() => setShowQueueModal(true)}
-                    />
-                    <Tip content={t('common.actions.refresh', 'Refresh')}>
-                        <Button variant="ghost" size="icon" aria-label={t('common.actions.refresh', 'Refresh')} onClick={() => { loadData(); loadQueues(selectedGroup); }}>
-                            <RefreshCw size={16} />
-                        </Button>
-                    </Tip>
-                </>
+                <ListActions
+                    secondary={(
+                        <>
+                            <Tip content={t('app.queueOperations.group', 'Group')}>
+                                <Button variant="ghost" size="icon" aria-label={t('app.queueOperations.group', 'Group')} onClick={() => setShowGroupModal(true)}>
+                                    <Folder size={16} />
+                                </Button>
+                            </Tip>
+                            <Tip content={t('common.actions.refresh', 'Refresh')}>
+                                <Button variant="ghost" size="icon" aria-label={t('common.actions.refresh', 'Refresh')} onClick={() => { loadData(); loadQueues(selectedGroup); }}>
+                                    <RefreshCw size={16} />
+                                </Button>
+                            </Tip>
+                        </>
+                    )}
+                    primary={(
+                        <PagePrimaryButton
+                            id="queue-new"
+                            label={t('app.queueOperations.newQueue', 'New queue')}
+                            shortLabel={t('common.actions.new', 'New')}
+                            onClick={() => setShowQueueModal(true)}
+                        />
+                    )}
+                />
             )}
         >
             <div className={`queue-ops-workspace${groups.length === 0 ? ' queue-ops-workspace--no-groups' : ''}`}>
@@ -580,23 +575,15 @@ const QueueOperations = () => {
                     {/* The view name is the page's heading for the list, and
                         the table's own chrome sits on that same line. */}
                     <GridViewPicker
-                        views={chrome.views}
+                        {...chrome.pickerProps}
+                        tools={{ ...chrome.toolsProps, onRefresh: () => { loadData(); loadQueues(selectedGroup); } }}
                         label="queues"
-                        onCreate={chrome.createView}
                         actions={(
                             <>
                                 <SearchField
                                     value={searchTerm}
                                     onSearch={setSearchTerm}
                                     placeholder={t('app.queueOperations.searchQueues', 'Search queues…')}
-                                />
-                                <GridFilterButton
-                                    count={chrome.filterCount}
-                                    onClick={() => chrome.setDrawerOpen(true)}
-                                />
-                                <GridToolsMenu
-                                    {...chrome.toolsProps}
-                                    onRefresh={() => { loadData(); loadQueues(selectedGroup); }}
                                 />
                             </>
                         )}

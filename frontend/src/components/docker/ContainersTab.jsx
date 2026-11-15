@@ -9,10 +9,9 @@ import EmptyState from '../EmptyState';
 import { ErrorState } from '../ErrorState';
 import Modal from '@/components/Modal';
 import { SheetPanel } from '@/components/ui/sheet';
-import { Drawer, DataTable, DataTableFooter, Pill, SearchField } from '@/components/ds';
+import { Drawer, DataTable, DataTableFooter, Pill } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer, GridBulkBar,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer, GridBulkBar,
 } from '@/components/ds/grid';
 import { formatRelativeTime } from '@/utils/time';
 import { useTableSort } from '@/hooks/useTableSort';
@@ -24,31 +23,18 @@ import EnvEditor from '@/components/EnvEditor';
 import { CopyButton } from '@/components/CopyButton';
 import { envToObject } from '@/utils/dotenv';
 import {
-    Box, X, Trash2, Play, Square, RotateCw,
-    Terminal as TerminalLucide, FileText, Activity, Clock3, Plus,
-    Database, Gauge, Package, Server as ServerIcon, Lock,
+    Box, X, Trash2, Play, Square, SquareCheck, RotateCw, Terminal as TerminalLucide, FileText, Activity, Clock3, Plus, Database, Gauge, Package, Server as ServerIcon, Lock,
 } from 'lucide-react';
 import {
-    useServer,
-    unwrapRemoteData,
-    formatPorts,
-    normalizeListResponse,
-    shortId,
-    getContainerId,
-    getContainerName,
-    getContainerImage,
-    getContainerStatus,
-    isContainerRunning,
-    isProtectedContainer,
-    getContainerStatusLabel,
-    containerHue,
-    getContainerProjectName,
+    useServer, unwrapRemoteData, formatPorts, normalizeListResponse, shortId, getContainerId, getContainerName, getContainerImage, getContainerStatus, isContainerRunning, isProtectedContainer, getContainerStatusLabel, containerHue, getContainerProjectName,
 } from './dockerHelpers';
 import { ContainerResourceBars } from './dockerShared';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { usePolling } from '@/hooks/usePolling';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
+import PagePrimaryButton from '@/components/PagePrimaryButton';
+import { useListTopbar } from '@/hooks/useTopbarActions';
 
 // Container stats cadence.
 const STATS_REFRESH_MS = 10000;
@@ -63,13 +49,15 @@ export const RunContainerButton = () => {
     const { isRemote } = useServer();
     return (
         <>
-            <Button
+            <PagePrimaryButton
+                id="docker-run-container"
+                icon={Play}
+                label={t('app.containersTab.runContainer2', 'Run container')}
+                shortLabel={t('app.containersTab.run', 'Run')}
                 onClick={() => setShowModal(true)}
                 disabled={isRemote}
-                title={isRemote ? t('app.containersTab.runningNewContainersIsOnlyAvailable', 'Running new containers is only available on the panel server right now') : t('app.containersTab.runContainer', 'Run container')}
-            >
-                <span>+</span> {t('app.containersTab.runContainer2', 'Run container')}
-            </Button>
+                disabledReason={isRemote ? t('app.containersTab.runningNewContainersIsOnlyAvailable', 'Running new containers is only available on the panel server right now') : undefined}
+            />
             {showModal && <RunContainerModal onClose={() => setShowModal(false)} onCreated={() => window.location.reload()} />}
         </>
     );
@@ -203,6 +191,13 @@ const ContainersTab = ({ onStatsChange }) => {
     const [logsContainer, setLogsContainer] = useState(null);
     const [execContainer, setExecContainer] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+
+    // The Docker page's top bar: this tab's create button and search, after the page-wide
+    // buttons. Filters and the table tools are in the view selector's menu.
+    useListTopbar(() => ({
+        primary: <RunContainerButton />,
+        search: { value: searchTerm, onSearch: setSearchTerm, placeholder: t('app.containersTab.searchContainers', 'Search containers…') },
+    }), [searchTerm]);
     // Native DataTable header sorting (the old <select> + direction button is
     // gone). Default keeps the previous behavior: running containers first.
     const { sorts, setSorts } = useTableSort({
@@ -780,39 +775,18 @@ const ContainersTab = ({ onStatsChange }) => {
 
     return (
         <div className="dx-tab-pane dx-containers-pane">
-            {/* One row of chrome. The view name is this pane's heading and
-                everything that acts on the table — the fetch scope, the search,
-                the filter, the "⋮" — rides the same line. This pane is inside
-                the Docker page's tab group, whose top bar belongs to that page,
-                so the chrome stays here rather than being hoisted (see
-                useTopbarChrome). Refresh is not repeated as an icon: it is in
-                the "⋮" with the other table-wide actions. */}
+            {/* The view name is this pane's heading. Its menu holds the fetch
+                scope (Include stopped), filters and the table tools; search
+                and Run ride the Docker page's top bar. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: loadContainers }}
                 label="containers"
-                onCreate={chrome.createView}
-                actions={(
-                    <>
-                        <label className="dx-toggle">
-                            <input
-                                type="checkbox"
-                                checked={showAll}
-                                onChange={(e) => setShowAll(e.target.checked)}
-                            />
-                            <span>{t('app.containersTab.includeStopped', 'Include stopped')}</span>
-                        </label>
-                        <SearchField
-                            value={searchTerm}
-                            onSearch={setSearchTerm}
-                            placeholder={t('app.containersTab.filterNameImageOrId', 'Filter name, image, or ID…')}
-                        />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={loadContainers} />
-                    </>
-                )}
+                extra={[{
+                    icon: showAll ? SquareCheck : Square,
+                    label: t('app.containersTab.includeStopped', 'Include stopped'),
+                    onSelect: () => setShowAll((value) => !value),
+                }]}
             />
 
             <GridChips {...chrome.chipProps} />

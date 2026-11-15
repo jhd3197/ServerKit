@@ -7,8 +7,7 @@ import { usePolling } from '../../hooks/usePolling';
 import EmptyState from '../EmptyState';
 import { DataTable, DataTableFooter, SearchField } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -320,9 +319,9 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
                 is in the "⋮". No process count here — the footer reports it,
                 under the rows it is counting. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: () => load() }}
                 label="sessions"
-                onCreate={chrome.createView}
                 actions={(
                     <>
                         <label className="dbp-auto">
@@ -338,11 +337,6 @@ export default function ProcessListPanel({ conn, engine, active, isAdmin }) {
                             onSearch={setSearch}
                             placeholder={t('app.processListPanel.filterSessions', 'Filter sessions…')}
                         />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={() => load()} />
                     </>
                 )}
             />

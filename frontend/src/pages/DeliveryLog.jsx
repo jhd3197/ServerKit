@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Send, Inbox } from 'lucide-react';
+import { Send, Inbox, ListFilter } from 'lucide-react';
 import api from '../services/api';
 import {
-    FilterDrawer, FilterButton, DataTable, DataTableFooter,
+    FilterDrawer, DataTable, DataTableFooter,
 } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -252,16 +251,6 @@ export default function DeliveryLog() {
             icon={<Send size={18} />}
             title={t('app.deliveryLog.notificationDeliveryLog', 'Notification delivery log')}
             meta="Outbound deliveries across all channels"
-            actions={(
-                // Labelled "Server filters" to keep it apart from the toolbar's
-                // filter icon: this one re-queries the whole table, that one
-                // narrows the rows already on screen.
-                <FilterButton
-                    label={t('app.deliveryLog.serverFilters', 'Server filters')}
-                    count={serverFilterCount}
-                    onClick={() => setFiltersOpen(true)}
-                />
-            )}
         >
             <div className="sk-dlog">
                 <EmailProviders />
@@ -270,9 +259,16 @@ export default function DeliveryLog() {
                     three built-in views, and the row count belongs to the
                     footer, under the rows it is counting. */}
                 <GridViewPicker
-                    views={chrome.views}
+                    {...chrome.pickerProps}
+                    tools={{ ...chrome.toolsProps, onRefresh: load }}
                     label="deliveries"
-                    onCreate={chrome.createView}
+                    // "Server filters" re-queries the whole table; "Filters and
+                    // fields" above it narrows the rows already on screen.
+                    extra={[{
+                        icon: ListFilter,
+                        label: `${t('app.deliveryLog.serverFilters', 'Server filters')}${serverFilterCount > 0 ? ` (${serverFilterCount})` : ''}`,
+                        onSelect: () => setFiltersOpen(true),
+                    }]}
                     actions={(
                         <>
                             {/* The chips only ever show CLIENT rules, so the
@@ -285,11 +281,6 @@ export default function DeliveryLog() {
                                 <i>&middot;</i>
                                 {channel === 'all' ? t('app.deliveryLog.allChannelsLower', 'all channels') : channel}
                             </span>
-                            <GridFilterButton
-                                count={chrome.filterCount}
-                                onClick={() => chrome.setDrawerOpen(true)}
-                            />
-                            <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />
                         </>
                     )}
                 />

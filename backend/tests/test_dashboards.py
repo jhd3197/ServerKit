@@ -486,7 +486,8 @@ def test_overview_layout_is_stored_but_is_not_a_dashboard_tab(client, auth_heade
 
 
 @pytest.mark.parametrize('scope', [
-    'entity:server', 'entity:service', 'entity:monitoring', 'entity:backups',
+    'entity:server', 'entity:service', 'entity:workspace',
+    'entity:monitoring', 'entity:backups', 'entity:security',
 ])
 def test_overview_layout_is_empty_until_saved(client, auth_headers, scope):
     resp = client.get(f'/api/v1/dashboards?scope={scope}', headers=auth_headers)

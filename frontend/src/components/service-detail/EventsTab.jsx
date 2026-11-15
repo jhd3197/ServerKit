@@ -3,8 +3,7 @@ import { History } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DataTable, DataTableFooter, Drawer, Pill, SearchField, statusKind, envActionKind } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -332,9 +331,9 @@ const EventsTab = ({ appId }) => {
                 than being hoisted (see useTopbarChrome). Refresh is not
                 repeated as a button — it is in the "⋮". */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: refresh }}
                 label="events"
-                onCreate={chrome.createView}
                 actions={(
                     <>
                         <SearchField
@@ -342,11 +341,6 @@ const EventsTab = ({ appId }) => {
                             onSearch={setSearch}
                             placeholder={t('app.eventsTab.searchActivity', 'Search activity…')}
                         />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={refresh} />
                     </>
                 )}
             />

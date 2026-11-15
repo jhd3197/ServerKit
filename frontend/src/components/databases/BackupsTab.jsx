@@ -6,8 +6,7 @@ import { useConfirm } from '../../hooks/useConfirm';
 import { formatBytes } from '@/utils/formatBytes';
 import { DataTable, DataTableFooter, SearchField } from '@/components/ds';
 import {
-    useTableChrome, GridViewPicker, GridChips, GridFilterButton,
-    GridToolsMenu, GridFilterDrawer,
+    useTableChrome, GridViewPicker, GridChips, GridFilterDrawer,
 } from '@/components/ds/grid';
 import { useTableSort } from '@/hooks/useTableSort';
 import { useColumnVisibility } from '@/hooks/useColumnVisibility';
@@ -222,10 +221,9 @@ export default function BackupsTab() {
         return (
             <div className="dbx-backups">
                 <GridViewPicker
-                    views={chrome.views}
+                    {...chrome.pickerProps}
+                    tools={{ ...chrome.toolsProps, onRefresh: load }}
                     label="backups"
-                    onCreate={chrome.createView}
-                    actions={<GridToolsMenu {...chrome.toolsProps} onRefresh={load} />}
                 />
                 <EmptyState
                     icon={Archive}
@@ -242,9 +240,9 @@ export default function BackupsTab() {
                 bar, so it stays inline rather than being hoisted; refresh is in
                 the "⋮" with the other table-wide actions. */}
             <GridViewPicker
-                views={chrome.views}
+                {...chrome.pickerProps}
+                tools={{ ...chrome.toolsProps, onRefresh: load }}
                 label="backups"
-                onCreate={chrome.createView}
                 actions={(
                     <>
                         <SearchField
@@ -252,11 +250,6 @@ export default function BackupsTab() {
                             onSearch={setSearch}
                             placeholder={t('app.backupsTab.filterDatabaseOrFile', 'Filter database or file…')}
                         />
-                        <GridFilterButton
-                            count={chrome.filterCount}
-                            onClick={() => chrome.setDrawerOpen(true)}
-                        />
-                        <GridToolsMenu {...chrome.toolsProps} onRefresh={load} />
                     </>
                 )}
             />

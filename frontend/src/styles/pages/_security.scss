@@ -256,22 +256,16 @@
     flex-direction: column;
     gap: $space-4;
 
-    .sec-posture-card .card-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    // ── Posture header: ScoreGauge + verdict + live readouts ──
+    // ── Posture block: ScoreGauge + verdict + Re-check. Its own board block,
+    // so it pads itself and fills the frame. ──
     .sec-posture__top {
         display: flex;
+        flex: 1;
         align-items: center;
         gap: $space-6;
-        padding-bottom: $space-4;
-        margin-bottom: $space-2;
-        border-bottom: 1px solid var(--border-soft);
+        padding: $space-3 $space-4;
 
-        // Phone: gauge beside the verdict, KPI row below at full width
+        // Phone: a smaller gauge beside the verdict
         @media (max-width: $breakpoint-sm) {
             display: grid;
             grid-template-columns: 72px minmax(0, 1fr); // gauge size
@@ -297,14 +291,6 @@
     .sec-posture__summary {
         flex: 1;
         min-width: 0;
-
-        // Dissolve so verdict joins the gauge row and the KPIs span below
-        @media (max-width: $breakpoint-sm) {
-            display: contents;
-
-            // KpiBand's wrapper is the grid item, so it must do the spanning
-            .sk-kpiband-wrap { grid-column: 1 / -1; margin-bottom: 0; }
-        }
     }
 
     .sec-posture__verdict {
@@ -314,21 +300,6 @@
         @media (max-width: $breakpoint-sm) { margin: 0; }
         font-weight: $font-weight-semibold;
         color: var(--text);
-    }
-
-    // Live event readouts — relocated from the old page-wide KPI strip
-    .sec-posture__kpis {
-        display: flex;
-        flex-wrap: wrap;
-        gap: $space-2 $space-5;
-
-        @media (max-width: $breakpoint-sm) {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: $space-2;
-
-            .sk-kpi { padding: $space-2; gap: $space-2; }
-        }
     }
 
     .sec-kpi {

@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import { formatBytes } from '@/utils/formatBytes';
-import { KpiBand, MetricCard, Pill, DataTable, DataTableFooter } from '@/components/ds';
+import { MetricCard, Pill, DataTable, DataTableFooter } from '@/components/ds';
 import EmptyState from '../EmptyState';
 import InfoTip from '../InfoTip';
 import { OverviewBoard, OverviewSection } from '@/components/detail/OverviewBoard';
@@ -103,6 +103,8 @@ const LATEST_COLUMNS = [
 // "is my data safe?", not "show me every file".
 // Dashboard widget types the Backups overview can carry besides its blocks.
 const BACKUPS_WIDGET_TYPES = ['note'];
+// Board rows a KPI tile takes: value, label and its sub line.
+const KPI_TILE_ROWS = 3;
 
 export default function BackupsOverview({
     stats, storageConfig, costSummary, schedules = [], backups = [], onGo, storageWarning = false,
@@ -259,8 +261,9 @@ export default function BackupsOverview({
     return (
         <div className="bk-overview">
             <OverviewBoard kind="backups" widgetTypes={BACKUPS_WIDGET_TYPES}>
-            <OverviewSection id="glance" title={t('app.backupsOverview.atAGlance', 'At a glance')} w={12} h={4}>
-            <KpiBand max={4}>
+            {/* One block per KPI: each is its own tile on the board, never a
+                section holding a strip of them. */}
+            <OverviewSection id="kpi-protected" title={t('app.backupsOverview.protectedResources', 'Protected resources')} tile replaces="glance" w={3} h={KPI_TILE_ROWS}>
                 <MetricCard
                     tone="green"
                     icon={<ShieldCheck size={16} />}
@@ -271,6 +274,8 @@ export default function BackupsOverview({
                         <span>{protection.detail || t('app.backupsOverview.fromTheBackupArchive', 'from the backup archive')}</span>
                     </div>
                 </MetricCard>
+            </OverviewSection>
+            <OverviewSection id="kpi-storage" title={t('app.backupsOverview.storageUsed', 'Storage used')} tile replaces="glance" w={3} h={KPI_TILE_ROWS}>
                 <MetricCard
                     tone="accent"
                     icon={<Database size={16} />}
@@ -281,6 +286,8 @@ export default function BackupsOverview({
                         <span>{t('app.backupsOverview.acrossDestinations', { count: destinations.count, defaultValue_one: 'across 1 destination', defaultValue_other: 'across {{count}} destinations' })}</span>
                     </div>
                 </MetricCard>
+            </OverviewSection>
+            <OverviewSection id="kpi-success" title={t('app.backupsOverview.successRate', 'Success rate')} tile replaces="glance" w={3} h={KPI_TILE_ROWS}>
                 <MetricCard
                     tone={successRate == null ? 'accent' : successRate >= 99 ? 'green' : successRate >= 90 ? 'amber' : 'red'}
                     icon={<History size={16} />}
@@ -292,6 +299,8 @@ export default function BackupsOverview({
                         <span>{finished30.length ? t('app.backupsOverview.runsLast30Days', { count: finished30.length, defaultValue_one: '1 run · last 30 days', defaultValue_other: '{{count}} runs · last 30 days' }) : t('app.backupsOverview.noRunsRecordedYet', 'no runs recorded yet')}</span>
                     </div>
                 </MetricCard>
+            </OverviewSection>
+            <OverviewSection id="kpi-next" title={t('app.backupsOverview.nextScheduled', 'Next scheduled')} tile replaces="glance" w={3} h={KPI_TILE_ROWS}>
                 <MetricCard
                     tone="violet"
                     icon={<Timer size={16} />}
@@ -306,7 +315,6 @@ export default function BackupsOverview({
                         </span>
                     </div>
                 </MetricCard>
-            </KpiBand>
             </OverviewSection>
 
             <OverviewSection id="activity" title={t('app.backupsOverview.backupActivity', 'Backup activity')} w={6} h={8}>
