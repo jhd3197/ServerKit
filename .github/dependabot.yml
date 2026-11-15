@@ -23,6 +23,22 @@ updates:
       frontend:
         patterns: ["*"]
         update-types: [minor, patch]
+    ignore:
+      # React 19 is a migration, not a bump: runtime extensions are published
+      # bundles that resolve React to the panel's singleton, so every shipped
+      # extension (and the recharts 2 they bundle) has to be proven on it first.
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/react-dom"
+        update-types: ["version-update:semver-major"]
+      # eslint-plugin-react 7.x peers on eslint <= 9, so `npm ci` cannot
+      # resolve ESLint 10. Drop this once the plugin ships ESLint 10 support.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
