@@ -71,7 +71,9 @@ class ProcessService:
                     'cmdline': proc.cmdline(),
                     'cwd': proc.cwd() if hasattr(proc, 'cwd') else None,
                     'num_threads': proc.num_threads(),
-                    'connections': len(proc.connections()) if hasattr(proc, 'connections') else 0
+                    # psutil 6 renamed connections() and will remove the old name.
+                    'connections': len((getattr(proc, 'net_connections', None)
+                                        or proc.connections)())
                 }
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             return None
