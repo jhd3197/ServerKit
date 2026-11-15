@@ -5,6 +5,7 @@ import json
 import os
 import shlex
 import yaml
+from collections import deque
 from datetime import datetime
 
 from app.exceptions import DependencyUnavailableError
@@ -1165,11 +1166,43 @@ class DockerService:
                 cmd.append('--build')
 
             result = cls.run_compose(cmd, cwd=project_path)
+            if not result['success'] and cls._pin_subnets_on_pool_error(
+                    project_path, compose_file,
+                    ' '.join(str(result.get(k) or '') for k in ('error', 'stderr', 'output'))):
+                result = cls.run_compose(cmd, cwd=project_path)
             if result['success']:
                 return {'success': True, 'output': result['output']}
             return {'success': False, 'error': result['error'], 'output': result['output']}
         except Exception as e:
             return {'success': False, 'error': str(e)}
+
+    @staticmethod
+    def _pin_subnets_on_pool_error(project_path, compose_file, text, on_line=None):
+        """Pin the project's networks when ``compose up`` failed because
+        Docker's default address pools are full. True means "retry the up".
+
+        A stock daemon has room for about thirty compose networks; past that
+        every new stack fails at network creation however idle the host is.
+        """
+        from app.services import compose_network_service
+        if not compose_network_service.needs_pinned_subnet(text):
+            return False
+        result = compose_network_service.pin_project_subnets(
+            project_path, compose_file, error_text=text)
+        if result['success']:
+            pins = ', '.join(f'{name} -> {subnet}' for name, subnet in result['pinned'].items())
+            note = ("ServerKit: Docker's default address pools are full; "
+                    f'pinned a dedicated subnet ({pins}) and retrying.')
+        else:
+            note = ("ServerKit: Docker's default address pools are full and no "
+                    f"subnet could be pinned: {result['error']}")
+        logger.warning('%s (%s)', note, project_path)
+        if on_line:
+            try:
+                on_line(note)
+            except Exception:
+                pass
+        return result['success']
 
     @classmethod
     def compose_up_streaming(cls, project_path, on_line, detach=True, build=False,
@@ -1205,18 +1238,28 @@ class DockerService:
             if build:
                 cmd.append('--build')
 
-            proc = subprocess.Popen(
-                cmd, cwd=project_path,
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                text=True, bufsize=1,
-            )
-            for line in iter(proc.stdout.readline, ''):
-                try:
-                    on_line(line.rstrip('\n'))
-                except Exception:
-                    pass
-            proc.stdout.close()
-            exit_code = proc.wait()
+            def _run():
+                proc = subprocess.Popen(
+                    cmd, cwd=project_path,
+                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                    text=True, bufsize=1,
+                )
+                # The tail is enough to recognise a network failure, and a
+                # build can print megabytes before it gets there.
+                transcript = deque(maxlen=200)
+                for line in iter(proc.stdout.readline, ''):
+                    transcript.append(line)
+                    try:
+                        on_line(line.rstrip('\n'))
+                    except Exception:
+                        pass
+                proc.stdout.close()
+                return proc.wait(), ''.join(transcript)
+
+            exit_code, transcript = _run()
+            if exit_code != 0 and cls._pin_subnets_on_pool_error(
+                    project_path, compose_file, transcript, on_line=on_line):
+                exit_code, _ = _run()
             return {'success': exit_code == 0, 'exit_code': exit_code}
         except Exception as e:
             try:
