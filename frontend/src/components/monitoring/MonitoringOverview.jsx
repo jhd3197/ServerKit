@@ -8,7 +8,7 @@ import { formatBytes } from '@/utils/formatBytes';
 import { AreaChart, MetricCard, Pill, Sparkline } from '@/components/ds';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '../Skeleton';
-import { LiveChecks, MonitorKpi, MonitorsList } from './MonitorsSummary';
+import { LiveChecks, MonitorKpi, MonitorsList, MonitorsNotice } from './MonitorsSummary';
 import { OverviewBoard, OverviewSection } from '@/components/detail/OverviewBoard';
 import DiskReclaimModal from './DiskReclaimModal';
 import { HOST_SCOPE, useScopeMetrics, trendOf } from './useMonitorScope';
@@ -60,6 +60,9 @@ const MONITOR_KPI_BLOCKS = [
     { metric: 'down', labelKey: 'app.monitorsSummary.monitorsDown', label: 'Monitors down' },
     { metric: 'degraded', labelKey: 'app.monitorsSummary.degraded', label: 'Degraded' },
 ];
+
+// Board rows for the "nothing is watched yet" notice: a line and a button.
+const NOTICE_ROWS = 3;
 
 // Board rows for the monitor list and the live check feed: five rows of each
 // without scrolling.
@@ -228,6 +231,12 @@ export default function MonitoringOverview({
             {/* Monitors first: "is the site up" is the question this page is
                 for, and everything below describes the machines ServerKit runs
                 on rather than the things it is watching. */}
+            {/* Only renders while nothing is watched (or the list failed to
+                load), so it leaves the layout once a monitor exists. */}
+            <OverviewSection id="monitor-notice" title={t('app.monitoringOverview.monitors', 'Monitors')} replaces="monitors" w={12} h={NOTICE_ROWS}>
+                <MonitorsNotice summary={monitorsSummary} />
+            </OverviewSection>
+
             {MONITOR_KPI_BLOCKS.map((block) => (
                 <OverviewSection key={block.metric} id={`monitor-${block.metric}`} title={translateLabel(t, block)} tile replaces="monitors" w={3} h={KPI_TILE_ROWS}>
                     <MonitorKpi summary={monitorsSummary} metric={block.metric} />

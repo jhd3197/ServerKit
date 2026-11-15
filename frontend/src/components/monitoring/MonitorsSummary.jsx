@@ -86,15 +86,17 @@ export function MonitorKpi({ summary, metric }) {
     );
 }
 
-// The watched monitors. Also where "nothing is watched yet"
-// and a failed load are said, since this is the block that would list them.
-export function MonitorsList({ summary }) {
+// What the monitor blocks say when there is nothing to list: no monitor exists
+// yet, or the request failed. Its own short block, so an empty page is one
+// line and a button rather than a tall empty list.
+export function MonitorsNotice({ summary }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { monitors, loadError, load } = summary;
+    if (monitors.length) return null;
 
     // A failed fetch with nothing loaded is not "nothing is being watched".
-    if (loadError && !monitors.length) {
+    if (loadError) {
         return (
             <section className="monitoring-panel mon-nomonitors">
                 <ErrorState
@@ -107,24 +109,29 @@ export function MonitorsList({ summary }) {
         );
     }
 
-    if (!monitors.length) {
-        return (
-            <section className="monitoring-panel mon-nomonitors">
-                <div className="monitoring-panel__header">
-                    <div>
-                        <h3>{t('app.monitorsSummary.monitors', 'Monitors')}</h3>
-                        <span className="mon-panel-sub">{t('app.monitorsSummary.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}</span>
-                    </div>
-                    <Button size="sm" onClick={() => navigate('/monitoring/monitors')}>
-                        <Plus size={14} /> {t('app.monitorsSummary.addMonitor', 'New monitor')}
-                    </Button>
+    return (
+        <section className="monitoring-panel mon-nomonitors">
+            <div className="monitoring-panel__header">
+                <div>
+                    <h3>{t('app.monitorsSummary.monitors', 'Monitors')}</h3>
+                    <span className="mon-panel-sub">{t('app.monitorsSummary.nothingIsBeingWatchedYet', 'Nothing is being watched yet')}</span>
                 </div>
-                <p className="mon-panel-hint">
-                    {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkitShort', 'Below: the servers ServerKit runs on.')} <InfoTip>{t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}</InfoTip>
-                </p>
-            </section>
-        );
-    }
+                <Button size="sm" onClick={() => navigate('/monitoring/monitors')}>
+                    <Plus size={14} /> {t('app.monitorsSummary.addMonitor', 'New monitor')}
+                </Button>
+            </div>
+            <p className="mon-panel-hint">
+                {t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkitShort', 'Below: the servers ServerKit runs on.')} <InfoTip>{t('app.monitorsSummary.everythingBelowDescribesTheMachinesServerkit', 'Everything below describes the servers ServerKit runs on. Add a monitor to watch a website, an API endpoint, a database port or a WordPress site and get an incident when it stops answering.')}</InfoTip>
+            </p>
+        </section>
+    );
+}
+
+// The watched monitors.
+export function MonitorsList({ summary }) {
+    const { t } = useTranslation();
+    const { monitors } = summary;
+    if (!monitors.length) return null;
 
     return (
         <section className="monitoring-panel">
