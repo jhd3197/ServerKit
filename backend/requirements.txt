@@ -68,7 +68,7 @@ webauthn==2.5.0
 requests==2.34.2
 
 # S3-compatible storage (AWS S3, Backblaze B2, MinIO, Wasabi)
-boto3==1.44.0
+boto3==1.44.1
 
 # SSO / OAuth
 Authlib==1.9.5
