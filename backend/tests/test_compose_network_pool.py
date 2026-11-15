@@ -16,6 +16,7 @@ import yaml
 
 from app.services import compose_network_service as cns
 from app.services.docker_service import DockerService
+from subprocess_stub import FakeProc
 
 EXHAUSTED = ('failed to create network site_default: Error response from daemon: '
              'all predefined address pools have been fully subnetted')
@@ -220,30 +221,18 @@ class TestComposeUpRetries:
         assert not result['success'] and len(calls) == 1
         assert 'networks' not in _compose(path)
 
-    def test_streaming_up_pins_retries_and_says_what_it_did(self, tmp_path, monkeypatch):
+    def test_streaming_up_pins_retries_and_says_what_it_did(self, tmp_path, monkeypatch,
+                                                            fake_subprocess):
         path = _project(tmp_path, SIMPLE)
         runs = []
 
-        class _Stdout:
-            def __init__(self, lines):
-                self._lines = iter(lines)
+        def up(argv, kwargs):
+            runs.append(argv)
+            if len(runs) == 1:
+                return FakeProc(returncode=1, stdout=EXHAUSTED + '\n', args=argv)
+            return FakeProc(stdout='started\n', args=argv)
 
-            def readline(self):
-                return next(self._lines, '')
-
-            def close(self):
-                pass
-
-        class _Proc:
-            def __init__(self, cmd, **kwargs):
-                runs.append(cmd)
-                self._code = 1 if len(runs) == 1 else 0
-                self.stdout = _Stdout([EXHAUSTED + '\n'] if self._code else ['started\n'])
-
-            def wait(self):
-                return self._code
-
-        monkeypatch.setattr('subprocess.Popen', _Proc)
+        fake_subprocess.when(['docker', 'compose'], up)
         monkeypatch.setattr(DockerService, '_is_compose_v2', classmethod(lambda cls: True))
         lines = []
         result = DockerService.compose_up_streaming(path, lines.append)

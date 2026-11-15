@@ -88,6 +88,27 @@ class FakeProc:
                 f'stdout={self.stdout!r}, stderr={self.stderr!r})')
 
 
+class _Lines:
+    """A pipe's line stream: iterable, and readable the way
+    ``iter(stream.readline, '')`` reads it, which is how the streaming
+    callers consume a live process."""
+
+    def __init__(self, text):
+        self._lines = iter(text.splitlines(keepends=True)) if text else iter(())
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return next(self._lines)
+
+    def readline(self):
+        return next(self._lines, '')
+
+    def close(self):
+        pass
+
+
 class FakePopen:
     """Minimal ``Popen`` stand-in over a :class:`FakeProc`.
 
@@ -101,9 +122,8 @@ class FakePopen:
         self._proc = proc
         self.args = proc.args
         self.returncode = None
-        text = proc.stdout or ''
-        self.stdout = iter(text.splitlines(keepends=True)) if text else iter(())
-        self.stderr = iter(())
+        self.stdout = _Lines(proc.stdout or '')
+        self.stderr = _Lines('')
 
     def wait(self, timeout=None):
         self.returncode = self._proc.returncode
