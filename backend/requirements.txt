@@ -59,7 +59,7 @@ cryptography==50.0.2
 
 # Two-Factor Authentication
 pyotp==2.10.0
-qrcode[pil]==7.4.2
+qrcode[pil]==8.2
 
 # WebAuthn / Passkeys
 webauthn==2.5.0
