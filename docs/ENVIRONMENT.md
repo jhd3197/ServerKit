@@ -37,6 +37,7 @@ variable that is not listed here.
 | `SITES_BASE_DOMAIN` | empty (`lvh.me` in development) | Managed sites are published at `<slug>.<domain>`. Empty falls back to `localhost:<port>` URLs. The panel setting overrides it. |
 | `SERVER_PUBLIC_IP` | empty | IP that auto-created DNS records point at. |
 | `SERVERKIT_ALLOW_PRIVATE_WEBHOOKS` | off | Let outgoing webhooks and event subscriptions reach private/internal addresses (the SSRF guard blocks them by default). |
+| `SERVERKIT_COMPOSE_SUBNET_POOL` | `10.213.0.0/16` | Where an app's Docker network gets its subnet once Docker's own address pools are full (about thirty stacks on a stock daemon). Each app takes a `/26`; change it if the range is routed elsewhere on your network. |
 
 ## Security and secrets
 

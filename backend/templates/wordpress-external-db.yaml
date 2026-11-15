@@ -92,6 +92,10 @@ files:
       FROM wordpress:${VERSION}
       RUN php -r '$v=PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION; $min=["8.2"=>"8.2.35","8.3"=>"8.3.36"]; exit(isset($min[$v]) && version_compare(PHP_VERSION,$min[$v],">=") ? 0 : 1);' \
        && docker-php-ext-install pdo_mysql
+      RUN pecl install redis \
+       && docker-php-ext-enable redis \
+       && rm -rf /tmp/pear \
+       && php -r 'exit(extension_loaded("redis") ? 0 : 1);'
       RUN printf 'session.upload_progress.enabled=0\n' > /usr/local/etc/php/conf.d/zz-serverkit-security.ini \
        && printf 'php_admin_flag session.upload_progress.enabled Off\n' > /etc/apache2/conf-available/serverkit-php-security.conf \
        && a2enconf serverkit-php-security
