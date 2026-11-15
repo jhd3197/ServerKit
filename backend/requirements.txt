@@ -35,7 +35,7 @@ psutil==7.2.2
 # threading driver) under a plain threaded gunicorn worker — do NOT deploy
 # with the gevent-websocket worker class; it double-answers the WS handshake
 # against async_mode='threading' (browser: "Invalid frame header").
-gunicorn==26.2.0
+gunicorn==27.0.0
 simple-websocket==1.1.0
 
 # Environment variables
