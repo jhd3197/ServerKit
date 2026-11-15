@@ -1,6 +1,6 @@
 {
   "schema_version": 3,
-  "updated": "2026-10-28",
+  "updated": "2026-11-15",
   "note": "Bundled fallback copy of the ServerKit extension registry index. The live index is fetched from SERVERKIT_REGISTRY_URL when configured; this file is used offline and in tests. It is a MIRROR of serverkit-extensions/index.json on main \u2014 do not hand-edit entries here, or it drifts from the artifacts it pins and installs fail checksum verification on exactly the panels that are already offline. Regenerate by copying that file's extensions array; tests/test_registry_bundled_index.py checks the two agree. Schema v3 adds optional per-entry `signature` + `publisher_key_id` (ed25519 minisign-style detached signature over the release zip, verified against the panel's pinned publisher keys at install \u2014 plan 55 D3). v1/v2 indexes without those fields remain valid; their entries are treated as unsigned.",
   "extensions": [
     {
@@ -299,7 +299,7 @@
       "slug": "serverkit-wordpress",
       "display_name": "WordPress",
       "description": "The full WordPress suite: one-click site provisioning, a curated plugin library, environments and promote pipelines, update runs, security hardening, vulnerability scanning, analytics and reports. Offered during onboarding; uninstall it to slim the panel.",
-      "version": "1.0.5",
+      "version": "1.0.6",
       "category": "integration",
       "author": "ServerKit",
       "first_party": true,
@@ -313,14 +313,14 @@
       ],
       "min_panel_version": "1.11.18",
       "max_panel_version": null,
-      "source": "https://github.com/jhd3197/serverkit-wordpress/releases/download/v1.0.5/serverkit-wordpress-1.0.5.zip",
-      "sha256": "f541d6a9077146470a212c79149df25806a77bbc5bebefb296bf8e1d1dfef74a",
+      "source": "https://github.com/jhd3197/serverkit-wordpress/releases/download/v1.0.6/serverkit-wordpress-1.0.6.zip",
+      "sha256": "b01b0bb714c6915537a070defe395c073cd151c82b3f6dca80c0e59006d54c7f",
       "repo": "https://github.com/jhd3197/serverkit-wordpress",
       "homepage": "https://github.com/jhd3197/serverkit-wordpress",
       "featured": true,
       "feature_score": 80,
       "logo": "assets/serverkit-wordpress/logo.png",
-      "signature": "RUSisf2r8uF4ywWGOlXcW5biOIo140NvStZUiYr6N9bi4DIvkKbTu/7rDkNYnny9SvWGdrkqobVArkY89YDMIOuuQJKCYB0RYAs=",
+      "signature": "RUSisf2r8uF4y4e/vDjZmaqyY1mT5D87BhSZwgRbS4Tal9G2qEGZt5/M7ucKJvJxsNWFHitUsNj8ZtTxA2Uhan5j0N766CIpmQk=",
       "publisher_key_id": "serverkit-official"
     },
     {
