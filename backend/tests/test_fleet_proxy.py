@@ -13,6 +13,13 @@ from app.services.proxy_stack_service import ProxyStackService as PS
 from app.models.proxy_stack import ProxyStack  # noqa: F401
 
 
+def _admin():
+    """The overview is scoped to its caller; an admin sees the whole fleet."""
+    from app import db
+    from factories import make_user
+    return make_user(db, role='admin')
+
+
 def _make_server(name, agent_id):
     from app import db
     from app.models.server import Server
@@ -28,7 +35,7 @@ def _make_server(name, agent_id):
 
 def test_fleet_overview_empty_when_no_servers(app):
     with app.app_context():
-        assert PS.fleet_overview() == []
+        assert PS.fleet_overview(_admin()) == []
 
 
 def test_fleet_overview_one_row_per_server(app):
@@ -37,7 +44,7 @@ def test_fleet_overview_one_row_per_server(app):
         sid_b = _make_server('bravo', 'agent-fp-b')
         sid_c = _make_server('charlie', 'agent-fp-c')
 
-        overview = PS.fleet_overview()
+        overview = PS.fleet_overview(_admin())
         # A row for every server, even ones that never opted into a stack.
         assert len(overview) == 3
         ids = {row['server_id'] for row in overview}
@@ -61,7 +68,7 @@ def test_fleet_overview_one_row_per_server(app):
 def test_fleet_overview_host_default_for_unconfigured(app):
     with app.app_context():
         sid = _make_server('hostonly', 'agent-fp-host')
-        overview = PS.fleet_overview()
+        overview = PS.fleet_overview(_admin())
         assert len(overview) == 1
         row = overview[0]
         # No managed stack → host nginx, status 'host'.
@@ -80,7 +87,7 @@ def test_fleet_overview_reflects_configured_stack(app):
         # Configure one server onto a managed Traefik stack.
         PS.configure(sid_traefik, proxy_type='traefik')
 
-        overview = PS.fleet_overview()
+        overview = PS.fleet_overview(_admin())
         by_id = {row['server_id']: row for row in overview}
 
         # Configured server reflects its stack type; not the host default.
@@ -120,7 +127,7 @@ def test_fleet_overview_recommendation_levels(app):
         # info: a stack server running with no apps yet.
         PS.switch(sid_idle_stack, 'caddy')
 
-        rows = {r['server_id']: r for r in PS.fleet_overview()}
+        rows = {r['server_id']: r for r in PS.fleet_overview(_admin())}
 
         warn = rows[sid_warn]['recommendation']
         assert warn['level'] == 'warn'

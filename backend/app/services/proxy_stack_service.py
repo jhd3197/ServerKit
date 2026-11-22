@@ -478,10 +478,10 @@ class ProxyStackService:
             return None
 
     @staticmethod
-    def fleet_overview():
-        """Fleet-wide proxy posture: one row per server.
+    def fleet_overview(user):
+        """Fleet-wide proxy posture: one row per server *user* can access.
 
-        Best-effort and guarded — never raises. Joins every ``Server`` with its
+        Best-effort and guarded — never raises. Joins each such ``Server`` with its
         ``ProxyStack`` (if one exists). Servers that never opted into a managed
         stack report the host-nginx default (``proxy_type='nginx'``,
         ``status='host'``) rather than being omitted, so the dashboard shows the
@@ -499,7 +499,9 @@ class ProxyStackService:
             return []
 
         try:
-            servers = Server.query.order_by(Server.name).all()
+            from app.services.workspace_service import WorkspaceService
+            servers = WorkspaceService.filter_accessible_servers(
+                Server.query, user).order_by(Server.name).all()
         except Exception as e:  # pragma: no cover - DB guard
             logger.warning(f"fleet_overview server query failed: {e}")
             return []

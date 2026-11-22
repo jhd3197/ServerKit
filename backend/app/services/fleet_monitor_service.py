@@ -20,6 +20,7 @@ from app.models.server import Server, ServerMetrics, ServerGroup
 from app.models.metric_alert import ServerAlertThreshold, MetricAlert
 from app.services.agent_registry import agent_registry
 from app.services.server_metrics_service import latest_metrics_by_server
+from app.services.workspace_service import WorkspaceService
 
 logger = logging.getLogger(__name__)
 
@@ -32,15 +33,40 @@ METRIC_COLUMNS = {
 }
 
 
+def _visible_servers(user, query=None):
+    """A Server query narrowed to what *user* may see — the same workspace
+    rule as GET /servers. Every read below goes through this or
+    `_visible_server`; the unscoped `Server.query` is for the system-level
+    passes only (threshold checks, the token-gated Prometheus scrape)."""
+    return WorkspaceService.filter_accessible_servers(
+        Server.query if query is None else query, user)
+
+
+def _visible_server(user, server_id):
+    """The server if *user* may see it, else None — a foreign id reads
+    exactly like an unknown one."""
+    return WorkspaceService.get_accessible_server(user, server_id)
+
+
+def _visible_server_ids(user):
+    """Subquery of the server ids *user* may see, for filtering child rows."""
+    return WorkspaceService.filter_accessible_servers(
+        db.session.query(Server.id), user)
+
+
 class FleetMonitorService:
-    """Service for fleet-wide monitoring and alerting."""
+    """Service for fleet-wide monitoring and alerting.
+
+    The read methods take the calling ``user`` and answer only for servers that
+    user can access (GHSA-qcjj-hf95-6rgw).
+    """
 
     # ==================== Fleet Heatmap ====================
 
     @staticmethod
-    def get_fleet_heatmap(group_id: str = None) -> List[Dict]:
-        """Get latest metrics for all servers, shaped for heatmap display."""
-        query = Server.query
+    def get_fleet_heatmap(user, group_id: str = None) -> List[Dict]:
+        """Latest metrics for the servers *user* can access, shaped for heatmap display."""
+        query = _visible_servers(user)
         if group_id:
             query = query.filter_by(group_id=group_id)
 
@@ -70,9 +96,11 @@ class FleetMonitorService:
 
     @staticmethod
     def get_comparison_timeseries(
-        server_ids: List[str], metric: str = 'cpu', period: str = '24h'
+        user, server_ids: List[str], metric: str = 'cpu', period: str = '24h'
     ) -> Dict:
-        """Get time-series data for multiple servers for overlay charting."""
+        """Get time-series data for multiple servers for overlay charting.
+
+        Ids *user* cannot access are skipped, like ids that do not exist."""
         hours_back = {'1h': 1, '6h': 6, '24h': 24, '7d': 168, '30d': 720}.get(period, 24)
         interval = {'1h': 1, '6h': 5, '24h': 15, '7d': 60, '30d': 360}.get(period, 15)
         cutoff = datetime.utcnow() - timedelta(hours=hours_back)
@@ -80,7 +108,7 @@ class FleetMonitorService:
 
         series = []
         for server_id in server_ids:
-            server = Server.query.get(server_id)
+            server = _visible_server(user, server_id)
             if not server:
                 continue
 
@@ -113,9 +141,17 @@ class FleetMonitorService:
     # ==================== Alert Thresholds ====================
 
     @staticmethod
-    def get_thresholds(server_id: str = None) -> List[Dict]:
-        """Get alert thresholds, optionally filtered by server."""
+    def get_thresholds(user, server_id: str = None) -> List[Dict]:
+        """Get alert thresholds, optionally filtered by server.
+
+        Global defaults (no server) are fleet policy and visible to everyone;
+        per-server overrides only for servers *user* can access."""
         query = ServerAlertThreshold.query
+        if not user.is_admin:
+            query = query.filter(
+                (ServerAlertThreshold.server_id == None) |  # noqa: E711
+                ServerAlertThreshold.server_id.in_(_visible_server_ids(user))
+            )
         if server_id:
             query = query.filter(
                 (ServerAlertThreshold.server_id == server_id) |
@@ -286,11 +322,13 @@ class FleetMonitorService:
 
     @staticmethod
     def get_alerts(
-        status: str = None, severity: str = None,
+        user, status: str = None, severity: str = None,
         server_id: str = None, limit: int = 50
     ) -> List[Dict]:
-        """Get metric alerts with filters."""
+        """Get metric alerts for the servers *user* can access, with filters."""
         query = MetricAlert.query.order_by(MetricAlert.created_at.desc())
+        if not user.is_admin:
+            query = query.filter(MetricAlert.server_id.in_(_visible_server_ids(user)))
         if status:
             query = query.filter_by(status=status)
         if severity:
@@ -322,9 +360,12 @@ class FleetMonitorService:
     # ==================== Anomaly Detection ====================
 
     @staticmethod
-    def detect_anomalies(server_id: str = None) -> List[Dict]:
+    def detect_anomalies(user, server_id: str = None) -> List[Dict]:
         """Simple z-score anomaly detection on 7-day hourly averages."""
-        servers = [Server.query.get(server_id)] if server_id else Server.query.filter_by(status='online').all()
+        if server_id:
+            servers = [_visible_server(user, server_id)]
+        else:
+            servers = _visible_servers(user).filter_by(status='online').all()
         cutoff = datetime.utcnow() - timedelta(days=7)
         anomalies = []
 
@@ -484,14 +525,14 @@ class FleetMonitorService:
     # ==================== Fleet Search ====================
 
     @staticmethod
-    def search_fleet(query: str, search_type: str = 'any') -> List[Dict]:
-        """Search across all servers for containers, services, or ports."""
+    def search_fleet(user, query: str, search_type: str = 'any') -> List[Dict]:
+        """Search the servers *user* can access for containers, services, or ports."""
         query_lower = query.lower()
         results = []
 
         # Search server names and hostnames
         if search_type in ('any', 'server'):
-            servers = Server.query.filter(
+            servers = _visible_servers(user).filter(
                 (Server.name.ilike(f'%{query}%')) |
                 (Server.hostname.ilike(f'%{query}%')) |
                 (Server.ip_address.ilike(f'%{query}%'))
@@ -510,7 +551,7 @@ class FleetMonitorService:
         if search_type in ('any', 'container'):
             connected = agent_registry.get_connected_servers()
             for server_id in connected:
-                server = Server.query.get(server_id)
+                server = _visible_server(user, server_id)
                 if not server:
                     continue
 
@@ -536,7 +577,7 @@ class FleetMonitorService:
 
         # Search tags
         if search_type in ('any', 'tag'):
-            all_servers = Server.query.all()
+            all_servers = _visible_servers(user).all()
             for s in all_servers:
                 if s.tags:
                     for tag in s.tags:
@@ -608,8 +649,8 @@ class FleetMonitorService:
     # ==================== CSV Export ====================
 
     @staticmethod
-    def export_metrics_csv(server_ids: List[str], metric: str = 'cpu', period: str = '24h') -> str:
-        """Export metrics as CSV string."""
+    def export_metrics_csv(user, server_ids: List[str], metric: str = 'cpu', period: str = '24h') -> str:
+        """Export metrics as CSV string, for the ids *user* can access."""
         hours_back = {'1h': 1, '6h': 6, '24h': 24, '7d': 168, '30d': 720}.get(period, 24)
         cutoff = datetime.utcnow() - timedelta(hours=hours_back)
         col_name = METRIC_COLUMNS.get(metric, 'cpu_percent')
@@ -619,7 +660,7 @@ class FleetMonitorService:
         writer.writerow(['timestamp', 'server_id', 'server_name', metric])
 
         for server_id in server_ids:
-            server = Server.query.get(server_id)
+            server = _visible_server(user, server_id)
             if not server:
                 continue
 

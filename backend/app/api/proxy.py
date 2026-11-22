@@ -33,14 +33,15 @@ def _require_server(server_id):
 @proxy_bp.route('/proxy/overview', methods=['GET'])
 @jwt_required()
 def proxy_overview():
-    """Fleet-wide proxy posture: one row per server.
+    """Fleet-wide proxy posture: one row per server the caller can access.
 
     Mounted under ``/api/v1/servers`` → full path ``/api/v1/servers/proxy/
     overview``. The static ``proxy`` segment can't match the ``<server_id>``
     converter on ``/<server_id>/proxy``, and Werkzeug prefers static rules over
     dynamic ones, so the two never collide. Best-effort; always returns JSON.
     """
-    return jsonify({'servers': ProxyStackService.fleet_overview()})
+    from app.middleware.rbac import get_current_user
+    return jsonify({'servers': ProxyStackService.fleet_overview(get_current_user())})
 
 
 @proxy_bp.route('/<server_id>/proxy', methods=['GET'])

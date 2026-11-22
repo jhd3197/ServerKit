@@ -8,6 +8,7 @@ from sqlalchemy import event
 
 from app import db
 from app.models.server import Server, ServerMetrics
+from factories import make_user
 from app.services.fleet_monitor_service import FleetMonitorService
 from app.services.server_metrics_service import latest_metrics_by_server
 
@@ -79,10 +80,11 @@ def test_each_fleet_reader_uses_one_metrics_query(
         # Arrives later, but describes an older observation.
         seed_sample(server, now - timedelta(hours=1), 20)
     db.session.commit()
+    admin = make_user(db, role='admin')
 
     with metric_queries() as queries:
         if reader == 'heatmap':
-            result = FleetMonitorService.get_fleet_heatmap()
+            result = FleetMonitorService.get_fleet_heatmap(admin)
             assert len(result) == size
             assert all(row['cpu'] == 10 for row in result)
         elif reader == 'prometheus':
@@ -115,7 +117,7 @@ def test_heatmap_keeps_group_scope_and_missing_metrics(app, db_session):
     included.group_id = group.id
     seed_server('excluded')
     db.session.commit()
-    result = FleetMonitorService.get_fleet_heatmap(group.id)
+    result = FleetMonitorService.get_fleet_heatmap(make_user(db, role='admin'), group.id)
     assert len(result) == 1
     assert result[0]['id'] == included.id
     assert result[0]['group_name'] == 'selected'

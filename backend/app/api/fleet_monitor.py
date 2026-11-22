@@ -4,6 +4,10 @@ Fleet Monitor API
 Endpoints for fleet-wide monitoring: heatmaps, comparisons,
 alert thresholds, anomaly detection, capacity forecasting,
 fleet search, and metrics export.
+
+Every read passes the caller to the service, which answers only for servers
+that caller can access — the workspace rule GET /servers applies. These routes
+carry no server id in the path, so nothing else enforces it for them.
 """
 
 from flask import Blueprint, request, jsonify, Response
@@ -24,7 +28,7 @@ fleet_monitor_bp = Blueprint('fleet_monitor', __name__)
 def get_fleet_heatmap():
     """Get latest metrics for all servers in heatmap format."""
     group_id = request.args.get('group_id')
-    return jsonify(fleet_monitor_service.get_fleet_heatmap(group_id))
+    return jsonify(fleet_monitor_service.get_fleet_heatmap(get_current_user(), group_id))
 
 
 # ==================== Comparison ====================
@@ -41,7 +45,8 @@ def get_comparison():
     if not server_ids:
         return jsonify({'error': 'ids parameter is required'}), 400
 
-    return jsonify(fleet_monitor_service.get_comparison_timeseries(server_ids, metric, period))
+    return jsonify(fleet_monitor_service.get_comparison_timeseries(
+        get_current_user(), server_ids, metric, period))
 
 
 # ==================== Alerts ====================
@@ -55,7 +60,8 @@ def get_alerts():
     server_id = request.args.get('server_id')
     limit = request.args.get('limit', 50, type=int)
 
-    return jsonify(fleet_monitor_service.get_alerts(status, severity, server_id, limit))
+    return jsonify(fleet_monitor_service.get_alerts(
+        get_current_user(), status, severity, server_id, limit))
 
 
 @fleet_monitor_bp.route('/alerts/<alert_id>/acknowledge', methods=['POST'])
@@ -89,7 +95,7 @@ def resolve_alert(alert_id):
 def get_thresholds():
     """Get alert thresholds."""
     server_id = request.args.get('server_id')
-    return jsonify(fleet_monitor_service.get_thresholds(server_id))
+    return jsonify(fleet_monitor_service.get_thresholds(get_current_user(), server_id))
 
 
 @fleet_monitor_bp.route('/thresholds', methods=['POST'])
@@ -120,7 +126,7 @@ def delete_threshold(threshold_id):
 def get_anomalies():
     """Get anomaly detection results."""
     server_id = request.args.get('server_id')
-    return jsonify(fleet_monitor_service.detect_anomalies(server_id))
+    return jsonify(fleet_monitor_service.detect_anomalies(get_current_user(), server_id))
 
 
 # ==================== Capacity Forecast ====================
@@ -146,7 +152,7 @@ def search_fleet():
     if not query or len(query) < 2:
         return jsonify({'error': 'Query must be at least 2 characters'}), 400
 
-    return jsonify(fleet_monitor_service.search_fleet(query, search_type))
+    return jsonify(fleet_monitor_service.search_fleet(get_current_user(), query, search_type))
 
 
 # ==================== Export ====================
@@ -163,7 +169,8 @@ def export_csv():
     if not server_ids:
         return jsonify({'error': 'ids parameter is required'}), 400
 
-    csv_data = fleet_monitor_service.export_metrics_csv(server_ids, metric, period)
+    csv_data = fleet_monitor_service.export_metrics_csv(
+        get_current_user(), server_ids, metric, period)
     return Response(
         csv_data,
         mimetype='text/csv',
@@ -183,7 +190,8 @@ def export_json():
     if not server_ids:
         return jsonify({'error': 'ids parameter is required'}), 400
 
-    return jsonify(fleet_monitor_service.get_comparison_timeseries(server_ids, metric, period))
+    return jsonify(fleet_monitor_service.get_comparison_timeseries(
+        get_current_user(), server_ids, metric, period))
 
 
 # ==================== Prometheus ====================
