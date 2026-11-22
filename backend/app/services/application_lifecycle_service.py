@@ -140,8 +140,20 @@ def _ensure_local_image_compose(app):
     db.session.commit()
 
 
+def _refuse_host_managed(app, action):
+    """An adopted host site is served by the host's own nginx and PHP-FPM,
+    shared with every other site on the box. There is no per-site runtime to
+    start or stop, and flipping the status column would only make the panel
+    lie about a site that is still serving."""
+    if app.is_host_managed:
+        raise ApplicationLifecycleError(
+            f'Cannot {action} a host-managed site: it is served by this server\'s '
+            'nginx and PHP-FPM, which ServerKit does not control per site.')
+
+
 def start_application(app, *, user_id=None):
     """Start the configured runtime, materializing local image apps if needed."""
+    _refuse_host_managed(app, 'start')
     # A local BYO-image docker app (image set, no source yet) has no compose to
     # launch — materialize one on first start so it can actually run.
     if app.app_type == 'docker' and not app.root_path and app.docker_image and not app.server_id:
@@ -197,6 +209,7 @@ def start_application(app, *, user_id=None):
 
 def stop_application(app, *, user_id=None):
     """Stop the configured runtime; a vanished single container is stopped."""
+    _refuse_host_managed(app, 'stop')
     # Handle Docker apps
     if app.app_type == 'docker' and app.root_path:
         if app.server_id:
@@ -234,6 +247,7 @@ def stop_application(app, *, user_id=None):
 
 def restart_application(app, *, user_id=None):
     """Restart the configured runtime, requiring a deployed single container."""
+    _refuse_host_managed(app, 'restart')
     # Handle Docker apps
     if app.app_type == 'docker' and app.root_path:
         if app.server_id:

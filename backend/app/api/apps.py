@@ -85,6 +85,13 @@ def _sync_manual_app_status(app):
     elif app.managed_by == 'docker_compose' and app.root_path:
         status = ProcessService.get_compose_project_status(app.root_path, compose_file=app.compose_file)
         actual = status.get('status', 'stopped')
+    elif app.is_host_managed:
+        # Served by host nginx: the site is up when nginx is. A probe that
+        # cannot answer leaves the recorded status alone rather than guess.
+        status = ProcessService.get_systemd_unit_status('nginx')
+        if not status.get('success') or status.get('status') == 'unknown':
+            return
+        actual = 'running' if status.get('active') else 'stopped'
     else:
         return
 
@@ -1029,8 +1036,12 @@ def create_manual_app():
         else:
             managed_by = 'docker_compose'
 
-    if managed_by not in ('docker_compose', 'systemd'):
-        return jsonify({'error': "managed_by must be 'docker_compose' or 'systemd'"}), 400
+    if managed_by not in ('docker_compose', 'systemd', Application.MANAGED_BY_HOST):
+        return jsonify({'error': "managed_by must be 'docker_compose', 'systemd' or 'host'"}), 400
+
+    if managed_by == Application.MANAGED_BY_HOST and app_type not in ('php', 'static', 'wordpress'):
+        return jsonify({'error': "managed_by 'host' is for php, static and wordpress sites "
+                                 'served by host nginx'}), 400
 
     if managed_by == 'docker_compose' and not compose_file:
         if not os.path.exists(os.path.join(root_path, 'docker-compose.yml')):

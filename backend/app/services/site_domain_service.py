@@ -538,6 +538,14 @@ class SiteDomainService:
         """
         from app.models.domain import Domain
 
+        # An adopted host site already has a vhost someone else wrote, under a
+        # file name that is not the app's. Rendering one here would publish a
+        # second server block for the same names — or, through drift repair,
+        # replace the one that is serving traffic.
+        if app.is_host_managed:
+            return None, ('This site is host-managed: ServerKit records its domains '
+                          'but does not rewrite its nginx config.')
+
         # query_active, not query: Domain is soft-deleted now, so a plain query
         # returns tombstones and this renderer would write a deleted domain
         # straight back into server_name — the vhost would keep serving a domain

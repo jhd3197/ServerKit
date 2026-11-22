@@ -12,8 +12,8 @@ class PreviewError(ValueError):
 def validate(app, preview, settings, git_config):
     if app.server_id or settings.target_server_id:
         raise PreviewError('Generic previews currently require a local server.')
-    if app.compose_file or app.managed_by in ('docker_compose', 'systemd'):
-        raise PreviewError('Compose and systemd previews are not supported by this provisioner.')
+    if app.compose_file or app.managed_by in ('docker_compose', 'systemd', 'host'):
+        raise PreviewError('Compose, systemd and host-managed previews are not supported by this provisioner.')
     if app.ingress_plane not in (None, '', 'nginx'):
         raise PreviewError('Generic previews currently require nginx ingress.')
     if not app.port or not 1 <= app.port <= 65535:

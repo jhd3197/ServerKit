@@ -88,7 +88,7 @@ class Application(JsonColumnMixin, TimestampMixin, SoftDeleteMixin, db.Model):
     # Manual / local service configuration
     compose_file = db.Column(db.String(200), nullable=True)
     systemd_unit = db.Column(db.String(100), nullable=True)
-    managed_by = db.Column(db.String(20), nullable=True)  # 'docker_compose', 'systemd'
+    managed_by = db.Column(db.String(20), nullable=True)  # 'docker_compose', 'systemd', 'host'
 
     # Ingress plane: which reverse proxy is expected to serve this app —
     # 'nginx' (host Nginx, the default) or 'proxy_stack' (Dockerized
@@ -185,6 +185,18 @@ class Application(JsonColumnMixin, TimestampMixin, SoftDeleteMixin, db.Model):
         never collide — or ``None`` when it is free."""
         from app.utils.slug import app_name_clash_error
         return app_name_clash_error(cls.query.filter_by(name=name).first(), name, suffix)
+
+    # A site that was already running on the host when the panel adopted it
+    # (nginx + PHP-FPM, or static files): its vhost, pool and certificate
+    # were written by someone else and stay theirs.
+    MANAGED_BY_HOST = 'host'
+
+    @property
+    def is_host_managed(self):
+        """True for an adopted host site. The panel records and observes it
+        but must never write, rewrite or remove its running config — every
+        path that touches nginx or the runtime for an app checks this."""
+        return self.managed_by == self.MANAGED_BY_HOST
 
     @property
     def live_domains(self):

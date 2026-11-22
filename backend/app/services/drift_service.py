@@ -342,7 +342,9 @@ def _nginx_list_resources():
             .filter(Domain.deleted_at.is_(None))
             .distinct()
             .all())
-    return [(app.id, app.name) for app in rows]
+    # An adopted host site's vhost was not written by the panel, so there is
+    # no expected config to compare it with and nothing here may repair it.
+    return [(app.id, app.name) for app in rows if not app.is_host_managed]
 
 
 def _nginx_render_expected(app_id):

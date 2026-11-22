@@ -271,6 +271,7 @@ CORE_BLUEPRINTS: tuple[BlueprintSpec, ...] = (
     BlueprintSpec('app.api.ai', 'ai_bp', '/api/v1/ai'),
     BlueprintSpec('app.api.speed_test', 'speedtest_bp', '/api/v1/speedtest'),
     BlueprintSpec('app.api.site_imports', 'site_imports_bp', '/api/v1/imports'),
+    BlueprintSpec('app.api.site_adoption', 'site_adoption_bp', '/api/v1/site-adoption'),
     BlueprintSpec('app.api.doctor', 'doctor_bp', '/api/v1/doctor'),
     BlueprintSpec(
         'app.api.fleet_doctor',
