@@ -195,8 +195,9 @@ class Application(JsonColumnMixin, TimestampMixin, SoftDeleteMixin, db.Model):
     def is_host_managed(self):
         """True for an adopted host site. The panel records and observes it
         but must never write, rewrite or remove its running config — every
-        path that touches nginx or the runtime for an app checks this."""
-        return self.managed_by == self.MANAGED_BY_HOST
+        path that touches nginx or the runtime for an app checks this (through
+        :func:`is_host_managed`, which also accepts a stand-in object)."""
+        return is_host_managed(self)
 
     @property
     def live_domains(self):
@@ -362,3 +363,14 @@ def _clear_cron_association(mapper, connection, target):
         CronService.clear_application(target.id)
     except Exception:  # noqa: BLE001 - cleanup must not block app deletion
         pass
+
+
+def is_host_managed(app):
+    """Whether ``app`` is an adopted host site (``managed_by == 'host'``).
+
+    A function rather than only the property so the services that guard on
+    it can be handed any app-shaped object: a plain attribute comparison
+    answers False for one that has no ``managed_by``, where reading a
+    property off a stand-in would raise or, on a mock, read as true.
+    """
+    return getattr(app, 'managed_by', None) == Application.MANAGED_BY_HOST

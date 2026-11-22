@@ -145,7 +145,8 @@ def _refuse_host_managed(app, action):
     shared with every other site on the box. There is no per-site runtime to
     start or stop, and flipping the status column would only make the panel
     lie about a site that is still serving."""
-    if app.is_host_managed:
+    from app.models.application import is_host_managed
+    if is_host_managed(app):
         raise ApplicationLifecycleError(
             f'Cannot {action} a host-managed site: it is served by this server\'s '
             'nginx and PHP-FPM, which ServerKit does not control per site.')

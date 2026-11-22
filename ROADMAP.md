@@ -619,7 +619,7 @@ platform infrastructure; new capability areas ship as Marketplace extensions.
 Issue #269 — a site already running on the host was invisible to the panel.
 
 - [x] Discover the sites host nginx serves: vhost, document root, PHP-FPM pool and version, WordPress database, certificate.
-- [x] Adopt a site in place (`serverkit adopt-site`, the Services page, `POST /site-adoption/adopt`), dry run by default, writing rows and never config.
+- [x] Adopt a site in place (`serverkit adopt-site`, the Services page, `POST /apps/host-sites/adopt`), dry run by default, writing rows and never config.
 - [x] `managed_by = host`: the vhost writer, drift repair, lifecycle and delete paths leave a host-managed site's running config alone.
 - [x] Report unmanaged sites in the doctor and on Services.
 - [x] Document the hand-migration path that ends in adoption (`docs/COEXISTENCE.md`).

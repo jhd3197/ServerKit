@@ -11,6 +11,7 @@ from sqlalchemy.orm import joinedload
 from app import db
 from app.api._query import apply_query, QueryParseError
 from app.models import Application, User
+from app.models.application import is_host_managed
 from app.utils.slug import app_name_clash_error, slugify
 from app.services.build_service import BuildService
 from app.services.docker_service import DockerService
@@ -85,7 +86,7 @@ def _sync_manual_app_status(app):
     elif app.managed_by == 'docker_compose' and app.root_path:
         status = ProcessService.get_compose_project_status(app.root_path, compose_file=app.compose_file)
         actual = status.get('status', 'stopped')
-    elif app.is_host_managed:
+    elif is_host_managed(app):
         # Served by host nginx: the site is up when nginx is. A probe that
         # cannot answer leaves the recorded status alone rather than guess.
         status = ProcessService.get_systemd_unit_status('nginx')
@@ -2415,3 +2416,7 @@ def delete_app_db_snapshot(app_id, snapshot_id):
     db.session.delete(snapshot)
     db.session.commit()
     return jsonify({'success': True, 'message': 'Snapshot deleted'}), 200
+
+
+# Area modules register their routes on apps_bp when imported.
+from app.api import apps_adoption  # noqa: E402,F401

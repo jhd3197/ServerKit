@@ -1,24 +1,24 @@
-"""Site adoption API — register sites that already run on this host.
+"""Site adoption routes — register sites that already run on this host.
 
-Mounted at /api/v1/site-adoption (see app/core_blueprints.py). Admin-only:
-discovery reads the host's nginx, PHP-FPM and site configuration, and adopting
-creates an application any admin could then operate.
+An area module of the apps blueprint: importing it registers the routes on
+``apps_bp`` (see the bottom of app/api/apps.py), so they live under
+/api/v1/apps/host-sites. Admin-only: discovery reads the host's nginx,
+PHP-FPM and site configuration, and adopting creates an application any
+admin could then operate.
 
 Nothing here writes to the host. See app/services/site_adoption_service.py.
 """
-from flask import Blueprint, jsonify, request
+from flask import jsonify, request
 
 from app.api._request import json_object
+from app.api.apps import apps_bp
 from app.exceptions import field_required
 from app.middleware.rbac import admin_required, get_current_user
 from app.services import site_adoption_service
 
-site_adoption_bp = Blueprint('site_adoption', __name__)
-
-
-@site_adoption_bp.route('/sites', methods=['GET'])
+@apps_bp.route('/host-sites', methods=['GET'])
 @admin_required
-def list_sites():
+def list_host_sites():
     """Every site host nginx serves, and whether an application accounts for
     it. ``unmanaged`` is the drift count: live sites the panel cannot see."""
     sites = site_adoption_service.discover()
@@ -29,9 +29,9 @@ def list_sites():
     }), 200
 
 
-@site_adoption_bp.route('/adopt', methods=['POST'])
+@apps_bp.route('/host-sites/adopt', methods=['POST'])
 @admin_required
-def adopt_site():
+def adopt_host_site():
     """Adopt one site. A dry run unless the body says ``"dry_run": false`` —
     the default answer is the plan, never the change."""
     data = json_object()

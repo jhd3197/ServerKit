@@ -159,6 +159,7 @@ Regenerate (backend/):
 - `GET /api-keys/{key_id}`
 - `GET /apps`
 - `GET /apps/attachments/services`
+- `GET /apps/host-sites`
 - `GET /apps/p/{slug}`
 - `GET /apps/{app_id}`
 - `GET /apps/{app_id}/attachments`
@@ -599,6 +600,7 @@ Regenerate (backend/):
 - `GET /servers/{server_id}/system/metrics`
 - `GET /servers/{server_id}/timeline`
 - `GET /services`
+- `GET /services/host-sites`
 - `GET /services/{app_id}`
 - `GET /services/{app_id}/backup-policy`
 - `GET /services/{app_id}/backups`
@@ -625,7 +627,6 @@ Regenerate (backend/):
 - `GET /shared/tags`
 - `GET /shared/variable-groups`
 - `GET /shared/variable-groups/{group_id}`
-- `GET /site-adoption/sites`
 - `GET /source-connections/admin/bitbucket`
 - `GET /source-connections/admin/github`
 - `GET /source-connections/admin/github/app-manifest`
@@ -771,6 +772,7 @@ Regenerate (backend/):
 - `POST /api-keys/{key_id}/rotate`
 - `POST /apps`
 - `POST /apps/from-repository`
+- `POST /apps/host-sites/adopt`
 - `POST /apps/htaccess-convert`
 - `POST /apps/manual`
 - `POST /apps/move-to-project`
@@ -1187,6 +1189,7 @@ Regenerate (backend/):
 - `POST /servers/{server_id}/terminal`
 - `POST /services`
 - `POST /services/from-repository`
+- `POST /services/host-sites/adopt`
 - `POST /services/manual`
 - `POST /services/move-to-project`
 - `POST /services/sweep-idle`
@@ -1217,7 +1220,6 @@ Regenerate (backend/):
 - `POST /shared/variable-groups/{group_id}/attach`
 - `POST /shared/variable-groups/{group_id}/detach`
 - `POST /shared/variable-groups/{group_id}/variables`
-- `POST /site-adoption/adopt`
 - `POST /source-connections/admin/github/app-manifest/complete`
 - `POST /source-connections/bitbucket/callback`
 - `POST /source-connections/github/callback`

@@ -164,7 +164,7 @@ def test_php_version_falls_back_to_the_socket_name(app, host):
 def test_dry_run_is_the_default_and_changes_nothing(client, host, admin):
     from app.models.application import Application
     before = _snapshot(host['root'])
-    resp = client.post('/api/v1/site-adoption/adopt', json={'site': 'shop.example.com'},
+    resp = client.post('/api/v1/apps/host-sites/adopt', json={'site': 'shop.example.com'},
                        headers=headers_for(admin))
     assert resp.status_code == 200
     body = resp.get_json()
@@ -189,7 +189,7 @@ def test_adopt_records_the_site_and_writes_nothing_to_the_host(client, host, adm
                side_effect=AssertionError('adoption wrote a vhost')), \
             patch('app.services.nginx_service.NginxService.write_vhost',
                   side_effect=AssertionError('adoption wrote a vhost')):
-        resp = client.post('/api/v1/site-adoption/adopt',
+        resp = client.post('/api/v1/apps/host-sites/adopt',
                            json={'site': 'shop.example.com', 'dry_run': False},
                            headers=headers_for(admin))
     assert resp.status_code == 201, resp.get_json()
@@ -217,18 +217,18 @@ def test_adopt_records_the_site_and_writes_nothing_to_the_host(client, host, adm
 
 
 def test_an_adopted_site_is_no_longer_reported_or_adoptable(client, host, admin):
-    listing = client.get('/api/v1/site-adoption/sites', headers=headers_for(admin)).get_json()
+    listing = client.get('/api/v1/apps/host-sites', headers=headers_for(admin)).get_json()
     assert (listing['unmanaged'], listing['adoptable']) == (3, 2)
 
-    client.post('/api/v1/site-adoption/adopt',
+    client.post('/api/v1/apps/host-sites/adopt',
                 json={'site': 'docs.example.com', 'dry_run': False, 'name': 'docs'},
                 headers=headers_for(admin))
-    listing = client.get('/api/v1/site-adoption/sites', headers=headers_for(admin)).get_json()
+    listing = client.get('/api/v1/apps/host-sites', headers=headers_for(admin)).get_json()
     assert (listing['unmanaged'], listing['adoptable']) == (2, 1)
     docs = _by_domain(listing['sites'])['docs.example.com']
     assert docs['linked_app']['name'] == 'docs' and not docs['adoptable']
 
-    again = client.post('/api/v1/site-adoption/adopt',
+    again = client.post('/api/v1/apps/host-sites/adopt',
                         json={'site': 'docs.example.com', 'dry_run': False},
                         headers=headers_for(admin))
     assert again.status_code == 409 and 'Already managed' in again.get_json()['error']
@@ -240,7 +240,7 @@ def test_an_adopted_site_is_no_longer_reported_or_adoptable(client, host, admin)
     ('serverkit.conf', 404),        # the panel itself is never offered
 ])
 def test_adopt_refuses_what_it_should_not_register(client, host, admin, site, status):
-    resp = client.post('/api/v1/site-adoption/adopt', json={'site': site, 'dry_run': False},
+    resp = client.post('/api/v1/apps/host-sites/adopt', json={'site': site, 'dry_run': False},
                        headers=headers_for(admin))
     assert resp.status_code == status
 
@@ -248,11 +248,11 @@ def test_adopt_refuses_what_it_should_not_register(client, host, admin, site, st
 def test_adoption_is_admin_only(client, host, app):
     from app import db
     developer = make_user(db, 'adopt_dev', 'developer')
-    assert client.get('/api/v1/site-adoption/sites',
+    assert client.get('/api/v1/apps/host-sites',
                       headers=headers_for(developer)).status_code == 403
-    assert client.post('/api/v1/site-adoption/adopt', json={'site': 'docs.example.com'},
+    assert client.post('/api/v1/apps/host-sites/adopt', json={'site': 'docs.example.com'},
                        headers=headers_for(developer)).status_code == 403
-    assert client.get('/api/v1/site-adoption/sites').status_code == 401
+    assert client.get('/api/v1/apps/host-sites').status_code == 401
 
 
 # ------------------------------------- the panel leaves the running config alone
@@ -260,7 +260,7 @@ def test_adoption_is_admin_only(client, host, app):
 @pytest.fixture
 def adopted(client, host, admin):
     from app.models.application import Application
-    client.post('/api/v1/site-adoption/adopt',
+    client.post('/api/v1/apps/host-sites/adopt',
                 json={'site': 'shop.example.com', 'dry_run': False}, headers=headers_for(admin))
     return Application.query_active().filter_by(name='shop-example-com').one()
 
@@ -280,7 +280,7 @@ def test_adding_a_domain_records_it_without_touching_nginx(client, admin, host):
     # The static site, not the WordPress one: a static app has everything the
     # vhost writer needs (a root), so only the host-managed guard stops it.
     from app.models.application import Application
-    client.post('/api/v1/site-adoption/adopt',
+    client.post('/api/v1/apps/host-sites/adopt',
                 json={'site': 'docs.example.com', 'dry_run': False}, headers=headers_for(admin))
     adopted = Application.query_active().filter_by(name='docs-example-com').one()
     before = _snapshot(host['root'])
@@ -364,7 +364,7 @@ def test_doctor_reports_unmanaged_sites_until_they_are_adopted(client, host, adm
     # A proxied process is still reported, with why it is not adopted here.
     assert 'Docker Compose or systemd' in checks['sites.unmanaged.api.example.com.conf']['detail']
 
-    client.post('/api/v1/site-adoption/adopt',
+    client.post('/api/v1/apps/host-sites/adopt',
                 json={'site': 'shop.example.com', 'dry_run': False}, headers=headers_for(admin))
     assert 'sites.unmanaged.shop.example.com.conf' not in unmanaged()
 
