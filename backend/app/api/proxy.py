@@ -24,9 +24,15 @@ def _require_server(server_id):
     """Return (server, None) or (None, error_response_tuple)."""
     from app.middleware.rbac import get_current_user
     from app.services.workspace_service import WorkspaceService
-    server = WorkspaceService.get_accessible_server(get_current_user(), server_id)
+    user = get_current_user()
+    server = WorkspaceService.get_accessible_server(user, server_id)
     if not server:
         return None, (jsonify({'error': 'Server not found'}), 404)
+    # Same rule as servers._get_operable_server: a workspace `viewer` member
+    # reads the proxy state but may not change it.
+    if (request.method not in ('GET', 'HEAD', 'OPTIONS') and server.workspace_id
+            and not WorkspaceService.can_write_in_workspace(user, server.workspace_id)):
+        return None, (jsonify({'error': 'You have read-only access to this workspace'}), 403)
     return server, None
 
 

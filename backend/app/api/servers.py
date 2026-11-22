@@ -90,13 +90,26 @@ def _agent_failure_status(result):
     return {'AGENT_OFFLINE': 503, 'PERMISSION_DENIED': 403}.get(result.get('code'), 500)
 
 
+_READ_METHODS = ('GET', 'HEAD', 'OPTIONS')
+
+
 def _get_operable_server(server_id):
     """The server, if the current user may operate it; 404 otherwise, so a
-    non-member can't tell a foreign workspace's server from a missing one."""
+    non-member can't tell a foreign workspace's server from a missing one.
+
+    On a mutating request the caller must also be able to WRITE in the
+    server's workspace: a member whose workspace role is `viewer` reads its
+    servers but may not change them, whatever their global role
+    (GHSA-m72h-hc66-5jwx). Checked here, at the one door every server route
+    goes through, so a new mutating route cannot forget it."""
     from app.services.workspace_service import WorkspaceService
-    server = WorkspaceService.get_accessible_server(get_current_user(), server_id)
+    user = get_current_user()
+    server = WorkspaceService.get_accessible_server(user, server_id)
     if server is None:
         raise not_found('server')
+    if (request.method not in _READ_METHODS and server.workspace_id
+            and not WorkspaceService.can_write_in_workspace(user, server.workspace_id)):
+        raise PermissionDeniedError('You have read-only access to this workspace')
     return server
 
 
