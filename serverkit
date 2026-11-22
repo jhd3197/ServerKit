@@ -1084,6 +1084,13 @@ reload_nginx_or_warn() {
     print_warning "Could not reload nginx — apply the change manually: systemctl reload nginx (or nginx -s reload)"
 }
 
+# A site name becomes a file under the nginx dir and a server_name, so it has
+# to look like a hostname. Anything else — a stray flag above all — is
+# refused before a single file is written or removed.
+valid_site_domain() {
+    [[ "$1" =~ ^[A-Za-z0-9]([A-Za-z0-9.-]*[A-Za-z0-9])?$ ]]
+}
+
 cmd_add_site() {
     check_root
 
@@ -1096,6 +1103,18 @@ cmd_add_site() {
         echo "Examples:"
         echo "  serverkit add-site test.builditdesign.com"
         echo "  serverkit add-site myapp.builditdesign.com 3000"
+        exit 1
+    fi
+
+    if ! valid_site_domain "$DOMAIN"; then
+        print_error "Not a valid domain: $DOMAIN"
+        echo "Usage: serverkit add-site <domain> [port]"
+        exit 1
+    fi
+
+    if ! [[ "$PORT" =~ ^[0-9]+$ ]]; then
+        print_error "Not a valid port: $PORT"
+        echo "Usage: serverkit add-site <domain> [port]"
         exit 1
     fi
 
@@ -1554,6 +1573,12 @@ cmd_remove_site() {
         exit 1
     fi
 
+    if ! valid_site_domain "$DOMAIN"; then
+        print_error "Not a valid domain: $DOMAIN"
+        echo "Usage: serverkit remove-site <domain>"
+        exit 1
+    fi
+
     resolve_site_paths "$DOMAIN"
 
     if [ ! -f "$SITE_FILE" ]; then
@@ -1575,12 +1600,51 @@ cmd_remove_site() {
     fi
 }
 
+# Subcommands that take plain positional arguments (or none) and parse no
+# flags of their own. A help flag used to fall through to them as a
+# positional: `add-site --help` wrote a vhost for a site named "--help", and
+# `setup-proxy --help` reran the proxy setup, resetting the panel's
+# certificate paths. For these, --help/-h anywhere prints usage and stops
+# before any command code runs. Commands missing from this list parse their
+# own flags (update, uninstall, cleanup-apps) or hand them to cli.py.
+PLAIN_COMMANDS="start stop restart status logs branch check-update setup-code init-db migrate-db factory-reset backup-db restore-db generate-keys config setup-proxy create-app start-app stop-app app-logs add-site list-sites remove-site doctor completion"
+
+wants_help() {
+    local arg
+    for arg in "$@"; do
+        case "$arg" in
+            --help|-h) return 0 ;;
+        esac
+    done
+    return 1
+}
+
+command_usage() {
+    local cmd="$1" args=""
+    case "$cmd" in
+        logs)                        args=" [backend|frontend|nginx|all]" ;;
+        restore-db)                  args=" <backup-file>" ;;
+        start-app|stop-app|app-logs) args=" <name>" ;;
+        add-site)                    args=" <domain> [port]" ;;
+        remove-site)                 args=" <domain>" ;;
+        doctor)                      args=" [--fix]" ;;
+    esac
+    echo "Usage: serverkit ${cmd}${args}"
+    # The command's one-line description from the main help, when it has one.
+    cmd_help 2>/dev/null | grep -m1 -E "^  ${cmd}( |\$)" | sed -E "s/^  ${cmd} +/  /" || true
+}
+
 # Main
 #
 # Sourcing this file (e.g. from scripts/test/test_cli.sh) exposes every
 # function above for unit testing without dispatching a command — the same
 # pattern as scripts/update.sh. Only direct execution runs the dispatch below.
 [ "${BASH_SOURCE[0]}" = "${0}" ] || return 0
+
+if [ $# -gt 1 ] && [[ " $PLAIN_COMMANDS " == *" $1 "* ]] && wants_help "${@:2}"; then
+    command_usage "$1"
+    exit 0
+fi
 
 case "${1:-help}" in
     help|--help|-h)
