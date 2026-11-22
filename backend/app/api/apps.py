@@ -1045,8 +1045,8 @@ def create_manual_app():
         return jsonify({'error': "managed_by must be 'docker_compose', 'systemd' or 'host'"}), 400
 
     if managed_by == Application.MANAGED_BY_HOST and app_type not in ('php', 'static', 'wordpress'):
-        return jsonify({'error': "managed_by 'host' is for php, static and wordpress sites "
-                                 'served by host nginx'}), 400
+        raise ValidationError("managed_by 'host' is for php, static and wordpress sites "
+                              'served by host nginx')
 
     if managed_by == 'docker_compose' and not compose_file:
         if not os.path.exists(os.path.join(root_path, 'docker-compose.yml')):

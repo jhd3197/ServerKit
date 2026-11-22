@@ -24,6 +24,7 @@ import re
 from datetime import datetime
 
 from app import db
+from app.exceptions import ConflictError, NotFoundError, ValidationError
 from app.models.application import Application
 from app.models.domain import Domain
 from app.services.nginx_service import NginxService
@@ -36,7 +37,7 @@ HOST_MANAGED = Application.MANAGED_BY_HOST
 # Where the distro keeps PHP-FPM pools: /etc/php/<version>/fpm/pool.d/*.conf.
 # Globbed rather than iterated over a list of known versions, so a 7.4 or 8.4
 # pool is found too.
-PHP_ETC_DIR = os.environ.get('PHP_ETC_DIR', '/etc/php')
+PHP_ETC_DIR = '/etc/php'
 
 # Kinds of site a vhost can describe, and what each one adopts as.
 KIND_PHP = 'php'
@@ -44,14 +45,6 @@ KIND_STATIC = 'static'
 KIND_PROXY = 'proxy'
 KIND_REDIRECT = 'redirect'
 _ADOPTABLE_KINDS = (KIND_PHP, KIND_STATIC)
-
-
-class SiteAdoptionError(Exception):
-    """Adoption refused. ``status`` is the HTTP status the API answers with."""
-
-    def __init__(self, message, status=400):
-        super().__init__(message)
-        self.status = status
 
 
 # --------------------------------------------------------------------------
@@ -392,6 +385,12 @@ def unmanaged():
     return [site for site in discover() if site['linked_app'] is None]
 
 
+def unknown_site(identifier):
+    """The error for a site name that matches nothing nginx serves."""
+    return NotFoundError(f'No site served by host nginx matches "{identifier}".',
+                         code='not_found.host_site')
+
+
 def find(identifier):
     """A discovered site by its id, vhost file name or any of its domains."""
     wanted = (identifier or '').strip().lower()
@@ -452,25 +451,26 @@ def plan(site, name=None):
 def adopt(identifier, user, name=None, workspace_id=None):
     """Register a running site as an application. Writes rows, never config.
 
-    Returns ``(application, plan)``. Raises :class:`SiteAdoptionError` when the
-    site is unknown, already managed, or not something this flow adopts.
+    Returns ``(application, plan)``. Raises a typed application error when the
+    site is unknown (404), already managed or not something this flow adopts
+    (409), or the name is unusable (400).
     """
     site = find(identifier)
     if site is None:
-        raise SiteAdoptionError(
-            f'No site served by host nginx matches "{identifier}".', status=404)
+        raise unknown_site(identifier)
     if not site['adoptable']:
-        raise SiteAdoptionError(site['reason'] or 'This site cannot be adopted.', status=409)
+        raise ConflictError(site['reason'] or 'This site cannot be adopted.',
+                            code='host_site.not_adoptable')
 
     todo = plan(site, name)
     app_name = todo['application']['name']
     if not app_name or len(app_name) < 2:
-        raise SiteAdoptionError('Service name must be at least 2 characters.')
+        raise ValidationError('Service name must be at least 2 characters.')
     # Not query_active: a tombstone keeps its name reserved so a restore from
     # the Recycle Bin can never collide with an app adopted in the meantime.
     clash = app_name_clash_error(Application.query.filter_by(name=app_name).first(), app_name)
     if clash:
-        raise SiteAdoptionError(clash, status=409)
+        raise ConflictError(clash, code='host_site.name_taken')
 
     if workspace_id is None:
         from app.services.workspace_service import WorkspaceService

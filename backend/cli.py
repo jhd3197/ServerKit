@@ -870,8 +870,8 @@ def adopt_site(site, apply_, name, as_json):
     Nothing on the server is rewritten either way: adopting records the
     running nginx vhost, PHP-FPM pool, database and certificate as they are.
     """
+    from app.exceptions import ApplicationError
     from app.services import site_adoption_service
-    from app.services.site_adoption_service import SiteAdoptionError
 
     app = create_app()
     with app.app_context():
@@ -929,7 +929,7 @@ def adopt_site(site, apply_, name, as_json):
             _fail("No active admin user to own the service. Run 'serverkit create-admin' first.")
         try:
             application, plan = site_adoption_service.adopt(site, owner, name=name)
-        except SiteAdoptionError as exc:
+        except ApplicationError as exc:
             _fail(str(exc))
         if as_json:
             _echo_json({'dry_run': False, 'plan': plan, 'app': application.to_dict()})
