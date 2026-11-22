@@ -92,6 +92,69 @@
     }
 }
 
+// "Adopt existing sites" dialog: one row per site nginx serves that no
+// service accounts for, with what discovery found about it.
+.adopt-sites {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    &__row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: $space-4;
+        padding: $space-3;
+        border: 1px solid var(--border-soft);
+        border-radius: $radius-card;
+        background: var(--surface-2);
+    }
+
+    &__main {
+        min-width: 0;
+        flex: 1;
+    }
+
+    &__head {
+        display: flex;
+        align-items: center;
+        gap: $space-2;
+        flex-wrap: wrap;
+    }
+
+    &__domain {
+        font-size: $text-sm;
+        font-weight: $font-weight-medium;
+        color: $text-primary;
+        overflow-wrap: anywhere;
+    }
+
+    &__facts {
+        display: grid;
+        grid-template-columns: max-content minmax(0, 1fr);
+        gap: $space-1 $space-3;
+        margin: $space-2 0 0;
+        font-size: $text-xs;
+
+        dt { color: $text-secondary; }
+
+        dd {
+            margin: 0;
+            color: $text-primary;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    &__reason {
+        margin: $space-2 0 0;
+        font-size: $text-xs;
+        color: $text-secondary;
+    }
+}
+
 @keyframes pulse-dot {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }

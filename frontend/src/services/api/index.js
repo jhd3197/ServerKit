@@ -36,6 +36,7 @@ import * as speedTestMethods from './speedtest.js';
 import * as dbProcessMethods from './dbProcesses.js';
 import * as dbTunerMethods from './dbTuner.js';
 import * as importMethods from './imports.js';
+import * as siteAdoptionMethods from './siteAdoption.js';
 import * as doctorMethods from './doctor.js';
 import * as bandwidthMethods from './bandwidth.js';
 import * as htaccessToolMethods from './htaccessTools.js';
@@ -97,6 +98,7 @@ class ApiService extends ApiClient {
             dbProcessMethods,
             dbTunerMethods,
             importMethods,
+            siteAdoptionMethods,
             doctorMethods,
             bandwidthMethods,
             htaccessToolMethods,

@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect, useMemo  } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Layers, Plus, Square, Play, RotateCw, GitBranch, FolderOpen, FileArchive, FolderKanban, ArrowDownToLine } from 'lucide-react';
+import { Layers, Plus, Square, Play, RotateCw, GitBranch, FolderOpen, FileArchive, FolderKanban, ArrowDownToLine, ScanSearch } from 'lucide-react';
 import { SiGithub as Github } from 'react-icons/si';
 import api from '../services/api';
 import { useToast } from '../contexts/useToast.js';
@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/select';
 import Modal from '@/components/Modal';
 import RequiresDocker from '../components/RequiresDocker';
+import AdoptSitesDialog from '@/components/apps/AdoptSitesDialog';
+import { useAuth } from '@/contexts/useAuth.js';
 import { useTranslation } from 'react-i18next';
 import { toastError } from '@/utils/errorMessage';
 import { translateLabel } from '@/i18n/labels';
@@ -120,6 +122,22 @@ const Services = () => {
     const [bulkLoading, setBulkLoading] = useState(false);
     const [showMoveDialog, setShowMoveDialog] = useState(false);
     const [bandwidth, setBandwidth] = useState({});
+    const { isAdmin } = useAuth();
+    // Sites this server's nginx is serving that no service accounts for.
+    const [unmanagedSites, setUnmanagedSites] = useState([]);
+    const [showAdoptDialog, setShowAdoptDialog] = useState(false);
+
+    // Best-effort and admin-only (the endpoint reads host config): a failure
+    // just means the Adopt button does not appear.
+    const loadUnmanagedSites = useCallback(async () => {
+        if (!isAdmin) return;
+        try {
+            const data = await api.getHostSites();
+            setUnmanagedSites((data?.sites || []).filter((site) => !site.linked_app && site.kind !== 'redirect'));
+        } catch {
+            setUnmanagedSites([]);
+        }
+    }, [isAdmin]);
 
     const loadApps = useCallback(async () => {
         try {
@@ -140,6 +158,10 @@ const Services = () => {
             .then((data) => setBandwidth(data?.apps || {}))
             .catch(() => {});
     }, [loadApps]);
+
+    useEffect(() => {
+        loadUnmanagedSites();
+    }, [loadUnmanagedSites]);
 
 
     async function handleAction(e, appId, action) {
@@ -203,6 +225,17 @@ const Services = () => {
 
     useTopbarActions(() =>
         <>
+            {unmanagedSites.length > 0 && (
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowAdoptDialog(true)}
+                    title={t('app.services.adopt.buttonTitle', 'Sites running on this server that are not managed here yet')}
+                >
+                    <ScanSearch size={16} />
+                    {t('app.services.adopt.button', { count: unmanagedSites.length, defaultValue: 'Adopt ({{count}})' })}
+                </Button>
+            )}
             <Button variant="outline" size="sm" asChild title={t('app.services.importASite', 'Import a site')}>
                 <Link to="/imports" aria-label={t('app.services.importASite', 'Import a site')}>
                     <ArrowDownToLine size={16} />
@@ -221,7 +254,7 @@ const Services = () => {
                 placeholder={t('app.services.searchServices', 'Search services…')}
             />
         </>,
-        [searchTerm]
+        [searchTerm, unmanagedSites.length]
     );
 
     const toggleOne = (id, checked) => {
@@ -374,6 +407,9 @@ const Services = () => {
             sortable: false,
             hideable: false,
             render: (app) => {
+                // A host-managed site is served by the server's own nginx and
+                // PHP-FPM: there is nothing per-site to start or stop.
+                if (app.managed_by === 'host') return null;
                 const isRunning = app.status === 'running';
                 return (
                     <div className="services-page__actions" onClick={(e) => e.stopPropagation()}>
@@ -414,7 +450,7 @@ const Services = () => {
             items={filteredApps}
             columns={columns}
             keyField="id"
-            onRowClick={(app) => navigate(app.app_type === 'wordpress' ? `/wordpress/${app.id}` : `/services/${app.id}`)}
+            onRowClick={(app) => navigate(app.app_type === 'wordpress' && app.managed_by !== 'host' ? `/wordpress/${app.id}` : `/services/${app.id}`)}
             selectable
             selectedIds={selectedIds}
             onToggleSelect={toggleOne}
@@ -447,6 +483,14 @@ const Services = () => {
             filteredEmptyTitle={t('app.services.noServicesFound', 'No services found')}
             filteredEmptyDescription={t('app.services.tryAdjustingFilter', 'Try adjusting your search or filter')}
         >
+            <AdoptSitesDialog
+                open={showAdoptDialog && unmanagedSites.length > 0}
+                onClose={() => setShowAdoptDialog(false)}
+                sites={unmanagedSites}
+                onAdopted={async () => {
+                    await Promise.all([loadApps(), loadUnmanagedSites()]);
+                }}
+            />
             <MoveToProjectDialog
                 open={showMoveDialog}
                 onOpenChange={setShowMoveDialog}
