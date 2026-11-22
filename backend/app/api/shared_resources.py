@@ -168,6 +168,64 @@ def _check_resource_write(resource_type, resource_id):
     return _bad('access denied', 403)
 
 
+def _check_resource_read(resource_type, resource_id):
+    """Authorize reading the variables resolved FOR a target resource.
+
+    The read-side twin of ``_check_resource_write``, and it fails closed the
+    same way: the resolved set is the target's effective configuration, so the
+    caller must be able to read the target itself. Returns None when allowed,
+    else a ``(response, status)`` tuple.
+    """
+    user = get_current_user()
+    if user is None:
+        return _bad('authentication required', 401)
+    if user.is_admin:
+        return None
+    if resource_type in ('application', 'wordpress'):
+        application = _resolve_app(resource_type, resource_id)
+        if application is None:
+            return _bad('resource not found', 404)
+        if not ResourceGrantService.can_access_app(user, application):
+            return _bad('access denied', 403)
+        return None
+    if resource_type == 'database':
+        from app.models.managed_database import ManagedDatabase
+        try:
+            row = ManagedDatabase.query_active().filter_by(id=int(resource_id)).first()
+        except (TypeError, ValueError):
+            row = None
+        if row is None:
+            return _bad('resource not found', 404)
+        if row.workspace_id is None:
+            return _bad('access denied', 403)
+        return require_workspace_access(row.workspace_id, user)
+    if resource_type == 'server':
+        from app.services.workspace_service import WorkspaceService
+        if WorkspaceService.get_accessible_server(user, str(resource_id)) is None:
+            return _bad('resource not found', 404)
+        return None
+    return _bad('access denied', 403)
+
+
+def _check_scope_context(context):
+    """Authorize every scope a hierarchical resolve was asked to layer in.
+
+    The scope ids arrive as query parameters, so without this any caller could
+    name another workspace's id and read its variable groups
+    (GHSA-893r-j92f-5q9x).
+    """
+    for scope_type, key in ((SharedVariableGroup.SCOPE_WORKSPACE, 'workspace_id'),
+                            (SharedVariableGroup.SCOPE_PROJECT, 'project_id'),
+                            (SharedVariableGroup.SCOPE_ENVIRONMENT, 'environment_id')):
+        scope_id = context.get(key)
+        if scope_id in (None, ''):
+            continue
+        denied = _check_scope(scope_type, scope_id)
+        if denied:
+            return denied
+    return None
+
+
 # ---------------------------------------------------------------- metadata
 
 @shared_resources_bp.route('/resource-types', methods=['GET'])
@@ -439,6 +497,9 @@ def resolved():
     resource_id = request.args.get('resource_id')
     if not resource_type or resource_id in (None, ''):
         return _bad('resource_type and resource_id are required')
+    denied = _check_resource_read(resource_type, resource_id)
+    if denied:
+        return denied
 
     variables = SharedResourceService.resolve_variables(
         resource_type, resource_id, mask_secrets=True
@@ -477,6 +538,9 @@ def resolved_hierarchical():
         'project_id': request.args.get('project_id'),
         'environment_id': request.args.get('environment_id'),
     }
+    denied = _check_resource_read(resource_type, resource_id) or _check_scope_context(context)
+    if denied:
+        return denied
     variables = SharedResourceService.resolve_hierarchical(
         resource_type, resource_id, context=context, mask_secrets=True
     )
