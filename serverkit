@@ -326,6 +326,7 @@ cmd_help() {
     echo "Site Management:"
     echo "  setup-proxy       Setup host nginx as reverse proxy (run once)"
     echo "  add-site          Add a new site/domain"
+    echo "  adopt-site        Register a site already running here (adopt-site [domain] [--apply])"
     echo "  list-sites        List all configured sites"
     echo "  remove-site       Remove a site"
     echo ""
@@ -372,7 +373,7 @@ cmd_completion() {
 _serverkit() {
     local cur commands
     cur="${COMP_WORDS[COMP_CWORD]}"
-    commands="help start stop restart status logs update branch version check-update uninstall create-admin reset-password setup-code unlock-user list-users make-admin deactivate-user activate-user init-db migrate-db db-migrate db-status db-history backup-db restore-db disk cleanup-apps factory-reset generate-keys config setup-proxy create-app deploy-template list-servers deployment-status list-apps start-app stop-app app-logs add-site list-sites remove-site doctor manifest services apps repair login-url support-bundle connect panel-status panel-doctor completion"
+    commands="help start stop restart status logs update branch version check-update uninstall create-admin reset-password setup-code unlock-user list-users make-admin deactivate-user activate-user init-db migrate-db db-migrate db-status db-history backup-db restore-db disk cleanup-apps factory-reset generate-keys config setup-proxy create-app deploy-template list-servers deployment-status list-apps start-app stop-app app-logs add-site adopt-site list-sites remove-site doctor manifest services apps repair login-url support-bundle connect panel-status panel-doctor completion"
 
     if [ "$COMP_CWORD" -eq 1 ]; then
         COMPREPLY=( $(compgen -W "$commands" -- "$cur") )
@@ -392,6 +393,7 @@ _serverkit() {
         disk)              COMPREPLY=( $(compgen -W "--safe --all --only --days --keep --older-than --dry-run --allow-restart --yes --json" -- "$cur") ) ;;
         cleanup-apps)      COMPREPLY=( $(compgen -W "--delete-volumes --keep-db" -- "$cur") ) ;;
         list-apps)         COMPREPLY=( $(compgen -W "--all --json" -- "$cur") ) ;;
+        adopt-site)        COMPREPLY=( $(compgen -W "--apply --name --json" -- "$cur") ) ;;
         deployment-status) COMPREPLY=( $(compgen -W "--logs --json" -- "$cur") ) ;;
         db-migrate|migrate-db) COMPREPLY=( $(compgen -W "--no-backup" -- "$cur") ) ;;
         login-url)         COMPREPLY=( $(compgen -W "--ttl --ip --user" -- "$cur") ) ;;
@@ -1205,11 +1207,17 @@ cmd_list_sites() {
                 DOMAIN=$(grep -m1 "server_name" "$site" | awk '{print $2}' | tr -d ';' || true)
                 # Portable port extraction (GNU-only `grep -oP` broke busybox)
                 PORT=$(grep -m1 "proxy_pass" "$site" | sed -n 's/.*:\([0-9][0-9]*\).*/\1/p' || true)
-                if [ -z "$PORT" ]; then
-                    PORT="static"
+                if [ -n "$PORT" ]; then
+                    TARGET="port $PORT"
+                elif grep -q "fastcgi_pass" "$site" 2>/dev/null; then
+                    # A host PHP-FPM site has no port: name what serves it.
+                    PHP_VER=$(grep -m1 "fastcgi_pass" "$site" | sed -n 's/.*php-\{0,1\}\([0-9][0-9]*\.[0-9][0-9]*\).*/\1/p' || true)
+                    TARGET="php-fpm${PHP_VER:+ $PHP_VER}"
+                else
+                    TARGET="static files"
                 fi
                 ENABLED="✓"
-                printf "  %s %-35s → port %s\n" "$ENABLED" "$DOMAIN" "$PORT"
+                printf "  %s %-35s → %s\n" "$ENABLED" "$DOMAIN" "$TARGET"
             fi
         done
     else
@@ -1719,7 +1727,7 @@ case "${1:-help}" in
     migrate-db)
         cmd_migrate_db
         ;;
-    manifest|services|apps|repair|login-url|support-bundle|connect|db-migrate|db-status|db-history)
+    manifest|services|apps|repair|login-url|support-bundle|connect|db-migrate|db-status|db-history|adopt-site)
         cmd_panel_cli "$@"
         ;;
     panel-status)

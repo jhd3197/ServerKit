@@ -600,6 +600,15 @@ server {
     root /var/www/static;
 }
 EOF
+cat > "$t/nginx/sites-enabled/php-site.conf" <<'EOF'
+server {
+    server_name php.example.com;
+    root /var/www/php-site;
+    location ~ \.php$ {
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+}
+EOF
 cat > "$t/rhel/conf.d/confd.conf" <<'EOF'
 server {
     server_name confd.example.com;
@@ -614,9 +623,11 @@ out2="$( set -Eeuo pipefail; NGINX_DIR="$t/rhel"; cmd_list_sites 2>&1 )"
 rc2=$?
 if [ "$rc" -eq 0 ] && [ "$rc2" -eq 0 ] \
    && printf '%s' "$out" | grep 'proxied.example.com' | grep -q 'port 4100' \
-   && printf '%s' "$out" | grep 'static.example.com' | grep -q 'port static' \
+   && printf '%s' "$out" | grep 'static.example.com' | grep -q 'static files' \
+   && printf '%s' "$out" | grep 'php.example.com' | grep -q 'php-fpm 8.3' \
+   && ! printf '%s' "$out" | grep -q 'port static' \
    && printf '%s' "$out2" | grep 'confd.example.com' | grep -q 'port 4200'; then
-    ok "list-sites extracts ports portably and lists conf.d layouts"
+    ok "list-sites extracts ports portably, names PHP-FPM sites, and lists conf.d layouts"
 else
     bad "list-sites broken: rc=$rc/$rc2 out=[$out] out2=[$out2]"
 fi
@@ -725,7 +736,7 @@ fi
 t="$WORK/t18"; mkdir -p "$t/install"
 unknown=""
 for c in manifest services apps repair login-url support-bundle \
-         db-migrate db-status db-history panel-status panel-doctor; do
+         db-migrate db-status db-history panel-status panel-doctor adopt-site; do
     out="$(SERVERKIT_DIR="$t/install" bash "$CLI" "$c" 2>&1)" || true
     if printf '%s' "$out" | grep -q 'Unknown command'; then
         unknown="$unknown $c"
@@ -829,6 +840,7 @@ check_args 'services list --json'                  services list --json
 check_args 'status --json'                         panel-status --json
 check_args 'doctor --repair --yes'                 panel-doctor --repair --yes
 check_args 'connect status --json'                 connect status --json
+check_args 'adopt-site example.com --apply --json' adopt-site example.com --apply --json
 if [ -z "$t20_fail" ]; then
     ok "executed-mode flag passthrough: wrapper commands reach cli.py verbatim"
 else
