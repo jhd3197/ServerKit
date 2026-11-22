@@ -170,7 +170,7 @@ class ManagedDatabaseService:
         }
 
     @classmethod
-    def protect(cls, managed, fields=None):
+    def protect(cls, managed, fields=None, allow_host_commands=False):
         """Create/refresh a BackupPolicy for this managed DB with a **real FK**
         (``target_id = managed.id``) plus a ``managed`` marker so the executor
         resolves the descriptor from the row (not a free-floating JSON blob)."""
@@ -184,7 +184,8 @@ class ManagedDatabaseService:
                          'host': managed.host},
         )
         if fields:
-            policy = BackupPolicyService.update_policy(policy, fields)
+            policy = BackupPolicyService.update_policy(
+                policy, fields, allow_host_commands=allow_host_commands)
         return policy
 
     @staticmethod

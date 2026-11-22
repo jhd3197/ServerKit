@@ -930,6 +930,11 @@ _HOST_BINDING_FIELDS = ('root_path', 'compose_file', 'systemd_unit', 'managed_by
 @jwt_required()
 def create_app():
     user = get_current_user()
+    # Creating a service is a write. A read-only (viewer) account owning an
+    # app would hold write access to it — and to everything an owner can
+    # configure (GHSA-vrwv-j8w5-p94q).
+    if not user.is_developer:
+        raise PermissionDeniedError('Your role is read-only and cannot create services')
     current_user_id = user.id
     data = json_object()
 
@@ -2229,7 +2234,10 @@ def update_app_backup_policy(app_id):
     app = require_app(app_id, write=True)
     policy = BackupPolicyService.get_or_create_policy('application', app_id)
     try:
-        BackupPolicyService.update_policy(policy, json_object())
+        # Write access to the app is not host access: only an admin may set
+        # the hooks, which run as shell commands on the panel host.
+        BackupPolicyService.update_policy(
+            policy, json_object(), allow_host_commands=get_current_user().is_admin)
     except BackupPolicyError as e:
         return jsonify({'error': str(e)}), 400
     return jsonify(BackupPolicyService.serialize_policy_view(policy))

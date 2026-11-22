@@ -132,10 +132,27 @@ class BackupPolicyService:
         'pre_backup_hook', 'post_backup_hook',
     )
 
+    # A hook is a shell command the panel runs as its own user on every backup:
+    # setting one is host command execution, whatever the target belongs to.
+    _HOST_COMMAND_FIELDS = ('pre_backup_hook', 'post_backup_hook')
+
     @classmethod
-    def update_policy(cls, policy, fields):
-        """Apply a partial update, persist, and re-sync the ScheduledJob."""
+    def update_policy(cls, policy, fields, *, allow_host_commands=False):
+        """Apply a partial update, persist, and re-sync the ScheduledJob.
+
+        Changing a hook is refused unless the caller says the actor is an admin
+        (``allow_host_commands``) — default-deny, so a new caller that forwards
+        request data cannot hand shell access to whoever may edit the target
+        (GHSA-vrwv-j8w5-p94q). Sending a hook back unchanged is not a change,
+        so a policy read by a non-admin still round-trips.
+        """
         clean = {k: v for k, v in (fields or {}).items() if k in cls._MUTABLE}
+        if not allow_host_commands:
+            changed = [key for key in cls._HOST_COMMAND_FIELDS
+                       if key in clean and (clean[key] or None) != (getattr(policy, key) or None)]
+            if changed:
+                from app.exceptions import PermissionDeniedError
+                raise PermissionDeniedError('Only an admin can set backup hooks')
         cls.validate_fields(clean)
         for key, value in clean.items():
             if key in ('retention_count', 'retention_days', 'full_every_n_days') and value is not None:

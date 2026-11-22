@@ -205,7 +205,8 @@ def update_target_policy(target_type, target_id):
     try:
         BackupPolicyService.validate_target_type(target_type)
         policy = BackupPolicyService.get_or_create_policy(target_type, target_id, subtype, meta)
-        BackupPolicyService.update_policy(policy, data)
+        # Admin-only route: an admin may set the policy's backup hooks.
+        BackupPolicyService.update_policy(policy, data, allow_host_commands=True)
     except BackupPolicyError as e:
         return jsonify({'error': str(e)}), 400
     return jsonify(BackupPolicyService.serialize_policy_view(policy)), 200
