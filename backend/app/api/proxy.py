@@ -32,7 +32,8 @@ def _require_server(server_id):
     # reads the proxy state but may not change it.
     if (request.method not in ('GET', 'HEAD', 'OPTIONS') and server.workspace_id
             and not WorkspaceService.can_write_in_workspace(user, server.workspace_id)):
-        return None, (jsonify({'error': 'You have read-only access to this workspace'}), 403)
+        from app.exceptions import PermissionDeniedError
+        raise PermissionDeniedError('You have read-only access to this workspace')
     return server, None
 
 

@@ -189,9 +189,9 @@ def _check_resource_read(resource_type, resource_id):
             return _bad('access denied', 403)
         return None
     if resource_type == 'database':
-        from app.models.managed_database import ManagedDatabase
+        from app.services.managed_database_service import ManagedDatabaseService
         try:
-            row = ManagedDatabase.query_active().filter_by(id=int(resource_id)).first()
+            row = ManagedDatabaseService.get(int(resource_id))
         except (TypeError, ValueError):
             row = None
         if row is None:
