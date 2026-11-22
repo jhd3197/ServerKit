@@ -625,6 +625,7 @@ Regenerate (backend/):
 - `GET /shared/tags`
 - `GET /shared/variable-groups`
 - `GET /shared/variable-groups/{group_id}`
+- `GET /site-adoption/sites`
 - `GET /source-connections/admin/bitbucket`
 - `GET /source-connections/admin/github`
 - `GET /source-connections/admin/github/app-manifest`
@@ -1216,6 +1217,7 @@ Regenerate (backend/):
 - `POST /shared/variable-groups/{group_id}/attach`
 - `POST /shared/variable-groups/{group_id}/detach`
 - `POST /shared/variable-groups/{group_id}/variables`
+- `POST /site-adoption/adopt`
 - `POST /source-connections/admin/github/app-manifest/complete`
 - `POST /source-connections/bitbucket/callback`
 - `POST /source-connections/github/callback`
