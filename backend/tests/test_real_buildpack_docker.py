@@ -221,3 +221,29 @@ def test_static_site(tmp_path):
     })
     plan, body = _deploy_and_probe(tmp_path, 'static')
     assert 'static-smoke-ok' in body
+
+
+def test_php_laravel_layout_served_by_fpm_from_public(tmp_path):
+    """Laravel-shaped repo: composer.json + artisan + public/. The image must
+    build (Composer failures are fatal now), serve public/ through nginx +
+    PHP-FPM, and load every extension Laravel needs."""
+    _write(tmp_path, {
+        # artisan flips detection to Laravel; no Composer packages are needed.
+        'composer.json': json.dumps({
+            'name': 'smoke/laravel-ish',
+            'require': {'php': '>=8.2'},
+            'extra': {'laravel': {}},
+        }),
+        'artisan': '#!/usr/bin/env php\n',
+        'public/index.php': (
+            "<?php $need = ['pdo_mysql','mbstring','tokenizer','xml','ctype',"
+            "'json','bcmath','openssl','fileinfo','intl','zip','exif','pcntl',"
+            "'gd','Zend OPcache'];\n"
+            "$missing = array_filter($need, fn($e) => !extension_loaded($e));\n"
+            "echo 'php-smoke-ok ' . ($missing ? 'missing:' . implode(',', $missing) : 'ext-ok');\n"
+        ),
+    })
+    plan, body = _deploy_and_probe(tmp_path, 'php')
+    assert plan['framework'] == 'laravel'  # via the artisan file
+    assert 'php -S' not in plan['start_command']
+    assert 'php-smoke-ok ext-ok' in body
