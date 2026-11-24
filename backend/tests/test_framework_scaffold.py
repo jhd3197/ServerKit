@@ -183,13 +183,8 @@ def test_write_project_files_without_database_uses_sqlite_and_file_sessions(tmp_
 @pytest.fixture
 def web_app(app):
     from app import db
-    from app.models import Application
-    from factories import make_user
-    row = Application(name='shop', app_type='docker', status='stopped', port=8123,
-                      user_id=make_user(db).id)
-    db.session.add(row)
-    db.session.commit()
-    return row
+    from factories import make_application
+    return make_application(db, name='shop', status='stopped', port=8123)
 
 
 def test_wire_env_uses_from_service_refs_not_literal_secrets(web_app):
