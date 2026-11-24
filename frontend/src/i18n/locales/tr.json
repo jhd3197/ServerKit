@@ -1254,7 +1254,8 @@
             "serviceName": "Hizmet adı",
             "systemdUnitOptional": "systemd ünitesi (isteğe bağlı)",
             "uploadTheArchive": "Arşivi yükleyin",
-            "setUpGithubInSettingsFirst": "Önce Ayarlar'da GitHub'ı kurun"
+            "setUpGithubInSettingsFirst": "Önce Ayarlar'da GitHub'ı kurun",
+            "pickAFramework": "Pick a framework"
         },
         "connectionsHub": {
             "authorizedViaOauth": "OAuth ile yetkilendirildi",
@@ -4062,7 +4063,9 @@
             "uploading": "Yükleniyor…",
             "completeTheSourceDetailsFirst": "Önce kaynak ayrıntılarını tamamlayın",
             "fillInTheRequiredDetailsFirst": "Önce gerekli bilgileri doldurun",
-            "finishThePreviousStepFirst": "Önce önceki adımı tamamlayın"
+            "finishThePreviousStepFirst": "Önce önceki adımı tamamlayın",
+            "createAndDeploy": "Create & deploy",
+            "creating": "Creating…"
         },
         "notFound": {
             "browseExtensions": "Uzantılara Göz Atın",
@@ -6464,7 +6467,9 @@
             "manualLocal": "Manuel / Yerel",
             "otherGitRemote": "Diğer Git Uzaktan Kumanda",
             "serviceSource": "Hizmet kaynağı",
-            "uploadZip": "ZIP'i yükle"
+            "uploadZip": "ZIP'i yükle",
+            "startFromFramework": "Start from a framework",
+            "startFromFrameworkSub": "Scaffold Laravel with its database already wired"
         },
         "sourceTree": {
             "collapse": "Yıkılmak",
@@ -7404,7 +7409,9 @@
             "repositoryServiceCreatedDeploying": "Depo hizmeti oluşturuldu — dağıtılıyor…",
             "serviceCreatedWithoutAutoDeploy": "Hizmet, otomatik dağıtım olmadan oluşturuldu; hizmet sayfasından manuel olarak başlatın.",
             "staticSite": "Statik site",
-            "uploadServiceCreated": "Yükleme hizmeti oluşturuldu"
+            "uploadServiceCreated": "Yükleme hizmeti oluşturuldu",
+            "failedToLoadFrameworks": "Couldn't load the framework list.",
+            "frameworkProjectQueued": "Project queued. Scaffolding and deploying…"
         },
         "useWidgetData": {
             "localThisServer": "Yerel (bu sunucu)",
@@ -7965,6 +7972,25 @@
         "changeBar": {
             "nothingToRedo": "Yinelenecek bir şey yok",
             "nothingToUndo": "Geri alınacak bir şey yok"
+        },
+        "frameworkStep": {
+            "addMysql": "Add MySQL",
+            "addMysqlHelp": "Installs a private MySQL service and wires its credentials into the app. No password to type.",
+            "database": "Database",
+            "domain": "Domain",
+            "framework": "Framework",
+            "invalidDomain": "Enter a valid domain such as app.example.com, or leave it empty.",
+            "loading": "Loading frameworks…",
+            "noDatabase": "None (SQLite inside the container)",
+            "noDomain": "None. Served on the assigned port.",
+            "none": "No frameworks available.",
+            "optional": "(optional)",
+            "stepDatabase": "Provision the database",
+            "stepDeploy": "Build the image and deploy",
+            "stepEnv": "Generate .env and APP_KEY, wire database credentials",
+            "stepMigrate": "Run migrations once the database is ready",
+            "stepScaffold": "Scaffold the project with Composer",
+            "whatServerkitWillDo": "What ServerKit will do"
         }
     },
     "auth": {

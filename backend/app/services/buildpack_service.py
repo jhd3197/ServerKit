@@ -54,6 +54,7 @@ class BuildpackService:
     DEFAULT_PYTHON_VERSION = '3.11'
     DEFAULT_GO_VERSION = '1.22'
     DEFAULT_PHP_VERSION = '8.3'
+    PHP_START_COMMAND = 'supervisord -n -c /etc/supervisor/serverkit.conf'
     DEFAULT_PORT = 3000
 
     # ------------------------------------------------------------------ #
@@ -262,9 +263,11 @@ class BuildpackService:
         if 'laravel/framework' in require or 'artisan' in files:
             plan['framework'] = 'laravel'
             plan['notes'].append('Detected Laravel.')
-        # Serve the public/ docroot if present, else the repo root.
+        # Serve the public/ docroot if present, else the repo root. The
+        # generated image runs PHP-FPM behind nginx (never `php -S`).
         docroot = 'public' if os.path.isdir(os.path.join(repo_path, 'public')) else '.'
-        plan['start_command'] = f'php -S 0.0.0.0:8080 -t {docroot}'
+        plan['docroot'] = docroot
+        plan['start_command'] = cls.PHP_START_COMMAND
         plan['notes'].append(f"Detected PHP; using PHP {plan['versions']['php']}.")
         return True
 
@@ -609,25 +612,108 @@ class BuildpackService:
         ]
         return '\n'.join(lines) + '\n'
 
+    # Extensions Laravel (and most Composer packages) need. ctype, fileinfo,
+    # json, mbstring, openssl, tokenizer and xml/dom ship compiled into the
+    # official php image, so only the optional ones are built here.
+    PHP_EXTENSIONS = (
+        'pdo_mysql', 'mysqli', 'bcmath', 'intl', 'zip', 'exif', 'pcntl', 'gd', 'opcache',
+    )
+
     @classmethod
     def _dockerfile_php(cls, plan: Dict) -> str:
+        """PHP-FPM + nginx image with Composer; docroot is ``public/`` when present.
+
+        A failing Composer install or build command fails the image build --
+        nothing here swallows errors.
+        """
         version = plan.get('versions', {}).get('php', cls.DEFAULT_PHP_VERSION)
         port = cls._port(plan)
         build = plan.get('build_command')
-        start = plan.get('start_command') or f'php -S 0.0.0.0:{port} -t .'
+        start = plan.get('start_command') or cls.PHP_START_COMMAND
+        # A plan persisted before the FPM image existed still carries the old
+        # `php -S ... -t <docroot>` start command; recover its docroot and
+        # serve it properly instead.
+        legacy = re.match(r'php -S \S+ -t (\S+)', start)
+        if legacy:
+            start = cls.PHP_START_COMMAND
+        docroot = plan.get('docroot') or (legacy.group(1) if legacy else '.')
+        root = '/var/www/html' if docroot in ('', '.') else f'/var/www/html/{docroot.strip("/")}'
+
+        nginx_conf = '\n'.join([
+            'server {',
+            f'    listen {port};',
+            '    server_name _;',
+            f'    root {root};',
+            '    index index.php index.html;',
+            '    client_max_body_size 64m;',
+            '    error_log /dev/stderr;',
+            '    access_log /dev/stdout;',
+            '    location / {',
+            '        try_files $uri $uri/ /index.php?$query_string;',
+            '    }',
+            '    location ~ \\.php$ {',
+            '        include fastcgi_params;',
+            '        fastcgi_pass 127.0.0.1:9000;',
+            '        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;',
+            '        fastcgi_param DOCUMENT_ROOT $realpath_root;',
+            '    }',
+            '    location ~ /\\.(?!well-known) {',
+            '        deny all;',
+            '    }',
+            '}',
+        ])
+        supervisor_conf = '\n'.join([
+            '[supervisord]',
+            'nodaemon=true',
+            'user=root',
+            'logfile=/dev/null',
+            'logfile_maxbytes=0',
+            'pidfile=/run/supervisord.pid',
+            '',
+            '[program:php-fpm]',
+            'command=php-fpm -F',
+            'autorestart=true',
+            'stdout_logfile=/dev/stdout',
+            'stdout_logfile_maxbytes=0',
+            'stderr_logfile=/dev/stderr',
+            'stderr_logfile_maxbytes=0',
+            '',
+            '[program:nginx]',
+            "command=nginx -g 'daemon off;'",
+            'autorestart=true',
+            'stdout_logfile=/dev/stdout',
+            'stdout_logfile_maxbytes=0',
+            'stderr_logfile=/dev/stderr',
+            'stderr_logfile_maxbytes=0',
+        ])
         lines = [
-            f'# syntax=docker/dockerfile:1',
-            f'FROM php:{version}-cli',
-            'WORKDIR /app',
+            '# syntax=docker/dockerfile:1',
+            f'FROM php:{version}-fpm',
+            'RUN apt-get update && apt-get install -y --no-install-recommends '
+            'nginx supervisor git unzip libzip-dev libicu-dev libpng-dev '
+            'libjpeg-dev libfreetype6-dev libonig-dev libxml2-dev \\',
+            ' && docker-php-ext-configure gd --with-freetype --with-jpeg \\',
+            f' && docker-php-ext-install -j"$(nproc)" {" ".join(cls.PHP_EXTENSIONS)} \\',
+            ' && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \\',
+            ' && rm -f /etc/nginx/sites-enabled/default \\',
+            ' && rm -rf /var/lib/apt/lists/*',
+            'COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer',
+            'ENV COMPOSER_ALLOW_SUPERUSER=1 COMPOSER_NO_INTERACTION=1',
+            "COPY <<'EOF' /etc/nginx/conf.d/default.conf",
+            nginx_conf,
+            'EOF',
+            "COPY <<'EOF' /etc/supervisor/serverkit.conf",
+            supervisor_conf,
+            'EOF',
+            'WORKDIR /var/www/html',
             'COPY . .',
         ]
         if build:
-            lines += [
-                'RUN curl -sS https://getcomposer.org/installer | php -- '
-                '--install-dir=/usr/local/bin --filename=composer || true',
-                f'RUN {build} || true',
-            ]
+            lines.append(f'RUN {build}')
         lines += [
+            # Laravel writes to storage/ and bootstrap/cache as www-data (FPM).
+            'RUN mkdir -p storage bootstrap/cache && chown -R www-data:www-data . '
+            '&& chmod -R ug+rwX storage bootstrap/cache',
             f'EXPOSE {port}',
             f'CMD {cls._cmd(start)}',
         ]

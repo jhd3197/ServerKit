@@ -339,3 +339,72 @@ def test_plan_cache_key_stable_and_distinct():
     assert k1 == k2
     assert k1 != k3
     assert k1.startswith('buildpack:plan:')
+
+
+# --------------------------------------------------------------------------- #
+# PHP / Laravel image
+# --------------------------------------------------------------------------- #
+def _laravel_repo(tmp_path):
+    (tmp_path / 'composer.json').write_text(json.dumps({
+        'require': {'php': '^8.2', 'laravel/framework': '^11.0'},
+    }), encoding='utf-8')
+    (tmp_path / 'artisan').write_text('#!/usr/bin/env php\n', encoding='utf-8')
+    (tmp_path / 'public').mkdir()
+    return tmp_path
+
+
+def test_detect_laravel_still_detected_and_serves_public(tmp_path):
+    plan = BuildpackService.detect(str(_laravel_repo(tmp_path)))
+
+    assert plan['language'] == 'php'
+    assert plan['framework'] == 'laravel'
+    assert plan['docroot'] == 'public'
+    assert 'php -S' not in plan['start_command']
+
+
+def test_php_dockerfile_does_not_swallow_failures(tmp_path):
+    plan = BuildpackService.detect(str(_laravel_repo(tmp_path)))
+    dockerfile = BuildpackService.generate_dockerfile(plan)
+
+    assert '|| true' not in dockerfile
+    assert 'composer install --no-dev' in dockerfile
+    # Composer comes from the official image, not a piped installer.
+    assert 'getcomposer.org/installer' not in dockerfile
+
+
+def test_php_dockerfile_has_laravel_extensions(tmp_path):
+    plan = BuildpackService.detect(str(_laravel_repo(tmp_path)))
+    dockerfile = BuildpackService.generate_dockerfile(plan)
+
+    for ext in ('pdo_mysql', 'bcmath', 'intl', 'zip', 'exif', 'pcntl', 'gd', 'opcache'):
+        assert ext in dockerfile
+    assert 'FROM php:8.3-fpm' in dockerfile
+
+
+def test_php_dockerfile_uses_fpm_and_nginx_with_public_docroot(tmp_path):
+    plan = BuildpackService.detect(str(_laravel_repo(tmp_path)))
+    dockerfile = BuildpackService.generate_dockerfile(plan)
+
+    assert 'php -S' not in dockerfile
+    assert 'root /var/www/html/public;' in dockerfile
+    assert 'fastcgi_pass 127.0.0.1:9000;' in dockerfile
+    assert 'command=php-fpm -F' in dockerfile
+    assert 'supervisord' in dockerfile.splitlines()[-1]
+
+
+def test_php_dockerfile_plain_repo_serves_root(tmp_path):
+    (tmp_path / 'composer.json').write_text('{}', encoding='utf-8')
+    dockerfile = BuildpackService.generate_dockerfile(BuildpackService.detect(str(tmp_path)))
+
+    assert 'root /var/www/html;' in dockerfile
+    assert '|| true' not in dockerfile
+
+
+def test_php_dockerfile_upgrades_legacy_persisted_plan():
+    legacy = {'language': 'php', 'port': 8080, 'versions': {'php': '8.3'},
+              'build_command': 'composer install',
+              'start_command': 'php -S 0.0.0.0:8080 -t public'}
+    dockerfile = BuildpackService.generate_dockerfile(legacy)
+
+    assert 'php -S' not in dockerfile
+    assert 'root /var/www/html/public;' in dockerfile

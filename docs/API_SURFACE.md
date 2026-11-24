@@ -366,6 +366,7 @@ Regenerate (backend/):
 - `GET /fleet-monitor/search`
 - `GET /fleet-monitor/thresholds`
 - `GET /fleet/targets`
+- `GET /frameworks`
 - `GET /git/deployments/app/{app_id}`
 - `GET /git/deployments/webhook/{webhook_id}`
 - `GET /git/deployments/{deployment_id}`
@@ -979,6 +980,7 @@ Regenerate (backend/):
 - `POST /fleet-monitor/alerts/{alert_id}/acknowledge`
 - `POST /fleet-monitor/alerts/{alert_id}/resolve`
 - `POST /fleet-monitor/thresholds`
+- `POST /frameworks/scaffold`
 - `POST /git/deployments/app/{app_id}/deploy`
 - `POST /git/deployments/app/{app_id}/rollback`
 - `POST /git/webhooks`

@@ -9,6 +9,8 @@ def register_job_handlers(app):
     DeploymentJobService.register_jobs()
     from app.services.recipe_execution_service import RecipeExecutionService
     RecipeExecutionService.register_jobs()
+    from app.services.framework_scaffold_service import FrameworkScaffoldService
+    FrameworkScaffoldService.register_jobs()
     # WorkflowEngine.register_jobs() removed (engine retired).
     from app.services.backup_service import BackupService
     BackupService.register_jobs()

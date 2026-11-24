@@ -96,6 +96,7 @@ CORE_BLUEPRINTS: tuple[BlueprintSpec, ...] = (
         '/api/v1/restore-points',
     ),
     BlueprintSpec('app.api.manifests', 'manifests_bp', '/api/v1/manifests'),
+    BlueprintSpec('app.api.frameworks', 'frameworks_bp', '/api/v1/frameworks'),
     BlueprintSpec('app.api.recipes', 'recipes_bp', '/api/v1/recipes'),
     BlueprintSpec(
         'app.api.walkthroughs',

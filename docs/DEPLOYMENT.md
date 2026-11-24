@@ -172,6 +172,50 @@ serverkit shell
 serverkit help
 ```
 
+## Starting from a framework (Laravel)
+
+**New Service → Start from a framework** scaffolds a brand-new project instead
+of importing an existing one. Laravel is the first framework; the picker reads
+`backend/app/services/framework_registry.py`, so adding another (Next.js,
+Django, ...) is a new registry entry plus a scaffold runner, not a UI rewrite.
+
+You give it a service name, an optional domain, and whether to **Add MySQL**
+(on by default for Laravel). ServerKit then runs one job in the Deploy Console:
+
+1. **Scaffold** with `composer create-project laravel/laravel:^11.0` into
+   `/var/serverkit/apps/<name>`. Composer runs in the official `composer:2`
+   container, so the host needs **Docker but not PHP or Composer**. A host
+   `composer` + `php` is used only when Docker is absent.
+2. **Image**: writes a `Dockerfile` for PHP 8.3 FPM + nginx with the document
+   root at `public/` (never `php -S`), the Laravel extensions (`pdo_mysql`,
+   `mbstring`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`, `openssl`,
+   `fileinfo`, `intl`, `zip`, `exif`, `pcntl`, `gd`, `opcache`) and a
+   `.dockerignore` that keeps `.env` out of the image.
+3. **Environment**: writes `.env` from `.env.example` with a fresh `APP_KEY`
+   (same format as `php artisan key:generate`, kept stable across retries),
+   `APP_ENV=production` and `APP_URL` from your domain, or the assigned
+   `host:port` when there is none. The same values are set as service env vars.
+4. **MySQL**: installs the `mysql` engine template as `<name>-db` and wires
+   `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` and `DB_PASSWORD` onto the
+   app as [`fromService` references](SERVERKIT_YAML.md#environment-variables).
+   Nobody types a password and none is written to the project files.
+5. **Deploy**, then **`php artisan migrate --force`** inside the app container
+   once the database accepts connections (retried while MySQL boots). A failed
+   migration fails the job and its output is shown in the console. Retry the
+   job after fixing the cause; every step is safe to repeat.
+
+Without MySQL the app uses SQLite inside the container, which is lost on
+redeploy. Use it for trying things out.
+
+## PHP images from the build pack
+
+Repositories with a `composer.json` (Laravel included) get a generated image
+based on `php:<version>-fpm` with nginx, serving `public/` when it exists. A
+failing `composer install` or build command now fails the image build; earlier
+versions appended `|| true` to both and shipped a broken image. Plans saved
+before this change that still carry `php -S ... -t public` are regenerated as
+FPM + nginx with the same document root.
+
 ## Manual Installation
 
 ### 1. Install Docker

@@ -10,6 +10,7 @@ import {
     Select, SelectTrigger, SelectContent, SelectItem, SelectValue,
 } from '@/components/ui/select';
 import { SOURCE_NEEDS } from './useNewServiceForm';
+import { FrameworkPicker } from './FrameworkStep';
 import { useTranslation } from 'react-i18next';
 
 // Step 2 — Connect. Only the source-specific input, plus the editable detected
@@ -25,13 +26,14 @@ const ConnectStep = ({ form }) => {
         serviceName, onNameChange, branch, setBranch, branches, branchesLoading,
     } = form;
 
-    const showBranch = sourceMode !== 'local' && sourceMode !== 'upload';
+    const showBranch = sourceMode !== 'local' && sourceMode !== 'upload' && sourceMode !== 'framework';
 
     return (
         <div className="new-service-page__step">
             <div className="new-service-page__step-head">
                 <h2>
-                    {sourceMode === 'github' ? t('app.connectStep.pickARepository', 'Pick a repository')
+                    {sourceMode === 'framework' ? t('app.connectStep.pickAFramework', 'Pick a framework')
+                        : sourceMode === 'github' ? t('app.connectStep.pickARepository', 'Pick a repository')
                             : sourceMode === 'local' ? t('app.connectStep.pointAtTheService', 'Point at the service')
                                 : sourceMode === 'upload' ? t('app.connectStep.uploadTheArchive', 'Upload the archive')
                                     : t('app.connectStep.connectTheRemote', 'Connect the remote')}
@@ -43,6 +45,8 @@ const ConnectStep = ({ form }) => {
                     </p>
                 )}
             </div>
+
+            {sourceMode === 'framework' && <FrameworkPicker form={form} />}
 
             {sourceMode === 'github' && (
                 <div className="new-service-page__pane">

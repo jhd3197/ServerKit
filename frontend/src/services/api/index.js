@@ -40,6 +40,7 @@ import * as doctorMethods from './doctor.js';
 import * as bandwidthMethods from './bandwidth.js';
 import * as htaccessToolMethods from './htaccessTools.js';
 import * as manifestMethods from './manifests.js';
+import * as frameworkMethods from './frameworks.js';
 import * as surveyMethods from './survey.js';
 import * as dnsCutoverMethods from './dnsCutover.js';
 import * as searchMethods from './search.js';
@@ -101,6 +102,7 @@ class ApiService extends ApiClient {
             bandwidthMethods,
             htaccessToolMethods,
             manifestMethods,
+            frameworkMethods,
             surveyMethods,
             dnsCutoverMethods,
             searchMethods,

@@ -1254,7 +1254,8 @@
             "serviceName": "서비스 이름",
             "systemdUnitOptional": "systemd 유닛(선택 사항)",
             "uploadTheArchive": "아카이브 업로드",
-            "setUpGithubInSettingsFirst": "먼저 설정에서 GitHub를 설정하세요"
+            "setUpGithubInSettingsFirst": "먼저 설정에서 GitHub를 설정하세요",
+            "pickAFramework": "Pick a framework"
         },
         "connectionsHub": {
             "authorizedViaOauth": "OAuth로 승인됨",
@@ -4062,7 +4063,9 @@
             "uploading": "업로드 중…",
             "completeTheSourceDetailsFirst": "먼저 소스 세부 정보를 입력하세요",
             "fillInTheRequiredDetailsFirst": "먼저 필수 정보를 입력하세요",
-            "finishThePreviousStepFirst": "먼저 이전 단계를 완료하세요"
+            "finishThePreviousStepFirst": "먼저 이전 단계를 완료하세요",
+            "createAndDeploy": "Create & deploy",
+            "creating": "Creating…"
         },
         "notFound": {
             "browseExtensions": "확장 프로그램 찾아보기",
@@ -6464,7 +6467,9 @@
             "manualLocal": "수동/로컬",
             "otherGitRemote": "기타 Git 원격",
             "serviceSource": "서비스 소스",
-            "uploadZip": "우편번호 업로드"
+            "uploadZip": "우편번호 업로드",
+            "startFromFramework": "Start from a framework",
+            "startFromFrameworkSub": "Scaffold Laravel with its database already wired"
         },
         "sourceTree": {
             "collapse": "접기",
@@ -7404,7 +7409,9 @@
             "repositoryServiceCreatedDeploying": "리포지토리 서비스 생성 — 배포 중…",
             "serviceCreatedWithoutAutoDeploy": "자동 배포 없이 서비스가 생성되었습니다. 서비스 페이지에서 수동으로 시작하세요.",
             "staticSite": "정적 사이트",
-            "uploadServiceCreated": "업로드 서비스가 생성되었습니다."
+            "uploadServiceCreated": "업로드 서비스가 생성되었습니다.",
+            "failedToLoadFrameworks": "Couldn't load the framework list.",
+            "frameworkProjectQueued": "Project queued. Scaffolding and deploying…"
         },
         "useWidgetData": {
             "localThisServer": "로컬 (이 서버)",
@@ -7965,6 +7972,25 @@
         "changeBar": {
             "nothingToRedo": "다시 실행할 항목이 없습니다",
             "nothingToUndo": "실행 취소할 항목이 없습니다"
+        },
+        "frameworkStep": {
+            "addMysql": "Add MySQL",
+            "addMysqlHelp": "Installs a private MySQL service and wires its credentials into the app. No password to type.",
+            "database": "Database",
+            "domain": "Domain",
+            "framework": "Framework",
+            "invalidDomain": "Enter a valid domain such as app.example.com, or leave it empty.",
+            "loading": "Loading frameworks…",
+            "noDatabase": "None (SQLite inside the container)",
+            "noDomain": "None. Served on the assigned port.",
+            "none": "No frameworks available.",
+            "optional": "(optional)",
+            "stepDatabase": "Provision the database",
+            "stepDeploy": "Build the image and deploy",
+            "stepEnv": "Generate .env and APP_KEY, wire database credentials",
+            "stepMigrate": "Run migrations once the database is ready",
+            "stepScaffold": "Scaffold the project with Composer",
+            "whatServerkitWillDo": "What ServerKit will do"
         }
     },
     "auth": {

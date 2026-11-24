@@ -186,6 +186,14 @@ Each entry has a `key` plus **exactly one** value source:
 config; pinning the *source* IP of outbound traffic is network infrastructure
 (secondary IPs, SNAT) that lives below the manifest.
 
+**Framework scaffolds.** New Service → *Start from a framework* (see the
+[Deployment Guide](DEPLOYMENT.md#starting-from-a-framework-laravel)) wires its
+database with the same primitives a manifest uses: the engine template install
+that backs `type: redis` and `fromService` references (`DB_HOST`, `DB_PORT`,
+`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`). It does not write a
+`serverkit.yaml`: a `type: mysql` service goes through the managed-database
+record path, while the scaffold needs a MySQL container on the shared network.
+
 ## Disks & backups
 
 ```yaml
