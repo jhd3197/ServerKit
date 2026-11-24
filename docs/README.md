@@ -13,7 +13,7 @@ Welcome to the ServerKit documentation. This guide will help you install, config
 | [Installation Guide](INSTALLATION.md) | Complete setup instructions for Docker and manual installation |
 | [Agent permission levels](AGENT_PERMISSION_LEVELS.md) | Monitor / Protect / Full: what each allows and how to change it |
 | [Architecture](ARCHITECTURE.md) | System design, request flow, and diagrams |
-| [Deployment Guide](DEPLOYMENT.md) | Production deployment, CLI commands, and configuration |
+| [Deployment Guide](DEPLOYMENT.md) | Production deployment, CLI commands, configuration, and starting a Laravel project from the framework picker |
 | [Local Development](LOCAL_DEVELOPMENT.md) | Run the panel locally for development |
 | [API Reference](API.md) | Curated REST API examples (see note below about auto-generated docs) |
 | [Multi-Environment Guide](MULTI_ENVIRONMENT.md) | Set up prod/dev WordPress pairs with shared database |

@@ -954,6 +954,67 @@
         }
     }
 
+    // ── Framework picker ────────────────────────────────────
+    &__field-error {
+        color: $danger;
+        font-size: $text-xs;
+    }
+
+    &__framework-summary {
+        display: grid;
+        gap: $space-3;
+        padding: $space-3;
+        background: $bg-elevated;
+        border: 1px solid $border-subtle;
+        border-radius: $radius-control;
+
+        dl {
+            display: grid;
+            gap: $space-2;
+            margin: 0;
+        }
+
+        dl > div {
+            display: flex;
+            justify-content: space-between;
+            gap: $space-3;
+        }
+
+        dt {
+            display: flex;
+            align-items: center;
+            gap: $space-1;
+            color: $text-tertiary;
+            font-size: $text-xs;
+        }
+
+        dd {
+            margin: 0;
+            color: $text-primary;
+            font-size: $text-xs;
+            font-weight: $font-weight-medium;
+            overflow-wrap: anywhere;
+        }
+
+        h3 {
+            display: flex;
+            align-items: center;
+            gap: $space-1;
+            margin: 0;
+            color: $text-secondary;
+            font-size: $text-xs;
+            font-weight: $font-weight-semibold;
+        }
+
+        ol {
+            margin: 0;
+            padding-left: $space-4;
+            color: $text-secondary;
+            font-size: $text-xs;
+            line-height: 1.6;
+        }
+    }
+
     &__note {
         display: flex;
         align-items: center;

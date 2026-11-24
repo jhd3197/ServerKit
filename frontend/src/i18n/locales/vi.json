@@ -1254,7 +1254,8 @@
             "serviceName": "Tên dịch vụ",
             "systemdUnitOptional": "Đơn vị systemd (tùy chọn)",
             "uploadTheArchive": "Tải lên tệp nén",
-            "setUpGithubInSettingsFirst": "Hãy thiết lập GitHub trong Cài đặt trước"
+            "setUpGithubInSettingsFirst": "Hãy thiết lập GitHub trong Cài đặt trước",
+            "pickAFramework": "Pick a framework"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Đã ủy quyền qua OAuth",
@@ -4062,7 +4063,9 @@
             "uploading": "Đang tải lên…",
             "completeTheSourceDetailsFirst": "Hãy hoàn tất chi tiết nguồn trước",
             "fillInTheRequiredDetailsFirst": "Hãy điền các thông tin bắt buộc trước",
-            "finishThePreviousStepFirst": "Hãy hoàn tất bước trước đó"
+            "finishThePreviousStepFirst": "Hãy hoàn tất bước trước đó",
+            "createAndDeploy": "Create & deploy",
+            "creating": "Creating…"
         },
         "notFound": {
             "browseExtensions": "Duyệt qua tiện ích mở rộng",
@@ -6464,7 +6467,9 @@
             "manualLocal": "Thủ công/Địa phương",
             "otherGitRemote": "Điều khiển từ xa Git khác",
             "serviceSource": "Nguồn dịch vụ",
-            "uploadZip": "Tải lên ZIP"
+            "uploadZip": "Tải lên ZIP",
+            "startFromFramework": "Start from a framework",
+            "startFromFrameworkSub": "Scaffold Laravel with its database already wired"
         },
         "sourceTree": {
             "collapse": "Sụp đổ",
@@ -7404,7 +7409,9 @@
             "repositoryServiceCreatedDeploying": "Đã tạo dịch vụ từ kho mã — đang triển khai…",
             "serviceCreatedWithoutAutoDeploy": "Dịch vụ được tạo mà không tự động triển khai — khởi động dịch vụ theo cách thủ công từ trang dịch vụ.",
             "staticSite": "Trang web tĩnh",
-            "uploadServiceCreated": "Đã tạo dịch vụ tải lên"
+            "uploadServiceCreated": "Đã tạo dịch vụ tải lên",
+            "failedToLoadFrameworks": "Couldn't load the framework list.",
+            "frameworkProjectQueued": "Project queued. Scaffolding and deploying…"
         },
         "useWidgetData": {
             "localThisServer": "Cục bộ (máy chủ này)",
@@ -7965,6 +7972,25 @@
         "changeBar": {
             "nothingToRedo": "Không có gì để làm lại",
             "nothingToUndo": "Không có gì để hoàn tác"
+        },
+        "frameworkStep": {
+            "addMysql": "Add MySQL",
+            "addMysqlHelp": "Installs a private MySQL service and wires its credentials into the app. No password to type.",
+            "database": "Database",
+            "domain": "Domain",
+            "framework": "Framework",
+            "invalidDomain": "Enter a valid domain such as app.example.com, or leave it empty.",
+            "loading": "Loading frameworks…",
+            "noDatabase": "None (SQLite inside the container)",
+            "noDomain": "None. Served on the assigned port.",
+            "none": "No frameworks available.",
+            "optional": "(optional)",
+            "stepDatabase": "Provision the database",
+            "stepDeploy": "Build the image and deploy",
+            "stepEnv": "Generate .env and APP_KEY, wire database credentials",
+            "stepMigrate": "Run migrations once the database is ready",
+            "stepScaffold": "Scaffold the project with Composer",
+            "whatServerkitWillDo": "What ServerKit will do"
         }
     },
     "auth": {

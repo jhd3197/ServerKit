@@ -101,8 +101,8 @@ const NewService = () => {
                             disabledReason={!submitting ? t('app.newService.fillInTheRequiredDetailsFirst', 'Fill in the required details first') : undefined}>
                             <Rocket size={16} />
                             {submitting
-                                ? (form.sourceMode === 'local' ? t('app.newService.registering', 'Registering…') : form.sourceMode === 'upload' ? t('app.newService.uploading', 'Uploading…') : t('app.newService.deploying', 'Deploying…'))
-                                : (form.sourceMode === 'local' ? t('app.newService.registerService', 'Register service') : form.sourceMode === 'upload' ? t('app.newService.uploadAndDeploy', 'Upload & deploy') : t('app.newService.deployService', 'Deploy service'))}
+                                ? (form.sourceMode === 'local' ? t('app.newService.registering', 'Registering…') : form.sourceMode === 'upload' ? t('app.newService.uploading', 'Uploading…') : form.sourceMode === 'framework' ? t('app.newService.creating', 'Creating…') : t('app.newService.deploying', 'Deploying…'))
+                                : (form.sourceMode === 'local' ? t('app.newService.registerService', 'Register service') : form.sourceMode === 'upload' ? t('app.newService.uploadAndDeploy', 'Upload & deploy') : form.sourceMode === 'framework' ? t('app.newService.createAndDeploy', 'Create & deploy') : t('app.newService.deployService', 'Deploy service'))}
                         </Button>
                     )}
                 </div>

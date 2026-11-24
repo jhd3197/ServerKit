@@ -31,7 +31,14 @@ export const SOURCE_NEEDS = {
     manual: 'The repository URL, plus a deploy key or credentials if it is private.',
     local: 'The path on the server, and its compose file or systemd unit if any.',
     upload: 'A .zip of the project (with a Dockerfile/compose or a detectable runtime).',
+    framework: 'Docker on this server — Composer runs in a container, so PHP is not needed on the host.',
 };
+
+const DOMAIN_RE = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i;
+
+export function isValidDomain(value) {
+    return DOMAIN_RE.test(String(value || '').trim());
+}
 
 export function slugify(value) {
     return String(value || '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '');
@@ -107,6 +114,12 @@ export function useNewServiceForm() {
     const [systemdUnit, setSystemdUnit] = useState('');
     const [managedBy, setManagedBy] = useState('auto');
 
+    const [frameworks, setFrameworks] = useState([]);
+    const [frameworksLoading, setFrameworksLoading] = useState(false);
+    const [frameworkId, setFrameworkId] = useState('laravel');
+    const [frameworkDomain, setFrameworkDomain] = useState('');
+    const [addDatabase, setAddDatabase] = useState(true);
+
     const [uploadFile, setUploadFile] = useState(null);
     const [uploadDragOver, setUploadDragOver] = useState(false);
 
@@ -130,7 +143,16 @@ export function useNewServiceForm() {
 
     const serviceName = nameTouched ? name : detectedServiceName;
 
-    const canSubmit = sourceMode === 'github'
+    const selectedFramework = useMemo(
+        () => frameworks.find(f => f.id === frameworkId) || null,
+        [frameworks, frameworkId],
+    );
+    const frameworkDomainValid = !frameworkDomain.trim() || isValidDomain(frameworkDomain);
+    const frameworkReady = Boolean(selectedFramework?.available && frameworkDomainValid);
+
+    const canSubmit = sourceMode === 'framework'
+        ? Boolean(frameworkReady && serviceName?.length >= 2)
+        : sourceMode === 'github'
         ? Boolean(githubConnection && selectedRepo && serviceName?.length >= 2)
         : sourceMode === 'local'
             ? Boolean(serviceName?.length >= 2 && localPath?.length >= 1)
@@ -139,7 +161,9 @@ export function useNewServiceForm() {
                 : Boolean(normalizedManualRepo && serviceName?.length >= 2);
 
     // Whether step 2 (Connect) has enough input to move on to Review.
-    const canProceedFromConnect = sourceMode === 'github'
+    const canProceedFromConnect = sourceMode === 'framework'
+        ? Boolean(frameworkReady && serviceName?.length >= 2)
+        : sourceMode === 'github'
         ? Boolean(githubConnection && selectedRepo)
         : sourceMode === 'local'
             ? Boolean(localPath?.length >= 1)
@@ -193,6 +217,24 @@ export function useNewServiceForm() {
     }, [t, toast]);
 
     useEffect(() => { loadGithubStatus(); }, [loadGithubStatus]);
+
+    useEffect(() => {
+        if (sourceMode !== 'framework' || frameworks.length > 0) return undefined;
+        let cancelled = false;
+        setFrameworksLoading(true);
+        api.listFrameworks()
+            .then(data => { if (!cancelled) setFrameworks(Array.isArray(data?.frameworks) ? data.frameworks : []); })
+            .catch(err => {
+                if (!cancelled) toastError(toast, t('app.useNewServiceForm.failedToLoadFrameworks', "Couldn't load the framework list."), err);
+            })
+            .finally(() => { if (!cancelled) setFrameworksLoading(false); });
+        return () => { cancelled = true; };
+    }, [sourceMode, frameworks.length, t, toast]);
+
+    // The database checkbox starts from the framework's own default (Laravel: on).
+    useEffect(() => {
+        if (selectedFramework) setAddDatabase(Boolean(selectedFramework.database?.default));
+    }, [selectedFramework]);
 
     useEffect(() => {
         if (!ingressProxyEligible && ingressPlane !== 'nginx') {
@@ -359,7 +401,7 @@ export function useNewServiceForm() {
             navigate(`/templates?install=${encodeURIComponent(templateId)}`, { replace: true });
             return;
         }
-        if (source && ['github', 'manual', 'local', 'upload'].includes(source)) {
+        if (source && ['github', 'manual', 'local', 'upload', 'framework'].includes(source)) {
             selectSource(source);
             setStep(2);
         }
@@ -369,7 +411,9 @@ export function useNewServiceForm() {
     async function handleSubmit(e) {
         if (e) e.preventDefault();
         if (!canSubmit) {
-            const msg = sourceMode === 'github'
+            const msg = sourceMode === 'framework'
+                ? 'Pick a framework, a service name and a valid domain (or leave the domain empty)'
+                : sourceMode === 'github'
                 ? 'Select a GitHub repository'
                 : sourceMode === 'template'
                     ? 'Select a service template'
@@ -406,6 +450,19 @@ export function useNewServiceForm() {
                 }));
                 toast.success(t('app.useNewServiceForm.manualServiceRegistered', 'Manual service registered'));
                 navigate(`/services/${result.app.id}`);
+            } else if (sourceMode === 'framework') {
+                const result = await api.scaffoldFramework({
+                    framework: frameworkId,
+                    name: serviceName,
+                    domain: frameworkDomain.trim() || undefined,
+                    add_database: addDatabase,
+                    ...projectEnvPayload,
+                });
+                window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
+                    detail: { type: 'service-created', appId: result.app?.id },
+                }));
+                toast.success(t('app.useNewServiceForm.frameworkProjectQueued', 'Project queued. Scaffolding and deploying…'));
+                navigate(`/deployments/${result.deploy_job_id}`);
             } else if (sourceMode === 'upload') {
                 const formData = new FormData();
                 formData.append('file', uploadFile);
@@ -481,6 +538,9 @@ export function useNewServiceForm() {
         githubStatus, githubConnection, githubConfigured,
         repos, reposLoading, repoSearch, setRepoSearch, selectedRepo, setSelectedRepo,
         loadGithubRepos, handleConnectGithub, branches, branchesLoading,
+        // framework picker
+        frameworks, frameworksLoading, frameworkId, setFrameworkId, selectedFramework,
+        frameworkDomain, setFrameworkDomain, frameworkDomainValid, addDatabase, setAddDatabase,
         // manual / local / upload
         manualRepoUrl, handleManualRepoChange, normalizedManualRepo,
         localPath, setLocalPath, composeFile, setComposeFile,

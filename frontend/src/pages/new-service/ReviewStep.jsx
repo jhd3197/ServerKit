@@ -19,6 +19,7 @@ import {
 } from './useNewServiceForm';
 import { Button as SharedButton } from '@/components/ui/button';
 import InfoTip from '@/components/InfoTip';
+import { FrameworkReview } from './FrameworkStep';
 
 // Step 3 — Review & deploy. Only renders cards that have real data; the core
 // fields live in one grid, Advanced keeps the genuinely rare bits.
@@ -89,6 +90,17 @@ const ReviewStep = ({ form }) => {
         setSelectedEnvironmentId('');
         setSelectedProjectId(resource.type === 'project' ? resource.id : '');
     };
+
+    if (sourceMode === 'framework') {
+        return (
+            <div className="new-service-page__step new-service-page__review" data-walkthrough="service-review">
+                <div className="new-service-page__step-head">
+                    <h2>{t('app.reviewStep.reviewDeploy', 'Review and deploy')}</h2>
+                </div>
+                <FrameworkReview form={form} />
+            </div>
+        );
+    }
 
     return (
         <div className="new-service-page__step new-service-page__review" data-walkthrough="service-review">

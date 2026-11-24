@@ -1254,7 +1254,8 @@
             "serviceName": "পরিষেবার নাম",
             "systemdUnitOptional": "systemd ইউনিট (ঐচ্ছিক)",
             "uploadTheArchive": "আর্কাইভ আপলোড করুন",
-            "setUpGithubInSettingsFirst": "আগে সেটিংসে GitHub সেট আপ করুন"
+            "setUpGithubInSettingsFirst": "আগে সেটিংসে GitHub সেট আপ করুন",
+            "pickAFramework": "Pick a framework"
         },
         "connectionsHub": {
             "authorizedViaOauth": "OAuth-এর মাধ্যমে অনুমোদিত",
@@ -4062,7 +4063,9 @@
             "uploading": "আপলোড হচ্ছে…",
             "completeTheSourceDetailsFirst": "আগে সোর্সের বিবরণ পূরণ করুন",
             "fillInTheRequiredDetailsFirst": "আগে প্রয়োজনীয় তথ্য পূরণ করুন",
-            "finishThePreviousStepFirst": "আগে আগের ধাপটি শেষ করুন"
+            "finishThePreviousStepFirst": "আগে আগের ধাপটি শেষ করুন",
+            "createAndDeploy": "Create & deploy",
+            "creating": "Creating…"
         },
         "notFound": {
             "browseExtensions": "এক্সটেনশন ব্রাউজ করুন",
@@ -6464,7 +6467,9 @@
             "manualLocal": "ম্যানুয়াল / স্থানীয়",
             "otherGitRemote": "অন্যান্য Git রিমোট",
             "serviceSource": "পরিষেবা উত্স",
-            "uploadZip": "জিপ আপলোড করুন"
+            "uploadZip": "জিপ আপলোড করুন",
+            "startFromFramework": "Start from a framework",
+            "startFromFrameworkSub": "Scaffold Laravel with its database already wired"
         },
         "sourceTree": {
             "collapse": "সঙ্কুচিত",
@@ -7404,7 +7409,9 @@
             "repositoryServiceCreatedDeploying": "সংগ্রহস্থল পরিষেবা তৈরি হয়েছে — স্থাপন করা হচ্ছে...",
             "serviceCreatedWithoutAutoDeploy": "স্বয়ংক্রিয়ভাবে স্থাপন ছাড়াই পরিষেবা তৈরি করা হয়েছিল — পরিষেবা পৃষ্ঠা থেকে ম্যানুয়ালি শুরু করুন।",
             "staticSite": "স্ট্যাটিক সাইট",
-            "uploadServiceCreated": "আপলোড পরিষেবা তৈরি করা হয়েছে"
+            "uploadServiceCreated": "আপলোড পরিষেবা তৈরি করা হয়েছে",
+            "failedToLoadFrameworks": "Couldn't load the framework list.",
+            "frameworkProjectQueued": "Project queued. Scaffolding and deploying…"
         },
         "useWidgetData": {
             "localThisServer": "স্থানীয় (এই সার্ভার)",
@@ -7965,6 +7972,25 @@
         "changeBar": {
             "nothingToRedo": "পুনরায় করার কিছু নেই",
             "nothingToUndo": "পূর্বাবস্থায় ফেরানোর কিছু নেই"
+        },
+        "frameworkStep": {
+            "addMysql": "Add MySQL",
+            "addMysqlHelp": "Installs a private MySQL service and wires its credentials into the app. No password to type.",
+            "database": "Database",
+            "domain": "Domain",
+            "framework": "Framework",
+            "invalidDomain": "Enter a valid domain such as app.example.com, or leave it empty.",
+            "loading": "Loading frameworks…",
+            "noDatabase": "None (SQLite inside the container)",
+            "noDomain": "None. Served on the assigned port.",
+            "none": "No frameworks available.",
+            "optional": "(optional)",
+            "stepDatabase": "Provision the database",
+            "stepDeploy": "Build the image and deploy",
+            "stepEnv": "Generate .env and APP_KEY, wire database credentials",
+            "stepMigrate": "Run migrations once the database is ready",
+            "stepScaffold": "Scaffold the project with Composer",
+            "whatServerkitWillDo": "What ServerKit will do"
         }
     },
     "auth": {

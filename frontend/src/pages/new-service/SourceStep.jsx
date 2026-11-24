@@ -1,9 +1,9 @@
-import { GitBranch, FolderOpen, FileArchive } from 'lucide-react';
+import { GitBranch, FolderOpen, FileArchive, Sparkles } from 'lucide-react';
 import { SiGithub } from 'react-icons/si';
 import { useTranslation } from 'react-i18next';
 import { Button as SharedButton } from '@/components/ui/button';
 
-// Step 1 — Source. Four clean radio-cards; selecting one advances to Connect.
+// Step 1 — Source. Five clean radio-cards; selecting one advances to Connect.
 //
 // No "Deploy Template" card: a curated template already declares its repo,
 // branch, build method and port, so this wizard's detect-and-confirm steps had
@@ -14,10 +14,19 @@ const SOURCES = [
     { mode: 'manual', Icon: GitBranch, titleKey: 'app.sourceStep.otherGitRemote', title: 'Other Git remote', sub: 'GitLab, Bitbucket, Gitea, or SSH' },
     { mode: 'local', Icon: FolderOpen, titleKey: 'app.sourceStep.manualLocal', title: 'Manual / local', sub: 'Register an app already on the server' },
     { mode: 'upload', Icon: FileArchive, titleKey: 'app.sourceStep.uploadZip', title: 'Upload ZIP', sub: 'Deploy or update from a zip archive' },
+    { mode: 'framework', Icon: Sparkles, titleKey: 'app.sourceStep.startFromFramework', title: 'Start from a framework', sub: 'Scaffold Laravel with its database already wired' },
 ];
 
 const SourceStep = ({ form }) => {
     const { t } = useTranslation();
+    // The older cards render their English text directly; the framework card
+    // is the only one translated here.
+    const translated = {
+        framework: {
+            title: t('app.sourceStep.startFromFramework', 'Start from a framework'),
+            sub: t('app.sourceStep.startFromFrameworkSub', 'Scaffold Laravel with its database already wired'),
+        },
+    };
     const choose = (mode) => {
         form.selectSource(mode);
         form.setStep(2);
@@ -42,8 +51,8 @@ const SourceStep = ({ form }) => {
                             <Icon size={20} />
                         </span>
                         <span className="new-service-page__source-text">
-                            <strong>{title}</strong>
-                            <span>{sub}</span>
+                            <strong>{translated[mode]?.title ?? title}</strong>
+                            <span>{translated[mode]?.sub ?? sub}</span>
                         </span>
                     </SharedButton>
                 ))}

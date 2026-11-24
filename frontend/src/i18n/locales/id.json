@@ -1254,7 +1254,8 @@
             "serviceName": "Nama layanan",
             "systemdUnitOptional": "Unit systemd (opsional)",
             "uploadTheArchive": "Unggah arsip",
-            "setUpGithubInSettingsFirst": "Siapkan GitHub di Pengaturan terlebih dahulu"
+            "setUpGithubInSettingsFirst": "Siapkan GitHub di Pengaturan terlebih dahulu",
+            "pickAFramework": "Pick a framework"
         },
         "connectionsHub": {
             "authorizedViaOauth": "Diotorisasi melalui OAuth",
@@ -4062,7 +4063,9 @@
             "uploading": "Mengunggah…",
             "completeTheSourceDetailsFirst": "Lengkapi detail sumber terlebih dahulu",
             "fillInTheRequiredDetailsFirst": "Isi detail yang diperlukan terlebih dahulu",
-            "finishThePreviousStepFirst": "Selesaikan langkah sebelumnya terlebih dahulu"
+            "finishThePreviousStepFirst": "Selesaikan langkah sebelumnya terlebih dahulu",
+            "createAndDeploy": "Create & deploy",
+            "creating": "Creating…"
         },
         "notFound": {
             "browseExtensions": "Telusuri Ekstensi",
@@ -6464,7 +6467,9 @@
             "manualLocal": "Manual / Lokal",
             "otherGitRemote": "Remote Git lainnya",
             "serviceSource": "Sumber layanan",
-            "uploadZip": "Unggah ZIP"
+            "uploadZip": "Unggah ZIP",
+            "startFromFramework": "Start from a framework",
+            "startFromFrameworkSub": "Scaffold Laravel with its database already wired"
         },
         "sourceTree": {
             "collapse": "Runtuh",
@@ -7404,7 +7409,9 @@
             "repositoryServiceCreatedDeploying": "Layanan repositori dibuat — menerapkan…",
             "serviceCreatedWithoutAutoDeploy": "Layanan dibuat tanpa penerapan otomatis — memulainya secara manual dari halaman layanan.",
             "staticSite": "Situs statis",
-            "uploadServiceCreated": "Layanan unggah dibuat"
+            "uploadServiceCreated": "Layanan unggah dibuat",
+            "failedToLoadFrameworks": "Couldn't load the framework list.",
+            "frameworkProjectQueued": "Project queued. Scaffolding and deploying…"
         },
         "useWidgetData": {
             "localThisServer": "Lokal (server ini)",
@@ -7965,6 +7972,25 @@
         "changeBar": {
             "nothingToRedo": "Tidak ada yang bisa diulang",
             "nothingToUndo": "Tidak ada yang bisa dibatalkan"
+        },
+        "frameworkStep": {
+            "addMysql": "Add MySQL",
+            "addMysqlHelp": "Installs a private MySQL service and wires its credentials into the app. No password to type.",
+            "database": "Database",
+            "domain": "Domain",
+            "framework": "Framework",
+            "invalidDomain": "Enter a valid domain such as app.example.com, or leave it empty.",
+            "loading": "Loading frameworks…",
+            "noDatabase": "None (SQLite inside the container)",
+            "noDomain": "None. Served on the assigned port.",
+            "none": "No frameworks available.",
+            "optional": "(optional)",
+            "stepDatabase": "Provision the database",
+            "stepDeploy": "Build the image and deploy",
+            "stepEnv": "Generate .env and APP_KEY, wire database credentials",
+            "stepMigrate": "Run migrations once the database is ready",
+            "stepScaffold": "Scaffold the project with Composer",
+            "whatServerkitWillDo": "What ServerKit will do"
         }
     },
     "auth": {
