@@ -209,7 +209,8 @@ class TwoFactorSetup:
         db.session.refresh(self.user, with_for_update=True)
 
         if self.user.totp_enabled:
-            raise ValueError('2FA is already enabled')
+            from app.exceptions import ConflictError
+            raise ConflictError('2FA is already enabled')
 
         secret = self.user.totp_secret
         if regenerate or not secret:

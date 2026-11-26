@@ -9,6 +9,8 @@ from werkzeug.security import generate_password_hash
 from app import db
 from app.models import User
 from app.services.totp_service import TOTPService, TwoFactorSetup
+from app.exceptions import ConflictError
+from factories import headers_for
 
 
 @pytest.fixture
@@ -211,25 +213,20 @@ def test_regenerate_mints_new_secret_only_while_unconfirmed(user):
     second = setup.initiate_setup(regenerate=True)['secret']
     assert second != first and user.totp_secret == second
     setup.confirm_setup(TOTPService.get_current_code(second))
-    with pytest.raises(ValueError):
+    with pytest.raises(ConflictError):
         setup.initiate_setup(regenerate=True)
     assert user.totp_secret == second
 
 
-def _headers(user):
-    from flask_jwt_extended import create_access_token
-    return {'Authorization': f'Bearer {create_access_token(identity=user.id)}'}
-
-
 def test_setup_endpoint_reuses_secret_until_regenerate(client, user):
     url = '/api/v1/auth/2fa/setup'
-    a = client.post(url, headers=_headers(user)).get_json()
-    b = client.post(url, headers=_headers(user)).get_json()
+    a = client.post(url, headers=headers_for(user)).get_json()
+    b = client.post(url, headers=headers_for(user)).get_json()
     assert a['secret'] == b['secret'] and a['uri'] == b['uri']
-    assert client.get('/api/v1/auth/2fa/status', headers=_headers(user)).get_json()['enabled'] is False
-    c = client.post(url, json={'regenerate': True}, headers=_headers(user)).get_json()
+    assert client.get('/api/v1/auth/2fa/status', headers=headers_for(user)).get_json()['enabled'] is False
+    c = client.post(url, json={'regenerate': True}, headers=headers_for(user)).get_json()
     assert c['secret'] != a['secret']
-    confirm = client.post(url + '/confirm', headers=_headers(user),
+    confirm = client.post(url + '/confirm', headers=headers_for(user),
                           json={'code': TOTPService.get_current_code(c['secret'])})
     assert confirm.status_code == 200
 
@@ -239,7 +236,7 @@ def test_setup_endpoint_rejects_confirmed_user_without_rotating(client, user):
     secret = user.totp_secret
     TwoFactorSetup(user).confirm_setup(TOTPService.get_current_code(secret))
     for body in (None, {'regenerate': True}):
-        r = client.post('/api/v1/auth/2fa/setup', json=body, headers=_headers(user))
+        r = client.post('/api/v1/auth/2fa/setup', json=body, headers=headers_for(user))
         assert r.status_code == 400
     db.session.refresh(user)
     assert user.totp_secret == secret and user.totp_enabled
