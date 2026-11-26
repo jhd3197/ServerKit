@@ -536,7 +536,16 @@ class SiteDomainService:
         domains (nothing to publish), ``(None, reason)`` when it can't be
         published via host nginx.
         """
+        from app.models.application import is_host_managed
         from app.models.domain import Domain
+
+        # An adopted host site already has a vhost someone else wrote, under a
+        # file name that is not the app's. Rendering one here would publish a
+        # second server block for the same names — or, through drift repair,
+        # replace the one that is serving traffic.
+        if is_host_managed(app):
+            return None, ('This site is host-managed: ServerKit records its domains '
+                          'but does not rewrite its nginx config.')
 
         # query_active, not query: Domain is soft-deleted now, so a plain query
         # returns tombstones and this renderer would write a deleted domain

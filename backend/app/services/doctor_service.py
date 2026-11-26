@@ -705,6 +705,37 @@ class DoctorService:
             return [_check('extensions.checks', 'Extension checks', 'warn',
                            f'Could not collect extension checks: {e}')]
 
+    @classmethod
+    def _unmanaged_site_checks(cls):
+        """Sites host nginx is serving that no application accounts for.
+
+        Such a site is live but invisible to the panel: no monitoring,
+        backups, SSL status or logs, while its database may well be listed
+        under Databases. One warning per site; a host with none adds nothing.
+        Not repairable — adopting is the operator's call, and it is one
+        command (or one click) away in the detail."""
+        try:
+            from app.services import site_adoption_service
+            sites = site_adoption_service.unmanaged()
+        except Exception as e:  # noqa: BLE001
+            logger.warning('unmanaged-site doctor section failed: %s', e)
+            return [_check('sites.unmanaged', 'Unmanaged sites', 'warn',
+                           f'Could not read the host nginx config: {e}')]
+        checks = []
+        for site in sites:
+            if site['kind'] == site_adoption_service.KIND_REDIRECT:
+                continue  # a redirect-only vhost has no site behind it
+            if site['adoptable']:
+                detail = (f"Served by host nginx ({site['vhost_file']}) but not registered "
+                          f"in ServerKit. Adopt it from Services, or run: "
+                          f"serverkit adopt-site {site['primary_domain']} --apply")
+            else:
+                detail = (f"Served by host nginx ({site['vhost_file']}) but not registered "
+                          f"in ServerKit. {site['reason']}")
+            checks.append(_check(f"sites.unmanaged.{site['id']}",
+                                 f"Unmanaged site: {site['primary_domain']}", 'warn', detail))
+        return checks
+
     # ------------------------------------------------------------------ #
     # Sweep
     # ------------------------------------------------------------------ #
@@ -718,6 +749,7 @@ class DoctorService:
         checks = []
         checks += cls._drift_checks()
         checks += cls._service_checks()
+        checks += cls._unmanaged_site_checks()
         checks += cls._dns_checks()
         checks += cls._backup_proof_checks()
         checks.append(cls._cert_check())

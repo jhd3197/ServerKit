@@ -87,6 +87,65 @@ When you're ready to move a site onto ServerKit:
    checklist: what to stop on the old box, what to keep until TTLs expire, and
    when it's safe to wipe.
 
+## Adopt in place — a site that already runs on this server
+
+Sometimes the site is already here: set up by hand, by a script, or by a
+migration that wrote its own nginx and PHP-FPM config. It serves traffic, but
+ServerKit has no record of it, so it gets no monitoring, backups, SSL status or
+logs — while its database may well be listed under Databases.
+
+Adopting registers such a site **as it is**. ServerKit reads the live nginx
+config, the PHP-FPM pools, the certificate and (for WordPress) `wp-config.php`,
+then records a service, its domains and its database link. **It writes nothing
+to the server**: the vhost, the pool, the certificate and the files stay
+exactly as they are. The database password is never read.
+
+```bash
+serverkit adopt-site                      # every site nginx serves, and its state
+serverkit adopt-site example.com          # dry run: what would be recorded
+serverkit adopt-site example.com --apply  # register it
+```
+
+In the panel, **Services** shows an **Adopt** button whenever this server is
+serving sites that are not managed yet, and the doctor reports each one.
+
+What adoption covers:
+
+| Site | Adopted as |
+|------|------------|
+| nginx + PHP-FPM | a PHP service (any installed PHP version, any pool) |
+| nginx + PHP-FPM + `wp-config.php` | a WordPress service, with its database linked |
+| nginx serving files | a static service |
+| nginx proxying to a port | not adopted here — register the process behind it as a Docker Compose or systemd service |
+
+An adopted service is **host-managed**. ServerKit observes and records it but
+never rewrites or removes its config:
+
+- Adding or removing a domain updates the record only. Edit the vhost yourself.
+- Start, stop and restart are refused: the site is served by the server's
+  shared nginx and PHP-FPM, and there is no per-site runtime to control.
+- Deleting the service forgets it. The site keeps serving.
+
+### Migrating a site onto this server by hand
+
+If you move a site yourself instead of using the import wizard, finish by
+adopting it so the migration does not bypass ServerKit:
+
+1. **Copy the files** to their document root and set ownership to the PHP-FPM
+   pool user.
+2. **Copy the database**: create the database and user, import the dump, and
+   point the site's config at it.
+3. **Write the nginx vhost and PHP-FPM pool**, then `nginx -t` and reload. Keep
+   the ACME location ahead of any dotfile deny:
+   `location ^~ /.well-known/acme-challenge/ { root /var/www/certbot; }`.
+4. **Check it on a preview hostname** (or a hosts-file entry) before touching
+   public DNS.
+5. **Issue the certificate** once the name resolves here, or use a DNS
+   challenge to issue it ahead of the cutover.
+6. **Cut DNS over**: lower the TTL a step ahead, switch the record, verify, and
+   keep the old server up until the old TTL has expired.
+7. **Adopt the site**: `serverkit adopt-site <domain> --apply`.
+
 ## 3. Manage — full takeover on a clean box
 
 Today's normal mode: ServerKit owns the box and manages the web stack end to

@@ -28,6 +28,7 @@ import shutil
 
 from app import db
 from app.models import Application
+from app.models.application import is_host_managed
 from app.services.cron_service import CronService
 
 logger = logging.getLogger(__name__)
@@ -206,12 +207,18 @@ def suspend_application(app, user_id=None):
         except Exception as exc:                        # noqa: BLE001
             results['docker'] = {'error': str(exc)}
 
-    try:
-        NginxService.disable_site(app.name)
-        NginxService.delete_site(app.name)
-        results['nginx'] = {'success': True}
-    except Exception as exc:                            # noqa: BLE001
-        results['nginx'] = {'error': str(exc)}
+    if is_host_managed(app):
+        # Deleting an adopted site forgets it; it does not take it offline.
+        # The vhost was never ours, and a site named like its vhost file
+        # would otherwise lose its live config here.
+        results['nginx'] = {'success': True, 'skipped': 'host-managed'}
+    else:
+        try:
+            NginxService.disable_site(app.name)
+            NginxService.delete_site(app.name)
+            results['nginx'] = {'success': True}
+        except Exception as exc:                        # noqa: BLE001
+            results['nginx'] = {'error': str(exc)}
 
     try:
         results['cron'] = {'suspended': CronService.suspend_for_application(app.id)}

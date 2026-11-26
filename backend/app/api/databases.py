@@ -879,7 +879,9 @@ def protect_managed_database(managed_id):
     if not managed:
         raise not_found('database')
     data = json_object()
-    policy = ManagedDatabaseService.protect(managed, fields=data.get('policy'))
+    # Admin-only route: an admin may set the policy's backup hooks.
+    policy = ManagedDatabaseService.protect(managed, fields=data.get('policy'),
+                                            allow_host_commands=True)
     return jsonify({'policy': policy.to_dict()}), 201
 
 

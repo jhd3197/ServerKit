@@ -88,7 +88,7 @@ class Application(JsonColumnMixin, TimestampMixin, SoftDeleteMixin, db.Model):
     # Manual / local service configuration
     compose_file = db.Column(db.String(200), nullable=True)
     systemd_unit = db.Column(db.String(100), nullable=True)
-    managed_by = db.Column(db.String(20), nullable=True)  # 'docker_compose', 'systemd'
+    managed_by = db.Column(db.String(20), nullable=True)  # 'docker_compose', 'systemd', 'host'
 
     # Ingress plane: which reverse proxy is expected to serve this app —
     # 'nginx' (host Nginx, the default) or 'proxy_stack' (Dockerized
@@ -185,6 +185,19 @@ class Application(JsonColumnMixin, TimestampMixin, SoftDeleteMixin, db.Model):
         never collide — or ``None`` when it is free."""
         from app.utils.slug import app_name_clash_error
         return app_name_clash_error(cls.query.filter_by(name=name).first(), name, suffix)
+
+    # A site that was already running on the host when the panel adopted it
+    # (nginx + PHP-FPM, or static files): its vhost, pool and certificate
+    # were written by someone else and stay theirs.
+    MANAGED_BY_HOST = 'host'
+
+    @property
+    def is_host_managed(self):
+        """True for an adopted host site. The panel records and observes it
+        but must never write, rewrite or remove its running config — every
+        path that touches nginx or the runtime for an app checks this (through
+        :func:`is_host_managed`, which also accepts a stand-in object)."""
+        return is_host_managed(self)
 
     @property
     def live_domains(self):
@@ -350,3 +363,14 @@ def _clear_cron_association(mapper, connection, target):
         CronService.clear_application(target.id)
     except Exception:  # noqa: BLE001 - cleanup must not block app deletion
         pass
+
+
+def is_host_managed(app):
+    """Whether ``app`` is an adopted host site (``managed_by == 'host'``).
+
+    A function rather than only the property so the services that guard on
+    it can be handed any app-shaped object: a plain attribute comparison
+    answers False for one that has no ``managed_by``, where reading a
+    property off a stand-in would raise or, on a mock, read as true.
+    """
+    return getattr(app, 'managed_by', None) == Application.MANAGED_BY_HOST

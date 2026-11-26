@@ -600,6 +600,15 @@ server {
     root /var/www/static;
 }
 EOF
+cat > "$t/nginx/sites-enabled/php-site.conf" <<'EOF'
+server {
+    server_name php.example.com;
+    root /var/www/php-site;
+    location ~ \.php$ {
+        fastcgi_pass unix:/run/php/php8.3-fpm.sock;
+    }
+}
+EOF
 cat > "$t/rhel/conf.d/confd.conf" <<'EOF'
 server {
     server_name confd.example.com;
@@ -614,9 +623,11 @@ out2="$( set -Eeuo pipefail; NGINX_DIR="$t/rhel"; cmd_list_sites 2>&1 )"
 rc2=$?
 if [ "$rc" -eq 0 ] && [ "$rc2" -eq 0 ] \
    && printf '%s' "$out" | grep 'proxied.example.com' | grep -q 'port 4100' \
-   && printf '%s' "$out" | grep 'static.example.com' | grep -q 'port static' \
+   && printf '%s' "$out" | grep 'static.example.com' | grep -q 'static files' \
+   && printf '%s' "$out" | grep 'php.example.com' | grep -q 'php-fpm 8.3' \
+   && ! printf '%s' "$out" | grep -q 'port static' \
    && printf '%s' "$out2" | grep 'confd.example.com' | grep -q 'port 4200'; then
-    ok "list-sites extracts ports portably and lists conf.d layouts"
+    ok "list-sites extracts ports portably, names PHP-FPM sites, and lists conf.d layouts"
 else
     bad "list-sites broken: rc=$rc/$rc2 out=[$out] out2=[$out2]"
 fi
@@ -725,7 +736,7 @@ fi
 t="$WORK/t18"; mkdir -p "$t/install"
 unknown=""
 for c in manifest services apps repair login-url support-bundle \
-         db-migrate db-status db-history panel-status panel-doctor; do
+         db-migrate db-status db-history panel-status panel-doctor adopt-site; do
     out="$(SERVERKIT_DIR="$t/install" bash "$CLI" "$c" 2>&1)" || true
     if printf '%s' "$out" | grep -q 'Unknown command'; then
         unknown="$unknown $c"
@@ -829,10 +840,91 @@ check_args 'services list --json'                  services list --json
 check_args 'status --json'                         panel-status --json
 check_args 'doctor --repair --yes'                 panel-doctor --repair --yes
 check_args 'connect status --json'                 connect status --json
+check_args 'adopt-site example.com --apply --json' adopt-site example.com --apply --json
 if [ -z "$t20_fail" ]; then
     ok "executed-mode flag passthrough: wrapper commands reach cli.py verbatim"
 else
     bad "flags lost between wrapper and cli.py:$t20_fail"
+fi
+
+# --------------------------------------------------------------------------
+# T21 — a help flag on a plain-positional subcommand must print usage and
+# change nothing (issue #269). `add-site --help` used to write a vhost for a
+# site named "--help"; `setup-proxy --help` reran the proxy setup and reset
+# the panel's certificate paths. Runs through the real executed-mode dispatch
+# with the root check out of the way, so "it stopped early" can only mean the
+# help guard and not a missing-root refusal.
+t="$WORK/t21"; mkdir -p "$t/install/scripts" "$t/nginx/sites-available" "$t/nginx/sites-enabled"
+cat > "$t/install/scripts/setup-nginx-proxy.sh" <<EOF
+#!/usr/bin/env bash
+echo ran > "$t/proxy-setup-ran"
+EOF
+chmod +x "$t/install/scripts/setup-nginx-proxy.sh"
+# The dispatch runs with the script's own functions, so the root check is
+# neutralised by a wrapper that sources the CLI's functions and replays the
+# dispatch block verbatim.
+cat > "$t/run.sh" <<EOF
+#!/usr/bin/env bash
+source "$CLI"
+check_root() { :; }
+eval "\$(sed -n '/^if \[ \$# -gt 1 \] && \[\[ " \$PLAIN_COMMANDS "/,\$p' "$CLI")"
+EOF
+run_plain() {
+    SERVERKIT_DIR="$t/install" SERVERKIT_NGINX_DIR="$t/nginx" bash "$t/run.sh" "$@" 2>&1 </dev/null
+}
+t21_fail=""
+for args in "add-site --help" "add-site -h" "add-site example.com --help" \
+            "remove-site --help" "setup-proxy --help" "setup-proxy -h" \
+            "doctor --help" "restore-db --help" "factory-reset --help"; do
+    # shellcheck disable=SC2086
+    out="$(run_plain $args)"; rc=$?
+    cmd="${args%% *}"
+    if [ "$rc" -ne 0 ] || ! printf '%s' "$out" | grep -q "^Usage: serverkit $cmd"; then
+        t21_fail="$t21_fail [$args → rc=$rc: $(printf '%s' "$out" | head -n 2 | tr '\n' ' ')]"
+    fi
+done
+written="$(find "$t/nginx" -mindepth 2 2>/dev/null | tr '
+' ' ')"
+if [ -n "$written" ]; then
+    t21_fail="$t21_fail [a help flag wrote nginx config: $written]"
+fi
+[ ! -e "$t/proxy-setup-ran" ] || t21_fail="$t21_fail [setup-proxy --help ran the proxy setup]"
+if [ -z "$t21_fail" ]; then
+    ok "--help on a plain subcommand prints its usage and touches nothing"
+else
+    bad "--help had side effects or no usage:$t21_fail"
+fi
+
+# T21b — the guard must not swallow the real command: the same wrapper still
+# writes the vhost and runs the proxy setup when no help flag is present.
+out="$(run_plain add-site t21.example.com 3210)"
+run_plain setup-proxy >/dev/null
+if [ -f "$t/nginx/sites-available/t21.example.com.conf" ] \
+   && grep -q 'proxy_pass http://127.0.0.1:3210;' "$t/nginx/sites-available/t21.example.com.conf" \
+   && [ -e "$t/proxy-setup-ran" ]; then
+    ok "add-site and setup-proxy still do their work without a help flag"
+else
+    bad "the help guard broke the real commands: [$out]"
+fi
+
+# T21c — a site name that is not a hostname (a stray flag, a path) is refused
+# before anything is written or removed.
+t21c_fail=""
+for name in "--frobnicate" "../etc/passwd" "a b" ".hidden"; do
+    out="$(run_plain add-site "$name")"; rc=$?
+    [ "$rc" -ne 0 ] || t21c_fail="$t21c_fail [add-site '$name' exited 0]"
+    out="$(run_plain remove-site "$name")"; rc=$?
+    [ "$rc" -ne 0 ] || t21c_fail="$t21c_fail [remove-site '$name' exited 0]"
+done
+out="$(run_plain add-site t21c.example.com notaport)"; rc=$?
+[ "$rc" -ne 0 ] || t21c_fail="$t21c_fail [add-site with a non-numeric port exited 0]"
+if [ "$(ls "$t/nginx/sites-available" | tr '\n' ' ')" != "t21.example.com.conf " ]; then
+    t21c_fail="$t21c_fail [unexpected vhosts: $(ls "$t/nginx/sites-available" | tr '\n' ' ')]"
+fi
+if [ -z "$t21c_fail" ]; then
+    ok "add-site/remove-site refuse a name that is not a hostname"
+else
+    bad "invalid site names got through:$t21c_fail"
 fi
 
 # --------------------------------------------------------------------------

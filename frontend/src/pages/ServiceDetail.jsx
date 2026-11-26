@@ -476,7 +476,7 @@ const ServiceDetail = () => {
                         {service.managed_by && (
                             <>
                                 <span className="svc-detail__repo-arrow">&rarr;</span>
-                                <span className="svc-detail__repo-branch">{service.managed_by === 'docker_compose' ? t('app.serviceDetail.dockerCompose', 'Docker Compose') : 'systemd'}</span>
+                                <span className="svc-detail__repo-branch">{managedByLabel(service.managed_by, t)}</span>
                             </>
                         )}
                     </span>
@@ -584,6 +584,14 @@ const ServiceDetail = () => {
         </DetailPage>
     );
 };
+
+// How a locally registered service is run. `host` is a site that was already
+// being served by this server's nginx when it was adopted.
+function managedByLabel(managedBy, t) {
+    if (managedBy === 'docker_compose') return t('app.serviceDetail.dockerCompose', 'Docker Compose');
+    if (managedBy === 'host') return t('app.serviceDetail.hostManaged', 'Host nginx');
+    return 'systemd';
+}
 
 function extractRepoDisplay(url) {
     if (!url) return '';

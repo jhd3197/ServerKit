@@ -13,7 +13,7 @@ from typing import Dict, List, Optional, Any
 from sqlalchemy import func, and_
 
 from app import db
-from app.models.server import ServerMetrics
+from app.models.server import Server, ServerMetrics
 
 logger = logging.getLogger(__name__)
 
@@ -284,28 +284,38 @@ class ServerMetricsService:
             return deleted
 
     @classmethod
-    def get_retention_stats(cls) -> Dict[str, Any]:
-        """Get statistics about metrics retention.
+    def get_retention_stats(cls, user) -> Dict[str, Any]:
+        """Get statistics about metrics retention, over the servers *user*
+        can access (admins: all of them).
 
         Returns:
             Dict with record counts, date ranges, and storage info
         """
         try:
-            # Total count
-            total_count = ServerMetrics.query.count()
-
-            # Count per server
-            server_counts = db.session.query(
+            from app.services.workspace_service import WorkspaceService
+            metrics = ServerMetrics.query
+            counts = db.session.query(
                 ServerMetrics.server_id,
                 func.count().label('count')
-            ).group_by(ServerMetrics.server_id).all()
+            )
+            if not user.is_admin:
+                visible = WorkspaceService.filter_accessible_servers(
+                    db.session.query(Server.id), user)
+                metrics = metrics.filter(ServerMetrics.server_id.in_(visible))
+                counts = counts.filter(ServerMetrics.server_id.in_(visible))
+
+            # Total count
+            total_count = metrics.count()
+
+            # Count per server
+            server_counts = counts.group_by(ServerMetrics.server_id).all()
 
             # Date range
-            oldest = ServerMetrics.query.order_by(
+            oldest = metrics.order_by(
                 ServerMetrics.timestamp.asc()
             ).first()
 
-            newest = ServerMetrics.query.order_by(
+            newest = metrics.order_by(
                 ServerMetrics.timestamp.desc()
             ).first()
 

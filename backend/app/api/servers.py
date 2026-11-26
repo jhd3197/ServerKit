@@ -90,14 +90,41 @@ def _agent_failure_status(result):
     return {'AGENT_OFFLINE': 503, 'PERMISSION_DENIED': 403}.get(result.get('code'), 500)
 
 
+_READ_METHODS = ('GET', 'HEAD', 'OPTIONS')
+
+
 def _get_operable_server(server_id):
     """The server, if the current user may operate it; 404 otherwise, so a
-    non-member can't tell a foreign workspace's server from a missing one."""
+    non-member can't tell a foreign workspace's server from a missing one.
+
+    On a mutating request the caller must also be able to WRITE in the
+    server's workspace: a member whose workspace role is `viewer` reads its
+    servers but may not change them, whatever their global role
+    (GHSA-m72h-hc66-5jwx). Checked here, at the one door every server route
+    goes through, so a new mutating route cannot forget it."""
     from app.services.workspace_service import WorkspaceService
-    server = WorkspaceService.get_accessible_server(get_current_user(), server_id)
+    user = get_current_user()
+    server = WorkspaceService.get_accessible_server(user, server_id)
     if server is None:
         raise not_found('server')
+    if (request.method not in _READ_METHODS and server.workspace_id
+            and not WorkspaceService.can_write_in_workspace(user, server.workspace_id)):
+        raise PermissionDeniedError('You have read-only access to this workspace')
     return server
+
+
+def _group_dict(group, include_servers=False):
+    """A server group as the current user sees it: a group is a fleet-wide
+    label, but its members and their count stop at the servers the caller
+    can access, so a group never lists a foreign workspace's servers."""
+    from app.services.workspace_service import WorkspaceService
+    user = get_current_user()
+    servers = [s for s in group.servers if WorkspaceService.can_access_server(user, s)]
+    result = group.to_dict()
+    result['server_count'] = len(servers)
+    if include_servers:
+        result['servers'] = [s.to_dict() for s in servers]
+    return result
 
 
 def _ip_pattern_errors(allowed_ips):
@@ -217,9 +244,10 @@ PERMISSION_PROFILES = {
 @servers_bp.route('/groups', methods=['GET'])
 @jwt_required()
 def list_groups():
-    """List all server groups"""
+    """List all server groups. Groups are fleet-wide labels; the member
+    count is of the servers the caller can access."""
     groups = ServerGroup.query.all()
-    return jsonify([g.to_dict() for g in groups])
+    return jsonify([_group_dict(g) for g in groups])
 
 
 @servers_bp.route('/groups', methods=['POST'])
@@ -253,7 +281,7 @@ def get_group(group_id):
     if not group:
         return jsonify({'error': 'Group not found'}), 404
 
-    return jsonify(group.to_dict(include_servers=True))
+    return jsonify(_group_dict(group, include_servers=True))
 
 
 @servers_bp.route('/groups/<group_id>', methods=['PUT'])
@@ -1300,7 +1328,7 @@ def get_server_metrics_aggregated(server_id):
 @developer_required
 def get_metrics_retention_stats():
     """Get metrics retention statistics."""
-    result = ServerMetricsService.get_retention_stats()
+    result = ServerMetricsService.get_retention_stats(get_current_user())
     return jsonify(result)
 
 

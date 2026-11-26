@@ -15,7 +15,7 @@ server {
     listen 80;
     server_name example.builditdesign.com;  # Change this to your domain
 
-    location /.well-known/acme-challenge/ {
+    location ^~ /.well-known/acme-challenge/ {
         root /var/www/certbot;
     }
 

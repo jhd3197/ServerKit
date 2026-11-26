@@ -104,7 +104,10 @@ def test_fleet_overview_reports_mismatch_counts(app):
         s = _make_server(app, 'fleet-srv')
         ProxyStackService.switch(s.id, 'caddy')
         _make_app(s.id, 'php', name='php-site')   # nginx plane on a caddy server -> mismatch
-        rows = {r['server_id']: r for r in ProxyStackService.fleet_overview()}
+        from app import db
+        from factories import make_user
+        admin = make_user(db, role='admin')
+        rows = {r['server_id']: r for r in ProxyStackService.fleet_overview(admin)}
         row = rows[s.id]
         assert row['proxy_type'] == 'caddy'
         assert row['app_count'] == 1

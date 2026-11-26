@@ -854,6 +854,122 @@ def _api_client(with_token=True):
     return ApiClient(token=token)
 
 
+@cli.command('adopt-site')
+@click.argument('site', required=False)
+@click.option('--apply', 'apply_', is_flag=True,
+              help='Register the site. Without it, only show what would be recorded.')
+@click.option('--name', default=None, help='Service name (default: derived from the domain)')
+@click.option('--json', 'as_json', is_flag=True, help='Output machine-readable JSON')
+def adopt_site(site, apply_, name, as_json):
+    """Register a site that already runs on this server.
+
+    With no SITE, lists every site host nginx serves and whether ServerKit
+    manages it. With a SITE (a domain or a vhost file name), shows what
+    adopting it would record: a dry run. Add --apply to register it.
+
+    Nothing on the server is rewritten either way: adopting records the
+    running nginx vhost, PHP-FPM pool, database and certificate as they are.
+    """
+    from app.exceptions import ApplicationError
+    from app.services import site_adoption_service
+
+    app = create_app()
+    with app.app_context():
+        if not site:
+            if apply_:
+                _fail('--apply needs a site: serverkit adopt-site <domain> --apply')
+            sites = site_adoption_service.discover()
+            if as_json:
+                _echo_json({'sites': sites})
+                return
+            if not sites:
+                click.echo('\n  Host nginx is not serving any sites.\n')
+                return
+            click.echo(f"\n{'Domain':<34} {'Type':<10} {'PHP':<6} {'SSL':<4} {'State'}")
+            click.echo('-' * 90)
+            for found in sites:
+                if found['linked_app']:
+                    state = f"managed as {found['linked_app']['name']}"
+                elif found['adoptable']:
+                    state = 'not managed (adoptable)'
+                else:
+                    state = f"not managed: {found['reason']}"
+                click.echo(
+                    f"{found['primary_domain']:<34} "
+                    f"{(found['app_type'] or found['kind']):<10} "
+                    f"{((found['php'] or {}).get('version') or '-'):<6} "
+                    f"{('yes' if found['ssl']['enabled'] else 'no'):<4} "
+                    f"{state}"
+                )
+            adoptable = sum(1 for found in sites if found['adoptable'])
+            click.echo(f"\n{adoptable} site(s) can be adopted: serverkit adopt-site <domain>\n")
+            return
+
+        found = site_adoption_service.find(site)
+        if found is None:
+            _fail(f'No site served by host nginx matches "{site}". '
+                  "Run 'serverkit adopt-site' to list them.")
+        plan = site_adoption_service.plan(found, name)
+
+        if not apply_:
+            if as_json:
+                _echo_json({'dry_run': True, 'adoptable': found['adoptable'],
+                            'reason': found['reason'], 'plan': plan})
+                return
+            _print_adoption_plan(found, plan)
+            if found['adoptable']:
+                click.echo(f"\nDry run. Nothing was changed. To register it:\n"
+                           f"  serverkit adopt-site {site} --apply\n")
+            else:
+                click.echo(click.style(f"\nCannot adopt: {found['reason']}\n", fg='yellow'))
+            return
+
+        owner = User.query.filter_by(role='admin', is_active=True).order_by(User.id).first()
+        if owner is None:
+            _fail("No active admin user to own the service. Run 'serverkit create-admin' first.")
+        try:
+            application, plan = site_adoption_service.adopt(site, owner, name=name)
+        except ApplicationError as exc:
+            _fail(str(exc))
+        if as_json:
+            _echo_json({'dry_run': False, 'plan': plan, 'app': application.to_dict()})
+            return
+        _print_adoption_plan(found, plan)
+        click.echo(click.style(
+            f"\nAdopted as \"{application.name}\" (id {application.id}). "
+            'No file on the server was changed.\n', fg='green'))
+
+
+def _print_adoption_plan(site, plan):
+    php = site['php'] or {}
+    click.echo(f"\nSite: {site['primary_domain']}")
+    click.echo(f"  vhost        {site['vhost_file']}")
+    click.echo(f"  domains      {', '.join(site['domains'])}")
+    click.echo(f"  root         {site['root'] or '-'}")
+    if php:
+        pool = f" (pool {php['pool']})" if php.get('pool') else ''
+        click.echo(f"  PHP-FPM      {php.get('version') or 'unknown version'}{pool} at {php['listen']}")
+    if site['ssl']['enabled']:
+        expires = site['ssl']['expires_at'] or 'expiry unknown'
+        click.echo(f"  certificate  {site['ssl']['certificate']} ({expires})")
+    else:
+        click.echo('  certificate  none')
+    if site['database']:
+        click.echo(f"  database     {site['database']['name']} on {site['database']['host']}")
+    click.echo('\nWould record:' if site['adoptable'] else '\nWould have recorded:')
+    application = plan['application']
+    click.echo(f"  service      {application['name']} ({application['app_type']}, "
+               f"managed by {application['managed_by']})")
+    click.echo(f"  domains      {len(plan['domains'])}")
+    if plan['wordpress_site'] is not None:
+        click.echo(f"  WordPress    version {plan['wordpress_site']['wp_version'] or 'unknown'}")
+    if plan['database'] is not None:
+        click.echo(f"  database     linked to the service")
+    click.echo('\nLeft exactly as it is:')
+    for path in plan['untouched']:
+        click.echo(f"  {path}")
+
+
 def _fail(message):
     click.echo(click.style(f'Error: {message}', fg='red'), err=True)
     sys.exit(1)
