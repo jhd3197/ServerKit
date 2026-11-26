@@ -160,10 +160,7 @@ const SetupStepSecurity = ({ onComplete }) => {
                 {error && (
                     <div className="tier-warning">
                         <AlertTriangle size={20} className="tier-warning-icon" />
-                        <div className="tier-warning-text">
-                            {error}
-                            {confirmFailed && <> {t('app.securitySettingsTab.codeMayBeFromOlderQr', 'The code may be from an older QR. Use the code for the QR currently on screen.')}</>}
-                        </div>
+                        <div className="tier-warning-text">{error}</div>
                     </div>
                 )}
 
@@ -233,7 +230,10 @@ const SetupStepSecurity = ({ onComplete }) => {
                 {error && (
                     <div className="tier-warning">
                         <AlertTriangle size={20} className="tier-warning-icon" />
-                        <div className="tier-warning-text">{error}</div>
+                        <div className="tier-warning-text">
+                            {error}
+                            {confirmFailed && <> {t('app.securitySettingsTab.codeMayBeFromOlderQr', 'The code may be from an older QR. Use the code for the QR currently on screen.')}</>}
+                        </div>
                     </div>
                 )}
 
