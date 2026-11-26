@@ -5265,6 +5265,7 @@
             "changePassword": "เปลี่ยนรหัสผ่าน",
             "changing": "กำลังเปลี่ยน…",
             "codeFromAuthenticatorOrBackupCode": "รหัสจากตัวตรวจสอบสิทธิ์หรือรหัสสำรอง",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "ยืนยันรหัสผ่านใหม่",
             "confirmNewPassword2": "ยืนยันรหัสผ่านใหม่",
             "connectExternalIdentityProvidersToYour": "เชื่อมต่อผู้ให้บริการข้อมูลประจำตัวภายนอกกับบัญชีของคุณ",

@@ -5265,6 +5265,7 @@
             "changePassword": "Thay đổi mật khẩu",
             "changing": "Đang thay đổi…",
             "codeFromAuthenticatorOrBackupCode": "Mã từ trình xác thực hoặc mã dự phòng",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "Xác nhận mật khẩu mới",
             "confirmNewPassword2": "Xác nhận mật khẩu mới",
             "connectExternalIdentityProvidersToYour": "Kết nối nhà cung cấp danh tính bên ngoài với tài khoản của bạn",

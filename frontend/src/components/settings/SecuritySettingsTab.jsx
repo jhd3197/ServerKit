@@ -1,10 +1,11 @@
-import { useState, useEffect, useId } from 'react';
+import { useState, useEffect, useId, useRef } from 'react';
 import { useAuth } from '../../contexts/useAuth.js';
 import api from '../../services/api';
 import useSettingFocus from '../../hooks/useSettingFocus';
 import TwoFactorPolicyCard from './TwoFactorPolicyCard';
 import SSOProviderIcon from '../SSOProviderIcon';
 import Modal from '../Modal';
+import { createSingleFlight } from '@/utils/singleFlight';
 import ErrorState from '../ErrorState';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -155,6 +156,8 @@ const SecuritySettingsTab = () => {
     const [backupCodes, setBackupCodes] = useState([]);
     const [twoFAError, setTwoFAError] = useState('');
     const [twoFALoadError, setTwoFALoadError] = useState(null);
+    const [confirmFailed, setConfirmFailed] = useState(false);
+    const initiateFlight = useRef(createSingleFlight()).current;
 
     useEffect(() => {
         load2FAStatus();
@@ -204,21 +207,25 @@ const SecuritySettingsTab = () => {
         }
     }
 
-    async function handleInitiate2FA() {
-        setTwoFAError('');
-        setTwoFALoading(true);
-        try {
-            const data = await api.initiate2FASetup();
-            setSetupData(data);
-            setShowSetupModal(true);
-            window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
-                detail: { type: 'two-factor-setup-started' },
-            }));
-        } catch (err) {
-            setTwoFAError(err.message);
-        } finally {
-            setTwoFALoading(false);
-        }
+    // The ref lock refuses a double-click before `twoFALoading` flushes.
+    function handleInitiate2FA() {
+        return initiateFlight(async () => {
+            setTwoFAError('');
+            setConfirmFailed(false);
+            setTwoFALoading(true);
+            try {
+                const data = await api.initiate2FASetup();
+                setSetupData(data);
+                setShowSetupModal(true);
+                window.dispatchEvent(new CustomEvent('serverkit:walkthrough-signal', {
+                    detail: { type: 'two-factor-setup-started' },
+                }));
+            } catch (err) {
+                setTwoFAError(err.message);
+            } finally {
+                setTwoFALoading(false);
+            }
+        });
     }
 
     async function handleConfirm2FA() {
@@ -229,6 +236,7 @@ const SecuritySettingsTab = () => {
 
         setTwoFALoading(true);
         setTwoFAError('');
+        setConfirmFailed(false);
         try {
             const result = await api.confirm2FASetup(verificationCode);
             setBackupCodes(result.backup_codes);
@@ -240,6 +248,7 @@ const SecuritySettingsTab = () => {
                 detail: { type: 'two-factor-enabled' },
             }));
         } catch (err) {
+            setConfirmFailed(true);
             setTwoFAError(err.message || t('auth.codeMismatch', "That code didn't match. Enter the current 6-digit code from your authenticator app."));
         } finally {
             setTwoFALoading(false);
@@ -455,7 +464,7 @@ Keep these codes in a safe place.`;
 
             {/* 2FA Setup Modal */}
             {showSetupModal && setupData && (
-                <Modal open={true} onClose={() => setShowSetupModal(false)} title={t('app.securitySettingsTab.setUpTwoFactorAuthentication', 'Set up two-factor authentication')} size="md">
+                <Modal open={true} onClose={() => setShowSetupModal(false)} closeOnDismiss={false} title={t('app.securitySettingsTab.setUpTwoFactorAuthentication', 'Set up two-factor authentication')} size="md">
                             <div className="setup-steps" data-walkthrough="two-factor-verify">
                                 <div className="setup-step">
                                     <span className="step-number">1</span>
@@ -494,6 +503,7 @@ Keep these codes in a safe place.`;
                                             autoFocus
                                         />
                                         {twoFAError && <p className="error-text">{twoFAError}</p>}
+                                        {confirmFailed && <p className="form-hint">{t('app.securitySettingsTab.codeMayBeFromOlderQr', 'The code may be from an older QR. Use the code for the QR currently on screen.')}</p>}
                                     </div>
                                 </div>
                             </div>

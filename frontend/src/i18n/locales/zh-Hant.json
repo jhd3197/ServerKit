@@ -5265,6 +5265,7 @@
             "changePassword": "更改密碼",
             "changing": "正在變更…",
             "codeFromAuthenticatorOrBackupCode": "驗證器或備用驗證碼",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "確認新密碼",
             "confirmNewPassword2": "確認新密碼",
             "connectExternalIdentityProvidersToYour": "將外部身分提供者連線到您的帳戶",

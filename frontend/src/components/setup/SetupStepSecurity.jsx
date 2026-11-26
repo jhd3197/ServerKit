@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ShieldCheck, Download, AlertTriangle, Check, Loader } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +7,7 @@ import CopyField from '../CopyField';
 import { downloadBlob } from '@/utils/downloadBlob';
 import { useTranslation } from 'react-i18next';
 import InfoTip from '@/components/InfoTip';
+import { createSingleFlight } from '@/utils/singleFlight';
 
 // Enrolment is a three-beat flow. Offer is the default so someone who just
 // wants a dashboard is one click from moving on — 2FA is offered here because
@@ -28,6 +29,8 @@ const SetupStepSecurity = ({ onComplete }) => {
     const [savedCodes, setSavedCodes] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState('');
+    const [confirmFailed, setConfirmFailed] = useState(false);
+    const enableFlight = useRef(createSingleFlight()).current;
 
     // Stepping back to Capacity and forward again re-mounts this step, but the
     // enrolment already landed server-side — re-offering it would just 400.
@@ -45,18 +48,22 @@ const SetupStepSecurity = ({ onComplete }) => {
         };
     }, []);
 
-    async function handleEnable() {
-        setBusy(true);
-        setError('');
-        try {
-            const data = await api.initiate2FASetup();
-            setSetupData(data);
-            setStage(STAGE_ENROLL);
-        } catch (err) {
-            setError(err.message || 'Could not start two-factor setup.');
-        } finally {
-            setBusy(false);
-        }
+    // The ref lock refuses a double-click before `busy` flushes.
+    function handleEnable() {
+        return enableFlight(async () => {
+            setBusy(true);
+            setError('');
+            setConfirmFailed(false);
+            try {
+                const data = await api.initiate2FASetup();
+                setSetupData(data);
+                setStage(STAGE_ENROLL);
+            } catch (err) {
+                setError(err.message || 'Could not start two-factor setup.');
+            } finally {
+                setBusy(false);
+            }
+        });
     }
 
     async function handleConfirm() {
@@ -66,11 +73,13 @@ const SetupStepSecurity = ({ onComplete }) => {
         }
         setBusy(true);
         setError('');
+        setConfirmFailed(false);
         try {
             const result = await api.confirm2FASetup(code);
             setBackupCodes(result.backup_codes || []);
             setStage(STAGE_CODES);
         } catch (err) {
+            setConfirmFailed(true);
             setError(err.message || 'That code did not match. Try the next one.');
         } finally {
             setBusy(false);
@@ -151,7 +160,10 @@ const SetupStepSecurity = ({ onComplete }) => {
                 {error && (
                     <div className="tier-warning">
                         <AlertTriangle size={20} className="tier-warning-icon" />
-                        <div className="tier-warning-text">{error}</div>
+                        <div className="tier-warning-text">
+                            {error}
+                            {confirmFailed && <> {t('app.securitySettingsTab.codeMayBeFromOlderQr', 'The code may be from an older QR. Use the code for the QR currently on screen.')}</>}
+                        </div>
                     </div>
                 )}
 

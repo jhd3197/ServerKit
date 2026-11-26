@@ -5265,6 +5265,7 @@
             "changePassword": "Passwort ändern",
             "changing": "Wird geändert…",
             "codeFromAuthenticatorOrBackupCode": "Code vom Authentifikator oder Backup-Code",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "Bestätigen Sie das neue Passwort",
             "confirmNewPassword2": "Neues Passwort bestätigen",
             "connectExternalIdentityProvidersToYour": "Verbinden Sie externe Identitätsanbieter mit Ihrem Konto",

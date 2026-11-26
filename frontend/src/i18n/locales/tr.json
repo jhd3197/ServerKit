@@ -5265,6 +5265,7 @@
             "changePassword": "Şifre değiştir",
             "changing": "Değiştiriliyor…",
             "codeFromAuthenticatorOrBackupCode": "Kimlik doğrulayıcıdan veya yedek koddan gelen kod",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "Yeni Şifreyi Onayla",
             "confirmNewPassword2": "Yeni şifreyi onayla",
             "connectExternalIdentityProvidersToYour": "Harici kimlik sağlayıcılarını hesabınıza bağlayın",
