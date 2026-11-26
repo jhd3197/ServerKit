@@ -9,6 +9,8 @@ from werkzeug.security import generate_password_hash
 from app import db
 from app.models import User
 from app.services.totp_service import TOTPService, TwoFactorSetup
+from app.exceptions import ConflictError
+from factories import headers_for
 
 
 @pytest.fixture
@@ -172,3 +174,69 @@ def test_regenerate_backup_codes_replaces_old_set(user):
     assert ok and len(new) == 10
     assert not old_hashes & set(user.get_backup_codes())
     assert setup.regenerate_backup_codes('abc') == (False, 'Invalid verification code')
+
+
+def test_qr_code_is_built_from_the_provisioning_uri(secret, monkeypatch):
+    from app.services import totp_service
+    if not totp_service.HAS_QRCODE:
+        pytest.skip('qrcode not installed')
+    added = []
+    real = totp_service.qrcode.QRCode
+
+    class Spy(real):
+        def add_data(self, data, *a, **kw):
+            added.append(data)
+            return super().add_data(data, *a, **kw)
+
+    monkeypatch.setattr(totp_service.qrcode, 'QRCode', Spy)
+    TOTPService.generate_qr_code_base64(secret, 'me@example.com')
+    assert added == [TOTPService.get_provisioning_uri(secret, 'me@example.com')]
+    parsed = urlparse(added[0])
+    assert parsed.scheme == 'otpauth' and parsed.netloc == 'totp'
+    assert parse_qs(parsed.query) == {'secret': [secret], 'issuer': ['ServerKit']}
+
+
+def test_second_initiate_reuses_pending_secret_and_confirm_works(user):
+    setup = TwoFactorSetup(user)
+    first = setup.initiate_setup()
+    second = TwoFactorSetup(user).initiate_setup()
+    assert second['secret'] == first['secret'] == user.totp_secret
+    assert second['uri'] == first['uri'] and second['issuer'] == 'ServerKit'
+    assert not user.totp_enabled
+    ok, _ = setup.confirm_setup(TOTPService.get_current_code(first['secret']))
+    assert ok and user.totp_enabled
+
+
+def test_regenerate_mints_new_secret_only_while_unconfirmed(user):
+    setup = TwoFactorSetup(user)
+    first = setup.initiate_setup()['secret']
+    second = setup.initiate_setup(regenerate=True)['secret']
+    assert second != first and user.totp_secret == second
+    setup.confirm_setup(TOTPService.get_current_code(second))
+    with pytest.raises(ConflictError):
+        setup.initiate_setup(regenerate=True)
+    assert user.totp_secret == second
+
+
+def test_setup_endpoint_reuses_secret_until_regenerate(client, user):
+    url = '/api/v1/auth/2fa/setup'
+    a = client.post(url, headers=headers_for(user)).get_json()
+    b = client.post(url, headers=headers_for(user)).get_json()
+    assert a['secret'] == b['secret'] and a['uri'] == b['uri']
+    assert client.get('/api/v1/auth/2fa/status', headers=headers_for(user)).get_json()['enabled'] is False
+    c = client.post(url, json={'regenerate': True}, headers=headers_for(user)).get_json()
+    assert c['secret'] != a['secret']
+    confirm = client.post(url + '/confirm', headers=headers_for(user),
+                          json={'code': TOTPService.get_current_code(c['secret'])})
+    assert confirm.status_code == 200
+
+
+def test_setup_endpoint_rejects_confirmed_user_without_rotating(client, user):
+    TwoFactorSetup(user).initiate_setup()
+    secret = user.totp_secret
+    TwoFactorSetup(user).confirm_setup(TOTPService.get_current_code(secret))
+    for body in (None, {'regenerate': True}):
+        r = client.post('/api/v1/auth/2fa/setup', json=body, headers=headers_for(user))
+        assert r.status_code == 400
+    db.session.refresh(user)
+    assert user.totp_secret == secret and user.totp_enabled

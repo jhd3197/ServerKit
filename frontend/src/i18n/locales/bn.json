@@ -5265,6 +5265,7 @@
             "changePassword": "পাসওয়ার্ড পরিবর্তন করুন",
             "changing": "পরিবর্তন করা হচ্ছে…",
             "codeFromAuthenticatorOrBackupCode": "প্রমাণীকরণকারী বা ব্যাকআপ কোড থেকে কোড",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "নতুন পাসওয়ার্ড নিশ্চিত করুন",
             "confirmNewPassword2": "নতুন পাসওয়ার্ড নিশ্চিত করুন",
             "connectExternalIdentityProvidersToYour": "আপনার অ্যাকাউন্টে বহিরাগত পরিচয় প্রদানকারীকে সংযুক্ত করুন",

@@ -5500,6 +5500,7 @@
             "changePassword": "Change password",
             "changing": "Changing…",
             "codeFromAuthenticatorOrBackupCode": "Code from authenticator or backup code",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "Confirm new password",
             "confirmNewPassword2": "Confirm new password",
             "connectExternalIdentityProvidersToYour": "Connect external identity providers to your account",

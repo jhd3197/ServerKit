@@ -5265,6 +5265,7 @@
             "changePassword": "Ubah Kata Sandi",
             "changing": "Mengubah…",
             "codeFromAuthenticatorOrBackupCode": "Kode dari pengautentikasi atau kode cadangan",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "Konfirmasi Kata Sandi Baru",
             "confirmNewPassword2": "Konfirmasikan kata sandi baru",
             "connectExternalIdentityProvidersToYour": "Hubungkan penyedia identitas eksternal ke akun Anda",

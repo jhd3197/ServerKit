@@ -5265,6 +5265,7 @@
             "changePassword": "Изменить пароль",
             "changing": "Изменение…",
             "codeFromAuthenticatorOrBackupCode": "Код из аутентификатора или резервный код",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "Подтвердите новый пароль",
             "confirmNewPassword2": "Подтвердите новый пароль",
             "connectExternalIdentityProvidersToYour": "Подключите внешних поставщиков удостоверений к своей учетной записи",

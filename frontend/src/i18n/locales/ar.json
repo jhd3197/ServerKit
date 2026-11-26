@@ -5265,6 +5265,7 @@
             "changePassword": "تغيير كلمة المرور",
             "changing": "جارٍ التغيير…",
             "codeFromAuthenticatorOrBackupCode": "رمز من المصادقة أو رمز النسخ الاحتياطي",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
             "confirmNewPassword2": "تأكيد كلمة المرور الجديدة",
             "connectExternalIdentityProvidersToYour": "قم بتوصيل موفري الهوية الخارجيين بحسابك",

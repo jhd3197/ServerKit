@@ -5265,6 +5265,7 @@
             "changePassword": "비밀번호 변경",
             "changing": "변경 중…",
             "codeFromAuthenticatorOrBackupCode": "인증자의 코드 또는 백업 코드",
+            "codeMayBeFromOlderQr": "The code may be from an older QR. Use the code for the QR currently on screen.",
             "confirmNewPassword": "새 비밀번호 확인",
             "confirmNewPassword2": "새 비밀번호 확인",
             "connectExternalIdentityProvidersToYour": "외부 ID 공급자를 계정에 연결",

@@ -1,5 +1,6 @@
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import { dismissGuards } from '@/components/ui/dismissGuards';
 
 // Generic modal built on the Radix Dialog primitive. SCSS owns all geometry
 // (styles/components/_ui.scss → .sk-modal*). `size` picks a max-width on
@@ -11,6 +12,9 @@ import { cn } from '@/lib/utils';
 // .form-actions row hand-rolled inside the body (forms inside the body) sticks
 // to the bottom of the scrolling body, and a nested .modal-body adds no extra
 // padding or scroller. Two-column .form-row stacks in narrow modals.
+//
+// closeOnDismiss={false}: overlay click and Escape no longer close the modal
+// (for flows that would lose in-progress state); explicit buttons still do.
 //
 // Form mode: pass `onSubmit` and the body AND footer
 // are wrapped in one <form>. This exists because a submit button must live
@@ -27,6 +31,7 @@ export default function Modal({
   onSubmit,
   className = '',
   size = 'md',
+  closeOnDismiss = true,
 }) {
   const body = (
     <>
@@ -42,7 +47,7 @@ export default function Modal({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className={cn('sk-modal', `sk-modal--${size}`, className)}>
+      <DialogContent className={cn('sk-modal', `sk-modal--${size}`, className)} {...dismissGuards(closeOnDismiss)}>
         {title && (
           <div className="sk-modal__header">
             <DialogTitle>{title}</DialogTitle>

@@ -67,7 +67,8 @@ def get_2fa_status():
 @jwt_required()
 def initiate_2fa_setup():
     """
-    Initiate 2FA setup. Generates a new secret and returns QR code.
+    Initiate 2FA setup. Reuses the pending unconfirmed secret (or generates
+    one); JSON {"regenerate": true} forces a fresh secret.
     User must verify with a code to complete setup.
     """
     current_user_id = get_jwt_identity()
@@ -79,8 +80,11 @@ def initiate_2fa_setup():
     if user.totp_enabled:
         return jsonify({'error': '2FA is already enabled'}), 400
 
+    data = json_object(optional=True)
+    regenerate = data.get('regenerate') is True
+
     setup = TwoFactorSetup(user)
-    setup_data = setup.initiate_setup()
+    setup_data = setup.initiate_setup(regenerate=regenerate)
 
     return jsonify({
         'message': '2FA setup initiated. Scan the QR code and enter a verification code.',

@@ -191,20 +191,32 @@ class TwoFactorSetup:
     def __init__(self, user):
         self.user = user
 
-    def initiate_setup(self):
+    def initiate_setup(self, regenerate=False):
         """
-        Start 2FA setup by generating a new secret.
+        Start 2FA setup, reusing the pending unconfirmed secret if there is one.
+
+        A new secret is minted only when none is pending or ``regenerate`` is
+        set, so repeated Enable clicks keep the secret the user already scanned.
+        A confirmed secret is never rotated here.
 
         Returns:
             dict: Setup data including secret and QR code
         """
         from app import db
 
-        # Generate new secret (don't enable yet)
-        secret = TOTPService.generate_secret()
-        self.user.totp_secret = secret
+        # Serialize on the user row so concurrent /setup calls see one secret.
+        # (No-op on SQLite, where writes are already serialized.)
+        db.session.refresh(self.user, with_for_update=True)
 
-        # Don't enable until verified
+        if self.user.totp_enabled:
+            from app.exceptions import ConflictError
+            raise ConflictError('2FA is already enabled')
+
+        secret = self.user.totp_secret
+        if regenerate or not secret:
+            secret = TOTPService.generate_secret()
+            self.user.totp_secret = secret
+        # Don't enable until verified; commit also releases the row lock.
         db.session.commit()
 
         # Generate QR code
