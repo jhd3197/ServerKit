@@ -7,7 +7,7 @@ Provides endpoints for enabling, disabling, and managing 2FA.
 import logging
 import threading
 import time
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import limiter
 from app.middleware.session_auth import issue_session_tokens
@@ -67,7 +67,8 @@ def get_2fa_status():
 @jwt_required()
 def initiate_2fa_setup():
     """
-    Initiate 2FA setup. Generates a new secret and returns QR code.
+    Initiate 2FA setup. Reuses the pending unconfirmed secret (or generates
+    one); JSON {"regenerate": true} forces a fresh secret.
     User must verify with a code to complete setup.
     """
     current_user_id = get_jwt_identity()
@@ -79,8 +80,15 @@ def initiate_2fa_setup():
     if user.totp_enabled:
         return jsonify({'error': '2FA is already enabled'}), 400
 
+    data = request.get_json(silent=True)
+    regenerate = isinstance(data, dict) and data.get('regenerate') is True
+
     setup = TwoFactorSetup(user)
-    setup_data = setup.initiate_setup()
+    try:
+        setup_data = setup.initiate_setup(regenerate=regenerate)
+    except ValueError:
+        # Confirmed between the check above and the row lock.
+        return jsonify({'error': '2FA is already enabled'}), 400
 
     return jsonify({
         'message': '2FA setup initiated. Scan the QR code and enter a verification code.',
